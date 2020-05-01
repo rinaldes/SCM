@@ -1,0 +1,6 @@
+<% if @user.save %>
+$("#user_<%= @user.id %>").replaceWith("<%= j(render 'user', :user => @user) %>")
+$("#myModal").modal('hide')
+<% else %>
+$("#myModal").html("<%= j(render 'edit') %>")
+<% end %>

@@ -1,0 +1,87 @@
+<%# if params[:action] == "new"%>
+		<tr id="data_<%= training_history.id %>">
+<%# end %>
+	<%= form_for(training_history, html: { role: "form", multipart: true}, remote: true) do |f| %>
+		<td>
+			<div class="checkbox check-default">
+	        <input id="checkbox12" type="checkbox" value="1">
+	        <label for="checkbox12"></label>
+	    </div>
+		</td>
+		<td>
+			<%= f.text_field :training_type, :class => "full-width", :placeholder => "training_type" %>
+		</td>
+		<td>
+			<div class="input-append success date">
+	        <%= f.text_field :start, :class => "form-control", value: (f.object.start.present? ? f.object.start.to_date.strftime("%d/%m/%Y") : (params[:training_history].present? ? params[:training_history][:start] : "")) %>
+	        <span class="add-on"><span class="arrow"></span><i class="fa fa-th"></i></span> 
+	    </div>
+		</td>
+		<td>
+			<div class="input-append success date">
+          <%= f.text_field :end, :class => "form-control", value: (f.object.end.present? ? f.object.end.to_date.strftime("%d/%m/%Y") : (params[:training_history].present? ? params[:training_history][:end] : "")) %>
+          <span class="add-on"><span class="arrow"></span><i class="fa fa-th"></i></span> 
+      </div>
+		</td>
+
+		<td>
+			<%= f.select :sponsor, options_for_select(sponsor, f.object.sponsor) %>
+			<% if params[:action] == "new"%>
+				<%= f.hidden_field :employee_id, :value => params[:employee_id]%>
+			<% else %>
+				<%= f.hidden_field :id, :value => params[:id] %>
+			<% end %>
+		</td>
+
+
+		<td>
+			<%= f.select :result, options_for_select(result, f.object.result) %>
+			<% if params[:action] == "new"%>
+				<%= f.hidden_field :employee_id, :value => params[:employee_id]%>
+			<% else %>
+				<%= f.hidden_field :id, :value => params[:id] %>
+			<% end %>
+		</td>
+		
+		<td>
+			<div>
+				<% if params[:action] == "new" %>
+        	<%= f.submit "Add", class: "btn btn-success", :style => "margin: 0 0 0 30px;", :onclick => "submit_training_history();"%>
+        	<button class="btn btn-danger" onclick="$(this).parent().parent().parent().remove(); $('.new-rec').remove()"> cancel </button>
+      	<% else %>
+      		<%= f.submit "Update", class: "btn btn-success", :style => "margin: 0 0 0 30px;", :onclick => "update_training_history();"%>
+        	<button class="btn btn-danger" onclick="reset_view_<%= f.object.id %>()"> cancel </button>
+      	<% end %>
+      </div>
+      <% if f.object.id.present? %>
+				<script type="text/javascript">
+					function reset_view_<%= f.object.id %>() {
+						$("#data_<%= f.object.id %>").replaceWith("<%= j(render 'data', :training_history => f.object) %>");
+						$('#toolbar_training_history').addClass('hide');
+						$('#button_edit_training_history').addClass('hide');
+						$('#button_remove_training_history').addClass('hide');
+						$(".child-box").each(function(){
+						  $(this).click(function() {
+						    section = $(this).attr("data-section")
+						    children = $(".child-" + section)
+						    // $(this).parent().parent().parent().toggleClass('row_selected')
+
+						    show_button($(this))
+						    
+						    selected_count = 0
+						    children.each(function(){ if ($(this).is(':checked')) { selected_count += 1 } })
+						    if (selected_count==children.length) {
+						      $(".parent-" + section).prop('checked', true)
+						    } else{
+						      $(".parent-" + section).prop('checked', false)
+						    };
+						  })
+						})
+					}
+				</script>
+			<% end %>
+		</td>
+	<% end %>
+<%# if params[:action] == "new"%>
+	</tr>
+<%# end %>

@@ -1,0 +1,30 @@
+<td><span class="hidden"><%= detail.product.id %></span><%= detail.product.article rescue '' %></td>
+<!-- <td><%= detail.product.article rescue '' %></td> -->
+<!-- <td><%= detail.product.barcode rescue '' %></td> -->
+<td><%= detail.product.description rescue '' %></td>
+<!-- <td><%= detail.product.description rescue '' %></td> -->
+<!-- <td><%= detail.product.cost_of_products %></td> -->
+<td>
+  <%= text_field_tag "#{params[:transaction_header]}[#{params[:transaction_type]}_details_attributes][#{key}][hpp]", format_currency(params[:hpp] || (detail.product.cost_of_products rescue '')), class: "hpp",
+    onkeyup: "$(this).parent().parent().find('.subtotal').html(parseFloat($(this).parent().parent().find('.hpp').val())*parseFloat($(this).parent().parent().find('.qty').val()))" %>
+</td>
+<!-- <td><%= detail.quantity %></td> -->
+<td>
+  <%= hidden_field_tag "#{params[:transaction_header]}[#{params[:transaction_type]}_details_attributes][#{key}][product_id]", detail.product.id %>
+  <%= text_field_tag "#{params[:transaction_header]}[#{params[:transaction_type]}_details_attributes][#{key}][quantity]", (params[:quantities] || (detail.quantity rescue '')), class: 'qty',
+    onkeyup: "$(this).parent().parent().find('.subtotal').html(addCommas(parseFloat($(this).parent().parent().find('.hpp').val().replace(/,/g, ''))*parseFloat($(this).parent().parent().find('.qty').val())))" %>
+</td>
+<!-- <td></td> -->
+<td>
+  <%= hidden_field_tag "inventory_request[inventory_request_details_attributes][#{key}][id]", detail.id if detail.id? %>
+  <%= hidden_field_tag "inventory_request[inventory_request_details_attributes][#{key}][product_id]", detail.product.id %>
+  <%= hidden_field_tag "inventory_request[inventory_request_details_attributes][#{key}][_destroy]", 0 %>
+  <%= select_tag "#{params[:transaction_header]}[#{params[:transaction_type]}_details_attributes][#{key}][unit_type]", options_for_select(['Unit', 'Box', 'Box 2']) %>
+  <!-- <%= text_field_tag "inventory_request[inventory_request_details_attributes][#{key}][quantity]", detail.quantity, style: 'width: 35px' %> -->
+</td>
+<td class='subtotal'></td>
+<td>
+  <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeDetail(this)">
+    <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+  </a>
+</td>

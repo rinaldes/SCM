@@ -1,0 +1,32 @@
+<% if params[:all_stores] == 'Store' %>
+  <% first_sale = Sale.where("store_id=#{pmh[0]} AND to_char(transaction_date, 'YYYY-MM')='#{params[:year]}-#{sprintf('%02d', Date::MONTHNAMES.index(params[:month]))}'").limit(1).first %>
+<% else %>
+  <% first_sale = @first_sale %>
+<% end %>
+<% count_day = (Time.now.month == Date::MONTHNAMES.index(params[:month]) ? Time.now.day : "#{params[:year]}-#{params[:month]}-01".to_date.end_of_month.day+1)-first_sale.transaction_date.strftime('%d').to_i rescue 0 %>
+
+<td class='align-right'><%= format_currency start_stock.map(&:start_qty).compact.sum rescue 0 %></td>
+<td class='align-right'><%= format_currency start_stock.map(&:start_amount).compact.sum rescue 0 %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:sales_qty).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:sales_amount).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:retur_sales_qty).compact.sum.abs %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:retur_sales_amount).compact.sum.abs %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:gr_qty).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:gr_amount).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:tat_in_qty).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:tat_in_amount).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:tat_out_qty).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:tat_out_amount).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:retur_qty).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:retur_amount).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:so_qty).compact.sum %></td>
+<td class='align-right'><%= format_currency pmh[1].map(&:so_amount).compact.sum %></td>
+<td class='align-right'>
+  <%= format_currency ((end_stock.map(&:end_amount).compact.sum rescue 0))-((start_stock.map(&:start_amount).compact.sum rescue 0)-pmh[1].map(&:sales_amount).compact.sum+pmh[1].map(&:retur_sales_amount).compact.sum+pmh[1].map(&:gr_amount).compact.sum-pmh[1].map(&:retur_amount).compact.sum+pmh[1].map(&:tat_in_amount).compact.sum-pmh[1].map(&:tat_out_amount).compact.sum+pmh[1].map(&:so_amount).compact.sum) %>
+</td>
+<td class='align-right'><%= format_currency end_stock.map(&:last_cost).compact.sum rescue 0 %></td>
+<td class='align-right'><%= format_currency end_stock.map(&:end_qty).compact.sum rescue 0 %></td>
+<td class='align-right'><%= format_currency end_stock.map(&:end_amount).compact.sum rescue 0 %></td>
+<td class='align-right'>
+  <%= (format_currency (end_stock.map(&:end_qty).compact.sum/pmh[1].map(&:sales_qty).compact.sum*count_day) rescue 0) if pmh[1].map(&:sales_amount).compact.sum>0 %>
+</td>

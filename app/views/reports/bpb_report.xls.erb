@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data>RECID</Data></Cell>
+        <Cell><Data>RTYPE</Data></Cell>
+        <Cell><Data>DOCNO</Data></Cell>
+        <Cell><Data>SEQNO</Data></Cell>
+        <Cell><Data>DIV</Data></Cell>
+        <Cell><Data>PRDCD</Data></Cell>
+        <Cell><Data>QTY</Data></Cell>
+        <Cell><Data>PRICE</Data></Cell>
+        <Cell><Data>GROSS</Data></Cell>
+        <Cell><Data>CTERM</Data></Cell>
+        <Cell><Data>DOCNO2</Data></Cell>
+        <Cell><Data>ISTYPE</Data></Cell>
+        <Cell><Data>INVNO</Data></Cell>
+        <Cell><Data>TOKO</Data></Cell>
+        <Cell><Data>DATE</Data></Cell>
+        <Cell><Data>DATE2</Data></Cell>
+        <Cell><Data>KETERANGAN</Data></Cell>
+        <Cell><Data>PTAG</Data></Cell>
+        <Cell><Data>CAT_COD</Data></Cell>
+        <Cell><Data>LOKASI</Data></Cell>
+        <Cell><Data>TGL1</Data></Cell>
+        <Cell><Data>TGL2</Data></Cell>
+        <Cell><Data>PPN</Data></Cell>
+        <Cell><Data>TOKO_1</Data></Cell>
+        <Cell><Data>DATE3</Data></Cell>
+        <Cell><Data>DOCNO3</Data></Cell>
+        <Cell><Data>SHOP</Data></Cell>
+        <Cell><Data>PRICE_IDM</Data></Cell>
+        <Cell><Data>PPNBM_IDM</Data></Cell>
+        <Cell><Data>PPNRP_IDM</Data></Cell>
+        <Cell><Data>LT</Data></Cell>
+        <Cell><Data>RAK</Data></Cell>
+        <Cell><Data>BAR</Data></Cell>
+        <Cell><Data>BKP</Data></Cell>
+        <Cell><Data>SUB_BKP</Data></Cell>
+        <Cell><Data>PRICE_JUAL</Data></Cell>
+        <Cell><Data>GROSS_JUAL</Data></Cell>
+      </Row>
+      <% @sales.all.each{|sale| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= sale.receiving.number rescue ''%></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.rtype %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.docno %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.seqno %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.receiving.head_office_id rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.barcode rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.quantity %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.cost_of_product rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.gross %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.cterm %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.docno2 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.istype %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.invno %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.receiving.head_office.office_name rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="Date"><%= sale.receiving.date.strftime('%Y-%m-%d') rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="Date"><%#= sale.date2 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.keterangan %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ptag %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.cat_cod %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.receiving.head_office.location.name rescue ''  %></Data></Cell>
+          <Cell><Data ss:Type="Date"><%= sale.receiving.date.strftime('%Y-%m-%d') rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="Date"><%#= sale.tgl2 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ppn %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.receiving.head_office.office_name rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.date3 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.docno3 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.shop %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.price_idm %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ppnbm_idm %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ppnrp_idm %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.lt %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.rak %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.bar %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.flag_pajak rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.sub_bkp %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.selling_price rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.gross_jual %></Data></Cell>
+        </Row>
+      <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,80 @@
+<%= link_to new_finances_cash_out_url(id: params[:id]), :class => "btn btn-labeled btn-primary edit-btn-primary" do %>
+    <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Add New
+<% end %>
+
+<% unless @petty_cash.blank? %>
+    <%= form_for @petty_cash, url: finances_petty_cash_path, html: {class: "smart-form petty-cash", id: "form-update-verify", :multipart => true} do |f| %>
+        <fieldset>
+            <section>
+            </section>
+            <section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Days</th>
+                                <th>Initial Budget</th>
+                                <th>Cash In</th>
+                                <th>Cash Out</th>
+                                <th>Balance</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody id="petty-cashes">
+                            <%= f.fields_for :petty_cash_details, f.object.petty_cash_details.order('date ASC')    do |petty_cash_detail| %>
+                                <%= render 'petty_cash_detail_fields', f: petty_cash_detail %>
+                            <% end %>
+                            <%= hidden_field_tag 'year', @petty_cash.year.to_date.year, id: "petty-cash-year" %>
+
+                            <tr style="font-weight:bold;">
+                                <td></td>
+                                <td>Total</td>
+                                <td  align="right"><%= format_currency(f.object.petty_cash_details.sum(:initial_budget)) %></td>
+                                <td  align="right"><%= format_currency(f.object.petty_cash_details.sum(:cash_in)) %></td>
+                                <td  align="right"><%= format_currency(f.object.petty_cash_details.sum(:cash_out)) %></td>
+                                <td  align="right"><%= format_currency(f.object.petty_cash_details.sum(:balance)) %></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </fieldset>
+
+        <footer>
+            <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-petty-cash", data: { :disable_with => "Please wait..." }  %>
+            <%= link_to "Back", finances_petty_cashes_path, :class => "btn btn-default"  %>
+        </footer>
+    <% end %>
+<% else %>
+    <fieldset>
+        <section>
+        </section>
+        <section>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Days</th>
+                            <th>Initial Budget</th>
+                            <th>Cash In</th>
+                            <th>Cash Out</th>
+                            <th>Balance</th>
+                            <th>Note</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td  align="center" colspan="8">There No Petty Cash details yet!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </fieldset>
+    <footer>
+    </footer>
+<% end %>

@@ -1,0 +1,270 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<style>
+  .custom-combobox {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: 96%;
+    padding: 0;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+  }
+  .custom-checkbox {
+    margin-bottom: 15px;
+  }
+
+</style>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Office</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div id="map-canvas"></div>
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-warehouse">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Office</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @branch, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <div id='departments' style='display: none'></div>
+              <%= f.hidden_field :lat %>
+              <%= f.hidden_field :long %>
+              <fieldset> <!-- tambah supplier -->
+                <div class="row">
+                <section class="col col-md-12">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Code</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :code, class: "input-sm #{(error_field @branch, :code)}", :placeholder => "Auto Generate", disabled: true %>
+                      </label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Name <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box"><%= f.text_field :office_name, :class => "input-sm" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Regional <span class='important'>*</span></label>
+                      <label class="col-md-8 custom-input-box">
+                        <%= f.select :regional_id, options_for_select(@regionals.map{|reg|[reg.name, reg.id]}, selected: @branch.regional_id), {include_blank: 'Please Select'},
+                          {class: 'form-control',onchange: "get_branch(this)"} %>
+                      </label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Branch <span class='important'>*</span></label>
+                      <label class="col-md-8 custom-input-box">
+                        <select class="form-control" name="head_office[city_id]" id="head_office_city_id" class="form-group" onchange="get_area(this)"  selected="<%= @branch.city_id %>">
+                          <option value="">Please Select</option>
+                        </select>
+                      </label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Area <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box">
+                      <select class= "form-control" name="head_office[area_id]" id="head_office_area_id" selected="<%= @branch.area_id %>">
+                        <option value="">Please Select</option>
+                      </select></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-2 label">NPWP</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :npwp, :class => "input-sm is-number" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Phone</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :phone_number, :class => "input-sm is-number" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Email</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.email_field :email, :class => "input-sm is-email" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Description</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_area :description, :class => "input-sm" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Active</label>
+                      <label class="col-md-10"><%= f.check_box :is_active %></label>
+                    </section>
+                  </section>
+                  </section>
+                  <section class="col col-md-12">
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-4 label">Province</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.select :province, options_for_select(@regionals.map{|prov|[prov.name, prov.name]}, selected: @branch.province), {include_blank: 'Please Select'},
+                          {class: 'form-control'} %>
+                      </label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">City</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.grouped_collection_select :city_name, Regional.order(:name), :cities, :name, :id, :name , {prompt: "Select a City"}, {class: "form-control"} %>
+
+                      </label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Districts</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.select :district_id, options_for_select(City.all.map{|reg|[reg.name, reg.id]}, selected: @branch.district_id), {include_blank: 'Please Select'},
+                          {class: 'form-control'} %>
+                      </label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Zip Code</label>
+                      <label class="col-md-8 input custom-input-box"><%= f.text_field :zip_code, :class => "input-sm" %></label>
+                    </section>
+                  </section>
+
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-2 label">Address</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :address, :class => "input-sm" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-2 label">RT</label>
+                      <label class="col-md-3 input custom-input-box"><%= f.text_field :rt, :class => "input-sm" %></label>
+                      <label class="col-md-2 label"></label>
+                      <label class="col-md-2 label">RW</label>
+                      <label class="col-md-3 input custom-input-box"><%= f.text_field :rw, :class => "input-sm" %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Village</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :village, :class => "input-sm" %></label>
+                    </section>
+                  </section></section>
+                </div>
+              </fieldset>
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Department</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<SCRIPT>
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  function get_branch(obj){
+    $.ajax({
+      url: "/head_offices/branches_per_regional",
+      dataType: "script",
+      data: {regional_id: obj.value},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+
+  function get_area(obj){
+    var reg_id = document.getElementById('head_office_regional_id').value;
+    $.ajax({
+      url: "/head_offices/areas_per_branches",
+      dataType: "script",
+      data: {city_id: obj.value, regional_id: reg_id},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+
+  function filter_department(obj){
+    $.ajax({
+      url: "/departments/departments_list",
+      dataType: "script",
+      data: {office_id: obj.value},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+  $(document).ready(function() {
+    $(window).unbind('gMapsLoaded');
+    $(window).bind('gMapsLoaded', function(){});
+    window.loadGoogleMaps();
+
+    $(".depart-check").change(function(){
+      deps = []
+      $(".depart-check").each(function(){
+        if (this.checked)
+          deps.push($(this).next().html())
+      })
+      $("#selected_department").html(deps.join(', '));
+    });
+
+    $('.save').click(function(){
+      var geocoder = new google.maps.Geocoder();
+      var map = new google.maps.Map(document.getElementById("map-canvas"), {zoom: 17, center: new google.maps.LatLng(-34.397, 150.644)});
+      var address = $('#head_office_province').val();
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          $('#head_office_lat').val(results[0].geometry.location.lat())
+          $('#head_office_long').val(results[0].geometry.location.lng())
+          for (i=0; i<$('.modal-body input[type=checkbox]').length; i++){
+            if($('.modal-body input[type=checkbox]')[i].checked)
+              $('#departments').append("<input name='branch[office_departments_attributes]["+i+"][department_id]' value="+$('.modal-body input[type=checkbox]')[i].value+" type='hidden'>")
+          }
+          setTimeout(function(){$('form').submit()}, 1000);
+        } else
+          alert("Geocode was not successful for the following reason: " + status);
+      });
+    })
+
+    $("#username").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/users/autocomplete_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+    //$('#supplier_department_id').combobox()
+  });
+</SCRIPT>
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

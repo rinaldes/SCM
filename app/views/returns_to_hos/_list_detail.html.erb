@@ -1,0 +1,19 @@
+<% @purchase_transfer.product_mutation_details.group_by{|prd|prd.product_size.product_id}.each do |prd| %>
+  <% detail = prd[1][0].product_size %>
+  <% product = detail.product %>
+  <tr>
+    <td><%= @purchase_transfer.code rescue '' %></td>
+    <td><%= product.barcode rescue '' %></td>
+    <td><%= product.brand.name rescue '' %></td>
+    <td><%= product.m_class.name rescue '' %></td>
+    <td><%= product.article rescue '' %></td>
+    <td><%= product.colour.name rescue '' %></td>
+    <td><%= product.cost_of_products rescue '' %></td>
+    <td><%= link_to 'View', 'javascript:void(0)', onclick: "$('#myModal#{product.id}').modal()" %></td>
+    <td>
+      <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(event)">
+        <i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      </a>
+    </td>
+  </tr>
+<% end %>

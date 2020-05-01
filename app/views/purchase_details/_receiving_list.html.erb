@@ -1,0 +1,32 @@
+<% if @receivings.count != 0 %>
+  <% @receivings.each_with_index do |receiving, i| %>
+    <% dpp = receiving.hpp * receiving.quantity rescue 0 %>
+    <% ppn = (receiving.receiving.supplier.status_pkp rescue nil) ? (dpp.to_f * 0.1) : 0 %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td class='nowrap'><%= receiving.number %></td>
+      <td class='nowrap office_name_all_store'><%= receiving.receiving.head_office.office_name %></td>
+      <td class='nowrap'><%= receiving.date %></td>
+      <td class='nowrap' align='right'><%= receiving.article %></td>
+      <td class='nowrap'><%= receiving.description %></td>
+      <td class='nowrap'><%= receiving.unit_type %></td>
+      <td class='nowrap' align='right'><%= receiving.quantity %></td>
+      <td class='nowrap' align='right'><%= receiving.product.select_unit receiving.unit_type %></td>
+      <td class='nowrap'><%= receiving.supplier_name rescue ''%></td>
+      <td class='nowrap'><%= format_currency dpp %></td>
+      <td class='nowrap'><%= format_currency ppn %></td>
+      <td class='nowrap'><%= format_currency dpp + ppn rescue 0 %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='11'>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@receivings, options = {}) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='11' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

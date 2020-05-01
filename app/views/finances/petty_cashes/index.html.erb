@@ -1,0 +1,104 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content">
+  <div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+      <h1 class="page-title txt-color-blueDark"><i class="fa a-repeat"></i> Finances <span>&gt;
+        Petty Cashes </span></h1>
+    </div>
+  </div>
+  <section id="widget-grid">
+    <div class="row">
+      <!-- NEW WIDGET START -->
+      <article class="col-sm-12 sortable-grid ui-sortable">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget well" id="wid-id-0a" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget">
+          <!-- widget div-->
+          <div role="content">
+            <!-- widget content -->
+            <div class="widget-body">
+              <div class="row">
+                <div id="notice_template"><%= render 'layouts/notice' %></div>
+              </div>
+              <div class="row">
+                <div class="col-sm-1">
+                  <p>Store :</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <% if current_user.branch_id.present? %>
+                    <%= text_field_tag "branch", current_user.branch.office_name, {class:"form-control", disabled: true} %>
+                  <% else %>
+                    <%= select_tag :branch, options_for_select([["All Store", 0]] + Office.all.map{|reg|[reg.office_name, reg.id]}), {class:"form-control search", onchange: "ganti_office()"}%>
+                  <% end %>
+                </div>
+                <div class="col-sm-2">
+                  <%= link_to 'Add Initial', new_finances_petty_cash_path, remote: true, class: 'btn btn-primary' %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <h1></h1>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Periode</th>
+                      <th>Branch</th>
+                      <th>Budget</th>
+                      <th>Cash In</th>
+                      <th>Cash Out</th>
+                      <th>Balance</th>
+                      <!-- <th>Realization</th> -->
+                      <!-- <th>Realization %</th> -->
+                    </tr>
+                    <tr>
+                      <%= form_tag finances_petty_cashes_path, :id => "petty-cash-filter-form", :remote => true  do %>
+                        <th>
+                            <input type="text" name="by_date" id="by_date" placeholder = "" class ="form-control search" size = "3" >
+                        </th>
+                        <th>
+                            <input type="hidden" name="store" id="store" placeholder = "" class ="form-control search" size = "5">
+                        </th>
+                      <% end %>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <!-- <th></th> -->
+                      <!-- <th></th> -->
+                    </tr>
+                  </thead>
+                  <tbody id='petty_cash_list'><%= render 'list' %></tbody>
+                </table>
+              </div>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </div>
+        <!-- end widget -->
+      </article>
+      <!-- WIDGET END -->
+    </div>
+  </section>
+</div>
+<!-- Modal -->
+<div class="modal fade" tabindex="-1" role="dialog"></div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+  function ganti_office(){
+    $("#store").val($('#branch').val());
+    $.ajax({
+      url: "/finances/petty_cashes?&store="+($('#branch').length == 1 ? $('#branch').val() : '')+
+        "&by_date="+($('#by_date').length == 1 ? $('#by_date').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+</script>

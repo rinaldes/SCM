@@ -1,0 +1,285 @@
+<div class="container-fluid">
+        <ul class="breadcrumb">
+            <li><p>YOU ARE HERE</p></li> 
+            <li><a href="recruitment.html" class="">Recruitment</a></li>
+            <li><a href="#" class="active">Show Recruitment</a></li>
+        </ul>
+        
+        <div class="page-title">    
+            <i class="fa fa-puzzle-piece"></i>
+            <h3>Show <span class="semi-bold">Recruitment</span></h3>    
+        </div>
+            <div class="grid simple">
+              <div class="grid-title no-border"></div>
+                <div class="grid-body no-border">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>No Recruitment:</label>
+                                <%= @recruitment.no_recruitment %>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Requester:</label>
+                                <%= @recruitment.user_id %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Organization:</label>
+                                <%= @recruitment.organization %>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Due Date:</label>
+                                <%= @recruitment.due_date %>
+                            </div>
+                        </div>
+                </div>
+              </div> 
+
+<div class="grid simple">
+                <div class="grid-body no-border has-tab">
+                    <ul class="nav nav-tabs" id="tab-01">
+                        <li class="active"><a href="#rec1">Request Employee</a></li>
+                        <li><a href="#rec2">Test Result</a></li>
+                        <li><a href="#rec3">Interview Result</a></li>
+                        <li><a href="#rec4">Selected</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <section class="tab-pane active" id="rec1">
+                            <table class="table no-more-tables table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="11%">Gender</th>
+                                        <th width="13%" class="center-text">Age</th>
+                                        <th width="16%">Experience (Years)</th>
+                                        <th width="17%">Fresh graduate</th>
+                                        <th width="17%">Skill</th>
+                                        <th width="13%">Organization</th>
+                                        <th width="13%">Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr>
+                                        <td>Male</td>
+                                        <td class="center-text">21-20;</td>
+                                        <td class="center-text">2</td>
+                                        <td class="center-text">No</td>
+                                        <td><ul>
+                                                <li>Lorem Ipsum</li>
+                                                <li>Ut wisi enim ad </li>
+                                            </ul>
+                                        </td>
+                                        <td>Accounting</td>
+                                        <td><a href="#" data-toggle="modal" data-target="#applicant_modal"> Staff </a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Male</td>
+                                        <td class="center-text">21-20;</td>
+                                        <td class="center-text">2</td>
+                                        <td class="center-text">No</td>
+                                        <td><ul>
+                                                <li>Lorem Ipsum</li>
+                                                <li>Ut wisi enim ad </li>
+                                            </ul>
+                                        </td>
+                                        <td>Accounting</td>
+                                        <td><a href="#" data-toggle="modal" data-target="#applicant_modal"> Staff </a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Female</td>
+                                        <td class="center-text">21-20;</td>
+                                        <td class="center-text">2</td>
+                                        <td class="center-text">No</td>
+                                        <td>
+                                            <ul>
+                                                <li>Lorem Ipsum</li>
+                                                <li>Ut wisi enim ad </li>
+                                            </ul>
+                                        </td>
+                                        <td>Accounting</td>
+                                        <td><a href="#" data-toggle="modal" data-target="#applicant_modal"> Staff </a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        
+                        <section class="tab-pane" id="rec2">
+                            <table class="table no-more-tables table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="11%">Applicant Name</th>
+                                        <th width="13%" class="center-text">Attachment</th>
+                                        <th width="16%">Apply for Position</th>
+                                        <th width="17%">Score</th>
+                                        <th width="17%">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr>
+                                        <td>John Doe</td>
+                                        <td><a href="#"><i class="fa fa-download"></i> johncv.pdf</a></td>
+                                        <td>Staff</td>
+                                        <td><a href="#" data-toggle="modal" data-target="#score_modal">Set Score</a></td>
+                                        <td><a href="#" data-toggle="modal" data-target="#pending_modal">Pending</a></td>                                   
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        
+                        <section class="tab-pane" id="rec3">
+                            <table class="table no-more-tables table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="11%">Applicant Name</th>
+                                        <th width="13%" class="center-text">Attachment</th>
+                                        <th width="16%">Apply fo Position</th>
+                                        <th width="17%">Interview Result</th>
+                                        <th width="17%">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr>
+                                        <td>John Doe</td>
+                                        <td><a href="#"><i class="fa fa-download"></i> johncv.pdf</a></td>
+                                        <td>Staff</td>
+                                        <td>Minta gaji terlalu tinggi</td>
+                                        <td><a href="#" data-toggle="modal" data-target="#pending2_modal">Pending</a></td>                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        
+                        <section class="tab-pane" id="rec4">
+                            <table class="table no-more-tables table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="11%">Applicant Name</th>
+                                        <th width="13%" class="center-text">Attachment</th>
+                                        <th width="16%">Apply fo Position</th>
+                                        <th width="17%">Interview Result</th>
+                                        <th width="17%">Status Interview</th>
+                                        <th width="17%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <div class="modal-header">
+                                   <div class="toolbar pull-right" id="toolbar_main">
+                                        <div class="table-tools-actions">
+                                            <%= link_to new_selected_path, class: "btn btn-success" do %>
+                                                Add New <i class="fa fa-plus"></i>
+                                        <% end %>
+                                        </div>
+                                 </div>
+
+                                    </div>
+                                     <tr>
+                                    <td>John Doe</td>
+                                    <td><a href="#"><i class="fa fa-download"></i> johncv.pdf</a></td>
+                                    <td>Staff</td>
+                                    <td>Minta gaji terlalu tinggi</td>
+                                    <td>Selected</td>
+                                    <td class="btn btn-danger" data-toggle="modal" data-target="#terminate_modal"<Termination><%= link_to 'As Employee', new_employee_path %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="grid simple">
+              <div class="grid-title no-border"><h4><strong>Man Power</strong></h4></div>
+                <div class="grid-body no-border">
+                  <div class="row toolbar-block">
+                    <div class="col-md-12">
+                            
+                        </div>
+                    </div>
+                    <table class="table no-more-tables table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th width="10%">Gender</th>
+                                <th width="12%">Age</th>
+                                <th width="11%">Experience (Years)</th>
+                                <th width="11%">Fresh graduate</th>
+                                <th width="27%">Skill</th>
+                                <th width="12%">Organization</th>
+                                <th width="12%">Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <% @recruitment.recruitment_details.each do |detail| %>
+                                <tr>
+                                    <td>
+                                        <%= detail.gender %>
+                                    </td>
+                                    <td>
+                                        <%= detail.range_age %>
+                                    </td>
+                                    <td>
+                                        <%= detail.experience %>
+                                    </td>
+                                    <td>
+                                        <% if detail.fresh_graduate == true %>
+                                            <span class='fa fa-trash-o'></span>
+                                        <% else %>
+                                            <span class='fa fa-plus'></span>
+                                        <% end %>
+                                    </td>
+                                    <td>
+                                        <%= detail.skill %>
+                                    </td>
+                                    <td>
+                                        <%= detail.organization %>
+                                    </td>
+                                    <td>
+                                        <%= detail.position %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                    
+                    
+                </div>
+            </div>
+            
+            <% if @recruitment.note.present? %>
+                <div class="grid simple">
+                  <div class="grid-title no-border"><h4><strong>Note by Requester</strong></h4></div>
+                    <div class="grid-body no-border">
+                        <%= @recruitment.note %>
+                    </div>
+                    <div class="form-actions">
+                       
+                      </div>
+                </div>  
+            <% end %>
+    </div>
+    <script type="text/javascript">
+        $('table .checkbox input').click( function() {          
+            if($(this).is(':checked')){         
+                $(this).parent().parent().parent().toggleClass('row_selected');
+                if($(this).parent().parent().parent().hasClass('new-rec')){
+                    $('#toolbar_upload').removeClass('hide');
+                    $('#toolbar_def').addClass('hide'); 
+                }else{
+                    $('#toolbar_upload').addClass('hide');
+                    $('#toolbar_def').removeClass('hide');  
+                }               
+            }else{  
+                $(this).parent().parent().parent().toggleClass('row_selected'); 
+                $('#toolbar_upload, #toolbar_def').addClass('hide');
+            }
+        });
+    </script>
+   <script type="text/javascript">
+    $('#text-editor').wysihtml5();
+    </script>

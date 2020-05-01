@@ -1,0 +1,35 @@
+<% @suppliers.each_with_index do |supplier, i| %>
+  <% email = supplier.email %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE-1) : i+1 %></td>
+    <td><span class="name"><%= supplier.code %></span></td>
+    <td class=""><%= link_to supplier.name.upcase, supplier_path(supplier), class: 'blue' %></td>
+    <td class=""><%= supplier.address %></td>
+    <td class="hidden-phone"><%= supplier.city %></td>
+    <td class="hidden-phone"><%= supplier.phone %></td>
+    <td class="hidden-phone"><%= supplier.fax %></td>
+    <td class="hidden-phone"><%= supplier.long_term %></td>
+    <td class="hidden-phone"><%= supplier.status_pkp ? "PKP" : "NPKP"  %></td>
+    <% if current_user.can_manage_supplier? %>
+    <td class="nowrap">
+      <%= link_to edit_supplier_path(supplier), class: "btn btn-primary btn-xs custom-edit-btn" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{supplier.id}, 'suppliers')", class: "btn btn-danger btn-xs custom-edit-btn" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+    <% end %>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <% if @suppliers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@suppliers, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

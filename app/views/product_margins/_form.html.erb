@@ -1,0 +1,241 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product Margin</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-department">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Product Margin</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @product_margin, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Store Name</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <% if current_user.branch_id.present? %>
+                          <%= f.select :office_id, options_for_select([current_user.branch].map{|branch|[branch.office_name, branch.id]}), {}, class: 'hide origin_branch_id ho_id' %>
+                          <%= current_user.branch.office_name %>
+                        <% else %>
+                          <%= f.select :office_id, options_for_select(Branch.all.map{|branch|[branch.office_name, branch.id]}), {}, class: 'origin_branch_id form-control ho_id' %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Code</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :code, class: "input-sm", placeholder: "Auto Generate", disabled: true %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Product</label>
+                      <label class="col-md-9 label">
+                        <label class="col-md-9 input custom-input-box">
+                          <%= text_field_tag :product, (@product_margin.product.description rescue ''), class: "input-sm", placeholder: "No product choosen", readonly: true, id: 'product_name' %>
+                          <%= hidden_field_tag :product, (@product_margin.product.barcode rescue ''), id: 'number' %>
+                        </label>
+                        <button type="button" class="btn btn-primary btn-sm browser_product" onclick="searchManual()" style="margin-left: 10px;">Browse</button>
+                      </label><br>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Start Date</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :start_date, class: "input-sm", :placeholder => DateTime.now.to_date, onchange: "tanggal();" %>
+                        <%= f.hidden_field :time, class: "input-sm", :value => Time.now.strftime("%I:%M:%S %p") %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">End Date</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :end_date, class: "input-sm", :placeholder => DateTime.now.to_date, onchange: "tanggal();" %>
+                        <%= f.hidden_field :time, class: "input-sm", :value => Time.now.strftime("%I:%M:%S %p") %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  <section class="col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Margin (%)</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.number_field :margin, class: "input-sm" %></label>
+                    </section>
+
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Browse Products</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E">
+        <!--List Product -->
+          </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <th>
+                    <%= t(:SKU) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sku-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sku-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:barcode) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                    <th>
+                    <%= t(:Name) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:Brand) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'brand-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'brand-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th class="col-md-2"><%= t(:action) %></th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :sku, params[:sku], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :name, params[:name], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :brand, params[:brand], class: 'form-control search' %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='colour-list'></tbody>
+              </table>
+            </div>
+</div>
+<script>
+  $( document ).ready(function() {
+    $('#product_margin_start_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      onSelect : function(selectedDate) {
+        $('#finishdate').datepicker('option', 'minDate', selectedDate);
+      }
+    });
+
+    $("#office").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/head_offices/autocomplete_head_office_office_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        generate_data_office(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    $('#product_margin_end_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      onSelect : function(selectedDate) {
+        $('#finishdate').datepicker('option', 'minDate', selectedDate);
+      }
+    });
+
+    $('#code').on('input', function() {
+      $('#code').parent().removeClass('state-error');
+    });
+  });
+
+  function tanggal(){
+      var a = $('#product_margin_start_date').val().toString().split("-");
+      var b = $('#product_margin_end_date').val().toString().split("-");
+      if(parseInt(a[0]) < parseInt(b[0])){
+        $('#sendButton').attr('disabled', false);
+        $('#pesan').hide();
+      }
+      else if(parseInt(a[0]) == parseInt(b[0])){
+        if(parseInt(a[1]) < parseInt(b[1])){
+          $('#sendButton').attr('disabled', false);
+          $('#pesan').hide();
+        }
+        else if(parseInt(a[1]) == parseInt(b[1])){
+          if(parseInt(a[2]) <= parseInt(b[2])){
+            $('#sendButton').attr('disabled', false);
+            $('#pesan').hide();
+          }
+          else{
+            $('#sendButton').attr('disabled',true);
+            $('#pesan').show();
+          }
+        }
+        else{
+          $('#sendButton').attr('disabled',true);
+          $('#pesan').show();
+        }
+      }
+      else{
+        $('#sendButton').attr('disabled',true);
+        $('#pesan').show();
+      }
+  }
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#img_prev')
+          .attr('src', e.target.result)
+          .width(135)
+          .height(135);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function generate_data_office(item_id){
+    $.ajax({
+      url: '/head_offices/generate_data_head_office',
+      data: {office_id: item_id}
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

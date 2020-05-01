@@ -1,0 +1,28 @@
+<tr>
+  <td colspan=2>Total</td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.where("date='#{params[:start_date]}'").map(&:start_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.where("date='#{params[:start_date]}'").map(&:start_amount).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:sales_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:sales_amount).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:retur_sales_qty).compact.sum.abs %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:retur_sales_amount).compact.sum.abs %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:gr_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:gr_amount).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:tat_in_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:tat_in_amount).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:tat_out_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:tat_out_amount).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:retur_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:retur_amount).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:so_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.map(&:so_amount).compact.sum %></td>
+  <td class='align-right'>
+    <%= format_currency @product_mutations_ungrouped.where("date='#{params[:end_date]}'").map(&:end_amount).compact.sum-(@product_mutations_ungrouped.where("date='#{params[:start_date]}'").map(&:start_amount).compact.sum-@product_mutations_ungrouped.map(&:sales_amount).compact.sum+@product_mutations_ungrouped.map(&:gr_amount).compact.sum-@product_mutations_ungrouped.map(&:retur_amount).compact.sum+@product_mutations_ungrouped.map(&:tat_in_amount).compact.sum-@product_mutations_ungrouped.map(&:tat_out_amount).compact.sum+@product_mutations_ungrouped.map(&:so_amount).compact.sum) %>
+  </td>
+  <td class='align-right'><%= format_currency @end_stocks.map(&:last_cost).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.where("date='#{params[:end_date]}'").map(&:end_qty).compact.sum %></td>
+  <td class='align-right'><%= format_currency @product_mutations_ungrouped.where("date='#{params[:end_date]}'").map(&:end_amount).compact.sum %></td>
+  <td class='align-right'>
+    <%#= (format_currency (pmh[1].map(&:end_amount).compact.sum/pmh[1].map(&:sales_amount).compact.sum*(Time.now.month == Date::MONTHNAMES.index(params[:month]) ? Time.now.day : "#{params[:year]}-#{params[:month]}-01".to_date.end_of_month.day))) if pmh[1].map(&:sales_amount).compact.sum>0 %>
+  </td>
+</tr>

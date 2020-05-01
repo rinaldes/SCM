@@ -1,0 +1,33 @@
+<% if @receivings.count != 0 %>
+  <% @receivings.each_with_index do |receiving, i| %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td class='nowrap'><%= receiving.office_name %></td>
+      <td class='nowrap'><%= receiving.description %></td>
+      <td class='nowrap'><%= receiving.cancel_date.strftime('%Y-%m-%d') %></td>
+      <td class='nowrap' align="right"><%= receiving.c_quantity %></td>
+      <td class='nowrap'><%= format_currency receiving.price %></td>
+      <td class='nowrap'><%= format_currency receiving.capital_price %></td>
+      <td class='nowrap' align="right"><%= receiving.discount %>%</td>
+      <td class='nowrap'><%= format_currency receiving.discount_amt %></td>
+      <td class='nowrap'><%= format_currency receiving.total_discount_amt %></td>
+      <td class='nowrap'><%= receiving.discount_type %></td>
+      <td class='nowrap'><%= format_currency receiving.price_after_discount %></td>
+      <td class='nowrap'><%= receiving.sales_person_bill_number %></td>
+      <td class='nowrap'><%= format_currency receiving.subtotal_price %></td>
+      <td class='nowrap'><%= format_currency receiving.total_price %></td>
+      <td class='nowrap'><%= receiving.user.username rescue '' %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='11'>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@receivings, options = {}) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='16' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

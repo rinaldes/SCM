@@ -1,0 +1,29 @@
+<% @ap_invoices.each_with_index do |apinvo, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= link_to apinvo.number, finances_ap_invoice_path(apinvo) %></span></td>
+    <td><%= apinvo.supplier_name %></td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="hidden-phone">
+      <%= link_to edit_finances_ap_invoice_path(apinvo), class: "btn btn-primary btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_api(#{apinvo.id})", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=7>
+    <% if @ap_invoices.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@ap_invoices, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

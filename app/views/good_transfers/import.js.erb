@@ -1,0 +1,20 @@
+var number = $("#request tbody tr:last-child td:first-child div").html() || 0;
+var exists = false;
+<% params[:transaction_header] = "good_transfer" %>
+<% params[:transaction_type] = "product_mutation" %>
+<% @product.each do |item| %>
+  <% prod = Product.find_by_barcode(item[1]) %>
+  <% next if prod.nil? %>
+
+  var barcode = $("#number").val();
+  exists = false;
+  $("#request tr").each(function() {
+    if ($(this).find(".product_barcode").html() == "<%= item[1] %>")
+      exists = true;
+  });
+
+  if (!exists) {
+    $("#request tbody").append("<%= j(render 'shared/tr_detail', product: prod, key: "#{Time.now.to_i}#{prod.id}", show_barcode: true, show_price: false, quantity: item[0]) %>");
+    $("#request tbody tr:last-child td:first-child div").append(parseInt(number) + 1);
+  }
+<% end %>

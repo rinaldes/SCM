@@ -1,0 +1,38 @@
+<% if @receivings.count != 0 %>
+  <% @receivings.each_with_index do |receiving, i| %>
+    <% dpp = receiving.purchase_price.to_i * receiving.r_quantity.to_i %>
+    <% ppn = 0 %>
+    <% ppn = dpp * 0.1 if receiving.returns_to_supplier.supplier.status_pkp %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td class='nowrap'><%= receiving.number %></td>
+      <td class='nowrap'><%= receiving.date %></td>
+      <td class='nowrap punya_toko'><%= Office.find(receiving.returns_to_supplier.head_office_id).office_name %></td>
+      <td class='nowrap' align='right'><%= receiving.article %></td>
+      <td class='nowrap'><%= receiving.description %></td>
+      <td class='nowrap' align='right'><%= receiving.r_quantity %></td>
+      <td class='nowrap'><%= receiving.supplier_name rescue ''%></td>
+      <td class='nowrap'><%= format_currency dpp %></td>
+      <td class='nowrap'><%= format_currency ppn %></td>
+      <td class='nowrap'><%= format_currency dpp + ppn rescue 0 %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='11'>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@receivings, options = {}) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='11' align='center'>No Data Entries</td>
+  </tr>
+<% end %>
+<script type="text/javascript">
+  <% if @ada_toko.present? %>
+    $(".punya_toko").addClass("hide");
+  <% else %>
+    $(".punya_toko").removeClass("hide");
+  <% end %>
+</script>

@@ -1,0 +1,191 @@
+<% total_awal_qty = 0 %>
+<% total_awal_price = 0 %>
+<% total_sales_qty = 0 %>
+<% total_sales_price = 0 %>
+<% total_sales_ppn = 0 %>
+<% total_receiving_qty = 0 %>
+<% total_receiving_price = 0 %>
+<% total_receiving_ppn = 0 %>
+<% total_gtr_qty = 0 %>
+<% total_gtr_price = 0 %>
+<% total_gtr_ppn = 0 %>
+<% total_gt_qty = 0 %>
+<% total_gt_price = 0 %>
+<% total_gt_ppn = 0 %>
+<% total_akhir_qty = 0 %>
+<% total_akhir_price = 0 %>
+<% total_so_qty = 0 %>
+<% total_so_price = 0 %>
+<table class="table table-bordered table-striped" id='stock_table'>
+  <thead>
+    <tr>
+      <th rowspan=2>Item Code
+        <span style="float: right;">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'kode_toko-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'kode_toko-asc', class: 'sorting' %>
+        </span></th>
+      <th rowspan=2>Item Name</th>
+      <th colspan=2>Start</th>
+      <th colspan=2>Sales</th>
+      <th rowspan=2>PPN sls</th>
+      <th colspan=2>Retur Sls</th>
+      <th rowspan=2>PPN rtr Sls</th>
+      <th colspan=2>BPB</th>
+      <th rowspan=2>PPNbpb</th>
+      <th colspan=2>TaT In</th>
+      <th colspan=2>TaT Out</th>
+      <th colspan=2>Retur</th>
+      <th rowspan=2>PPNretur</th>
+      <th colspan=2>SO</th>
+      <th colspan=2>End</th>
+    </tr>
+    <tr>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+    </tr>
+    <tr>
+      <th class="hasinput"><%= text_field_tag :product_code, params[:product_code], class: 'form-control', onkeydown: "enter_pressed(event);" %></th>
+      <th class="hasinput"><%= text_field_tag :product_name, params[:product_name], class: 'form-control', onkeydown: "enter_pressed(event);" %></th>
+      <th colspan="22"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% product_mutation_histories.each{|pmh| %>
+      <% sales_qty = stocks["qty_#{pmh[0]}_Sales"].to_f %>
+      <% if pmh[0].present? %>
+        <% awal = ProductMutationHistory.where("product_mutation_histories.id IN (#{ProductMutationHistory.select("MIN(product_mutation_histories.id) AS min_id, product_detail_id")
+          .joins(product_detail: :product).where("product_id=#{pmh[0].id} AND product_mutation_histories.id IN (#{pmh[1].map(&:id).join(',')})").group(:product_detail_id).map(&:min_id).join(',')})") rescue [] %>
+        <% awal_qty = awal.map(&:old_quantity).compact.sum %>
+        <% awal_price = awal.map{|pd|pd.price.to_f/pd.moved_quantity.to_f*pd.old_quantity.to_f}.compact.sum %>
+        <% total_awal_qty += awal_qty %>
+        <% total_awal_price += awal_price %>
+        <% total_sales_qty += sales_qty %>
+        <% sales_price = stocks["price_#{pmh[0]}_Sales"].to_f %>
+        <% total_sales_price += sales_price %>
+        <% sales_ppn = stocks["ppn_#{pmh[0]}_Sales"].to_f %>
+        <% total_sales_ppn += sales_ppn %>
+        <% receiving_qty = stocks["qty_#{pmh[0]}_Receiving"].to_f %>
+        <% total_receiving_qty += receiving_qty %>
+        <% receiving_price = stocks["price_#{pmh[0]}_Receiving"].to_f %>
+        <% total_receiving_price += receiving_price %>
+        <% receiving_ppn = stocks["ppn_#{pmh[0]}_Receiving"].to_f %>
+        <% total_receiving_ppn += receiving_ppn %>
+        <% gtr_qty = stocks["qty_#{pmh[0]}_Good Transfer Receipt"].to_f %>
+        <% total_gtr_qty += gtr_qty %>
+        <% gtr_price = stocks["price_#{pmh[0]}_Good Transfer Receipt"].to_f %>
+        <% total_gtr_price += gtr_price %>
+        <% gtr_ppn = stocks["ppn_#{pmh[0]}_Good Transfer Receipt"].to_f %>
+        <% total_gtr_ppn += gtr_ppn %>
+
+        <% gt_qty = stocks["qty_#{pmh[0]}_Good Transfer"].to_f %>
+        <% total_gt_qty += gt_qty %>
+        <% gt_price = stocks["price_#{pmh[0]}_Good Transfer"].to_f %>
+        <% total_gt_price += gt_price %>
+        <% gt_ppn = stocks["ppn_#{pmh[0]}_Good Transfer"].to_f %>
+        <% total_gt_ppn += gt_ppn %>
+
+        <% so_qty = stocks["qty_#{pmh[0]}_Stock Opname"].to_f %>
+        <% total_so_qty += so_qty %>
+        <% so_price = stocks["price_#{pmh[0]}_Stock Opname"].to_f %>
+        <% total_so_price += so_price %>
+
+        <% conditions = ["product_id=#{pmh[0].id}"] %>
+        <% conditions << "offices.code='#{params[:store_code]}'" if params[:store_code].present? %>
+        <% conditions << "product_mutation_histories.created_at > '#{params[:start_date]} 00:00:00'" if params[:start_date].present? %>
+        <% conditions << "product_mutation_histories.created_at < '#{params[:end_date]} 23:59:59'" if params[:end_date].present? %>
+        <% akhir = ProductMutationHistory.where("product_mutation_histories.id IN (#{ProductMutationHistory.select("MAX(product_mutation_histories.id) AS max_id, product_detail_id")
+          .joins(product_detail: [:product, :warehouse]).where(conditions.join(' AND ')).group(:product_detail_id).map(&:max_id).join(',')})") %>
+
+        <% akhir_qty = akhir.map(&:new_quantity).compact.sum %>
+        <% akhir_price = awal_price-sales_price+receiving_price+gtr_price-gt_price-stocks["price_#{pmh[0]}_Return To Supplier"].to_f+stocks["price_#{pmh[0]}_Stock Opname"].to_f %>
+        <% total_akhir_qty += akhir_qty %>
+        <% total_akhir_price += akhir_price %>
+        <tr>
+          <td><%= pmh[0].article %></td>
+          <td><%= pmh[0].description %></td>
+          <td class='align-right'><%= format_currency awal_qty %></td>
+          <td class='align-right'><%= format_currency awal_price %></td>
+          <td class='align-right'><%= format_currency sales_qty %></td>
+          <td class='align-right'><%= format_currency sales_price %></td>
+          <td class='align-right'><%= format_currency sales_ppn %></td>
+          <td class='align-right'>0</td>
+          <td class='align-right'>0</td>
+          <td class='align-right'>0</td>
+          <td class='align-right'><%= format_currency receiving_qty %></td>
+          <td class='align-right'><%= format_currency receiving_price %></td>
+          <td class='align-right'><%= format_currency receiving_ppn %></td>
+          <td class='align-right'><%= format_currency gtr_qty %></td>
+          <td class='align-right'><%= format_currency gtr_price %></td>
+          <td class='align-right'><%= format_currency gt_qty %></td>
+          <td class='align-right'><%= format_currency gt_price %></td>
+          <td class='align-right'><%= format_currency stocks["qty_#{pmh[0]}_Return To Supplier"].to_f %></td>
+          <td class='align-right'><%= format_currency stocks["price_#{pmh[0]}_Return To Supplier"].to_f %></td>
+          <td class='align-right'><%= format_currency stocks["ppn_#{pmh[0]}_Return To Supplier"].to_f %></td>
+          <td class='align-right'><%= format_currency stocks["qty_#{pmh[0]}_Stock Opname"].to_f %></td>
+          <td class='align-right'><%= format_currency stocks["price_#{pmh[0]}_Stock Opname"].to_f %></td>
+          <td class='align-right'><%= format_currency akhir_qty %></td>
+          <td class='align-right'><%= format_currency akhir_price %></td>
+        </tr>
+      <% end %>
+    <% } %>
+    <tr>
+      <td colspan=2>Total</td>
+      <td class='align-right'><%= format_currency total_awal_qty %></td>
+      <td class='align-right'><%= format_currency total_awal_price %></td>
+      <td class='align-right'><%= format_currency total_sales_qty %></td>
+      <td class='align-right'><%= format_currency total_sales_price %></td>
+      <td class='align-right'><%= format_currency total_sales_ppn %></td>
+      <td class='align-right'>0</td>
+      <td class='align-right'>0</td>
+      <td class='align-right'>0</td>
+      <td class='align-right'><%= format_currency total_receiving_qty %></td>
+      <td class='align-right'><%= format_currency total_receiving_price %></td>
+      <td class='align-right'><%= format_currency total_receiving_ppn %></td>
+      <td class='align-right'><%= format_currency total_gtr_qty %></td>
+      <td class='align-right'><%= format_currency total_gtr_price %></td>
+      <td class='align-right'><%= format_currency total_gt_qty %></td>
+      <td class='align-right'><%= format_currency total_gt_price %></td>
+      <td class='align-right'>0</td>
+      <td class='align-right'>0</td>
+      <td class='align-right'>0</td>
+      <td class='align-right'><%= format_currency total_so_qty %></td>
+      <td class='align-right'><%= format_currency total_so_price %></td>
+      <td class='align-right'><%= format_currency total_akhir_qty %></td>
+      <td class='align-right'><%= format_currency total_akhir_price %></td>
+    </tr>
+  </tbody>
+</table>
+<script type="text/javascript">
+  function reload(){
+    $.ajax({
+      url: "/reports/stock?&all_stores=Item"+
+            "&product_code="+($('#product_code').length == 1 ? $('#product_code').val() : '')+
+            "&product_name="+($('#product_name').length == 1 ? $('#product_name').val() : ''),
+      method: "get",
+      data: $("form").serialize(),
+        dataType: "script"
+    })
+  } 
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

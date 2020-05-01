@@ -1,0 +1,37 @@
+<h5>Detail Sub Jenis</h5>
+<table class="table table-condensed table-striped table-bordered table-hover no-margin">
+  <thead>
+    <tr>
+      <th style="">Code</th>
+      <th style="" class="hidden-phone">Name</th>
+      <th style="" class="hidden-phone">Action</th>
+    </tr>
+  </thead>
+  <tbody class="list_sub_type">
+    <% if @type.id.present? %>
+      <% @type.subtype.each do |type|%>
+        <tr class="" id="<%= type.code%>">
+          <td><input type="text" name="subtype_attributes[][code]" value="<%= type.code %>" class="input-block-level span11 input_uppercase"></td>
+          <td><input type="text" name="subtype_attributes[][name]" class="input-block-level 
+                     span11 input_uppercase" value="<%= type.name %>"></td>
+          <td class="text-center"><a href="javascript:void(0)" class="btn btn-danger" onclick="remData($(this))">
+              <i class="fa fa-times fa-1x"></i></a></td></tr>
+      <%end%>
+    <% end %>
+  </tbody>
+  <tbody>
+    <tr class="new-data-subtype" id="<%= @code %>">
+      <td>
+        <%= text_field_tag "subtype_attributes[][code]", @code , class: "input-block-level", :class => "span11 input_uppercase", :id=> 'input_sub_code' %>
+      </td>
+      <td>
+        <%= text_field_tag "subtype_attributes[][name]","", class: "input-block-level", :class => "span11 input_uppercase", :id=>'input_sub' %>
+      </td>
+      <td class="text-center">
+        <%= link_to "javascript:void(0)", :class => "btn btn-success btn-#{@code}", :data_sub=>@code ,:id=>'add_sub', :onClick => "setData();" do %>
+          <i class="fa  fa-check fa-1x"></i>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>

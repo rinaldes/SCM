@@ -1,0 +1,227 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li><%= t(:inventory) %></li><li><%= t(:product_mutation) %></li><li><%= @good_transfer.code %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @good_transfer.code %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @good_transfer, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label"><%= t(:transfer_date) %></label>
+                      <label class="col-md-8 input custom-input-box"><%= @good_transfer.mutation_date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">No. Goods Transfer</label>
+                      <label class="col-md-8 input custom-input-box"><%= @good_transfer.code %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">From</label>
+                      <label class="col-md-9 input custom-input-box"><%= @good_transfer.origin_warehouse.office_name %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Destination</label>
+                      <label class="col-md-9 input custom-input-box"><%= @good_transfer.destination_warehouse.office_name %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+              <fieldset class="col col-md-12"> <!-- brand person -->
+                <div class="row">
+                  <section class="col col-md-12">
+                    <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                      <thead>
+                        <tr>
+                          <th>CODE</th>
+                          <th>BRAND</th>
+                          <th>TYPE</th>
+                          <th>ARTICLE</th>
+                          <th>COLOUR</th>
+                          <th>COST OF GOODS</th>
+                          <th>SIZE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @good_transfer.product_mutation_details.group_by{|prd|prd.product_size.product_id}.each do |prd| %>
+                          <% detail = prd[1][0].product_size %>
+                          <% product = detail.product %>
+                          <tr>
+                            <td>
+                              <span class='hidden'><%= detail.product_id rescue '' %></span>
+                              <span><%= product.barcode rescue '' %></span>
+                            </td>
+                            <td><%= product.brand.name rescue '' %></td>
+                            <td><%= product.m_class.name rescue '' %></td>
+                            <td><%= product.article rescue '' %></td>
+                            <td><%= product.colour.name rescue '' %></td>
+                            <td><%= product.cost_of_products rescue '' %></td>
+                            <td><%= link_to 'View', 'javascript:void(0)', onclick: "$('#myModal#{product.id}').modal()" %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+                <%= link_to 'Print To PDF', print_to_pdf_good_transfer_url(@good_transfer), class: 'btn btn-primary' %>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'>
+  <% @good_transfer.product_mutation_details.group_by{|prd|prd.product_size.product_id}.each_with_index { |prd, i| %>
+    <% product = prd[1][0].product_size.product %>
+    <div class="modal fade" id="myModal<%= product.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <% quantities = prd[1].map(&:quantity); %>
+      <% product_sizes = product.product_sizes; %>
+      <% list_product = @list_product[product.id]; %>
+      <% key = "#{Time.now}#{i}" %>
+      <style type="text/css">
+        .label{
+          color: #151313;
+        }
+      </style>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Size Detail</h4>
+          </div>
+          <div class="modal-body" style="color:#5E5E5E">
+            <div class="row">
+              <%= render partial: 'shared/product_info', locals: {product: product} %>
+              <section class="col col-md-12">
+                <label class="col-md-12 input custom-input-box">
+                  <table class="table table-striped table-bordered" id="table_size">
+                    <thead>
+                      <tr>
+                        <th>Size</th>
+                        <% product_sizes.each do |product_size| %>
+                          <td><%= product_size.size_detail.size_number.to_s %></td>
+                        <% end %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Retur Quantity</th>
+                        <% product_sizes.each do |product_size| %>
+                          <td><%= @product_mutation_details.find_by_product_size_id(product_size.id).quantity %></td>
+                        <% end %>
+                      </tr>
+                    </tbody>
+                  </table>
+                </label>
+              </section>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+  <% } %>
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    <% if params[:action] == 'edit' %>
+      <% @good_transfer.good_transfer_details.joins(product_size: :product).select("DISTINCT product_id").each{|cp| %>
+        add_brand('<%= cp.product_id %>')
+      <% } %>
+    <% end %>
+    autocomplete_barcode()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+    set_barcode()
+  });
+
+  function set_barcode(){
+    if ($('#good_transfer_origin_branch_id').val() == '')
+      $('#barcode').attr('disabled', 'disabled')
+    else
+      $('#barcode').removeAttr('disabled')
+
+  }
+  function add_brand(product_id, good_transfer_detail_id){
+    var date = new Date();
+    $.ajax({
+      url: '/good_transfers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id,
+        warehouse_id: $('#good_transfer_origin_branch_id').val(), id: '<%= @good_transfer.id %>'
+      }
+    })
+  }
+
+  function merk(){
+  }
+
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

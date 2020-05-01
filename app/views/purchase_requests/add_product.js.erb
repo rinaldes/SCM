@@ -1,0 +1,19 @@
+//$("#request tbody").append("<%#= j(render 'shared/tr_detail', product_size: @product_size, product: @product, key: Time.now.to_i, transaction_type: 'purchase_requests') %>");
+var inputValues = [];
+var date = new Date();
+key = date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+$("#table_size input[type=text]").each(function() {
+  inputValues.push($(this).val())
+  key = key+$(this).next().val()
+})
+$("#request tbody").append("
+  <tr><td><span class='hidden'>"+
+  $('#product_id').val()+"</span></td><td>"+
+  $('#article').val()+"</td><td>"+
+  $('#number').val()+"</td><td>"+
+  $('#merk').val()+
+  "</td><td><%= @product.description %></td><td>" +
+  $('#hpp').val()+
+  "</td><td><input class='input-sm' type='text' "
+  +"value='<%= params[:quantities] %>' name='purchase_request[purchase_request_details_attributes][<%= params[:key] %>][quantity]' /></td><td><a href='javascript:void(0)' class='btn btn-warning btn-xs custom-edit-btn' onclick='removeList(this);'><i class='fa fa-trash-o' rel='tooltip'></i></a></td></tr>")
+clone_details()

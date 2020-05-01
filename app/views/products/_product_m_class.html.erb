@@ -1,0 +1,18 @@
+<section class="form-group" id='mclass<%= i %>'>
+  <label class="col-md-4 label">M-Class <%= i %><span class='important'>*</span></label>
+  <label class="col-md-8 input custom-input-box">
+    <%= text_field_tag "m_class", params["m_class"], class: "m_class input-sm autocomplete-field", placeholder: "Select or type to autocomplete", id: "m_class_#{i}" %>
+    <a class="ui-button ui-widget ui-state-default ui-button-icon-only custom-combobox-toggle ui-corner-right" tabindex="-1">
+      <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text"></span>
+    </a>
+    <ul style="display: none; width: 100%; top: 29px;" tabindex="0" id="ui-id-1" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content">
+      <% @m_classes.each{|m_class| %>
+        <li tabindex="-1" id="ui-id-2" class="ui-menu-item" onclick="reload_mclass(<%= i.to_i %>, $(this).html())">
+          <%= m_class.name %>
+        </li>
+      <% } %>
+    </ul>
+  </label>
+  <!-- <button id='dmclass<%= i %>', href="javascript:void(0)" onclick="mundur(<%= i.to_i %>);"><i class='fa fa-trash-o'></i></button> -->
+  <%=link_to 'Del', 'javascript:void(0)', onclick:"mundur(#{i})" %>
+</section>

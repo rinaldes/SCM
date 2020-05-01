@@ -1,0 +1,176 @@
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return to Supplier
+          </h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <div class="row">
+              <table id="table-info">
+                <tr>
+                  <td><label>Return Date</label>:<span><%= @returns_to_supplier.date %></span></td>
+                  <td></td>
+                  <td><label>Name</label>:<span><%= Office.find(@returns_to_supplier.head_office_id).office_name rescue ''%></span></td>
+                </tr>
+                <tr>
+                  <td><label>Return Number</label>:<span><%= @returns_to_supplier.number %></span></td>
+                  <td></td>
+                  <td><label>Code</label>:<span><%= Office.find(@returns_to_supplier.head_office_id).code rescue ''%></span></td>
+                </tr>
+                <tr>
+                  <td><label>Invoice Number</label>:<span><%= @receiving.consigment_number rescue '' %></span></td>
+                  <td></td>
+                  <td><label>Code Supplier</label>:<span><%= @supplier.code rescue '' %></span></td>
+                </tr>
+                <tr>
+                  <td><label><i>Remark</i></label>:<span><%= @returns_to_supplier.note %></span></td>
+                  <td></td>
+                  <td><label>Name Supplier</label>:<span><%= @supplier.name rescue '' %></span></td>
+                </tr>
+                <tr>
+                  <td><label>Date PO</label>:<span><%= @purchase_order.date rescue '-' %></span></td>
+                </tr>
+                <tr>
+                  <td><label>No PO</label>:<span><%= @purchase_order.number rescue '-' %></span></td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <section class="col col-md-12">
+              <div class="row">
+                <table class="table" border="1" width="100%" id="orders">
+                  <tr>
+                    <th>ARTICLE</th>
+                    <th>DESCRIPTION</th>
+                    <th>HARGA SATUAN</th>
+                    <th>QUANTITY</th>
+                    <th>DISC1 %</th>
+                    <th>DISC2 %</th>
+                    <th>DPP</th>
+                    <th>PPN</th>
+                    <th>TOTAL PRICE</th>
+                  </tr>
+                  <% grand_total, total_ppn = 0, 0 %>
+                  <% @returns_to_supplier.returns_to_supplier_details.where("quantity>0").each do |rts| %>
+                    <% product = rts.product %>
+                    <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*rts.fraction %>
+                    <% hpp_akhir = rts.purchase_price*rts.fraction-hpp_disc_amt %>
+
+                    <!-- ngambil harga beli dari receiving -->
+                    <% if @returns_to_supplier.receive_no.present? %>
+                      <% receiving = Receiving.find_by_number(@returns_to_supplier.receive_no) %>
+                      <% rd = ReceivingDetail.find_by_product_id_and_receiving_id(product.id, receiving.id) %>
+                    <% end %>
+
+                    <% dpp = hpp_akhir*rts.quantity %>
+                    <% ppn = 0 unless @returns_to_supplier.supplier.status_pkp %>
+                    <% ppn = dpp*0.1 if @returns_to_supplier.supplier.status_pkp %>
+                    <% total = dpp + ppn %>
+                    <tr>
+                      <td><%= product.article rescue '' %></td>
+                      <td><%= product.description rescue '' %></td>
+                      <td style='text-align: right; padding-right: 21px'><%= format_currency rts.purchase_price %></td>
+                      <td style='text-align: right; width: 21px; padding-right: 21px'><%= rts.quantity %></td>
+                      <td style='text-align: right; padding-right: 21px'><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+                      <td style='text-align: right; padding-right: 21px'><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+                      <td style='text-align: right; padding-right: 21px'><%= format_currency dpp %></td>
+                      <td style='text-align: right; padding-right: 21px'><%= format_currency ppn %></td>
+                      <td style='text-align: right; padding-right: 21px'><%= format_currency total %></td>
+                    </tr>
+
+                    <% total_ppn += ppn if product.flag_pajak == 'BKP' && @returns_to_supplier.supplier.status_pkp %>
+                    <% grand_total += total %>
+                  <% end %>
+                  <tr>
+                    <td class="noborder" colspan=7></td>
+                    <td>Grand Total</td>
+                    <td style='text-align: right; padding-right: 21px'><%= format_currency grand_total %></td>
+                  </tr>
+                </table>
+              </div>
+            </section>
+            <section class="col col-md-12">
+              <div class="row">
+              <table id="table-info">
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                  <td>DELIVERED BY</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>RECEIVED BY</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+                </tr>
+              </table>
+              <table id="table-info">
+                <tr>
+                  <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Print By</label>:<span><%= current_user.fullname %></span></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Date</label>:<span><%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %></span></td>
+                </tr>
+              </table>
+              </div>
+            </section>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<style>
+td, th {
+  font-size: 11px;
+}
+</style>

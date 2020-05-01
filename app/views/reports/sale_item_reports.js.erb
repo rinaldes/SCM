@@ -1,0 +1,54 @@
+<% if @dari == "item" %>
+$("#sales").html("<%= j(render 'reports/sales/all_item', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+ <% elsif @dari == "category" %>
+   $("#sales").html("<%= j(render 'reports/sales/all_category', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+ <% elsif @dari == "month" %>
+  $("#tf_label").hide();
+  $("#ut_label").hide();
+  $("#start_date").hide();
+  $("#end_date").hide();
+  $("#months").show();
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sales").html("<%= j(render 'reports/sales/by_months', time_type: 'YYYY-MM-DD', label: 'Month', sales: @sales) %>");
+ <% elsif @dari == "store" %>
+  $("#sales").html("<%= j(render 'reports/sales/all_toko') %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+ <% elsif @dari == "member" %>
+  $("#sales").html("<%= j(render 'reports/sales/by_member', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+ <% elsif @dari == "hour" %>
+ $("#sales").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'YYYY-MM-DD', label: 'Date', sales: @sales) %>");
+  //$("#sales_per_hour").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'HH24 YYYY-MM-DD', label: 'Jam', sales: @sales_per_hour, dari: 'hour') %>");  
+  $("#tf_label").show();
+  $("#ut_label").show();
+  $("#start_date").show();
+  $("#end_date").show();
+  $("#months").hide();
+  //$(".hide_detail").removeClass('hide');
+ <% elsif @dari == "tanggal" %>
+ $("#sales").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'YYYY-MM-DD', label: 'Date', sales: @sales) %>");
+ // $("#sales_per_item").html("<%= j(render 'reports/sales/all_item', sales: @sales_per_item, dari: 'tanggal') %>");
+  $("#tf_label").show();
+  $("#ut_label").show();
+  $("#start_date").show();
+  $("#end_date").show();
+  $("#months").hide();
+  //$(".hide_detail").removeClass('hide');
+ <% end %>

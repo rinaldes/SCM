@@ -1,0 +1,17 @@
+<% if @inventory_requests.count > 0 %>
+  <% @inventory_requests.each do |request| %>
+    <tr>
+      <td><%= link_to request.number, inventory_request_url(request) %></td>
+      <td><%= request.date %></td>
+      <td><%= request.status %></td>
+      <td>
+        <%= link_to raw("<i class='fa fa-pencil'> </i>"), edit_inventory_request_path(request.id), class: "btn btn-primary btn-xs edit-btn-dlt" %>
+        <%= link_to raw("<i class='fa fa-trash-o'></i>"), 'javascript:void(0)', onclick: "delete_one(#{request.id}, 'inventory_requests')", class: "btn btn-danger btn-xs edit-btn-dlt" %>
+      </td>
+    </tr>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan='8' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

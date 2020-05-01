@@ -1,0 +1,118 @@
+<%= render 'header_profile', user: @user %>
+
+<div class="col-md-12">
+  <section class="panel">
+    <div class="panel-body">
+      <div class="tab-content tasi-tab">
+        <div id="contacts" class="tab-pane active">
+          <div class="position-center">
+            <div class="prf-contacts sttng">
+              <h2>Personal Information</h2>
+            </div>
+
+            <%= form_for(@user, url: profiles_path, html: { method: :put, role: "form", class: "form-horizontal" }) do |f| %>
+              <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+              <% if @user.errors.any? %>
+                <div id="error_explanation">
+                  <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+                  <ul>
+                  <% @user.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <div class="form-group">
+                <%= f.label :first_name, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= f.text_field :first_name, placeholder: "First Name", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :last_name, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= f.text_field :last_name, placeholder: "Last Name", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :image, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= f.file_field :image, autocomplete: "off", class: "form-control", placeholder: "Upload your image" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :gender, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6 edit-gender-profile">
+                  <%= f.label :gender_male, class: "label_radio col-lg-4 col-sm-4" do %>
+                    <%= f.radio_button :gender, "male" %> Male
+                  <% end %>
+                  <%= f.label :gender_female, class: "label_radio col-lg-4 col-sm-4" do %>
+                    <%= f.radio_button :gender, "female" %> Female
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :birth_place, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= f.text_field :birth_place, placeholder: "Birth Place", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :birth_date, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6 edit-gender-profile">
+                  <div data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-group date dpYears">
+                    <%= f.text_field :birth_date, placeholder: "Birth Date", class: "form-control", readonly: "" %>
+                    <span class="input-group-btn add-on">
+                      <%= button_tag class: "btn btn-primary", type: "button" do %>
+                        <i class="fa fa-calendar"></i>
+                      <% end %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="prf-contacts sttng">
+                <h2>Login Information</h2>
+              </div>
+              
+              <div class="form-group">
+                <%= f.label :username, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= f.text_field :username, placeholder: "Username", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :email, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= f.email_field :email, placeholder: "Email", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password, class: "col-lg-2 control-label" %>
+                <div class="col-lg-6">
+                  <%= link_to "Edit password", edit_user_registration_path, class: "edit-password-profile" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                  <%= button_tag "Save", class: "btn btn-primary", type: "submit" %>
+                  <%= button_tag "Cancel", class: "btn btn-default", type: "button" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

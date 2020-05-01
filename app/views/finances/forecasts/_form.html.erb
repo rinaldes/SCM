@@ -1,0 +1,32 @@
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <section></section>
+            <section>
+                <label class="col-md-4 label">Year</label>
+                <label class="col-md-6 input custom-input-box">
+                <%= f.date_select :year, {:order => [:year], :start_year => Time.now.year, :end_year => Time.now.year+5, :prompt => {:year => "Select year"}}, {:class => "form-control", id: "select-year"} %>
+                </label>
+
+                <label class="col-md-4 label">Branch</label>
+                <label class="col-md-6 input custom-input-box">
+                    <input class="form-control" placeholder="Type branch name for hints" type="text" id="branch">
+                    <%= hidden_field_tag 'forecast[office_id]', '', id: "office_id" %>
+                </label>
+
+                <label class="col-md-4 label">Months</label>
+                <label class="col-md-6">
+                    <% 12.times {f.object.monthly_forecasts.build} %>
+                    <%= f.fields_for :monthly_forecasts  do |monthly_forecast| %>
+                        <%= render 'monthly_forecast_fields', f: monthly_forecast %>
+                    <% end %>
+                 </label>
+            </section>
+        </section>
+    </div>
+</fieldset>
+
+<footer>
+    <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-forecast", data: { :disable_with => "Please wait..." }  %>
+    <%= link_to "Back", finances_forecasts_path, :class => "btn btn-default"  %>
+</footer>

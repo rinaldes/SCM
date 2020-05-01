@@ -1,0 +1,86 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Selling Price</li><li><%#= @selling_price. %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-department">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Selling Price</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <form class='smart-form'>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">Store Name</label>
+                      <label class="col-md-8 input custom-input-box"><%= @selling_price.office.office_name %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Product</label>
+                      <label class="col-md-8 label">
+                        <label class="col-md-6 input custom-input-box"><%= @selling_price.product.description %></label>
+                      </label><br>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Start Date</label>
+                      <label class="col col-md-8 input custom-input-box" style="padding: 0px;"><%= @selling_price.start_date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">End Date</label>
+                      <label class="col col-md-8 input custom-input-box" style="padding: 0px;"><%= @selling_price.end_date %></label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  <section class="col-md-4">
+                    <section>
+                      <label class="col-md-4 label">HPP</label>
+                      <label class="col-md-7 input custom-input-box"><%= format_currency @selling_price.hpp %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">HPP Average</label>
+                      <label class="col-md-7 input custom-input-box"><%= format_currency @selling_price.hpp_average %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">HPP Out</label>
+                      <label class="col-md-7 input custom-input-box"><%= format_currency @selling_price.hpp_2 %></label>
+                    </section>
+                    <section>
+                      <% if @selling_price.margin_percent.present? %>
+                        <label class="col-md-4 label">Margin Percent</label>
+                        <label class="col-md-7 input custom-input-box"><%= @selling_price.margin_percent %></label>
+                      <% else %>
+                        <label class="col-md-4 label">Selling Price</label>
+                        <label class="col-md-7 input custom-input-box"><%= format_currency @selling_price.selling_price %></label>
+                      <% end %>
+                    </section>
+                  </section>
+                  <section class="col-md-4">
+                    <section>
+                      <label class="col-md-4 label">PPN In</label>
+                      <label class="col-md-7 input custom-input-box"><%= format_currency @selling_price.ppn_in %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">PPN Out</label>
+                      <label class="col-md-7 input custom-input-box"><%= format_currency @selling_price.ppn_out %></label>
+                    </section>
+                  </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            </form>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

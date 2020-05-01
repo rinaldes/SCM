@@ -1,0 +1,105 @@
+<!-- Form product yang sudah dipilih -->
+<div class="row">
+  <!-- NEW COL START -->
+  <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+    <!-- Widget ID (each widget will need unique ID)-->
+    <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" role="widget">
+      <header role="heading">
+        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+        <h2>Product for Stock Opname </h2>
+      </header>
+      <!-- widget div-->
+      <div role="content">
+        <!-- widget content -->
+        <div class="widget-body no-padding">
+          <form class="smart-form">
+            <fieldset>
+              <div class="row">
+                <section class="col col-lg-12">
+                  <input type="hidden" id="so_item">
+                  <table class="table table-striped table-bordered" width="100%" id='selected_products_table'>
+                    <thead>
+                      <tr>
+                        <th><%= t(:no) %></th>
+                        <th><%= t(:barcode) %></th>
+                        <th><%= t(:article) %></th>
+                        <th><%= t(:description) %></th>
+                        <th><%= t(:action) %></th>
+                      </tr>
+                    </thead>
+                    <tbody id='selected_products_table_list'></tbody>
+                  </table>
+                </section>
+              </div>
+            </fieldset>
+            <footer><button type="button" class="btn btn-success" data-dismiss="modal" onclick="validate_store()">Save</button></footer>
+          </form>
+        </div>
+        <!-- end widget content -->
+      </div>
+      <!-- end widget div -->
+    </div>
+    <!-- end widget -->
+  </article>
+  <!-- END COL -->
+</div>
+<!-- END Form product yang sudah dipilih -->
+
+<!-- Form product yang akan dipilih -->
+<div class="row">
+  <!-- NEW COL START -->
+  <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+    <!-- Widget ID (each widget will need unique ID)-->
+    <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" role="widget">
+      <header role="heading">
+        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+        <h2>Product List </h2>
+      </header>
+      <!-- widget div-->
+      <div role="content">
+        <!-- widget content -->
+        <div class="widget-body no-padding">
+          <form class="smart-form">
+            <fieldset>
+              <div class="row">
+                <section class="col col-lg-12">
+                  <table class="table table-striped table-bordered" width="100%" id='product_list_table'>
+                    <thead>
+                      <tr>
+                        <th><%= t(:no) %></th>
+                        <th><%= t(:barcode) %></th>
+                        <th><%= t(:article) %></th>
+                        <th><%= t(:description) %></th>
+                        <th><%= t(:action) %></th>
+                      </tr>
+                      <tr>
+                        <th></th>
+                        <th class="hasinput">
+                          <%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %>
+                        </th>
+                        <th class="hasinput">
+                          <%= text_field_tag :article, params[:article], class: 'form-control search' %>
+                        </th>
+                        <th class="hasinput">
+                          <%= text_field_tag :description, params[:description], class: 'form-control search' %>
+                        </th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id='product-list'><%= render 'product_list' %></tbody>
+                  </table>
+                </section>
+              </div>
+            </fieldset>
+            <footer></footer>
+          </form>
+        </div>
+        <!-- end widget content -->
+      </div>
+      <!-- end widget div -->
+    </div>
+    <!-- end widget -->
+  </article>
+  <!-- END COL -->
+</div>
+<!-- END Form product yang akan dipilih -->

@@ -1,0 +1,3 @@
+<% contact_people.each do |cp| %>
+  <li tabindex="-1" id="ui-id-2" class="ui-menu-item" onclick="hide_me(this);chooseContactPerson(<%= cp.id %>)"><%= cp.name %></li>
+<% end %>

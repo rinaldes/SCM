@@ -1,0 +1,6 @@
+<% if @user.save %>
+$("#users").append("<%= j(render 'user', :user => @user) %>")
+$("#myModal").modal('hide')
+<% else %>
+$("#myModal").html("<%= j(render 'new') %>")
+<% end %>

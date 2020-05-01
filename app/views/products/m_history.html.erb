@@ -1,0 +1,82 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Inventory</li><li>Product Mutation History</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Product Mutation History</h2> <!-- header content --></header>
+          <div style='overflow-y: hidden'><!-- widget div-->
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                    SKU
+                    <span style="float: right;">
+                      <%= link_to 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'article-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </span>
+                  </th>
+                  <th class='nowrap'>
+                    Barcode
+                    <%= link_to 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                  </th>
+                  <th class=''>
+                    Name
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  </th>
+                  <th class=''>
+                    Department
+                    <%= link_to 'javascript:void(0)', id: 'department_id-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to 'javascript:void(0)', id: 'department_id-asc', class: 'sorting' do %>
+                      <i class="fa fa-sort-asc"></i>
+                    <% end %>
+                  </th>
+                  <th class='nowrap'>
+                    Category
+                    <%= link_to 'javascript:void(0)', id: 'm_class_name-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'm_class_name-asc', class: 'sorting' %>
+                  </th>
+                    <th>
+                      Action
+                    </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :department_name, params[:department_name], class: 'form-control search', name: 'departments.name' %></th>
+                    <th class="hasinput"><%= text_field_tag :m_class_name, params[:m_class_name], class: 'form-control search', name: 'm_classes.name' %></th>
+                    <th></th>
+                  </tr>
+              </thead>
+              <tbody id='m-history-list'><%= render 'm_history_list' %></tbody>
+            </table>
+          </div><!-- end widget content -->
+        </div><!-- end widget -->
+      </article><!-- WIDGET END -->
+    </div><!-- end row -->
+  </section><!-- end widget grid -->
+</div><!-- end row -->

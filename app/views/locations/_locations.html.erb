@@ -1,0 +1,12 @@
+<% locations.sort_by(&:name).each_with_index do |location, idx| %>
+  <% no = "#{i}.#{idx+1}" %>
+  <tr>
+    <td class="hidden-phone"><%= raw "#{spliter}#{no}" %></td>
+    <td><span class="name"><%= raw "#{spliter}#{location.jenis}" %></span></td>
+    <td><span class="name"><%= raw "#{spliter}#{location.code}" %></span></td>
+    <td class="hidden-phone">
+      <%= raw "#{spliter}#{location.name}" %>
+      <%= render partial: 'locations', locals: {locations: location.locations, spliter: "#{spliter}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", i: no} if location.locations.present? %>
+    </td>
+  </tr>
+<% end %>

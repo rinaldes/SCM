@@ -1,0 +1,5 @@
+$("#notification").html("<%= j(render 'dashboard/notification') %>");
+<% if @supplier.errors.blank? %>
+	$("#plano-list").html("<%= j(render 'plano_list') %>");
+<% end %>
+$("#form-plano").html("<%= j(render 'form') %>");

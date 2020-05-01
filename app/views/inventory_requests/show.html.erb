@@ -1,0 +1,246 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Inventory</li><li>Inventory Request</li><li><%= @inventory_request.number %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @inventory_request.number %></h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @inventory_request, html: {class: "smart-form", id: "form_request"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">TGL.IR</label>
+                      <label class="col-md-10 input custom-input-box"><%= @inventory_request.date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">No.IR </label>
+                      <label class="col-md-10 input custom-input-box"><%= @inventory_request.number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">IR Note</label>
+                      <label class="col-md-10 textarea custom-input-box"><%= @inventory_request.note || '-' %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="row">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                    <thead>
+                      <tr>
+                        <th>NO</th>
+                        <th>SKU</th>
+                        <th>Barcode</th>
+                        <th>Brand</th>
+                        <th>Product Name</th>
+                        <th>Total HPP</th>
+                        <th>Qty</th>
+                      </tr>
+                    </thead>
+                    <tbody id="list_detail-list">
+                      <% @inventory_request.inventory_request_details.each_with_index do |prd, i| %>
+                        <% product = prd.product %>
+                        <tr>
+                          <td><%= i + 1 %>
+                          <td><%= product.article rescue '' %></td>
+                          <td>
+                            <span class='hidden'><%= detail.product_id rescue '' %></span>
+                            <span><%= product.barcode rescue '' %></span>
+                          </td>
+                          <td><%= product.brand.name rescue '' %></td>
+                          <td><%= product.description rescue '' %></td>
+                          <td><%= product.cost_of_products*prd.quantity rescue '' %></td>
+                          <td><%= prd.quantity %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+                <%#= link_to 'Print To PDF', print_to_pdf_inventory_request_url(@inventory_request), class: 'btn btn-primary' %>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'>
+  <% @inventory_request.inventory_request_details.group_by{|prd|prd.product_id}.each_with_index { |prd, i| %>
+    <% product = prd[1][0].product %>
+    <% quantities = prd[1].map(&:quantity) %>
+    <% list_product = @list_product[product.id] %>
+    <% key = "#{Time.now}#{i}" %>
+    <div class="modal fade" id="myModal<%= product.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <style type="text/css">
+        .label{
+          color: #151313;
+        }
+      </style>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Size Detail</h4>
+          </div>
+          <div class="modal-body" style="color:#5E5E5E">
+            <div class="row">
+              <%= render partial: 'shared/product_info', locals: {product: product} %>
+              <section class="col col-md-12">
+                <label class="col-md-12 input custom-input-box">
+                  <table class="table table-striped table-bordered" id="table_size">
+                    <thead>
+                      <tr>
+                        <th>Size</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if list_product.present? %>
+                      <tr>
+                        <th>Min Stock</th>
+                        <% list_product.each_with_index do |detail, i| %>
+                          <td><%= detail.min_stock.to_i %></td>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <th>Available Quantity</th>
+                        <% list_product.each_with_index do |detail, i| %>
+                          <td><%= detail.available_qty.to_i %></td>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <th>Requested Quantity</th>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </label>
+              </section>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+  <% } %>
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    autocomplete_barcode()
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#supplier_code').val(ui.item.code)
+        $('#purchase_request_supplier_id').val(ui.item.id)
+        $('#alamat').val(ui.item.address)
+      },
+      minLength: 1
+    });
+    reset_form();
+
+    <% if params[:action] == 'edit' %>
+      $("#purchase_request_supplier_id").val("<%= @supplier.id rescue '' %>");
+      $("#supplier_name").val("<%= @supplier.name rescue '' %>")
+      $("#alamat").val("<%= @supplier.address rescue '' %>");
+      $("#supplier_code").val("<%= @supplier.code rescue '' %>");
+    <% end %>
+  });
+
+  function getProduct(){
+    $.ajax({
+      url: '<%= get_product_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        barcode: $("#number").val()
+      }
+    })
+  }
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function removeList(event){
+    $(event.target).parent().parent().remove();
+  }
+
+
+  function reset_form(){
+    document.getElementById("form_request").reset();
+    $("#request tboby").html("");
+  }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_requests/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function changeBarcode(barcode){
+    $("#number").val(barcode);
+    getProduct()
+    $("#myModal").modal('hide');
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

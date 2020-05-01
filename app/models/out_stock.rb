@@ -1,0 +1,3 @@
+class OutStock < ProductDetail
+	
+end

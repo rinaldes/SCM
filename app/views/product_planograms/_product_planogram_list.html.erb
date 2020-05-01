@@ -1,0 +1,19 @@
+                        <% @product_planograms.each_with_index do |prop,i| %>
+                        <tr>
+                          <td><%= i + 1%></td>
+                          <td><%= prop.product.barcode %></td>
+                          <td><%= prop.product.description %></td>
+                          <td>
+                          <%= link_to 'javascript:void(0)', onclick: "delete_one(#{prop.id}, 'product_planograms')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+                            <i class="fa fa-trash-o"></i>
+                          <% end %>
+                          </td>
+                        </tr>
+                        <% end %>
+                        <tr>
+                          <td colspan=4>
+                            <% if @product_planograms.blank? %>
+                              <%= raw '<center>No Data Available</center>' %>
+                            <% end %>
+                          </td>
+                        </tr>

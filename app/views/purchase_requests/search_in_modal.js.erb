@@ -1,0 +1,8 @@
+$("#product-search").html("<%= j( render 'product_search_list')%>")
+paging()
+$(function () {
+        $('.pagination a').click(function () {
+                $.get(this.href, null, null, 'script');
+                return false;
+        });
+});

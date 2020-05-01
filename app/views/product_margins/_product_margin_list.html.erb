@@ -1,0 +1,29 @@
+<% @product_margins.each_with_index do |product_margin, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= product_margin.product.description rescue nil %></td>
+    <td class="hidden-phone"><%= product_margin.start_date %></td>
+    <td class="hidden-phone"><%= product_margin.end_date %></td>
+    <td class="hidden-phone"><%= format_currency product_margin.margin %> %</td>
+
+    <td class="hidden-phone nowrap">
+      <%= link_to edit_product_margin_path(product_margin), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{product_margin.id}, 'product_margins')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=12>
+    <% if @product_margins.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,93 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:data_master) %></li><li><%= t(:ar_voucher) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <%= render 'layouts/notice' %>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span><%= t(:ar_voucher_list) %></h2> <!-- header content --></header>
+          <div>
+            <div class="widget-body no-padding">
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_ar_voucher)}"), new_ar_voucher_url,
+                class: "btn btn-labeled btn-primary edit-btn-primary" %>
+            </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <th>
+                    <%= t(:name) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:valid_from) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'valid_from-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'valid_from-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:valid_until) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'valid_until-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'valid_until-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:amount) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'amount-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'amount-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:discount) %> (%)
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'discount_percent-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'discount_percent-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Discount (Amount)
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'discount_amount-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'discount_amount-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Store
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                    <th class="col-md-2">Action</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :name, params[:name], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :valid_from, params[:valid_from], class: 'form-control search', name: "to_char(valid_from, 'DD-MM-YYYY')" %></th>
+                    <th class="hasinput"><%= text_field_tag :valid_until, params[:valid_until], class: 'form-control search', name: "to_char(valid_until, 'DD-MM-YYYY')" %></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='ar_voucher-list'><%= render 'ar_voucher_list' %></tbody>
+              </table>
+            </div>
+          </div>
+      </article>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,289 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Purchasing</li><li>Retur Goods To Supplier</li><li>Edit</li><li><%= @returns_to_supplier.number %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Retur Goods</h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <%= form_for @returns_to_supplier, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Retur No</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :number, class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Retur Date</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :date, class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Status</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= label_tag "Pending", "Pending", class: "input-sm", readonly: true %>
+                        <%= f.hidden_field :status %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Note</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_area :note, class: "input-sm" %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Receive No <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag :receive_no, (@receiving.number rescue '-'), class: 'input-sm autocompletenya2', placeholder: "Type to Autocomplete" %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Receive Date </label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag "r_date", (@receiving.date rescue '-'), class: "input-sm r_date", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Supplier Code</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag "supplier_code", (@supplier.code rescue '-'), class: "input-sm supplier_code", readonly: true %>
+                      </label>
+                    <section>
+                      <label class="col-md-3 label">Supplier Name</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag "supplier_name", (@supplier.name rescue '-'), class: "input-sm supplier_name", readonly: true %>
+                      </label>
+                    <section>
+                      <label class="col-md-3 label">Supplier Address</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag "supplier_address", (@supplier.address rescue '-'), class: "input-sm supplier_address", readonly: true %>
+                      </label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <div class="barang">
+                <%= render "purchase_requests/product_search" %>
+              </div>
+              <fieldset class="col col-md-12">
+              <%= link_to 'Add List', 'javascript:void(0)', class: 'btn btn-primary btn-xs add_list' %>
+                <div class="row">
+                  <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                    <thead>
+                      <tr>
+                        <th>Barcode</th>
+                        <th>Brand</th>
+                        <th>Article</th>
+                        <th>Colour</th>
+                        <th>Department</th>
+                        <th>Retur QTY</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id='list_detail'>
+                      <%= render partial: "list_detail", locals: {details: @returns_to_supplier.returns_to_supplier_details} if params[:action] == 'edit' %>
+                    </tbody>
+                  </table>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick="return(beforeSave())">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-primary" onclick="mark_as_received()">
+                  Mark As Received
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+
+  function mark_as_received(){
+    $('#returns_to_supplier_status').val('<%= ProductMutation::RECEIVED %>');
+    beforeSave()
+  }
+
+  $(document).ready(function() {
+    autocomplete_barcode()
+    autocomplete_receiving()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+    $('.add_list').click(function(){
+      add_list()
+    })
+    $("#abcxyz").hide();
+  });
+
+  function nomorkeisi(){
+    var value=$.trim($("#receive_no").val());
+    if(value.length>0)
+    {
+      $(".barang").hide();
+      $("#returns_to_supplier_receive_no").val($("#receive_no").val());
+
+    }
+    else
+    {
+      $(".barang").show();
+      $("#returns_to_supplier_receive_no").val('');
+    }
+  }
+
+  function add_list(product_id){
+    var value=$.trim($("#number").val());
+    var value2=$.trim($("#receive_no").val());
+    if(value.length>0 || value2.length>0)
+    {
+      var date = new Date();
+      $.ajax({
+        url: '/returns_to_suppliers/add_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), barcode: $("#number").val()
+        }
+      })
+      $("#number").val('');
+    }
+    else
+    {
+      alert("Isi Field Receive No atau Barcode terlebih dahulu..");
+    }
+  }
+
+  function add_brand(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_suppliers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, origin_branch: $("#stock_transfer_branch_id").val()
+      }
+    })
+  }
+
+  function get_receiving(){
+    $.ajax({
+      url: '<%= get_receiving_returns_to_suppliers_path %>',
+      type: 'get',
+      data: {
+        name: $("#receive_no").val()
+      }
+    })
+  }
+/*
+  function get_product(){
+    $.ajax({
+      url: '<%#= get_product_returns_to_suppliers_path %>',
+      type: 'get',
+      data: {
+        name: $("#barcode").val()
+      }
+    })
+  }
+*/
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function autocomplete_receiving(){
+    $(".autocompletenya2").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/receivings/autocomplete_receiving_number",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        $('#r_date').val(ui.item.date)
+        $('#supplier_code').val(ui.item.supplier_code)
+        $('#supplier_name').val(ui.item.supplier_name)
+        $('#supplier_address').val(ui.item.supplier_address)
+        $('#returns_to_supplier_supplier_id').val(ui.item.supplier_id)
+        add_receive_to_return(ui.item.value)
+      },
+      minLength: 1
+    });
+  }
+
+  function add_receive_to_return(number){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_suppliers/add_product_receive',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('tbody#list_detail tr').length;
+    if(tot != 0){
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      return false;
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+
+  function searchManual(){
+    $.ajax({
+      url: '/purchase_requests/search_product_manual',
+      type: 'get'
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

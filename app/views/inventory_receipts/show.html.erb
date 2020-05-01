@@ -1,0 +1,448 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Receiving</li><li><%= @receiving.number %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+
+<script src="https://www.java.com/js/deployJava.js"></script>
+<script type="text/javascript">
+  var attributes = { id:'epsonApplet',
+                     code:'epson.Epson',  width:1, height:1} ;
+  var parameters = { jnlp_href: '/applet/epson.jnlp'} ;
+  deployJava.runApplet(attributes, parameters, '1.7');
+</script>
+
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @receiving.number %></h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <form class='smart-form'>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-4 label">Receive Date</label>
+                      <label class="col-md-8 input custom-input-box"><%= @receiving.date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Receive No. </label>
+                      <label class="col-md-8 input custom-input-box"><%= @receiving.number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Consigment No </label>
+                      <label class="col-md-8 input custom-input-box"><%= @receiving.consigment_number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Store Name </label>
+                      <label class="col-md-8 input custom-input-box"><%= @receiving.head_office.office_name %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">PO NO</label>
+                      <label class="col-md-9 input custom-input-box"><%= @purchase_order.number rescue '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">PO DATE </label>
+                      <label class="col-md-8 input custom-input-box"><%= @purchase_order.date rescue '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">PO NOTE </label>
+                      <label class="col-md-8 input custom-input-box"><%= @purchase_order.note rescue '-' %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">SUP.CODE</label>
+                      <label class="col-md-9 input custom-input-box"><%= @supplier.code %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">SUPPLIER</label>
+                      <label class="col-md-9 input custom-input-box"><%= @supplier.name %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">ALAMAT </label>
+                      <label class="col-md-9 input custom-input-box"><%= @supplier.address %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <section class="col col-md-12">
+                <label class="col-md-12 label">Note</label>
+                <label class="col-md-9 input custom-input-box"><%= @receiving.note %></label>
+              </section>
+              <fieldset>
+                <section class="col col-md-12">
+                  <div class="row">
+                    <table class="table table-striped table-bordered table-hover" width="100%" id="request">
+                      <thead>
+                        <tr>
+                          <th><%= t(:no) %></th>
+                          <th>
+                            <%= t(:article) %>
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th>
+                            <%= t(:barcode) %>
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th>
+                            <%= t(:description) %>
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th><%= t(:quantity) %>
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'quantity-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'quantity-asc', class: 'sorting' %>
+                            </span></span>
+                          </th>
+                          <th><%= t(:total_price) %></th>
+                        </tr>
+                      </thead>
+                      <tbody id="receiving-details-list"><%= render 'receiving_details_list' %></tbody>
+                    </table>
+                  </div>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+                <%= link_to "Eksport ke Excel", export_to_xls_receiving_url(:id => params[:id], format: "xls"), class: 'btn btn-info' %>
+                <%= link_to 'Print To PDF', print_to_pdf_receiving_url(@receiving.id), class: 'btn btn-primary' unless @receiving.has_printed %>
+                <%= link_to 'Print Receipt of Goods', "javascript:void(0);", class: 'btn btn-info', onclick: 'print_gr();' %>
+                <%= link_to 'Print Data Processing Evidence', print_dpe_pdf_receiving_url(@receiving.id), class: 'btn btn-success'  unless @receiving.has_printed_dpe %>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            </form>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'>
+  <% @receiving.receiving_details.group_by{|prd|prd.product_id}.each_with_index { |prd, i| %>
+    <% product = prd[1][0].product %>
+    <div class="modal fade" id="myModal<%= product.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+
+      <% quantities = prd[1].map(&:quantity) %>
+      <% product_sizes = product.product_sizes; %>
+      <% list_product = @list_product[product.id]; %>
+      <% key = "#{Time.now}#{i}" %>
+      <style type="text/css">
+        .label{
+          color: #151313;
+        }
+      </style>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Size Detail</h4>
+          </div>
+          <div class="modal-body" style="color:#5E5E5E">
+            <div class="row">
+              <%= render partial: 'shared/product_info', locals: {product: product} %>
+              <section class="col col-md-12">
+                <label class="col-md-12 input custom-input-box">
+                  <table class="table table-striped table-bordered" id="table_size">
+                    <thead>
+                      <tr>
+                        <th>Size</th>
+                        <% product_sizes.each do |product_size| %>
+                          <td><%= product_size.size_detail.size_number.to_s %></td>
+                        <% end %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Received Quantity</th>
+                        <% product_sizes.each do |product_size| %>
+                          <td><%= @receiving.receiving_details.find_by_product_size_id(product_size.id).quantity %></td>
+                        <% end %>
+                      </tr>
+                    </tbody>
+                  </table>
+                </label>
+              </section>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+  <% } %>
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#supplier_code').val(ui.item.code)
+        $('#receiving_supplier_id').val(ui.item.id)
+        $('#alamat').val(ui.item.address)
+      },
+      minLength: 1
+    });
+
+    $("#supplier_code").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_code",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#supplier_name').val(ui.item.name)
+        $('#receiving_supplier_id').val(ui.item.id)
+        $('#alamat').val(ui.item.address)
+      },
+      minLength: 1
+    });
+
+    $("#number").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+
+    $("#purchase_order_number").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/purchase_orders/autocomplete_purchase_order",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#po_date').val(ui.item.date)
+        $('#po_note').val(ui.item.po_note)
+        $('#alamat').val(ui.item.address)
+        $('#supplier_name').val(ui.item.supplier_name)
+        $('#supplier_code').val(ui.item.supplier_code)
+        $('#po_note').val(ui.item.po_note)
+        $('#receiving_purchase_order_id').val(ui.item.id)
+        add_po_to_receive(ui.item.value)
+      },
+      minLength: 1
+    });
+  });
+
+  function print_gr() {
+    epsonApplet.tglterima = "<%= @receiving.date %>";
+    epsonApplet.noterima = "<%= @receiving.number %>";
+    epsonApplet.nofaktur = "<%= @receiving.consigment_number %>";
+    epsonApplet.remark = "<%= @receiving.note %>";
+    epsonApplet.tglpo = "<%= @purchase_order.date rescue '-' %>";
+    epsonApplet.nopo = "<%= @purchase_order.number rescue '-' %>";
+
+    epsonApplet.tname = "<%= @receiving.head_office.office_name rescue ''%>";
+    epsonApplet.kode = "<%= @receiving.head_office.code %>";
+    epsonApplet.kodesup = "<%= @supplier.code rescue '' %>";
+    epsonApplet.namasup = "<%= @supplier.name rescue '' %>";
+    epsonApplet.tgl = "<%= @purchase_order.number rescue '-' %>";
+
+    var source = [
+      <% grand_total, total_ppn = 0, 0 %>
+      <% @receiving.receiving_details.where("quantity>0").each do |prd| %>
+        <% product = prd.product %>
+        <% total = prd.hpp * prd.quantity %>
+        <% ppn = prd.hpp * prd.quantity * 0.1 %>
+
+        ["<%= product.article rescue '' %>", "<%== product.description.gsub('"', '\"') rescue '' %>",
+         "<%= format_currency prd.hpp %>", "<%= prd.quantity %>", "<%= prd.unit_type %>",
+         "<%= format_currency prd.hpp*prd.quantity %>", "<%= format_currency ppn %>",
+         "<%= format_currency prd.quantity*prd.hpp*1.1 %>"],
+
+        <% grand_total += total %>
+        <% total_ppn += ppn if product.flag_pajak == 'BKP' && @receiving.supplier.status_pkp %>
+      <% end %>
+    ];
+
+    epsonApplet.total = "<%= format_currency grand_total %>";
+    <% if @receiving.supplier.status_pkp %>
+      epsonApplet.address1 = "PPN";
+      epsonApplet.address2 = "Grand Total";
+      epsonApplet.ppn = "<%= format_currency total_ppn %>";
+      epsonApplet.grandtotal = "<%= format_currency grand_total + total_ppn %>";
+    <% else %>
+      epsonApplet.address1 = "PPN";
+      epsonApplet.address2 = "Grand Total";
+      epsonApplet.ppn = "<%= format_currency total_ppn %>";
+      epsonApplet.grandtotal = "<%= format_currency grand_total + total_ppn %>";
+    <% end %>
+    epsonApplet.sperson = "<%= current_user.fullname %>";
+    epsonApplet.tgl = "<%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %>";
+
+    console.log(epsonApplet.printGr(source));
+  }
+
+  function add_po_to_receive(number){
+    var date = new Date();
+    $.ajax({
+      url: '/receivings/add_product_po',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+      }
+    })
+  }
+
+  function getProduct(){
+    $.ajax({
+      url: '<%= get_product_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        barcode: $("#number").val()
+      }
+    })
+  }
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function addTabel(){
+    var inputValues = [];
+    $('#table_size input').each(function() {
+        inputValues.push(parseInt($(this).val()))
+    })
+    $("#orders tbody").append("<tr><td><span class='hidden'>" + $('#product_id').val() + "</span><span>" + $('#number').val() + "</span></td><td>" + $('#merk').val() + "</td><td>" + $('#article').val() + "</td><td>" + $('#warna').val() + "</td><td>" + $('#departement').val()+ "</td><td>" + ( parseInt($('#harga_pokok').val())*eval(inputValues.join('+'))) + "</td><td>" + eval(inputValues.join('+')) + "</td><td>" + "<a href='javascript:void(0)' onclick='get_size(" + $('#product_id').val() + ", ["+ inputValues.map(String) +"])'>view</a>"+ "</td><td><a href='javascript:void(0)' class='btn btn-primary btn-xs custom-edit-btn' onclick='removeList(event)'><i class='fa fa-pencil' rel='tooltip' data-placement='left' data-original-title='Edit'></i> Edit</a></td></tr>");
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span:eq(0)").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function reset_form(){
+    document.getElementById("form_request").reset();
+    $("#request tboby").html("");
+  }
+
+  function searchManual(){
+    $.ajax({
+      url: '/purchase_requests/search_product_manual',
+      type: 'get'
+    })
+  }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_requests/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function getPO(){
+    $.ajax({
+      url: '<%= get_purchase_order_receivings_path %>',
+      type: 'get',
+      data: {
+        number: $("#purchase_order_number").val()
+      }
+    })
+  }
+
+  function changeBarcode(barcode){
+    $("#number").val(barcode);
+    getProduct()
+    $("#myModal").modal('hide');
+  }
+
+  function clone_details(){
+    inputs = ''
+    for (a = 0; a < $('#product_detail td').length; a++){
+      inputs += $('#product_detail td')[a].innerHTML
+    }
+    $('#product_detail_tobe_submitted').html(inputs)
+  }
+
+  function clone_inputs(){
+    for (a = 0; a < $('#product_detail input').length; a++){
+      obj = $('#product_detail input')[a]
+      $('#product_detail_tobe_submitted #'+obj.id).val(obj.value)
+    }
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

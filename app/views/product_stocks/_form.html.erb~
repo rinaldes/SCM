@@ -1,0 +1,50 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product Stock</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-colour">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Product Stock</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @productstock, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Product Detail Id <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :product_detail_id, :class => "input-sm #{(error_field @productstock, :stock_type)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Stock <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :stock, :class => "input-sm #{(error_field @productstock, :stock)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Stock Type <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :stock_type, :class => "input-sm #{(error_field @productstock, :stock_type)}" %></label>
+                    </section>
+
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

@@ -1,0 +1,29 @@
+<% if @cashiers.all.present? %>
+  <% @cashiers.all.each_with_index{|session, i| %>
+    <tr>
+      <td><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+      <td><%= session.s_created_at %></td>
+      <td align="right"><%= session.session %></td>
+      <td><%= session.machine_id %></td>
+      <td><%= session.start_time %></td>
+      <td><%= session.end_time %></td>
+      <td><%= session.username %></td>
+      <td><%= session.receipt_count %></td>
+      <td align="right"><%= format_currency session.start_amount %></td>
+      <td align="right"><%= format_currency session.debit %></td>
+      <td align="right"><%= format_currency session.credit %></td>
+      <td align="right"><%= format_currency session.cash %></td>
+    </tr>
+  <% } %>
+<% end %>
+<tr>
+  <td colspan=12>
+    <% if @cashiers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@cashiers, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

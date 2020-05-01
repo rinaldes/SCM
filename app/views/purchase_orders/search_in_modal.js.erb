@@ -1,0 +1,8 @@
+$("#product-search").html("<%= j( render 'purchase_orders/po_search_list')%>")
+paging()
+$(function () {
+  $('.pagination a').click(function () {
+    $.get(this.href, null, null, 'script');
+    return false;
+  });
+});

@@ -1,0 +1,30 @@
+<% @promotions.each_with_index do |promotion, i| %>
+  <% item = PromoItemList.find_by_promotion_id(promotion.id) %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= promotion.code rescue ''%></span></td>
+    <td><%= link_to promotion.name, promotion_path(promotion), class: 'blue' %></td>
+    <td class="hidden-phone"><%= promotion.promotion_type %></td>
+    <td class="hidden-phone"><%= promotion.from.strftime('%d-%m-%Y') %></td>
+    <td class="hidden-phone"><%= promotion.to.strftime('%d-%m-%Y') %></td>
+    <td class="hidden-phone"><%= promotion.is_claim %></td>
+    <td class="hidden-phone"><%= promotion.is_member %></td>
+    <td class="hidden-phone"><%= promotion.multi %></td>
+    <td class="hidden-phone"><%= promotion.branch_name rescue ''%></td>
+    <td class="nowrap">
+      <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_promotion_path(promotion), class: "btn btn-primary btn-xs edit-btn-dlt" %>
+      <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{promotion.id}, 'promotions')", class: "btn btn-danger btn-xs edit-btn-dlt" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=11>
+    <% if @promotions.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@promotions, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

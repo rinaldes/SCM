@@ -1,0 +1,108 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Pos Machine</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-pos_machine">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Pos Machine</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @pos_machine, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+
+                    <section>
+                      <label class="col-md-2 label">Name <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :name, :class => "input-sm #{(error_field @pos_machine, :name)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Office <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box">
+                      <% if params[:action] != 'edit' %>
+                        <%= text_field_tag :office, '', class: 'input-sm autocompletenya2', placeholder: "Type to Autocomplete"%>
+                      <% else %>
+                        <%= text_field_tag :office, '', class: 'input-sm autocompletenya2', placeholder: "Type to Autocomplete", value: Office.find(@pos_machine.office_id).office_name %>
+                      <% end %>
+                        <%= f.hidden_field :office_id %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Hide Empty Stock</label>
+                      <label class="col-md-9 custom-input-box"><%= f.check_box :hide_empty_stock, {class: 'input-sm'}, true, false %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Enable PPN</label>
+                      <label class="col-md-9 custom-input-box"><%= f.check_box :enable_ppn, {class: 'input-sm'}, true, false %></label>
+                    </section>
+
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Receipt Footer</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :receipt_footer, :class => "input-sm #{(error_field @pos_machine, :receipt_footer)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Eod Footer</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :eod_footer, :class => "input-sm #{(error_field @pos_machine, :eod_footer)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Enable Minus Stock</label>
+                      <label class="col-md-9 custom-input-box"><%= f.check_box :enable_minus_stock, {class: 'input-sm'}, true, false %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Enable Loss Price</label>
+                      <label class="col-md-9 custom-input-box"><%= f.check_box :enable_loss_price, {class: 'input-sm'}, true, false %></label>
+                    </section>
+
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".autocompletenya2").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/head_offices/autocomplete_head_office_office_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        $('#pos_machine_office_id').val(ui.item.id)
+      },
+      minLength: 1
+    });
+  });
+</script>
+<script src="/js/jquery.min.js"></script>

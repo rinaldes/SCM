@@ -1,0 +1,41 @@
+<% total, grand_total, total_ppn = 0, 0, 0 %>
+<% total_qty = 0 %>
+<% @receiving_details.each_with_index do |rcv_dt, i| %>
+  <% product = rcv_dt.product %>
+  <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*rcv_dt.fraction %>
+  <% hpp_akhir = rcv_dt.hpp*rcv_dt.fraction-hpp_disc_amt %>
+  <% ppn = hpp_akhir*rcv_dt.quantity*0.1 %>
+  <tr>
+    <td><%= i+1 %></td>
+    <td><%= product.article rescue '' %></td>
+    <td><%= product.barcode rescue '' %></td>
+    <td><%= product.description rescue '' %></td>
+    <td><%= product.select_unit rcv_dt.unit_type rescue '' %></td>
+    <td><%= rcv_dt.fraction rescue 0 %></td>
+    <td><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+    <td><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+    <td style='text-align: right'><%= rcv_dt.quantity %></td>
+    <td style='text-align: right'><%= format_currency hpp_akhir*rcv_dt.quantity %></td>
+    <% total += hpp_akhir*rcv_dt.quantity %>
+    <% total_qty += rcv_dt.quantity %>
+  </tr>
+  <% grand_total += total %>
+  <% total_ppn += ppn if product.flag_pajak == 'BKP' && @receiving.supplier.status_pkp %>
+<% end %>
+<tr>
+  <th colspan=8>Total</th>
+  <td style='text-align: right'><%= total_qty %></td>
+  <td style='text-align: right'><%= format_currency total rescue '' %></td>
+</tr>
+<tr>
+  <% if @receiving.supplier.status_pkp %>
+    <tr>
+      <td colspan=9>PPN</td>
+      <td style='text-align: right;'><%= format_currency total_ppn %></td>
+    </tr>
+    <tr>
+      <td colspan=9>Grand Total</td>
+      <td style='text-align: right;'><%= format_currency total + total_ppn %></td>
+    </tr>
+  <% end %>
+</tr>

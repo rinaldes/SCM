@@ -1,0 +1,5 @@
+Documentation:
+  Enabled: false
+require: rubocop-rspec
+AllCops:
+  RunRailsCops: true

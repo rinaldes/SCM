@@ -1,0 +1,3 @@
+$("#product-list").html("<%= j(render partial: 'product_list', locals: {products: @products}) %>");
+paging()
+$("#notice_template").html("<%= j(render 'layouts/notice') %>");

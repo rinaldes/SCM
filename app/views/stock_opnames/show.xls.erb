@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Laporan Hasil Stock Opname <%= @stock_opname.office.office_name %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">TGL SO</Data></Cell>
+        <Cell><Data ss:Type="String">:</Data></Cell>
+        <Cell><Data ss:Type="String"><%= @stock_opname.start_date.strftime('%Y-%m-%d %H:%M:%S') %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Petugas SO</Data></Cell>
+        <Cell><Data ss:Type="String">:</Data></Cell>
+        <Cell><Data ss:Type="String"><%= @stock_opname.inspector.fullname %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">No</Data></Cell>
+        <Cell><Data ss:Type="String">Artikel</Data></Cell>
+        <Cell><Data ss:Type="String">Deskripsi</Data></Cell>
+        <Cell><Data ss:Type="String">Stock</Data></Cell>
+        <Cell><Data ss:Type="String">Sold</Data></Cell>
+        <Cell><Data ss:Type="String">Receive Transfer</Data></Cell>
+        <Cell><Data ss:Type="String">Retur</Data></Cell>
+        <Cell><Data ss:Type="String">Mutation In</Data></Cell>
+        <Cell><Data ss:Type="String">Mutation Out</Data></Cell>
+        <Cell><Data ss:Type="String">Last Stock</Data></Cell>
+        <Cell><Data ss:Type="String">Actual Qty</Data></Cell>
+        <Cell><Data ss:Type="String">Var</Data></Cell>
+        <Cell><Data ss:Type="String">Amount Variance</Data></Cell>
+      </Row>
+      <% @stock_opname_details.each_with_index do |stock_opname_detail, i| %>
+        <Row>
+          <% product = stock_opname_detail.product %>
+          <% product_detail = ProductDetail.find_by_product_id_and_warehouse_id(product.id, @stock_opname.office_id) %>
+          <Cell><Data ss:Type="String"><%= i+1 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.article %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.description %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.system_stock.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.sold.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.received_from_transfer.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.retur.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.mutation_in.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.mutation_out.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.qty_virtual %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.qty_actual.to_i %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.diff %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= stock_opname_detail.diff.to_f*stock_opname_detail.hpp.to_f %></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

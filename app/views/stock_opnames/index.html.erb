@@ -1,0 +1,186 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:inventory) %></li><li><%= t(:stock_opname) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+            <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> <%= t(:stock_opname_list) %></h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding" style='overflow-y: hidden'>
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_stock_opname)}"), new_stock_opname_url,
+                class: "btn btn-labeled btn-primary edit-btn-primary" if current_user.can_manage_stock_opname? %>
+              <table id= "stock_opname" class="table table-striped table-bordered" width="100%">
+                <thead>
+                  <tr>
+                    <th><%= t(:no) %></th>
+                    <th class='nowrap'>
+                      <%= t(:stock_opname_no) %>
+                      <%= link_to 'javascript:void(0)', id: 'opname_number-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-arrow-down"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'opname_number-asc', class: 'sorting' do %>
+                        <i class="fa fa-arrow-up"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:so_type) %>
+                      <%= link_to 'javascript:void(0)', id: 'so_type-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-arrow-down"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'so_type-asc', class: 'sorting' do %>
+                        <i class="fa fa-arrow-up"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:status) %>
+                      <%= link_to 'javascript:void(0)', id: 'status-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-arrow-down"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'status-asc', class: 'sorting' do %>
+                        <i class="fa fa-arrow-up"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap punya_toko'>
+                      <%= t(:store) %>
+                      <%= link_to 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:start_date) %>
+                      <%= link_to 'javascript:void(0)', id: 'start_date-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'start_date-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:end_date) %>
+                      <%= link_to 'javascript:void(0)', id: 'end_date-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'end_date-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:stock) %>
+                      <%= link_to 'javascript:void(0)', id: 'system_stock-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'system_stock-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:sold) %>
+                      <%= link_to 'javascript:void(0)', id: 'sold-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'sold-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:receive_transfer) %>
+                      <%= link_to 'javascript:void(0)', id: 'received_from_transfer-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'received_from_transfer-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:retur) %>
+                      <%= link_to 'javascript:void(0)', id: 'retur-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'retur-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:mutation_in) %>
+                      <%= link_to 'javascript:void(0)', id: 'mutation_in-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'mutation_in-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:mutation_out) %>
+                      <%= link_to 'javascript:void(0)', id: 'mutation_out-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'mutation_out-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:LPP) %>
+                      <%= link_to 'javascript:void(0)', id: 'last_stock-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'last_stock-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:actual_stock) %>
+                      <%= link_to 'javascript:void(0)', id: 'actual_stock-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'actual_stock-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:diff) %>
+                      <%= link_to 'javascript:void(0)', id: 'diff-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'diff-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :opname_number, params[:opname_number], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :so_type, params[:so_type], class: 'form-control search', name: 'so_type' %></th>
+                    <th class="hasinput"><%= text_field_tag :status, params[:status], class: 'form-control search', name: 'status' %></th>
+                    <th class="hasinput punya_toko"><%= text_field_tag :office_name, params[:office_name], class: 'form-control search', name: 'offices.office_name' %></th>
+                    <th class="hasinput"><%= text_field_tag :start_date, params[:start_date], class: 'form-control search', name: "to_char(start_date, 'DD-MM-YYYY')" %></th>
+                    <th class="hasinput"><%= text_field_tag :end_date, params[:end_date], class: 'form-control search', name: "to_char(end_date, 'DD-MM-YYYY')" %></th>
+                    <th class="hasinput"><%= text_field_tag :system_stock, params[:system_stock], class: 'form-control search', name: "trim(to_char(system_stock, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :sold, params[:sold], class: 'form-control search', name: "trim(to_char(sold, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :received_from_transfer, params[:received_from_transfer], class: 'form-control search', name: "trim(to_char(received_from_transfer, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :retur, params[:retur], class: 'form-control search', name: "trim(to_char(retur, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :mutation_in, params[:mutation_in], class: 'form-control search', name: "trim(to_char(mutation_in, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :mutation_out, params[:mutation_out], class: 'form-control search', name: "trim(to_char(mutation_out, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :last_stock, params[:last_stock], class: 'form-control search', name: "trim(to_char(last_stock, '999'))" %></th>
+                    <th class="hasinput"><%= text_field_tag :actual_stock, params[:actual_stock], class: 'form-control search', name: "trim(to_char(actual_stock, '999'))" %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='stock_opname-list'><%= render "stock_opname_list" %></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>  
+  </section>
+</div>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">No</Data></Cell>
+        <Cell><Data ss:Type="String">URL</Data></Cell>
+        <Cell><Data ss:Type="String">Ad Type</Data></Cell>
+        <Cell><Data ss:Type="String">Valid From</Data></Cell>
+        <Cell><Data ss:Type="String">Valide Until</Data></Cell>
+        <Cell><Data ss:Type="String">Store</Data></Cell>
+      </Row>
+    <% nomor = 0 %>
+    <% Ad.all.each do |ad| %>
+    <% nomor += 1 %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= nomor %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= ad.url %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= ad.ad_type %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= ad.valid_from %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= ad.valid_until %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= ad.store %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

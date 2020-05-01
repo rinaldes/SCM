@@ -1,0 +1,3 @@
+$("#contact_people").html("<%= j(render 'contact_people_per_supplier', contact_people: @contact_people) %>");
+$("#contact_person").removeAttr("disabled")
+$("#contact_person").next().removeClass("disabled")

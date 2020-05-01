@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  unit_name: MyString
+  unit_alias: MyString
+
+two:
+  unit_name: MyString
+  unit_alias: MyString

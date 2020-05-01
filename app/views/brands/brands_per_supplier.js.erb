@@ -1,0 +1,4 @@
+$("#brands").html("<%= j(render 'brand_per_supplier', brands: @brands) %>");
+dropdown_autocomplete()
+$('#brand').removeAttr('disabled')
+$('#brand').next().removeClass('disabled')

@@ -1,0 +1,109 @@
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Warehouse</li><li><%= @warehouse.office_name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @warehouse.office_name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @warehouse, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset> <!-- tambah supplier -->
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-4 label">Code</label>
+                      <label class="col-md-8 input custom-input-box"><%= @warehouse.code %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Name</label>
+                      <label class="col-md-8 textarea custom-input-box"><%= @warehouse.office_name %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Regional</label>
+                      <label class="col-md-8 input custom-input-box"><%= @warehouse.regional.name rescue '' %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Branch</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= @warehouse.city.name rescue '' %>
+                      </label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-4 label">Area</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= @warehouse.area.name rescue '' %>
+                        </label>
+                    </section><br>
+                  </section>
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-2 label">Telp. Number</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.phone_number %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Email</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.email %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Description</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.description %></label>
+                    </section><br>
+                  </section><br>
+                </div>
+              </fieldset>
+              <fieldset>
+                <section class="col col-md-6">
+                  <section class="form-group">
+                      <label class="col-md-2 label">Province</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.province %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">City</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.city_name %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Districts</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.districts %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Zip Code</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.zip_code %></label>
+                    </section><br>
+                </section>
+                <section class="col col-md-6">
+                  <section class="form-group">
+                      <label class="col-md-2 label">Address</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.address %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">RT</label>
+                      <label class="col-md-2 input custom-input-box"><%= @warehouse.rt %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">RW</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.rw %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-2 label">Village</label>
+                      <label class="col-md-10 input custom-input-box"><%= @warehouse.village %></label>
+                    </section><br>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

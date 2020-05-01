@@ -1,0 +1,47 @@
+<tr class="alert alert-info alert-block" id='<%= @product.barcode %>'>
+  <td><label class="col-md-10 label"><%= @product.barcode %></label></td>
+  <td><label class="col-md-10 label"><%= @product.brand.name %></label></td>
+  <td><label class="col-md-10 label"><%= @product.article %></label></td>
+  <td><label class="col-md-10 label"><%= @product.colour.name %></label></td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+        <tr>
+          <td>Size</td>
+          <% @product_details.each_with_index{|product_detail, i| %>
+            <% break if i > 13 %>
+            <% product_size = product_detail.product_size %>
+            <% size_detail = product_size.size_detail %>
+            <%= hidden_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][product_size_id]", product_size.id %>
+            <td><label class="col-md-10 input custom-input-box"><%= size_detail.size_number %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Transfered Qty</td>
+          <% @product_details.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td><label class="col-md-10 input custom-input-box"><%= a.quantity %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Quantity</td>
+          <% @product_details.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td class='quantity_detail'>
+              <%= text_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][quantity]", '', class: "qty_detail" %>
+              <%= hidden_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][transfered_quantity]", a.quantity, class: 'quantity_detail' %>
+            </td>
+          <% } %>
+        </tr>
+      </table>
+    </div>
+  </td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+    </div>
+    <div class="accept">
+      <a href="javascript:void(0)" onclick="check_quantity($(this).parent().parent().parent())">Accept</a>
+    </div>
+  </td>
+</tr>

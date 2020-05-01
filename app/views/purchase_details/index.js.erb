@@ -1,0 +1,10 @@
+$("#purchase-detail-list").html("<%= j(render 'receiving_list') %>");
+check_all_store_nya();
+$('.pagination a').bind('click', function(){
+  $.ajax({
+    url: this.href+"&start_date="+($('#start_date').length == 1 ? $('#start_date').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&end_date="+($('#end_date').length == 1 ? $('#end_date').val() : ''),
+    method: "get",
+    dataType: "script"
+  })
+  return false
+})

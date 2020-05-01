@@ -1,0 +1,264 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<link href="/plugin/multiple-select/multiple-select.css" rel="stylesheet" />
+
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<script src="/plugin/multiple-select/multiple-select.js"></script>
+<style>
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 4px 3px 0 !important;
+  }
+  .btn {
+    padding: 6px 12px !important;
+    font-size: 14px;
+  }
+  .custom-input-box {
+    margin-bottom: 0px;
+  }
+  input.input-sm {
+    margin: 3px 14px;
+    height: 36px !important;
+  }
+  .form-control {
+    margin: 3px 14px;
+    height: 35px !important;
+  }
+  .select2-container {
+    margin-left: 14px;
+    height: 33px !important;
+  }
+</style>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Inventory</li><li>Stock All Store</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Cek Stock All Stores</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <form class='smart-form' url="/products/stock">
+              <fieldset class="smart-form">
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section class="form-group col col-md-12">
+                      <label class="col-md-4 label">Supplier</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= select_tag :supplier_id, options_for_select(Supplier.all.map{|a|[a.name, a.id]}), include_blank: true, class: "form-control" %>
+                      </label>
+                    </section>
+                    <!--<section class="form-group col col-md-12">-->
+                    <!--  <label class="col-md-4 label">Brand <span class='important'>*</span></label>-->
+                    <!--  <label class="col-md-8 input custom-input-box">-->
+                    <!--    <%= text_field_tag "search[brand]", (@brand.name rescue '') , class: "input-sm autocomplete-field search", placeholder: "Select or type to autocomplete", name: 'search[brands.name]' %>-->
+                    <!--  </label>-->
+                    <!--</section>-->
+                    <section class="form-group col col-md-12">
+                      <label class="col-md-4 label">Article</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= text_field_tag "search[article]", '' , class: "input-sm autocomplete-field search", placeholder: "Separate with comma if more than one article" %>
+                      </label>
+                    </section>
+                    <section class="form-group col col-md-12">
+                      <label class="col-md-4 label">Barcode</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= text_field_tag "search[barcode]", '' , class: "input-sm autocomplete-field search", placeholder: "Select or type to autocomplete" %>
+                      </label>
+                    </section>
+                    <section class="col col-md-12">
+                      <section class="form-group">
+                        <label class="col-md-4 label">Quantity</label>
+                        <label class="col-md-2">
+                          <%= select_tag "comparison", options_for_select(['=', '>=', '<=', '!=', '>', '<', 'BETWEEN']), include_blank: 'Please Select', class: 'form-control' %>
+                        </label>
+                        <label class="col-md-2 input custom-input-box" style='margin-left: 7px' >
+                          <%= text_field_tag :quantity, '', class: 'input-sm', style: "height: 34px" %>
+                        </label>
+                        <label class="col-md-12" style="display: none">
+                          <%= number_field_tag :low_quantity %>
+                          AND
+                          <%= number_field_tag :low_quantity %>
+                        </label>
+                      </section>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                </div>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-12">
+                      <label class="col-md-2 label">Store</label>
+                      <div id="offices" class="col-md-3 status4">
+                        <label class="select">
+                        <%= select_tag "stock[office_id]", options_for_select(@offices.map { |str| [str.office_name, str.id] }), multiple: true, class: 'form_input', id: 'stock_office_id' %>
+                        </label>
+                      </div>
+                    </section>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-3">
+                      <section class="form-group">
+                        <label class="col-md-8 label">Status 2</label>
+                        <label class="col-md-8">
+                          <%= radio_button_tag "search[status2][konsinyasi]", 'Konsinyasi', (params[:search][:status3].keys rescue []).include?('Konsinyasi')%>Konsinyasi
+                        </label>
+                        <label class="col-md-12">
+                          <%= radio_button_tag "search[status2][konsinyasi]", (params[:search][:status3].keys rescue []).include?('Non-Konsinyasi') %>Non-Konsinyasi
+                        </label>
+                      </section>
+                    </section>
+                    <section class="col col-md-3">
+                      <label class="col-md-8 label">Status 4</label>
+                      <label class="col-md-8 status4"><%= check_box_tag "search[status4][fast moving]", 'Fast-Moving' %>Fast Moving</label>
+                      <label class="col-md-8 status4"><%= check_box_tag "search[status4][slow moving]", 'Slow-Moving' %>Slow Moving</label>
+                      <label class="col-md-8 status4"><%= check_box_tag "search[status4][dead moving]", 'Dead-Moving' %>Dead Moving</label>
+                    </section>
+                    <section class="col col-md-3">
+                      <section class="form-group">
+                        <label class="col-md-8 label">Status 5</label>
+                        <label class="col-md-8">
+                          <%= radio_button_tag "search[status5][konsinyasi]", 'Konsinyasi', (params[:search][:status5].keys rescue []).include?('Konsinyasi') %>BKP
+                        </label>
+                        <label class="col-md-8">
+                          <%= radio_button_tag "search[status5][konsinyasi]", (params[:search][:status5].keys rescue []).include?('Non-Konsinyasi') %>Non-BKP
+                        </label>
+                      </section>
+                    </section>
+                  </section>
+
+                  <section class="col col-md-12">
+                  <table>
+                    <tr>
+                      <td>
+                        <%= link_to 'Search', 'javascript:void(0)', onclick: 'filter_stock()', class: 'btn btn-primary' %>
+                      </td>
+                      <td>&nbsp; &nbsp;
+                      </td>
+                      <td>
+                        <ul id="myTab1" class="nav nav-tabs">
+                          <li class="dropdown">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down" ></i></button>
+                            <ul class="dropdown-menu">
+                              <!-- <li><%#= link_to t(:export_to_csv),  products_path(:id => params[:id], format: "csv", :a => "stock") %></li> -->
+                              <li id="ekspor"><%= link_to t(:export_to_excel), stock_products_path(:id => params[:id], format: "xls", :a => "stock") %></li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </table>
+                  </section>
+                </div>
+              </fieldset> <!-- tambah product -->
+            </form> <!-- tambah product -->
+          </div><!-- end widget content -->
+          <div class="widget-body no-padding"><!-- TABEL -->
+            <div class="table-responsive" id="stock_table">
+              <% if params[:search].present? %>
+                <table class='table table-bordered table-striped' id='stock'><%= render 'products/stock' %></table>
+              <% end %>
+            </div>
+          </div><!-- END TABEL -->
+        </div><!-- end widget div -->
+
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<%= render 'shared/modal_supplier' %>
+<SCRIPT>
+  $(document).ready(function(){
+    $('#stock_office_id').multipleSelect();
+  });
+
+  $("#branch_check").change(function () {
+    $("[id*='search_branch']").prop('checked', $(this).prop("checked"));
+  });
+
+  function filter_stock(){
+    linknya = "/products/stock.xls?"+$("form").serialize()
+    $("#ekspor").html("<a href='"+linknya+"'>Export to Excel</a>");
+    $.ajax(
+    {
+      url: "/products/stock",
+      dataType: "script",
+      data: $("form").serialize()
+    });
+  }
+
+  function collect_brand(supplier_id) {
+    $('#search_supplier_id').val(supplier_id);
+    $.ajax(
+    {
+      url: "/brands/brands_per_supplier",
+      dataType: "script",
+      data: {supplier_id: supplier_id}
+    });
+  }
+
+  function generate_data_brand(item_id){
+    $('#search_brand_id').val(item_id);
+  }
+
+  $(function() {
+    //$('#search_brand').attr('disabled', true);
+    //$('#search_brand').next().addClass('disabled');
+    $("#supplier_id").select2();
+
+    $('#all_store').change(function() {
+      if($(this).is(':checked')) {
+          $('.check_store').prop('checked', true);
+      } else {
+          $('.check_store').prop('checked', false);
+      }
+    });
+
+    $("#search_brand").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/brands/autocomplete_brand_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+    $("#supplier").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data);
+          }
+        });
+      },
+      minLength: 1
+    });
+  });
+</SCRIPT>
+
+<STYLE>
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+}
+</STYLE>

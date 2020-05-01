@@ -1,0 +1,11 @@
+<tr rowspan=2 id='' barcode="<%= gtd.goods_size.barcode rescue nil %>">
+  <td class='barcode'><%= text_field_tag "goods_transfer[goods_transfer_details_attributes][#{gtd.goods_size.barcode}][barcode]", nil,readonly: true, class: "input-block-level w140px", value: (gtd.goods_size.barcode rescue nil) %></td>
+  <td class="brand"><%= text_field_tag "brand", nil, class: "input-block-level", disabled: true, value: (gtd.goods_size.goods.brand.name rescue nil) %></td>
+  <td class="article"><%= text_field_tag "article", nil, class: "input-block-level", disabled: true, value: (gtd.goods_size.goods.article rescue nil) %></td>
+  <td class="color"><%= text_field_tag "color", '', class: "input-block-level", disabled: true, value: (gtd.goods_size.goods.colour.name rescue nil) %></td>
+  <td class="size_number"><%= text_field_tag "size_number", '', class: "input-block-level w81px", disabled: true, value: (fix_zero_float(gtd.goods_size.size_detail.size_number) rescue nil) %></td>
+  <td class="quantity"><%= text_field_tag "goods_transfer[goods_transfer_details_attributes][#{gtd.goods_size.barcode}][quantity]", nil,class: "input-block-level w81px", value: (gtd.quantity rescue nil) %></td>
+  <td class='origin_store'><%= select_tag "goods_transfer[goods_transfer_details_attributes][#{gtd.goods_size.barcode}][origin_store_id]", options_for_stockroom(gtd), class: "input-block-level" %></td>
+  <td><%= text_field_tag "goods_transfer[goods_transfer_details_attributes][#{gtd.goods_size.barcode}][description]", (gtd.description rescue nil), class: "input-block-level description" %></td>
+  <td><%= link_to_remove_association "Delete", f, title: "Remove Goods", 'data-original-title' => "Delete" %></td>
+</tr>

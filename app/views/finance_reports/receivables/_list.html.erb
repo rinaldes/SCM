@@ -1,0 +1,22 @@
+<% if @payments.present? %>
+  <% total_payment_amount = 0 %> 
+  <% @payments.each do |payment| %>
+    <tr>
+      <td><%= payment.account_receivable.try(:created_at).try(:strftime, "%d-%b-%Y") %></td>
+      <td><%= payment.account_receivable.try(:total_amount) %></td>
+      <td><%= payment.payment_date.try(:strftime, "%d-%b-%Y") %></td>
+      <td><%= "Keterangan" %></td>
+      <td><%= payment.payment_amount %></td>
+      <td><%= payment.account_receivable.try(:outstanding) %></td>
+    </tr>
+    <% total_payment_amount += payment.payment_amount if payment.payment_amount.present? %>
+  <% end %>
+  <tr>
+    <td>Total</td>
+    <td><%= @get_total_account_receivables %></td>
+    <td></td>
+    <td></td>
+    <td><%= total_payment_amount %></td>
+    <td><%= @payments.last.account_receivable.try(:outstanding) %></td>
+  </tr>
+<% end %>

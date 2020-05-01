@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+				<Cell><Data ss:Type="String">TGL</Data></Cell>
+				<Cell><Data ss:Type="String">SALDO AWAL</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">PENJUALAN</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">%</Data></Cell>
+				<Cell><Data ss:Type="String">TRANSFER</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">MUTASI MASUK</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">MUTASI KELUAR</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">RETURN KE HO</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">KERUGIAN DISKON</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">SALDO AKHIR</Data></Cell>
+				<Cell></Cell>
+      </Row>
+      <Row>
+      			<Cell></Cell>
+      			<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+				<Cell><Data ss:Type="String">QTY</Data></Cell>
+				<Cell><Data ss:Type="String">PRICE</Data></Cell>
+      </Row>
+    	<% @product_mutation_histories.each{|pmh| %>
+    	<% last_stock = @product_mutation_histories[pmh[0]].last %>
+    	<% first_stock = @product_mutation_histories[pmh[0]].first %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= store_stock_movement.code %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= store_stock_movement.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pmh[0].to_i %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= first_stock.old_quantity %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency ((first_stock.old_quantity*last_stock.product_detail.product_size.product.cost_of_products rescue 0)), unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_Sales"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_#{pmh[0]}_Sales"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency @stocks["price_#{pmh[0]}_Sales"], unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_#{pmh[0]}_Purchase Transfer Receipt"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency @stocks["price_#{pmh[0]}_Purchase Transfer Receipt"], unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_#{pmh[0]}_Product Mutation Receipt"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency @stocks["price_#{pmh[0]}_Product Mutation Receipt"], unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_#{pmh[0]}_Good Transfer"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency @stocks["price_#{pmh[0]}_Good Transfer"], unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_#{pmh[0]}_Returns To Ho"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency @stocks["price_#{pmh[0]}_Returns To Ho"], unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= @stocks["qty_#{pmh[0]}_Discount"] %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency @stocks["price_#{pmh[0]}_Discount"], unit: '' %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= last_stock.new_quantity %></Data></Cell>
+	      <Cell><Data ss:Type="String"><%= number_to_currency last_stock.new_quantity*last_stock.product_detail.product_size.product.cost_of_products, unit: '' %></Data></Cell>
+      </Row>
+    <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

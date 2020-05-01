@@ -1,0 +1,98 @@
+== README
+
+This README would normally document whatever steps are necessary to get the
+application up and running.
+
+Things you may want to cover:
+
+* Ruby version
+
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
+
+
+Please feel free to use a different markup language if you do not plan to run
+<tt>rake doc:app</tt>.
+
+Application Overview==================================================================================================================================================================
+
+
+#Transaction
+
+#--------------------------------------------------------------------------
+##Product Mutation, Product Transfer, Return to HO, all in one table product_mutations
+#--------------------------------------------------------------------------
+##All Product Mutation, from inventory, purchase or sales, per office per size are logged in product_mutation_histories
+#--------------------------------------------------------------------------
+##After transaction
+- change quantity
+- logged in history
+- check Transaction Status
+- check detail
+- check stock
+#--------------------------------------------------------------------------
+
+##Transaction Status:
+
+Inventory==============================================================================================================================================================================
+-------------------------------------------------------------------------Product Mutation---------------------------------------------------------------------------------------------
+After Create -> Pending
+After Received -> Closed
+
+---------------------------------------------------------------------Product Mutation Receipt-----------------------------------------------------------------------------------------
+After Create -> Ready For Inspection
+After Inspection -> Inspected
+
+=======================================================================================================================================================================================
+
+Purchasing=============================================================================================================================================================================
+---------------------------------------------------------------------------------Purchase Request-------------------------------------------------------------------------------------
+After Create -> Pending
+After Included in PO -> Approved
+After Receive One Transfer -> On Progress
+After Transfer Completed -> Closed
+
+---------------------------------------------------------------------------------Purchase Order---------------------------------------------------------------------------------------
+After Create -> Waiting Approval
+After Approved -> Approved/Rejected
+After One Receive -> On Progress
+After Receiving Completed -> Closed
+
+--------------------------------------------------------------------------------------Receiving---------------------------------------------------------------------------------------
+After Create -> Ready For Inspection
+After Inspection -> Inspected
+After Paid All -> Closed
+
+----------------------------------------------------------------------------------Product Transfer------------------------------------------------------------------------------------
+After Create -> Pending
+After Received by Branch -> Received
+
+-------------------------------------------------------------------------------Product Transfer Receipt-------------------------------------------------------------------------------
+After Create -> Ready For Inspection
+After Inspection -> Inspected
+
+--------------------------------------------------------------------------------------ReturnsToHO-------------------------------------------------------------------------------------
+After Create -> On Progress
+After Received by HO -> Closed
+
+-----------------------------------------------------------------------------------ReturnsToHO Receipt--------------------------------------------------------------------------------
+After Create -> Ready For Inspection
+After Inspection -> Inspected
+
+-----------------------------------------------------------------------------------ReturnsToSupplier----------------------------------------------------------------------------------
+After Create -> PENDING
+After Complete -> RECEIVED
+=======================================================================================================================================================================================

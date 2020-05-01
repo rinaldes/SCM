@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+    <Column ss:Span="2"/>
+    <% if params[:a] != "stock" %>
+      <Row>
+        <Cell><Data>No</Data></Cell>
+        <Cell><Data>Article</Data></Cell>
+        <Cell><Data>Division</Data></Cell>
+        <Cell><Data>Department</Data></Cell>
+        <Cell><Data>Category</Data></Cell>
+        <Cell><Data>Sub Category</Data></Cell>
+        <Cell><Data>Segment</Data></Cell>
+        <Cell><Data>uom_1</Data></Cell>
+        <Cell><Data>uom_2</Data></Cell>
+        <Cell><Data>uom_3</Data></Cell>
+        <Cell><Data>box_num</Data></Cell>
+        <Cell><Data>box2_num</Data></Cell>
+        <Cell><Data>barcode</Data></Cell>
+        <Cell><Data>description</Data></Cell>
+        <Cell><Data>supplier_code</Data></Cell>
+        <Cell><Data>supplier_name</Data></Cell>
+      </Row>
+      <% @products.each_with_index do |product, i| %>
+        <%
+        cat_ori = MClass.find(product.m_class_id) rescue ''
+        cat_level = cat_ori.level rescue 0
+        if cat_level == 1 
+          cat1 = cat_ori
+          cat2 = ''
+          cat3 = ''
+          cat4 = ''
+        elsif cat_level == 2
+          cat2 = cat_ori
+          cat1 = MClass.find(cat_ori.parent_id) rescue ''
+          cat3 = ''
+          cat4 = ''
+        elsif cat_level == 3
+          cat3 = cat_ori
+          cat2 = MClass.find(cat_ori.parent_id) rescue ''
+          cat1 = MClass.find(cat2.parent_id) rescue ''
+          cat4 = ''
+        elsif cat_level == 4
+          cat4 = cat_ori
+          cat3 = MClass.find(cat_ori.parent_id) rescue ''
+          cat2 = MClass.find(cat3.parent_id) rescue ''
+          cat1 = MClass.find(cat2.parent_id) rescue ''
+        end
+        %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= i+= 1 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.article %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (product.department.name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (cat1.name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (cat2.name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (cat3.name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (cat4.name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (product.unit.name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (Unit.find(product.box_id).name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (Unit.find(product.box2_id).name rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.box_num %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.box2_num %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.barcode %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.description %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (product.suppliers.last.code rescue '') %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= (product.suppliers.last.name rescue '') %></Data></Cell>
+        </Row>
+      <% end %>
+  <% else %>
+  <Row>
+    <Cell><Data ss:Type="String">Department</Data></Cell>
+    <Cell><Data ss:Type="String">Category</Data></Cell>
+    <Cell><Data ss:Type="String">SKU</Data></Cell>
+    <Cell><Data ss:Type="String">Barcode</Data></Cell>
+    <Cell><Data ss:Type="String">Name</Data></Cell>
+    <% Office.all.each{|office| %>
+      <Cell><Data ss:Type="String"><%= office.office_name %></Data></Cell>
+      <Cell><Data ss:Type="String"></Data></Cell>
+    <% } %>
+  </Row>
+  <Row>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <% Office.all.each{|office| %>
+      <Cell><Data ss:Type="String">Qty</Data></Cell>
+      <Cell><Data ss:Type="String">Min Stock</Data></Cell>
+    <% } %>
+  </Row>
+  <% @products.each{|product| %>
+    <Row>
+      <Cell><Data ss:Type="String"><%= product.m_class.department.name rescue '' %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.m_class.name rescue '' %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.sku %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.barcode %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.description %></Data></Cell>
+      <% Office.all.each do |office| %>
+      <Cell><Data ss:Type="String">
+        <% prod_ava = ProductDetail.find_by_warehouse_id_and_product_id(office.id, product.id).available_qty.to_i rescue 0 
+          if prod_ava.present? %>
+        <%= prod_ava %>
+        <% else %> 
+          0
+        <% end %>
+      </Data></Cell>
+      <Cell><Data ss:Type="String">
+        <% prod_min = ProductDetail.find_by_warehouse_id_and_product_id(office.id, product.id).min_stock.to_i rescue 0 
+          if prod_min.present? %>
+        <%= prod_min %>
+        <% else %>
+          0
+        <% end %>
+      </Data></Cell>
+      <% end %>
+    </Row>
+  <% } %>
+<% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

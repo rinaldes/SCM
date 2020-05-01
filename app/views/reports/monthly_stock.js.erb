@@ -1,0 +1,15 @@
+<% if params[:all_stores] == 'Store' %>
+  $("#stock").html("<%= j(render 'reports/stock/monthly_cut_off_by_store') %>");
+  $("#stock_per_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+<% elsif params[:all_stores] == 'Item' %>
+  $("#stock").html("<%= j(render 'reports/stock/monthly_cut_off_by_item') %>");
+<% end %>
+for (i=0; i<$('input.search').length; i++){
+  input_search = $('input.search')[i]
+  if (input_search.value != ''){
+    params_for_export.push('search['+input_search.name+']' + '=' + input_search.value)
+  }
+}
+$('#export_to_xls').attr('href', "/reports/monthly_stock.xls?"+$("form").serialize()+"&store_code="+($('#store_code').length == 1 ? $('#store_code').val() : '')+"&office_name="+($('#office_name').length == 1 ? $('#office_name').val() : '')+"&article="+($('#article').length == 1 ? $('#article').val() : '')+"&description="+($('#description').length == 1 ? $('#description').val() : ''))

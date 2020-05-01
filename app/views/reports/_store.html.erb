@@ -1,0 +1,24 @@
+<% if @stores.present? %>
+<% @stores.each{|branch| %>
+  <tr>
+    <td><%= branch.attributes["kode_toko"] %></td>
+    <td><%= branch.attributes["nama_toko"] %></td>
+    <td><%= branch.attributes["alamat_toko"] %></td>
+    <td><%= branch.attributes["telepon"] %></td>
+    <td><%= branch.attributes["no_barang_terima"] rescue '' %></td>
+    <td><%= branch.attributes["no_barang_kembali"] rescue '' %></td>
+    <td><%= branch.attributes["no_stok_opname"] rescue '' %></td>
+  </tr>
+<% } %>
+<% end %>
+<tr>
+  <td colspan=13>
+    <% if @stores.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@stores, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,68 @@
+<% retur_counts = 0 %>
+  <thead id="sale-list">
+    <tr>
+      <th>Code</th>
+      <th>Quantity</th>
+      <th>Store</th>
+      <th>Date</th>
+    </tr>
+    <tr>
+      <th class="hasinput"><%= text_field_tag :code, params[:code], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th class="hasinput"><%= text_field_tag :quantity, params[:quantity], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th class="hasinput"><%= text_field_tag :store, params[:store], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+    </tr>
+  </thead>
+  <tbody id="history_list">
+    <% @zf.each_with_index do |zf, i| %>
+      <% zf.zfood_details.each do |zfd| %>
+        <% if zfd.moved_qty > 0 %>
+        <tr>
+          <td>
+            <a id="Details" href="#" onclick="get_convertion_details('<%=zf.id%>');return false;"><%= (zfd.zfood.code || "#####") %>
+            </a>
+          </td>
+          <td class="qty"><%= zfd.moved_qty.to_i %></td>
+          <td><%= zf.product_detail.warehouse.office_name rescue '' %></td>
+          <td><%= zfd.created_at.strftime("%Y-%m-%d") rescue '' %></td>
+        </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
+<script>
+  $('.sorting').click(function(){
+          reload_list({sort: this.id})
+          $(this).addClass('hide')
+          if($(this).attr('id').split('-')[1] == 'desc')
+            $(this).next().removeClass('hide')
+          else
+            $(this).prev().removeClass('hide')
+        })
+  function reload(){
+    $.ajax({
+      url: "/reports/convertion_history_detail?"+
+            "&code="+($('#code').length == 1 ? $('#code').val() : '')+
+            "&quantity="+($('#quantity').length == 1 ? $('#quantity').val() : '')+
+            "&store="+($('#store').length == 1 ? $('#store').val() : '')+
+            "&clicked_article="+($('#clicked_article').length == 1 ? $('#clicked_article').val() : '')+
+            "&date="+($('#date').length == 1 ? $('#date').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+    $('#export_to_xls').attr('href', "/reports/convertion_history.xls?locale=en&"+$("form").serialize())
+  }
+
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

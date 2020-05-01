@@ -1,0 +1,56 @@
+<% @mo.each_with_index do |po, i| %>
+  <tr>
+    <td><%= i+1 %></td>
+    <td><%= po.article %></td>
+    <td><%= po.description %></td>
+    <td><%= po.quantity %></td>
+    <td><%= po.uom_short_name %></td>
+    <td><%= format_currency po.price %></td>
+    <td style="vertical-align:middle" align="center">
+      <section class="col col-md-6">
+        <%= radio_button_tag po.id, true %> Send 
+      </section>
+      <section class="col col-md-6 hide">
+        <%= radio_button_tag po.id, false %> Cancel
+      </section>
+    </td>
+  </tr>
+  <script type="text/javascript">
+    var check, idnya, yg_checked, yg_unchecked;
+    <% if (po.status.downcase  == "finished" rescue false) %>
+      $("#" + <%= po.id %> +"_true").prop("checked", true)
+      $("#" + <%= po.id %> +"_true").prop("disabled", true)
+      $("#" + <%= po.id %> +"_false").prop("disabled", true)
+      $("#yg_checked").val($("#yg_checked").val() + <%= po.id %> + ";")
+    <% elsif (po.status.downcase  == "reject" rescue false)%>
+      $("#" + <%= po.id %> +"_true").prop("disabled", true)
+      $("#" + <%= po.id %> +"_false").prop("disabled", true)
+      $("#" + <%= po.id %> +"_false").prop("checked", true)
+      $("#yg_unchecked").val($("#yg_unchecked").val() + <%= po.id %> + ";")
+    <% else %>
+      $("#" + <%= po.id %> +"_true").prop("checked", true)
+      $("#yg_checked").val($("#yg_checked").val() + <%= po.id %> + ";")
+    <% end %>
+      
+    $("#" + <%= po.id %> +"_true").on("change", function(){
+      idnya = <%= po.id %> + ";"
+      yg_checked = $("#yg_checked").val()
+      yg_unchecked = $("#yg_unchecked").val()
+      check = $(this).val();
+      if(check){ 
+        $("#yg_checked").val(yg_checked + idnya)
+        $("#yg_unchecked").val(yg_unchecked.replace(idnya, ''))
+      }
+    });
+    $("#" + <%= po.id %> +"_false").on("change", function(){
+      idnya = <%= po.id %> + ";"
+      yg_checked = $("#yg_checked").val()
+      yg_unchecked = $("#yg_unchecked").val()
+      check = $(this).val();
+      if(check){
+        $("#yg_checked").val(yg_checked.replace(idnya, ''))
+        $("#yg_unchecked").val(yg_unchecked + idnya)
+      }
+    });
+  </script>
+<% end %>

@@ -1,0 +1,4 @@
+<% if @areas  %>
+  $('#warehouse_area_id').html("<option>Please Select</option>");
+  $('#warehouse_area_id').append("<%= escape_javascript options_from_collection_for_select(@areas, :id, :name) %>");
+<% end %>

@@ -1,0 +1,81 @@
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+
+<center><b><%= @session.office.office_name %></b><br/></center>
+<center><b><%= @session.office.address %></b><br/></center>
+<center><b><%= @session.office.phone_number %></b><br/></center>
+<hr><hr>
+<center>TUTUP SHIFT</center>
+<table id="table-info">
+  <tr>
+    <td><label>Shift</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%#= @session.start_date.strftime('%Y-%m-%d %H:%M:%S') %></span></td>
+  </tr>
+  <tr>
+    <td><label>Kasir</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= @session.user.username rescue '' %></span></td>
+  </tr>
+  <tr>
+    <td><label>Date</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= @session.sod_eod_date %></span></td>
+  </tr>
+</table>
+<hr><hr><br>
+SALES
+<br><hr>
+<table id="table-info">
+  <tr>
+    <td><label>Cash Income</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.end_amount %></span></td>
+  </tr>
+  <tr>
+    <td><label>Net Sales</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.total_cash_sales %></span></td>
+  </tr>
+  <tr>
+    <td><label>Net Return</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.retur %></span></td>
+  </tr>
+  <tr>
+    <td><label>Total Sales</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.total_sales %></span></td>
+  </tr>
+</table>
+<hr /><br />
+ACTUAL
+<br><hr>
+<table id="table-info">
+  <tr>
+    <td><label>Cash</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.cash %></span></td>
+  </tr>
+  <tr>
+    <td><label>Cash Income</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.end_amount %></span></td>
+  </tr>
+  <tr>
+    <td><label>Debit</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.debit %></span></td>
+  </tr>
+  <tr>
+    <td><label>Credit</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.credit %></span></td>
+  </tr>
+  <tr>
+    <td><label>Voucher</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.voucher %></span></td>
+  </tr>
+  <tr>
+    <td><label>Claim Promo</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.claim_promo || 0 %></span></td>
+  </tr>
+</table>
+<hr /><br />
+<table id="table-info">
+  <tr>
+    <td><label>Total Actual</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.actual_end_amount %></span></td>
+  </tr>
+  <tr>
+    <td><label>Variance</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.difference %></span></td>
+  </tr>
+  <tr>
+    <td><label>Variance Paid</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= format_currency @session.paid_difference %></span></td>
+  </tr>
+  <tr>
+    <td><label>Receipt Count</label>:<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= @session.receipt_count %></span></td>
+  </tr>
+</table>
+<hr /><br />
+<center><b>Mengetahui Store Leader</b></center>
+<br><br><br>
+<center>
+  (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+</center>
+<br><hr>
+Print Date : <%= Time.now %>

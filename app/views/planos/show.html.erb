@@ -1,0 +1,101 @@
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Rack Display</li><li><%= @plano.product.article %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @plano.product.article %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @plano, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Article</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= @plano.product.article %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Name</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.product.description %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Rack Number</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.planogram.rack_number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Rack Type</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.planogram.rack_type %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Start</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.start %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">End</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.end %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Shelving</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.shelving %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Min. Display</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.min %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Leadtime</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.leadtime || '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Min. Stock</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.product_detail.min_stock || '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Minor</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.product_detail.rop_stock || '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">PKM</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.product_detail.max_stock || '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Kiri-Kanan</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.kir_ka %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Atas-Bawah</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.at_ba %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Depan-Belakang</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.de_be %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Toko</label>
+                      <label class="col-md-8 input custom-input-box"><%= @plano.product_detail.warehouse.office_name %></label>
+                    </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

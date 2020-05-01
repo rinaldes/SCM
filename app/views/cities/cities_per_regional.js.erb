@@ -1,0 +1,4 @@
+<% if @cities  %>
+  $('#branch_city_id').html("<option>Please Select</option>");
+  $('#branch_city_id').append("<%= escape_javascript options_from_collection_for_select(@cities, :id, :name, :prompt => true) %>");
+<% end %>

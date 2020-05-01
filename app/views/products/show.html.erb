@@ -1,0 +1,526 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product</li><li><%= @product.barcode %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Product Details</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @product, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <header>Product : <%= @product.description.upcase %></header>
+
+              <% m_class_path = (MClass.find(@product.m_class_id).department_m_class).split(" > ").reverse! %>
+
+              <fieldset>
+                <div class="row">
+
+                  <section class="col col-9">
+                  <div class="row">
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Article</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>: <%= @product.article rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Unit</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <%= @product.unit.name rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Box 1 Unit</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>: <%= Unit.find(@product.box_id).name rescue '-' %></p>
+                      </label>
+                    </section>
+
+                  </div>
+                  <div class="row">
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Barcode</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>: <%= @product.barcode rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Department</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>&nbsp; &nbsp; &nbsp;: <%= @product.department.name rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Box 1 Barcode</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>: <%= @product.box_barcode rescue '-' %></p>
+                      </label>
+                    </section>
+
+                  </div>
+                  <div class="row">
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Name</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>: <%= @product.description rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Category</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <%= m_class_path[1] %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Box 1 QTY</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>: <%= @product.box_num rescue '-' %></p>
+                      </label>
+                    </section>
+
+                  </div>
+                  <div class="row">
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Receipt Name</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>: <%= @product.description_2 rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                      <% if m_class_path[2].present? %>
+                        <p><b>Category&nbsp;2&nbsp;</b></p>
+                      <% end %>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= m_class_path[2].present? ? (": " + m_class_path[2]) : '' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Box 2 Unit</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>: <%= Unit.find(@product.box2_id).name rescue '-' %></p>
+                      </label>
+                    </section>
+
+                  </div>
+                  <div class="row">
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Brand</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>: <%= @product.brand.name rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <% if m_class_path[3].present? %>
+                          <p><b>Category&nbsp;3&nbsp;</b></p>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= m_class_path[3].present? ? (": " + m_class_path[3]) : '' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Box 2 Barcode</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <p>: <%= @product.box2_barcode rescue '-' %></p>
+                      </label>
+                    </section>
+
+                  </div>
+                  <div class="row">
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Supplier</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p><%= @product_supplier.supplier.name rescue '-' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <% if m_class_path[4].present? %>
+                        <p><b>Category&nbsp;4&nbsp;</b></p>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= m_class_path[4].present? ? (": " + m_class_path[4]) : '' %></p>
+                      </label>
+                    </section>
+
+                    <section class="col col-1">
+                      <label class="label">
+                        <p><b>Box 2 QTY</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="label">
+                        <p>: <%= @product.box2_num rescue '-' %></p>
+                      </label>
+                    </section>
+
+                  </div>
+                  </section>
+                  <section class="col col-3">
+                    <%= image_tag @product.image, width: '235px' %>
+                  </section>
+                </div>
+                </fieldset>
+                <header>Status Product</header>
+                <fieldset>
+                <div class="row">
+                  <section class="col col-md-3">
+                    <section class="col col-5">
+                      <label class="label">
+                        <p><b>Status 1</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-5">
+                      <label class="label">
+                        <p><%= @product.status1 rescue '' %></p>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-3">
+                    <section class="col col-5">
+                      <label class="label">
+                        <p><b>Status 2</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-5">
+                      <label class="label"><%= @product.status2 rescue '' %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-3">
+                    <section class="col col-5">
+                      <label class="label">
+                        <p><b>Status 3</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-7">
+                      <label class="label">
+                        <%
+                          status3 = ''
+                          case @product.status3
+                          when "V"
+                            status3 = "Very Fast Moving"
+                          when "F"
+                            status3 = "Fast Moving"
+                          when "M"
+                            status3 = "Medium Moving"
+                          when "S"
+                            status3 = "Slow Moving"
+                          when "N"
+                            status3 = "No Moving"
+                          when "O"
+                            status3 = "Stop Order"
+                          when "H"
+                            status3 = "Habiskan Stok"
+                          when "T"
+                            status3 = "Temporary"
+                          when "B"
+                            status3 = "Bazar"
+                          when "END"
+                            status3 = "Dead Moving"
+                          when "Fast Moving"
+                            status3 = "Fast Moving"
+                          when "Slow Moving"
+                            status3 = "Slow Moving"
+                          when "Dead Moving"
+                            status3 = "Dead Moving"
+                          end
+                        %>
+                        <p><%= status3 %></p>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-3">
+                    <section class="col col-6">
+                      <label class="label">
+                        <p><b>Status Pajak</b></p>
+                      </label>
+                    </section>
+                    <section class="col col-5">
+                      <label class="label">
+                        <p><%= @product.flag_pajak %></p>
+                      </label>
+                    </section>
+                  </section>
+                  <!-- <section class="col col-1">
+                    <label class="label">
+                      <p><b>Status 4</b></p>
+                    </label>
+                  </section> -->
+                  <!-- <section class="col col-1">
+                    <label class="label">
+                      <p><%#= @product.status4 rescue '' %></p>
+                    </label>
+                  </section> -->
+                </div>
+                </fieldset>
+              <footer>
+                <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"> Edit</i>'), edit_product_path(params[:id]), class: "btn btn-primary btn-xs custom-edit-btn" %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<SCRIPT>
+  $(document).ready(function() {
+    set_price()
+    $('#product_purchase_price, #product_margin_percent1, #product_margin_percent2, #product_margin_percent3, #product_margin_percent4, #product_margin_percent').keyup(function(){
+      set_price()
+    })
+    add_branch()
+    $('.status4 input').attr('disabled', 'disabled')
+  })
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#img_prev')
+          .attr('src', e.target.result)
+          .width(135)
+          .height(135);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function printTextBarcode(barcode, cost_of_products, supplier, department, article, color) {
+
+   var applet = document.jZebra_barcode;
+    if (applet != null) {
+    // start of command
+    applet.append("^XA^CFD");
+    applet.append("^LH0,0");
+    applet.append("^POI^BY2");
+    // product 1
+    applet.append("^FO50,13^BY1^BCN,50,Y,N,N50^FD"+ barcode +"^FS");
+    applet.append("^FO50,125^ADN,20,10^FD" + article +" " + color +"^FS");
+    applet.append("^FO50,91^ADN,15,10^FD" + supplier +" "+ department +"^FS");
+    applet.append("^FO15,10^A0B,20,20^FD" + cost_of_products + "^FS");
+    applet.append("^FO230,30^A0B,20,20^FD<%=Time.now.strftime('%d-%m-%Y')%>^FS");
+
+    // product 1
+    applet.append("^FO325,13^BY1^BCN,50,Y,N,N50^FD"+ barcode +"^FS");
+    applet.append("^FO325,125^ADN,20,10^FD" + article +" "+ color +"^FS");
+    applet.append("^FO325,91^ADN,15,10^FD" + supplier +" "+ department +"^FS");
+    applet.append("^FO290,10^A0B,20,20^FD" + cost_of_products + "^FS");
+    applet.append("^FO505,30^A0B,20,20^FD<%=Time.now.strftime('%d-%m-%Y')%>^FS");
+
+    // product 1
+    applet.append("^FO605,13^BY1^BCN,50,Y,N,N50^FD"+ barcode +"^FS");
+    applet.append("^FO605,125^ADN,20,10^FD" + article +" "+ color +"^FS");
+    applet.append("^FO605,91^ADN,15,10^FD" + supplier +" "+ department +"^FS");
+    applet.append("^FO570,10^A0B,20,20^FD" + cost_of_products + "^FS");
+    applet.append("^FO785,30^A0B,20,20^FD<%=Time.now.strftime('%d-%m-%Y')%>^FS");
+
+    applet.append("^XZ");
+    applet.print();
+
+    }
+  }
+
+  function add_branch(){
+    $('.add_branch').click(function(){
+      var date = new Date();
+      $.ajax({
+        url: '/products/add_branch',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+  }
+
+  function set_price(){
+    purchase_price = parseFloat($('#product_purchase_price').val())
+    price_after_discount1 = $('#product_purchase_price').val() == '' ? 0 : purchase_price*(100-parseFloat($('#brand_discount1').val()))/100
+    price_after_discount2 = price_after_discount1*(100-parseFloat($('#brand_discount2').val() == '' ? 0 : $('#brand_discount2').val()))/100
+    price_after_discount3 = price_after_discount2*(100-parseFloat($('#brand_discount3').val() == '' ? 0 : $('#brand_discount3').val()))/100
+    price_after_discount4 = price_after_discount3*(100-parseFloat($('#brand_discount4').val() == '' ? 0 : $('#brand_discount4').val()))/100
+    margin_percent3 = $('#product_margin_percent3').val() == '' ? 0 : parseFloat($('#product_margin_percent3').val())
+    margin_percent2 = $('#product_margin_percent2').val() == '' ? 0 : parseFloat($('#product_margin_percent2').val())
+    margin_percent1 = $('#product_margin_percent1').val() == '' ? 0 : parseFloat($('#product_margin_percent1').val())
+    margin_percent4 = $('#product_margin_percent4').val() == '' ? 0 : parseFloat($('#product_margin_percent4').val())
+    harga_bandrol = 0
+    mod = price_after_discount4 % 500
+    $('#product_cost_of_products').val(price_after_discount4)
+    if ($('#brand_price').val() == 'Normal'){
+      $('.labelPercent4').show()
+      $('#product_margin_rp').val(price_after_discount4/parseFloat($('#product_margin_percent').val())*100)
+      $('#product_margin_rp, #product_margin_percent').removeAttr('disabled')
+
+      harga_kredit = parseFloat($('#product_margin_rp').val())/margin_percent1*100
+      harga_kredit_mod = harga_kredit % 500
+      kredit = harga_kredit_mod > 250 ? harga_kredit+500-harga_kredit_mod : harga_kredit-harga_kredit_mod
+
+      harga_bandrol = parseInt(harga_kredit/margin_percent4*100)
+      harga_bandrol_mod = harga_bandrol % 500
+      bandrol = harga_bandrol_mod > 250 ? harga_bandrol+500-harga_bandrol_mod : harga_bandrol-harga_bandrol_mod
+
+      harga_eceran = parseInt(harga_bandrol-harga_bandrol*margin_percent3/100)
+      harga_eceran_mod = harga_eceran % 500
+      eceran = harga_eceran_mod > 250 ? harga_eceran+500-harga_eceran_mod : harga_eceran-harga_eceran_mod
+
+      harga_member_eceran = parseInt(harga_bandrol-harga_bandrol*margin_percent2/100)
+      harga_member_eceran_mod = harga_member_eceran % 500
+      member_eceran = harga_member_eceran_mod > 250 ? harga_member_eceran+500-harga_member_eceran_mod : harga_member_eceran-harga_member_eceran_mod
+
+      $('#product_harga_member_eceran').val(member_eceran)
+      $('#product_harga_eceran').val(eceran)
+      $('#product_harga_bandrol').val(harga_bandrol)
+      $('#product_selling_price').val(harga_bandrol)
+      $('#product_harga_kredit').val(kredit)
+    }
+    else if ($('#brand_price').val() == 'Pabrik'){
+      $('.labelPercent4').hide()
+      $('#product_margin_rp').val('')
+      $('#product_margin_percent').val('')
+      $('#product_margin_rp, #product_margin_percent').attr('disabled', true)
+
+/* membulatkan harga --START-- */
+      harga_bandrol = purchase_price+margin_percent4
+      harga_bandrol_mod = harga_bandrol % 500
+      bandrol = harga_bandrol_mod > 250 ? harga_bandrol+500-harga_bandrol_mod : harga_bandrol-harga_bandrol_mod
+
+      harga_kredit = bandrol-bandrol*margin_percent1/100
+      harga_kredit_mod = harga_kredit % 500
+      kredit = harga_kredit_mod > 250 ? harga_kredit+500-harga_kredit_mod : harga_kredit-harga_kredit_mod
+
+      harga_member_eceran = parseInt(bandrol-bandrol*margin_percent2/100)
+      harga_member_eceran_mod = harga_member_eceran % 500
+      member_eceran = harga_member_eceran_mod > 250 ? harga_member_eceran+500-harga_kredit_mod : harga_member_eceran-harga_member_eceran_mod
+
+      harga_eceran = parseInt(bandrol-bandrol*margin_percent3/100)
+      harga_eceran_mod = harga_eceran % 500
+      eceran = harga_eceran_mod > 250 ? harga_eceran+500-harga_eceran_mod : harga_eceran-harga_eceran_mod
+/* --END--*/
+
+      $('#product_harga_kredit').val(kredit)
+      $('#product_harga_member_eceran').val(member_eceran)
+      $('#product_harga_eceran').val(eceran)
+      $('#product_harga_bandrol').val(harga_bandrol)
+      $('#product_selling_price').val(parseInt(harga_bandrol))
+    }
+    else if ($('#brand_price').val() == 'Obral'){
+      harga_eceran = parseFloat($('#product_cost_of_products').val())/margin_percent3*100
+      harga_eceran_mod = harga_eceran % 500
+      eceran = harga_eceran_mod > 250 ? harga_eceran+500-harga_eceran_mod : harga_eceran-harga_eceran_mod
+
+      harga_member_eceran = parseInt(harga_eceran/margin_percent2*100)
+      harga_member_eceran_mod = harga_member_eceran % 500
+      member_eceran = harga_member_eceran_mod > 250 ? harga_member_eceran+500-harga_member_eceran_mod : harga_member_eceran-harga_member_eceran_mod
+
+      $('#product_harga_eceran').val(eceran)
+      $('#product_harga_member_eceran').val(member_eceran)
+      harga_bandrol = harga_eceran/margin_percent4*100
+      harga_bandrol_mod = harga_bandrol % 500
+      bandrol = harga_bandrol_mod > 250 ? harga_bandrol+500-harga_bandrol_mod : harga_bandrol-harga_bandrol_mod
+
+      harga_kredit = parseInt(bandrol-bandrol*margin_percent1/100)
+      harga_kredit_mod = harga_kredit % 500
+      kredit = harga_kredit_mod > 250 ? harga_kredit+500-harga_kredit_mod : harga_kredit-harga_kredit_mod
+
+      $('#product_harga_kredit').val(kredit)
+      $('#product_harga_bandrol').val(parseInt(harga_bandrol))
+      $('#product_selling_price').val(parseInt(harga_bandrol))
+    }
+    else{
+      $('#product_harga_kredit, #product_harga_member_eceran, #product_harga_eceran, #product_harga_bandrol').removeAttr('readOnly')
+    }
+  }
+</SCRIPT>
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

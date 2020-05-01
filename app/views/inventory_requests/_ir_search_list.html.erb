@@ -1,0 +1,17 @@
+<% (@ir || []).each do |request| %>
+  <tr>
+      <td><%= request.number %></td>
+      <td><%= request.date %></td>
+
+      <td><%= request.status %></td>
+      <td><a href="javascript:void(0)" onclick="loadIR('<%= request.number %>', '<%= request.date %>', '<%= request.note %>')" class="btn btn-primary"> Choose </a></td>
+  </tr>
+<% end %>
+<SCRIPT>
+function loadIR(number, ir_date, ir_note){
+  $("#inventory_request_number").val(number);
+  $('#ir_date').val(ir_date)
+  $('#ir_note').html(ir_note)
+  $("#irModal").modal('hide');
+}
+</SCRIPT>

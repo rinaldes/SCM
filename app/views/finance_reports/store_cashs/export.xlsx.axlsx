@@ -1,0 +1,15 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Store Cash") do |sheet|
+	sheet.add_row
+	sheet.add_row ["KAS TK.BELAKANG NOVEMBER 2015"]
+  sheet.add_row ["Date", "Sisa Kas Bulan Lalu", "Kas Masuk", "Saldo End", "ATK", "RTK", "Kebersihan", "Keamanan", "Obat-Obatan", "Air Galon", "Sumbangan", "Minyak Kayu Putih", "Stop Kontak, Lampu", "Gembok", "Plastik", "Total Pengeluaran"], :style => default
+  # @store_cashs.each do |ap|
+    sheet.add_row ["1-Nov-15", "Rp.37.508", "", "Rp.37.508", "", "", "", "", "", "", "", "", "", "", "", "Rp.-"], :style => default
+    sheet.add_row ["2-Nov-15", "", "", "Rp.22.508", "", "", "Rp.15.000", "", "", "", "", "", "", "", "", "Rp.15.000"], :style => default
+    sheet.add_row ["3-Nov-15", "", "", "Rp.22.508", "", "", "", "", "", "", "", "", "", "", "", "Rp.-"], :style => default
+  # end
+  sheet.add_row ["Total", "", "Rp.37.508", "Rp.45.016", "Rp.37.508", "", "Rp.15.000", "", "", "", "", "", "", "", "", "Rp.15.000"], :style => default
+end

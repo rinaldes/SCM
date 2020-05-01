@@ -1,0 +1,31 @@
+<% @ar_vouchers.each_with_index do |ar_voucher, i| %>
+  <tr>
+    <td class="nowrap"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="nowrap"><%= link_to ar_voucher.name, ar_voucher_url(ar_voucher) %></td>
+    <td class="nowrap"><%= ar_voucher.valid_from.strftime('%d-%m-%Y') %></td>
+    <td class="nowrap"><%= ar_voucher.valid_until.strftime('%d-%m-%Y') %></td>
+    <td class="nowrap"><%= format_currency ar_voucher.max_voucher_amt %></td>
+    <td class="nowrap"><%= ar_voucher.discount_percent rescue ''%></td>
+    <td class="nowrap"><%= ar_voucher.discount_amount rescue ''%></td>
+    <td class="nowrap"><%= ar_voucher.office.office_name rescue '' %></td>
+    <td class="nowrap">
+      <%= link_to edit_ar_voucher_path(ar_voucher), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"> Edit</i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{ar_voucher.id}, 'ar_vouchers')", class: "btn btn-danger btn-xs" do %>
+        <i class="fa fa-trash-o"> Delete</i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <% if @ar_vouchers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@ar_vouchers, options = {}) rescue ''%>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

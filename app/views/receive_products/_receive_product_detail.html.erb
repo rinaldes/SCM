@@ -1,0 +1,36 @@
+<tr>
+<div class="alert alert-info alert-block" style='float: left; width: 98%'>
+     <td>
+      <label class="col-md-10 input custom-input-box">
+        <%= text_field_tag "receive_product[receive_product_details_attributes][#{key}][barcode]", (@products.name rescue ''), class: 'input-sm autocompletenya', onkeyup: "$(this).next().next().hide()" %>
+          <a class="ui-button ui-widget ui-state-default ui-button-icon-only custom-combobox-toggle ui-corner-right" tabindex="-1" onclick="$(this).next().show()">
+            <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text"></span>
+          </a>
+          <ul style="display: none; width: 100%; top: 29px;" tabindex="0" id="ui-id-1" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content">
+            <% @products.each{|product| %>
+  	          <li tabindex="-1" id="ui-id-2" class="ui-menu-item">
+  	          	<%= product[0] %>
+  	          </li>
+            <% } %>
+          </ul>
+        </label>
+		  </div>
+
+		</td>
+     <td>
+		  <div class="nested-fields addform clearfix">
+		    <%= number_field_tag "receive_product[receive_product_details_attributes][#{key}][quantity]", (object[:quantity] rescue ''), class: "input-sm" %>
+		  </div>
+		</td>
+     <td>
+		  <div class="nested-fields addform clearfix">
+		    <%= number_field_tag "receive_product[receive_product_details_attributes][#{key}][size]", (object[:size] rescue ''), class: "input-sm" %>
+		  </div>
+		</td>
+		<td>
+			<div class="nested-fields addform clearfix">
+	  		<a class="close" data-dismiss="alert" href="#">×</a>
+			</div>
+		</td>
+</div>
+</tr>

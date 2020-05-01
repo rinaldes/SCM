@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">Time</Data></Cell>
+        <Cell><Data ss:Type="String">User</Data></Cell>
+        <Cell><Data ss:Type="String">Description</Data></Cell>
+        <Cell><Data ss:Type="String">Goals</Data></Cell>
+        <Cell><Data ss:Type="String">Status</Data></Cell>
+      </Row>
+    <% ToDoList.all.each do |to_do_list| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= to_do_list.date %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= to_do_list.time.strftime("%I:%M:%S %p") %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= to_do_list.user.first_name rescue '' %>  <%= to_do_list.user.last_name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= to_do_list.description %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= to_do_list.tujuan.split(';').join(', ') %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= to_do_list.status %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,36 @@
+#table-info {
+  width: 100%;
+  border: none;
+}
+
+#table-info td {
+  border: none;
+}
+
+#table-info tr {
+  height: 14px;
+  border: none;
+}
+
+#table-info td label {
+  display: inline-block;
+  width: 100px;
+}
+
+#table-info td span {
+  margin-left: 12px;
+}
+
+#table-item {
+  border-collapse: collapse;
+  border: none;
+  width: 100%;
+}
+
+#table-item th, #table-item td:not(.noborder) {
+  border: 1px solid black;
+}
+
+td.noborder {
+  border: none;
+}

@@ -1,0 +1,13 @@
+<% ProductSupplier.all.each_with_index do |ps, i| %>
+<tr>
+  <td class="hidden-phone"><%= i + 1 %></td>
+  <td class="hidden-phone"><%= ps.product.article rescue nil%></td>
+  <td class="hidden-phone"><%= ps.product.description %></span></td>
+  <td class="hidden-phone"><%= ps.contact_person.supplier.name rescue '' %></span></td>
+  <td class="hidden-phone"><%= ps.contact_person.name rescue '' %></span></td>
+  <td class="hidden-phone">
+    <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>'), edit_product_supplier_path(ps), class: "btn btn-primary btn-xs custom-edit-btn" %>
+    <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{ps.id}, 'product_suppliers')", class: "btn btn-danger btn-xs edit-btn-dlt custom-edit-btn" %>
+  </td>
+</tr>
+<% end %>

@@ -1,0 +1,10 @@
+$("#receiving-list").html("<%= j(render 'receiving_list') %>");
+if($("#store").val() != 0){
+  $("#office_name").val("");
+  $(".store_all_store").addClass("hide");
+}
+else{
+  $("#office_name").val("");
+  $(".store_all_store").removeClass("hide");      
+}
+paging()

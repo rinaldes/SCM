@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Ad</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-ad">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Ad</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @ad, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                  <div id="pesan" class="alert alert-danger" hidden>
+                      <%= label_tag "Valid From must be before the Valid Until",'Valid From must be before the Valid Until' %>
+                  </div>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">URL <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :url, :class => "input-sm #{(error_field @ad, :url)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Valid From <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :valid_from, :class => "input-sm #{(error_field @ad, :valid_from)}", onchange: "date();" , onkeyup: "date();" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Valid Until <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :valid_until, :class => "input-sm #{(error_field @ad, :valid_until)}", onchange: "date();" , onkeyup: "date();" %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Ad Type <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.select :ad_type, ['Video', 'Image'], {:prompt => '--select--'} %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Store</label>
+                      <label class="col-md-9 custom-input-box">
+                        <% Branch.all.each do |branch|%>
+                          <label>
+                            <%= check_box_tag "search[branch][#{branch.office_name}]", branch.office_name, '' %><%= branch.office_name %>
+                          </label><br>
+                        <% end %>
+                        <% if params[:action] != 'edit' %>
+                          <%= f.hidden_field :store, value: '' %>
+                        <% else %>
+                          <%= f.hidden_field :store, value: @ad.store %>
+                        <% end %>
+                      </label>
+                    </section>
+                  </section>
+
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<script type="text/javascript">
+  $( document ).ready(function() {
+    $('input:checkbox').prop('checked', false);
+    <% if params[:action] == 'edit' %>
+      <% storenya = @ad.store.split(', ') %>
+      <% Branch.all.each do |branches|%>
+        <% storenya.each do |stre| %>
+          <% if branches.office_name == stre %>
+            $('#search_branch_<%= branches.office_name.tr(' ', '_') %>').prop('checked', true);
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+    $('input:checkbox').change(function(){
+      var c = this.checked ? 'y' : 'n';
+      checkbox(this, c);
+    });
+    $('#ad_valid_from').datepicker({
+        dateFormat : 'yy-mm-dd',
+        prevText : '<i class="fa fa-chevron-left"></i>',
+        nextText : '<i class="fa fa-chevron-right"></i>',
+        onSelect : function(selectedDate) {
+          $('#finishdate').datepicker('option', 'minDate', selectedDate);
+          date();
+        }
+      });
+    $('#ad_valid_until').datepicker({
+        dateFormat : 'yy-mm-dd',
+        prevText : '<i class="fa fa-chevron-left"></i>',
+        nextText : '<i class="fa fa-chevron-right"></i>',
+        onSelect : function(selectedDate) {
+          $('#finishdate').datepicker('option', 'minDate', selectedDate);
+          date();
+        }
+      });
+  });
+
+  function date() {
+    var a = $('#ad_valid_from').val().toString().split("-");
+    var b = $('#ad_valid_until').val().toString().split("-");
+
+    if(a[0] < b[0]){
+      date2(1);
+    }
+    else if(a[0] == b[0] && a[1] < b[1]){
+      date2(1);
+    }
+    else if(a[0] == b[0] && a[1] == b[1] && a[2] <= b[2]){
+      date2(1);
+    }
+    else{
+      date2(0);
+    }
+  }
+
+  function date2(abc){
+    if(abc == 1){
+      $('#sendButton').attr('disabled', false);
+      $('#pesan').hide();
+    }
+    else{
+      $('#sendButton').attr('disabled',true);
+      $('#pesan').show();
+    }
+  }
+
+  function checkbox(store5, c){
+    store_name = store5.value + ', ';
+    store = $('#ad_store').val();
+    if(c == 'y'){
+      $('#ad_store').val(store + store_name);
+    }
+    else{
+      store2 = store.replace(store_name, '');
+      $('#ad_store').val(store2);
+    }
+
+  }
+
+</script>
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to -->

@@ -1,0 +1,39 @@
+<%= form_for [:finances, @petty_cash], remote: true do |f| %>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Initial</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-2"><span>Periode : </span></div>
+          <div class="col-md-3"><%= select_tag :f_month, options_for_select((1..12).map {|m| [Date::MONTHNAMES[m], m]}) %></div>
+          <div class="col-md-7"><%= select_tag :f_year, options_for_select((Time.zone.now.year - 3)..(Time.zone.now.year + 1)) %></div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <h1></h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2"><span>Store : </span></div>
+          <div class="col-md-10"><%= select_tag :f_store, options_for_select(Office.all.map {|office| [office.office_name, office.id]}) %></div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <h1></h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2"><span>Budget : </span></div>
+          <div class="col-md-10"><%= text_field_tag :f_init_budget %></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.submit 'Save', class: 'btn btn-primary', remote: true %>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+<% end %>

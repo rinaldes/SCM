@@ -1,0 +1,24 @@
+<% @products.each do |product|%>
+  <tr>
+    <% hpp_ave = Product.get_hpp_average(product.id, @offices) rescue 0 %>
+    <% conditions = ["product_id=#{product.id} AND end_date > NOW()"] %>
+    <% conditions << "office_id=#{current_user.branch_id}" if current_user.branch_id.present? %>
+    <% sp_autocomp = SellingPrice.where(conditions.join(' AND ')).last rescue '' %>
+    <td><%= product.article %></td>
+    <td><%= product.barcode %></td>
+    <td><%= product.description %></td>
+    <td><%= product.brand.name rescue ''%></td>
+    <td><a href="javascript:void(0)" onclick="changeBarcodeSP('<%= product.article %>', '<%= hpp_ave %>', '<%= sp_autocomp.start_date rescue nil %>', '<%= sp_autocomp.end_date rescue nil %>', '<%= sp_autocomp.hpp rescue nil %>', '<%= sp_autocomp.hpp_2 rescue nil %>', '<%= sp_autocomp.margin_amount rescue nil %>', '<%= sp_autocomp.margin_percent rescue nil %>', '<%= sp_autocomp.selling_price rescue nil %>', '<%= sp_autocomp.selling_price_middle rescue nil %>', '<%= sp_autocomp.selling_price_high rescue nil %>', '<%= sp_autocomp.ppn_out rescue nil %>')" class="btn btn-primary"> Choose </a></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

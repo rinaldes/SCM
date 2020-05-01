@@ -1,0 +1,24 @@
+<% @products.each_with_index do |product, i| %>
+<% product_s = ProductStructure.find_by_parent_id(Sku.find_by_product_id(product.id).id).id rescue nil %>
+<% if product_s.present? %>
+  <tr>
+    <td class="hidden-phone">
+      <%= link_to product.article, 'javascript:void(0)', onclick: "$('#clicked_article').val('#{product.article}');$('#show_details').val(1);filter_convertion()" %>
+    </td>
+    <td class='nowrap'><%= link_to product.barcode || '-', product_structure_url(product_s)  %></span></td>
+    <td class='nowrap'><%= product.description %></span></td>
+    <td class="nowrap"><%= product.m_class.name rescue '' %></td>
+  </tr>
+<% end %>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

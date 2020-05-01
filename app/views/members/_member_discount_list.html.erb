@@ -1,0 +1,45 @@
+<table class="table table-condensed table-striped table-bordered table-hover no-margin">
+  <thead>
+    <tr>
+      <th class="hidden-phone">Level</th>
+      <th class="hidden-phone">Accumulated Purchases</th>
+      <th class="hidden-phone">Discount (%)</th>
+      <th class="hidden-phone">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @discounts.present? %>
+      <% @discounts.each_with_index do |disc| %>
+        <tr id="<%= disc.id %>">
+          <td><%= disc.discount_type %></td>
+          <td><%= disc.nominal %></td>
+          <td><%= disc.percent %></td>
+          <td>
+            <div class="btn-group ">
+              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">Action&nbsp;<span class="caret"></span></button>
+              <ul class="dropdown-menu pull-right">
+                <li><%= link_to 'Ubah', edit_member_discount_members_path(id: disc.id), :remote => true %></li>
+                <li><%= link_to "Remove", delete_member_discount_members_path(id: disc.id), method: :delete, remote: true, confirm: 'Remove diskon member?' %></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr id="no-discount">
+        <td colspan='5' class='centered-text'>No Data</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @discounts %>
+<script>
+  $('.pagination a').bind('click', function(){
+    $.ajax({
+      url: '<%= discount_members_path %>'.split('?page')[0]+'?page='+this.href.split('page=')[1],
+      method: "get",
+      dataType: "script"
+    })
+    return false
+  })
+</script>

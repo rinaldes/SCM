@@ -1,0 +1,2 @@
+module HeadOfficesHelper
+end

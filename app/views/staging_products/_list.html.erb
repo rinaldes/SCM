@@ -1,0 +1,56 @@
+<% @sync_products.each_with_index do |product, i| %>
+<tr>
+  <td>
+    <% p_article = product.article %>
+    <%= check_box_tag "sp_#{p_article}", p_article, session[:selected_products].include?(p_article), onclick: "get_selected_products(#{p_article})" %>
+    <% if session[:selected_products].present? %>
+      <% if session[:selected_products].include?(p_article) %>
+        <%= javascript_tag "$('#sp_#{p_article}').prop('checked', true)" %>
+      <% end %>
+    <% end %>
+  </td>
+  <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+  <td class="hidden-phone"><%= product.department.name rescue ''%></td>
+  <td class="nowrap"><%= product.m_class.name rescue '' %></td>
+  <td><%= product.article %></td>
+  <td><%= product.barcode %></td>
+  <td><%= product.description %></td>
+  <td><%= product.short_name %></td>
+  <td class="no-wrap">
+    <% if Product.exists?(article: product.article) %>
+      <span class="label label-success">Imported</span><br>
+      <% if product.updated_at > Product.find_by_article(product.article).updated_at %>
+        <span class="label label-warning">Need to updated</span><br>
+      <% else %>
+        <span class="label label-success">You have newest version</span><br>
+      <% end %>
+    <% else %>
+      <span class="label label-info">Not Yet Imported</span><br>
+    <% end %>
+  </td>
+</tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <% if @sync_products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@sync_products, :params => { :selected_products => session[:selected_products] }) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>
+<script type="text/javascript">
+  function get_selected_products(product_id)
+  {
+    $.ajax({
+      url: "/staging_products/get_selected_products",
+      dataType: "script",
+      data: {id: product_id},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+</script>

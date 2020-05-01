@@ -1,0 +1,13 @@
+<% @account_receivables.each do |ar| %>
+    <tr>
+        <td><%= link_to ar.ar_number, finances_account_receivable_path(ar.id) %></td>
+        <td><%= ar.transaction_number %></td>
+        <td><%= ar.member.name %></td>
+        <td><%= format_currency(ar.total_amount) %></td>
+        <td><%= format_currency(ar.payments.sum(:payment_amount)) %></td>
+        <td><%= format_currency(ar.outstanding) %></td>
+        <td>
+            <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), edit_finances_account_receivable_path(ar.id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+        </td>
+    </tr>
+<% end %>

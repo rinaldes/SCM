@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  office_id: 1
+  rack_number: MyString
+  rack_type: MyString
+
+two:
+  office_id: 1
+  rack_number: MyString
+  rack_type: MyString

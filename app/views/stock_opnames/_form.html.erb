@@ -1,0 +1,293 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<link href="/plugin/multiple-select/multiple-select.css" rel="stylesheet" />
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Inventory</li><li>Stock Opname</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-StockOpname">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Stock Opname</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding" id='so_form'><!-- widget content -->
+            <%= render partial: 'so_form', locals: {stock_opname: @stock_opname} %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Stock Opname</h4>
+      </div>
+      <%= form_tag import_stock_opname_details_path(:id => params[:id]), multipart: true do %>
+        <div class="modal-body">
+          <%= file_field_tag :file %>
+        </div>
+        <div class="modal-footer">
+          <%#= link_to "Download Template", stock_opname_details_path(format: "csv", :a => "b"), :class => "btn btn-success" %>
+          <%= submit_tag "Import", :class => "btn btn-primary"%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<!-- Choose Product Per Item MODAL -->
+<div class="modal fade modal_per_item" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" id="myLargeModalLabel">Choose Product</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'so_by_item_modal' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Choose Product Per Item MODAL -->
+
+<script type="text/javascript">
+  function validate_store(){
+    if ($('#stock_opname_office_id').val() == "")
+    {
+      alert("Store harus di isi!");
+    }
+    else
+    {
+      start_so();
+      select_so();
+    }
+  }
+  function change_so_type()
+  {
+    if ($('#stock_opname_so_type').val() == 'All Item')
+    {
+      $('#so_by_item').hide();
+      $('#so_by_rack').hide();
+      $('#so_all_item').show();
+      $('#so_by_item').addClass('hide');
+      $('#so_by_rack').addClass('hide');
+      $('#so_all_item').removeClass('hide');
+      $('.rack_field').addClass('hide');
+      $('.so_dept').removeClass('hide');
+      $('#stock_opname_dept').multipleSelect();
+    }
+    else if ($('#stock_opname_so_type').val() == 'By Item')
+    {
+      $('#so_by_item').show();
+      $('#so_by_rack').hide();
+      $('#so_all_item').hide();
+      $('#so_by_item').removeClass('hide');
+      $('#so_by_rack').addClass('hide');
+      $('#so_all_item').addClass('hide');
+      $('.rack_field').addClass('hide');
+      $('.so_dept').addClass('hide');
+    }
+    else if ($('#stock_opname_so_type').val() == 'By Rack')
+    {
+      $('#so_by_item').hide();
+      $('#so_by_rack').show();
+      $('#so_all_item').hide();
+      $('#so_by_item').addClass('hide');
+      $('#so_by_rack').removeClass('hide');
+      $('#so_all_item').addClass('hide');
+      $('.rack_field').removeClass('hide');
+      $('.so_dept').addClass('hide');
+    }
+  }
+
+  function start_so(){
+    var date = new Date();
+    $.ajax({
+      url: '/stock_opnames/start_stock_opname_data',
+      data: {
+        key: date.getDay() + "" + date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(),
+        office_id: $('#stock_opname_office_id').val(),
+        warehouse_id: $('#stock_opname_warehouse_id').val(),
+        so_type: $('#stock_opname_so_type').val(),
+        rack_number: $('#rack_number').val(),
+        so_dept: $('#stock_opname_dept').val(),
+        so_item: $('#so_item').val()
+      }
+    })
+  }
+
+  function end_so(){
+    var date = new Date();
+    $.ajax({
+      url: '/stock_opnames/end_stock_opname_data',
+      data: {
+        key: date.getDay() + "" + date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(),
+        office_id: $('#stock_opname_office_id').val()
+      }
+    })
+  }
+
+  function select_so(){
+    var date = new Date();
+    $.ajax({
+      url: '/stock_opnames/select_stock_opname_data',
+      data: {
+        key: date.getDay() + "" + date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(),
+        office_id: $('#stock_opname_office_id').val()
+      }
+    })
+  }
+  $(document).ready(function() {
+    $("#rack_number").select2();
+    $('#stock_opname_office_id').change(function(){
+      select_so()
+    })
+    if($("#stock_opname_so_type").val() == "By Item" || $("#stock_opname_so_type").val() == "By Rack"){
+      //$(".qty_opname").attr("readonly", false)
+    }
+    autocomplete_barcode()
+    set_barcode()
+  });
+
+  function set_barcode(){
+    if ($('#good_transfer_origin_branch_id').val() == '')
+      $('#barcode').attr('disabled', 'disabled')
+    else
+      $('#barcode').removeAttr('disabled')
+  }
+
+  function store_dan_warehouse(id_so_detail){
+    if($("#qty_store_"+id_so_detail).val().length > 0){
+      qty_store = parseInt($("#qty_store_"+id_so_detail).val())
+    }
+    else{
+      qty_store = 0
+    }
+    if($("#qty_warehouse_"+id_so_detail).val().length > 0){
+      qty_warehouse = parseInt($("#qty_warehouse_"+id_so_detail).val())
+    }
+    else{
+      qty_warehouse = 0
+    }
+    qty = qty_warehouse + qty_store
+    $("#qty_actual_"+id_so_detail).val(qty)
+  }
+
+  function get_quantity_data(product_id, good_transfer_detail_id){
+    var date = new Date();
+    $.ajax({
+      url: '/stock_opnames/get_quantity_data',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id,
+        warehouse_id: $('#stock_opname_branch_id').val()
+      }
+    })
+  }
+
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        get_quantity_data(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function keterangan(obj, id){
+    if(parseInt($('#quantity_a'+ id).val()) == parseInt($('#quantity_v'+ id).val())){
+      obj.parent().parent().find('.stock_opname_details').html("sesuai<input type='hidden' name='stock_opname[stock_opname_details_attributes]["+id
+        +"][explanation]' value='sesuai'>");
+    }else if(parseInt($('#quantity_a'+ id).val()) > parseInt($('#quantity_v'+ id).val())){
+      obj.parent().parent().find('.stock_opname_details').html("penyesuaian(+)<input type='hidden' name='stock_opname[stock_opname_details_attributes]["+ id
+        +"][explanation]' value='penyesuaian(+)'>");
+    }else if(parseInt($('#quantity_a'+ id).val()) < parseInt($('#quantity_v'+ id).val())){
+      obj.parent().parent().find('.stock_opname_details').html(
+        "<select id='keterangan"+ id +"' name='stock_opname[stock_opname_details_attributes]["+ id
+        +"][explanation]'><option>hilang</option><option>rusak</option><option>penyesuaian(-)</option></select>"
+      );
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+
+  function add_product_to_table_list(obj, i)
+  {
+    $('#selected_products_table').append(obj.parent().parent().append("<td><button type='button' class='btn btn-danger btn-sm' onclick='remove_item($(this));'>Remove</button>"));
+    obj.parent().remove();
+    $('.button_action'+i).remove();
+
+    str = []
+    for (i=0; i<$('#selected_products_table .product').length; i++){
+      str.push($('#selected_products_table .product')[i].value)
+    }
+    $('#so_item').val(str.join(','));
+  }
+
+  function remove_item(obj){
+    obj.parent().parent().remove();
+    str = []
+    for (i=0; i<$('#selected_products_table .product').length; i++){
+      str.push($('#selected_products_table .product')[i].value)
+    }
+    $('#so_item').val(str.join(','));
+  }
+
+  function office_selected(obj){
+    $.ajax({
+      url: "/stock_opnames/offices_per_rack",
+      dataType: "script",
+      data: {office_id: obj.value},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+
+  function rack_selected(obj){
+    $.ajax({
+      url: "/stock_opnames/rack_selected",
+      dataType: "script",
+      data: {rack_id: obj.value, so_date: $("#stock_opname_start_date").val()},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+
+  function so_by_rack_select(){
+    start_so();
+    select_so();
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="/plugin/multiple-select/multiple-select.js"></script>

@@ -1,0 +1,5 @@
+$("#convertion-list").html("<%= j(render 'reports/convertion_report_list') %>");
+<% if @zf.present? %>
+$("#convertion_detail").html("<%= j(render 'reports/convertion_history_detail') %>");
+alert("Convertion Detail captured.");
+<% end %>

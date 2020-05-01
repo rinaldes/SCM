@@ -1,0 +1,7 @@
+
+<% if @errors.present? %>
+  <%= render 'layouts/errors' %>
+  window.scrollTo(0, 0);
+<% else %>
+  window.location = '/locations'
+<% end %>

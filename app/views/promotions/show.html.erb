@@ -1,0 +1,237 @@
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Promotion</li><li><%= @promotion.name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+      <h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-edit fa-fw "></i>
+          Promotions
+        <span>&gt;
+          Promotion Details
+        </span>
+      </h1>
+    </div>
+  </div>
+
+  <section id="widget-grid">
+    <div class="row">
+      <!-- NEW COL START -->
+      <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" role="widget">
+          <header role="heading">
+            <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+            <h2>Promotion <%= @promotion.name %> Details </h2>
+          </header>
+
+          <!-- widget div-->
+          <div role="content">
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+              <form class="smart-form">
+                <header>
+                  General Informations
+                </header>
+                <fieldset>
+                  <div class="row">
+                    <section class="col col-1">
+                      <label class="label">Name</label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="input">
+                        <%= @promotion.name %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Type</label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="input">
+                        <%= @promotion.promotion_type %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Member?</label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="input">
+                        <%= @promotion.is_member %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Multiple?</label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="input">
+                        <%= @promotion.multi %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Claim?</label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="input">
+                        <%= @promotion.is_claim %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-1">
+                      <label class="label">from</label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="input">
+                        <%= @promotion.from %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">to</label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="input">
+                        <%= @promotion.to %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Store</label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="input">
+                        <%= @store_name %>
+                      </label>
+                    </section>
+                  </div>
+                  <% if @promotion.promotion_type == 'Happy Hour' %>
+                    <div class="row">
+                      <section class="col col-1">
+                        <label class="label">Start Time</label>
+                      </section>
+                      <section class="col col-2">
+                        <label class="input">
+                          <%= @promotion.promo_item_lists.first.start_time.strftime("%H:%M") %>
+                        </label>
+                      </section>
+                      <section class="col col-1">
+                        <label class="label">End Time</label>
+                      </section>
+                      <section class="col col-2">
+                        <label class="input">
+                          <%= @promotion.promo_item_lists.first.end_time.strftime("%H:%M") %>
+                        </label>
+                      </section>
+                    </div>
+                  <% end %>
+                </fieldset>
+                <% unless @promotion.promotion_type == 'Discount Period' || @promotion.promotion_type == 'Happy Hour' %>
+                <header>Promo Item</header>
+                <fieldset>
+                  <section>
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th>Article</th>
+                          <th>Name</th>
+                          <th>UoM</th>
+                          <th>Qty</th>
+                        </tr>
+                      </thead>
+                      <tbody id='promo_item_list'>
+                        <% @promotion.promo_item_lists.each_with_index{|pil, i| %>
+                          <% product = Product.find(pil.product_id) %>
+                          <tr>
+                            <td><%= product.article rescue '' %></td>
+                            <td><%= product.description rescue '' %></td>
+                            <td><%= Sku.find_by_barcode(product.barcode).unit.name rescue nil %></td>
+                            <td><%= pil.min_qty rescue '' %></td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </section>
+                </fieldset>
+                <% end %>
+                <header>Prize Lists</header>
+                <fieldset>
+                  <section>
+                    <% if @promotion.discount_amount.present? %>
+                      <section class="col col-2">
+                        <h2>Discount Amount :</h2>
+                      </section>
+                      <section class="col col-4">
+                        <h2>Rp. <%= format_currency @promotion.discount_amount %></h2>
+                      </section>
+                    <% end %>
+                    <% if @promotion.prize_lists.present? %>
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th>Article</th>
+                          <th>Name</th>
+                          <th>UoM</th>
+                          <% if @promotion.promotion_type == 'Discount Period' %>
+                            <th>HPP</th>
+                            <th>Selling Price</th>
+                          <% end %>
+                          <% if @promotion.promotion_type == 'Discount Period' || @promotion.promotion_type == 'Happy Hour' %>
+                            <th>Harga Jual Akhir</th>
+                          <% elsif @promotion.promotion_type == 'Purchase to Purchase' %>
+                            <th>Prize Promo</th>
+                          <% else %>
+                            <th>Qty</th>
+                          <% end %>
+                          <% if @promotion.promotion_type == 'Happy Hour' %>
+                            <th>Min Qty</th>
+                          <% end %>
+                        </tr>
+                      </thead>
+
+                      <tbody id='prize_list'>
+                        <% @promotion.prize_lists.each_with_index{|pil, i| %>
+                          <% product = Product.find(pil.product_id) %>
+                          <tr>
+                            <td><%= product.article rescue '' %></td>
+                            <td><%= product.description rescue '' %></td>
+                            <td><%= Sku.find_by_barcode(product.barcode).unit.name rescue '' %></td>
+                            <% if @promotion.promotion_type == 'Discount Period' %>
+                              <td>Rp <%= product.selling_prices.last.selling_price rescue '' %></td>
+                              <td>Rp <%= product.selling_prices.last.hpp rescue '' %></td>
+                            <% end %>
+                            <% if @promotion.promotion_type == 'Discount Period' || @promotion.promotion_type == 'Happy Hour' %>
+                              <td><%= number_to_currency(pil.disc_amt, unit: 'Rp.', precision: 2) rescue '' %></td>
+                            <% elsif @promotion.promotion_type == 'Purchase to Purchase' %>
+                              <td><%= pil.prize_promo rescue '' %></td>
+                            <% else %>
+                              <td><%= pil.max_qty rescue '' %></td>
+                            <% end %>
+                            <% if @promotion.promotion_type == 'Happy Hour' %>
+                              <td><%= pil.min_qty rescue '' %></td>
+                            <% end %>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                    <% end %>
+                  </section>
+                </fieldset>
+                <footer>
+                  <button type="button" class="btn btn-default" onclick="window.history.back();">
+                    Back
+                  </button>
+                </footer>
+              </form>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </div>
+        <!-- end widget -->
+      </article>
+      <!-- END COL -->
+    </div>
+  </section>
+</div>

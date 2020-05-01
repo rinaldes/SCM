@@ -1,0 +1,5 @@
+$("#notification").html("<%= j(render 'dashboard/notification') %>");
+<% if @supplier.errors.blank? %>
+	$("#good_transfer-list").html("<%= j(render 'good_transfer_list') %>");
+<% end %>
+$("#form-good_transfer").html("<%= j(render 'form') %>");

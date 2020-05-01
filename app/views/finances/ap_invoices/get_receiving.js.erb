@@ -1,0 +1,9 @@
+<% if @receiving.present? %>
+// Untuk View
+$("td#gr_date_<%=@key%>").text("<%= @receiving.date %>");
+$("td#gr_store_<%=@key%>").text("<%= @receiving.head_office.office_name %>");
+$("#gr_number_<%=@key%>").text("<%= @receiving.number %>");
+
+// Untuk database
+$("#ap_invoice_ap_invoice_details_attributes_<%=@key%>_receiving_id").val("<%= @receiving.id %>");
+<% end %>

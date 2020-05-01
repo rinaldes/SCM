@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Best Seller</Data></Cell>
+      </Row>
+      <Row></Row>
+      <Row>
+        <Cell><Data ss:Type="String">No</Data></Cell>
+        <Cell><Data ss:Type="String">SKU</Data></Cell>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Department</Data></Cell>
+        <Cell><Data ss:Type="String">Category</Data></Cell>
+        <Cell><Data ss:Type="String">Total Sold (<%= params[:group_by] %>)</Data></Cell>
+      </Row>
+
+ <% @products.each_with_index do |product, i| %>
+    <Row>
+      <Cell><Data ss:Type="String"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.article %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.description %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.department.name rescue '' %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= product.m_class.name rescue '' %></Data></Cell>
+      <% if params[:group_by] == 'Amount' %>
+      <Cell><Data ss:Type="Number"><%= product.total_amount %></Data></Cell>
+      <% elsif params[:group_by] == 'Quantity' %>
+      <Cell><Data ss:Type="Number"><%= product.total_quantity %></Data></Cell>
+      <% end %>
+    </Row>
+  <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

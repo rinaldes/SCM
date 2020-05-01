@@ -1,0 +1,80 @@
+<% sales_counts = 0 %>
+<% retur_counts = 0 %>
+  <thead>
+    <tr>
+      <th><%= label %></th>
+      <th>Sales Price</th>
+      <th>Sales Qty</th>
+      <th>Retur sales</th>
+      <th>PPN</th>
+      <th>Sales Net</th>
+      <th>HPP</th>
+      <th>Margin Rp</th>
+      <th>Margin %</th>
+      <th>Struk</th>
+      <th>APC</th>
+    </tr>
+
+    <tr>
+      <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th colspan="10"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% sales.each{|sale| %>
+      <% sales_count = (Sale.where("to_char(transaction_date, '#{time_type}')='#{sale.transaction_date}'").count rescue 0) %>
+      <% retur = (SalesDetail.where("to_char(transaction_date, '#{time_type}')='#{sale.transaction_date}' AND quantity<0").joins(:sale).map(&:quantity).sum*-1 rescue 0) %>
+      <tr>
+        <td>
+          <%= link_to sale.transaction_date.split(' ')[0], 'javascript:void(0)',
+            onclick: "$('#transaction_date').val('#{sale.transaction_date}');$('#show_item').val($('#all_stores').val() == 'Tanggal' ? '1' : '');filter_sales()" %>
+        </td>
+        <td class='align-right'><%= format_currency sale.total_price %></td>
+        <td class='align-right'><%= format_currency sale.total_quantity %></td>
+        <td class='align-right'><%= format_currency retur %></td>
+        <td class='align-right'><%= format_currency sale.total_ppn %></td>
+        <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn %></td>
+        <td class='align-right'><%= format_currency sale.capital_price %></td>
+        <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn-sale.capital_price %></td>
+        <td class='align-right'><%= format_currency (sale.total_price-sale.total_ppn-sale.capital_price)/sale.capital_price.to_f*100 rescue 0 %>%</td>
+        <td class='align-right'><%= sales_count %></td>
+        <td class='align-right'><%= format_currency (sales_count == 0 ? 0 : sale.total_price/sales_count) %></td>
+      </tr>
+      <% sales_counts += sales_count %>
+      <% retur_counts += retur %>
+    <% } %>
+    <tr>
+      <th>Total</th>
+      <th class='align-right'><%= format_currency @sales.map(&:total_price).sum %></th>
+      <th class='align-right'><%= format_currency @sales.map(&:total_quantity).sum %></th>
+      <th class='align-right'><%= format_currency retur_counts %></th>
+      <th class='align-right'><%= format_currency @sales.map(&:total_ppn).sum %></th>
+      <th class='align-right'><%= format_currency @sales.map{|sale|sale.total_price-sale.total_ppn}.sum %></th>
+      <th class='align-right'><%= format_currency @sales.map(&:capital_price).sum %></th>
+      <th class='align-right'><%= format_currency @sales.map{|sale|sale.total_price-sale.total_ppn-sale.capital_price}.sum %></th>
+      <th class='align-right'><%= format_currency @sales.map{|sale|sale.total_price-sale.total_ppn-sale.capital_price}.sum/@sales.map(&:capital_price).sum*100 rescue 0 %>%</th>
+      <th class='align-right'><%= sales_counts %></th>
+      <th class='align-right'><%= format_currency @sales.map(&:total_price).sum/sales_counts rescue 0 %></th>
+    </tr>
+  </tbody>
+<script type="text/javascript">
+  function reload(){
+    $.ajax({
+      url: "/reports/sale_item_reports?&dari=month"+
+            "&store_code="+($('#store_code').length == 1 ? $('#store_code').val() : '')+
+            "&transaction_date="+($('#date').length == 1 ? $('#date').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

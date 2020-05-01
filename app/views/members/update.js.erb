@@ -1,0 +1,5 @@
+$("#notification").html("<%= j(render 'dashboard/notification') %>");
+<% if @member.errors.blank? %>
+  $("#member-list").html("<%= j(render 'member_list') %>");
+<% end %>
+$("#form-member").html("<%= j(render 'form') %>");

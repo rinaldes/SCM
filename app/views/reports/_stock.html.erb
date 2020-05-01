@@ -1,0 +1,59 @@
+<thead>
+  <tr>
+    <td rowspan=2>TGL</td>
+    <td colspan=2>SALDO AWAL</td>
+    <td colspan=2>PENJUALAN</td>
+    <td rowspan=2>%</td>
+    <td colspan=2>TRANSFER</td>
+    <td colspan=2>MUTASI MASUK</td>
+    <td colspan=2>MUTASI KELUAR</td>
+    <td colspan=2>RETURN KE HO</td>
+    <td colspan=2>KERUGIAN DISKON</td>
+    <td colspan=2>SALDO AKHIR</td>
+  </tr>
+  <tr>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+    <td>QTY</td>
+    <td>PRICE</td>
+  </tr>
+</thead>
+<tbody>
+  <% @product_mutation_histories.each{|pmh| %>
+    <% last_stock = @product_mutation_histories[pmh[0]].last %>
+    <% first_stock = @product_mutation_histories[pmh[0]].first %>
+    <tr>
+      <td><%= pmh[0].to_i %></td>
+      <td><%= first_stock.old_quantity %></td>
+      <td><%= number_to_currency ((first_stock.old_quantity*last_stock.product_detail.product_size.product.cost_of_products rescue 0)), unit: '' %></td>
+      <td><%= @stocks["qty_Sales"] %></td>
+      <td><%= @stocks["qty_#{pmh[0]}_Sales"] %></td>
+      <td><%= number_to_currency @stocks["price_#{pmh[0]}_Sales"], unit: '' %></td>
+      <td><%= @stocks["qty_#{pmh[0]}_Purchase Transfer Receipt"] %></td>
+      <td><%= number_to_currency @stocks["price_#{pmh[0]}_Purchase Transfer Receipt"], unit: '' %></td>
+      <td><%= @stocks["qty_#{pmh[0]}_Product Mutation Receipt"] %></td>
+      <td><%= number_to_currency @stocks["price_#{pmh[0]}_Product Mutation Receipt"], unit: '' %></td>
+      <td><%= @stocks["qty_#{pmh[0]}_Good Transfer"] %></td>
+      <td><%= number_to_currency @stocks["price_#{pmh[0]}_Good Transfer"], unit: '' %></td>
+      <td><%= @stocks["qty_#{pmh[0]}_Returns To Ho"] %></td>
+      <td><%= number_to_currency @stocks["price_#{pmh[0]}_Returns To Ho"], unit: '' %></td>
+      <td><%= @stocks["qty_#{pmh[0]}_Discount"] %></td>
+      <td><%= number_to_currency @stocks["price_#{pmh[0]}_Discount"], unit: '' %></td>
+      <td><%= last_stock.new_quantity %></td>
+      <td><%= number_to_currency last_stock.new_quantity*last_stock.product_detail.product_size.product.cost_of_products, unit: '' %></td>
+    </tr>
+  <% } %>
+</tbody>
+

@@ -1,0 +1,92 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Purchasing</li><li>Return To Warehouse</li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Retur To Warehouse</h2> <!-- header content --></header>
+          <div>
+            <div class="widget-body no-padding">
+              <%= link_to raw('<span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Add Retur'), '/returns_to_warehouses/new',
+                class: "btn btn-labeled btn-primary edit-btn-primary" %>
+            </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                    Code
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Date
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  <th>
+                    Supplier
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Retur Quantity
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  <th>
+                    Total Cost Price
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  <th>
+                    Note
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  <th>
+                    Status
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                    <th>Action</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :code, params[:code], class: 'form-control search', name: 'product_mutations.code' %></th>
+                    <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control search', name: "to_char(mutation_date, 'DD-MM-YYYY')" %></th>
+                    <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: "suppliers.name" %></th>
+                    <th></th>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :note, params[:note], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :status, params[:status], class: 'form-control search', name: 'product_mutations.status' %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='returns_to_ho-list'><%= render 'returns_to_ho_list' %></tbody>
+              </table>
+            </div>
+          </div>
+      </article>
+    </div>
+  </section>
+</div>

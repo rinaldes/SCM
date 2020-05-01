@@ -1,0 +1,110 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Voucher</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-unit">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Voucher</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @voucher, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <section>
+                  <label class="label">Voucher Name <span class='important'>*</span></label>
+                  <label class="input"><%= f.text_field :name, id: 'voucher_name', class: "input-sm #{(error_field @voucher, :name)}" %></label>
+                </section>
+                <section>
+                  <label class="label">Valid From</label>
+                  <label class="input"><%= f.date_field :valid_from, id: 'valid_from', class: "input-sm #{(error_field @voucher, :valid_from)}", :disabled => true %></label>
+                </section>
+                <section>
+                  <label class="label">Valid Until <span class='important'>*</span></label>
+                  <label class="input"><%= f.date_field :valid_until, id: 'valid_until', class: "input-sm #{(error_field @voucher, :valid_until)}" %></label>
+                </section>
+                <section>
+                  <label class="label">Minimum Amount (Rp)</label>
+                  <label class="input"><%= f.text_field :min_amount, id: 'min_amount', class: "input-sm #{(error_field @voucher, :min_amount)}", :placeholder => "Rupiah", :disabled => true %></label>
+                </section>
+                <section>
+                  <label class="label">DISCOUNT (% atau Rp)</label>
+                  <label class="label">[ % ]</label>
+                  <label class="input"><%= f.text_field :discount, id: 'disc_pct', class: "input-sm #{(error_field @voucher, :discount)}", :placeholder => "Percent", onkeyup: 'disable_disc_amt()', :readonly => true %></label>
+                  <label class="label">[ Rp ]</label>
+                  <label class="input"><%= f.text_field :discount_amount, id: 'disc_amt', class: "input-sm #{(error_field @voucher, :discount_amount)}", :placeholder => "Rupiah", onkeyup: 'disable_disc_pct()', :readonly => true %></label>
+                </section>
+                <section>
+                  <label class="label">MAX VOUCHER (pcs atau Rp)<span class='important'>*</span></label>
+                  <label class="label">[ pcs ]</label>
+                  <label class="input"><%= f.text_field :max_voucher, id: 'max_pcs', class: "input-sm #{(error_field @voucher, :max_voucher)}", :placeholder => "Pieces", onkeyup: 'disable_max_amt()' %></label>
+                  <label class="label">[ Rp ]</label>
+                  <label class="input"><%= f.text_field :max_voucher_amt, id: 'max_amt', class: "input-sm #{(error_field @voucher, :max_voucher_amt)}", :placeholder => "Rupiah", onkeyup: 'disable_max_pcs()' %></label>
+                </section>
+                <section>
+                  <label class="label">Multiple</label>
+                  <label><%= f.check_box :is_multiple, id: 'is_multiple', :disabled => true %></label>
+                </section>
+                <section>
+                  <label class="label">Term & Condition</label>
+                  <label class="input"><%= f.text_area :term_condition, id: 'term_condition', class: "input-sm #{(error_field @voucher, :term_condition)}", :cols => 50, :rows => 5 %></label>
+                </section>
+                <section>
+                  <label><%= f.hidden_field :is_percent, id: 'is_percent' %></label>
+                  <label><%= f.hidden_field :is_max_pcs, id: 'is_max_pcs' %></label>
+                  <label><%= f.hidden_field :is_active, :value => "true" %></label>
+                </section>
+                </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<script type="text/javascript">
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+    disc_pct_or_amt()
+    max_pcs_or_amt()
+  })
+
+  function disc_pct_or_amt(){
+    if($('#voucher_is_percent').val() == true){
+      $('#disc_amt').val('')
+    }
+    else if($('#voucher_is_percent').val() == false){
+      $('#disc_pct').val('')
+    }
+    else{
+      $('#disc_amt').val('')
+      $('#disc_pct').val('')
+    }
+  }
+
+  function max_pcs_or_amt(){
+    if($('#voucher_is_max_pcs').val() == true){
+      $('#max_amt').val('')
+    }
+    else if($('#voucher_is_max_pcs').val() == false){
+      $('#max_pcs').val('')
+    }
+    else{
+      $('#max_amt').val('')
+      $('#max_pcs').val('')
+    }
+  }
+</script>

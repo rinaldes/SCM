@@ -1,0 +1,1 @@
+<%= select_tag "brand[department_id]", options_for_select((@departments.map{|a|[a.name, a.id]}.uniq rescue []), selected: (@brand.department_id rescue nil)), {class: "form-control"} %>

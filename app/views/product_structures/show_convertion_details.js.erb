@@ -1,0 +1,4 @@
+<% if @zfd.present? %>
+  $('.modal_details').html("<%= j(render 'modal') %>")
+  $('.modal_details').modal();
+<% end %>

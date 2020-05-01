@@ -1,0 +1,148 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Goods Transfer</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Goods Transfer</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @good_transfer, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= f.hidden_field :no_surat_jalan, value: "SJ/#{Time.now.strftime('%m%y')}-#{'%06d' % ((@last_goods_transfer.id rescue 0)+1)}", class: "input-sm" %>
+              <%= f.hidden_field :receiver_id, value: current_user.id %>
+              <%= f.hidden_field :status, value: "Pending", class: "input-sm" %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Date</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :transfer_date, value: Time.now.strftime('%d-%m-%Y'), class: "input-sm #{(error_field @good_transfer, :transfer_date)}", disabled: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">No. Goods Transfer</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :code, value: "TB/#{Time.now.strftime('%m/%y')}-#{'%06d' % ((@last_goods_transfer.id rescue 0)+1)}", class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">From <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.collection_select(:origin_branch_id, Branch.all, :id, :office_name,{prompt: 'Origin Branch'},{ class: "input-sm #{(error_field @good_transfer, :origin_branch_id)}" }) %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Destination <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.collection_select(:destination_branch_id, Branch.all, :id, :office_name,{prompt: 'Destination Branch'},{ class: "input-sm #{(error_field @good_transfer, :destination_branch_id)}" }) %></label></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <fieldset>
+                  </fieldset>
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+
+                <header>Products</header>
+                <fieldset class="col col-md-12"> <!-- brand person -->
+                  <div class="row">
+                    <section class="col col-md-12">
+                      <label class="col-md-4 input custom-input-box">
+                        <%= text_field_tag "barcode", '', class: 'input-sm autocompletenya', onkeyup: "$(this).next().next().hide()" %>
+                        <a class="ui-button ui-widget ui-state-default ui-button-icon-only custom-combobox-toggle ui-corner-right" tabindex="-1" onclick="$(this).next().show()">
+                          <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text"></span>
+                        </a>
+                        <ul style="display: none; width: 100%; top: 29px;" tabindex="0" id="ui-id-1" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content">
+                          <% @products.each{|product| %>
+                            <li tabindex="-1" id="ui-id-2" class="ui-menu-item"><%= product[0] %></li>
+                          <% } %>
+                        </ul>
+                      </label>
+                    </section>
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th>Barcode</th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id='brand'>
+                        <% if params[:action] == 'edit' %>
+                          <% @good_transfer.good_transfer_details.each{|cp| %>
+                            <%= render partial: "good_transfer_detail", locals: {key: cp.id, object: cp} %>
+                          <% } %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                    </section>
+                    </div> <!-- row -->
+                  </fieldset>
+              <footer>
+                <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    autocomplete_barcode()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+  });
+
+  function add_brand(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/good_transfers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id,
+        warehouse_id: $('#good_transfer_origin_branch_id').val()
+      }
+    })
+  }
+
+  function merk(){
+  }
+
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

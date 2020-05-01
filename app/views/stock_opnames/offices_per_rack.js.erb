@@ -1,0 +1,5 @@
+<% if @rack %>
+  $('#rack_number').prop("disabled", false);
+  $('#rack_number').html("<option>Please Select</option>");
+  $('#rack_number').append("<%= escape_javascript options_from_collection_for_select(@rack, :planogram_id, :rack_number) %>");
+<% end %>

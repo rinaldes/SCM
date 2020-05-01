@@ -1,0 +1,66 @@
+<script src="/js/jquery-2.1.1.min.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>Mobile Order</li><li><%= @purchase_order.transaction_number %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Transaction Number : <%= @purchase_order.transaction_number %></h2>
+        </header>
+        <div>
+          <div style='overflow-x: scroll'>
+          	<table class="table table-striped table-bordered" width="100%" id="table_show">
+            <tbody>
+              <% if @mo.present? %>
+                <%= hidden_field_tag 'yg_checked' %>
+                <%= hidden_field_tag 'yg_unchecked' %>
+                <%= render 'show_list' %>
+              <% else %>
+                <tr>
+                  <td colspan='3' align='center'>No Data Entries</td>
+                </tr>
+              <% end %>
+            </tbody>
+            </table>
+          <footer>
+            <button type="button" class="btn btn-success" onclick="kirim_pesanan('terima')">Terima Pesanan</button>
+            <button type="button" class="btn btn-primary" onclick="kirim_pesanan('tunda')">Tunda</button>
+            <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+          </footer>
+          <br>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+	function kirim_pesanan(status){
+		$.ajax({
+      url: '<%= kirim_pesanan_mobile_orders_path %>',
+      type: 'get',
+      data: {
+        status: status,
+        id: '<%= params[:id] %>',
+        unchek: $("#yg_unchecked").val(),
+        chek: $("#yg_checked").val()
+      }
+    })
+	}
+  $('.send_msg').click(function(e) {
+    $.ajax({
+      url: '<%= kirim_pesan_mobile_orders_path %>',
+      type: 'get',
+      data: {
+        note: $(this).prev().prev().val(),
+        id: $(this).next().val()
+      }
+    })
+    alert("Message sent")
+  })
+</script>

@@ -1,0 +1,35 @@
+<% @selling_prices.each_with_index do |selling_price, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= selling_price.product.id %></td>
+    <td class="hidden-phone"><%= selling_price.start_date %></td>
+    <td class="hidden-phone"><%= selling_price.end_date %></td>
+    <td class="hidden-phone"><%= selling_price.hpp %></td>
+    <td class="hidden-phone"><%= selling_price.ppn_in %></td>
+    <td class="hidden-phone"><%= selling_price.margin %></td>
+    <td class="hidden-phone"><%=  %></td>
+    <td class="hidden-phone"><%= selling_price.dpp %></td>
+    <td class="hidden-phone"><%= selling_price.ppn_out %></td>
+    <td class="hidden-phone"><%=  %></td>
+
+    <td class="hidden-phone nowrap">
+      <%= link_to edit_selling_price_path(selling_price), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{selling_price.id}, 'selling_prices')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=12>
+    <% if @selling_prices.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

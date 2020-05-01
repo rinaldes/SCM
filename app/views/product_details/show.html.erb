@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product</li><li>Cek Stock All Gudang Per Supplier</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @product_detail.product_size.product.barcode rescue '' %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <form class='smart-form' url="products/stock">
+            <fieldset class="smart-form">
+              <div class="row">
+                <section class="col col-md-12">
+                  <section class="form-group col col-md-6">
+                    <label class="col-md-4 label">Barcode</label>
+                    <label class="col-md-8 label">
+                      <%= @product.barcode rescue '' %>
+                    </label>
+                  </section>
+                  <section class="form-group col col-md-6">
+                    <label class="col-md-4 label">Article</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @product.article rescue '' %>
+                    </label>
+                  </section>
+                  <section class="form-group col col-md-6">
+                    <label class="col-md-4 label">Description</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @product.description rescue '' %>
+                    </label>
+                  </section>
+                  <section class="form-group col col-md-6">
+                    <label class="col-md-4 label">Store Name</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @office.office_name rescue '' %>
+                    </label>
+                  </section>
+                </section> <!-- col-md-6 -->
+              </div>
+            </fieldset> <!-- tambah product -->
+            </form> <!-- tambah product -->
+          </div><!-- end widget content -->
+          <div class="widget-body no-padding"><!-- TABEL -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <td>Old Quantity</td>
+                    <td>Moved Quantity</td>
+                    <td>New Quantity</td>
+                    <td>Store Destination</td>
+                  </tr>
+                </thead>
+                <tbody id='stock'>
+                  <% @product_mutation_histories.each{|pmh| %>
+                    <td><%= pmh.old_quantity %></td>
+                    <td><%= pmh.moved_quantity %></td>
+                    <td><%= pmh.new_quantity %></td>
+                    <td><%= pmh.product_mutation_detail.product_mutation.destination_warehouse.office_name %></td>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div><!-- END TABEL -->
+        </div><!-- end widget div -->
+
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<SCRIPT>
+  $(document).ready(function() {
+    function filter_stock(){
+      status1 = []
+      $('.status1 checkobox').click(function(){
+        status1
+      })
+      $.ajax(
+      {
+        url: "/products/stock",
+        dataType: "json",
+//        data: {status1},
+        success: function (data){
+          response(data)
+        },
+      });
+    }
+
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+  })
+</SCRIPT>

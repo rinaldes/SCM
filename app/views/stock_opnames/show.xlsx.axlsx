@@ -1,0 +1,40 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+tengah = styles.add_style(:alignment => {:horizontal => :center, :vertical => :center})
+
+wb.add_worksheet(name: "Stock Opname") do |sheet|
+  judul = "Laporan Hasil Stock Opname " + @stock_opname.office.office_name + " ( " + @stock_opname.office.code + " )"
+  sheet.merge_cells "A1:C1"
+  sheet.add_row [judul]
+  sheet.add_row ["TGL SO : ", @stock_opname.start_date.strftime('%Y-%m-%d %H:%M:%S')]
+  sheet.add_row ["Petugas SO : ", (@stock_opname.inspector.fullname rescue '')]
+  sheet.add_row [""]
+  sheet.add_row ["No", "Artikel", "Deskripsi", "Department", "UoM", "Stock", "Sold", "Receive Transfer", "Retur", "Mutation In", "Mutation Out", "LPP", "Store Qty", "Warehouse Qty", "Actual Qty", "HPP", "Var", "Amount Variance"], :style => default
+  total_var = 0
+  total_amount_var = 0
+  @stock_opname_details.each_with_index do |stock_opname_detail, i|
+    product = stock_opname_detail.product
+    if stock_opname_detail.explanation.present?
+      store_dan_warehouse = stock_opname_detail.explanation.split(", ")
+      store_qty = store_dan_warehouse[0].gsub("store:", "").to_i
+      warehouse_qty = store_dan_warehouse[1].gsub("warehouse:", "").to_i
+    end
+    next if product.blank?
+    product_detail = ProductDetail.find_by_product_id_and_warehouse_id(product.id, @stock_opname.office_id)
+
+    sheet.add_row [(i+1), (product.article.to_i), (product.description), (product.department.try(:name)), (product.unit.try(:short_name)), (stock_opname_detail.system_stock.to_i), (stock_opname_detail.sold.to_i), (stock_opname_detail.received_from_transfer.to_i), (stock_opname_detail.retur.to_i), (stock_opname_detail.mutation_in.to_i), (stock_opname_detail.mutation_out.to_i), (stock_opname_detail.qty_virtual), (store_qty rescue nil), (warehouse_qty rescue nil), (stock_opname_detail.qty_actual.to_i), (stock_opname_detail.hpp.to_f), (stock_opname_detail.diff), (stock_opname_detail.diff*stock_opname_detail.hpp.to_f)], :style => default
+
+    total_var += stock_opname_detail.diff
+    total_amount_var += (stock_opname_detail.diff*stock_opname_detail.hpp.to_f rescue 0).to_f
+  end
+
+  sheet.add_row ["","","","","","","","","","","","","","","", "Total", total_var, total_amount_var], :style => default
+  sheet.add_row [""]
+  sheet.add_row [""]
+  sheet.add_row ["", "Pelaksana,", "","", "Penanggung Jawab,", "", "", "", "", "", "   Diketahui,   "], :style => tengah
+  sheet.add_row [""]
+  sheet.add_row [""]
+  sheet.add_row [""]
+  sheet.add_row ["", "(", ")","", "(", ")", "", "", "", "", "(", ")"]
+end

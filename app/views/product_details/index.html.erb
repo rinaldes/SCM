@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product Stock</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Product Stock List</h2> <!-- header content --></header>
+          <div style='overflow-y: hidden'><!-- widget div-->
+            <div class="widget-body no-padding" style='overflow-y: hidden'><!-- widget content -->
+            <%= link_to new_product_detail_url, :class => "btn btn-labeled btn-primary edit-btn-primary" do %>
+                <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Add Product Stock
+              <% end %>
+              
+                <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                  <li class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                      <ul class="dropdown-menu" >
+                        <li><%= link_to "Export to Excel", product_details_path(:id => params[:id], format: "xls") %></li>
+                        <li data-toggle="modal" data-target="#myModal" style='cursor: pointer'><a>Import from CSV</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+            </div><!-- end widget content -->
+            <table class="table table-striped table-bordered table-hover" width="100%">
+              <thead>
+              <tr>
+                <th>No</th>
+                <th>
+                  SKU
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Store Name
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Product Name
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'product_description-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'product_description-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Barcode
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Safety Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'po_number-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'po_number-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  ROP Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'po_number-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'po_number-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Max Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'po_number-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'po_number-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>Actions</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search', name: 'products.article' %></th>
+                  <th class="hasinput"><%= text_field_tag :office_name, params[:office_name], class: 'form-control search', name: 'offices.office_name' %></th>
+                  <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search', name: "products.description" %></th>
+                  <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id='product_detail-list'><%= render 'product_detail_list' %></tbody>
+            </table>
+          </div>
+        </div><!-- end widget -->
+      </article><!-- WIDGET END -->
+    </div>	<!-- end row -->
+  </section><!-- end widget grid -->
+</div>	<!-- end row -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Product Stock</h4>
+      </div>
+      <%= form_tag import_product_details_path(:id => params[:id]), multipart: true do %>
+        <div class="modal-body">
+          <%= file_field_tag :file, accept: ".csv", onchange: "checkfile(this);" %>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Download Template", product_details_path(format: "csv", :a => "a"), :class => "btn btn-success" %>
+          <%= submit_tag "Import", :class => "btn btn-primary", :id => 'commit'%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#commit').bind("click",function(){ 
+    if(!$('#file').val()){
+      alert("File not been chosen");
+      return false;
+    }
+  }); 
+  window.reset = function (e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();
+  }
+});
+function checkfile(sender) {
+    var validExts = new Array(".csv");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+      alert("This is not a csv file");
+      reset($("#file"));
+      return false;
+    }
+    else return true;
+};
+</script>

@@ -1,0 +1,55 @@
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Bank</li><li><%= @edc_machine.bank_name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @edc_machine.bank_name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @edc_machine, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-3 label">Bank Name</label>
+                      <label class="col-md-9 label"><%= @edc_machine.bank_name %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Branch</label>
+                      <label class="col-md-9 label"><%= @edc_machine.branch %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-3 label">EDC Machine</label>
+                      <label class="col-md-9 label"><%= @edc_machine.edc_serial_number %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-3 label">Account Number</label>
+                      <label class="col-md-9 label"><%= @edc_machine.account_number %></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Owner Name</label>
+                      <label class="col-md-9 label"><%= @edc_machine.owner %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

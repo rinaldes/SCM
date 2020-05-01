@@ -1,0 +1,29 @@
+<% if @sales_onlines.present? %>
+  <% @sales_onlines.limit(50).each do |so| %>
+    <tr>
+      <td><%= so.office_name %></td>
+      <td><%= so.tipe %></td>
+      <td><%= so.idpel %></td>
+      <td><%= so.pay_date %></td>
+      <td><%= so.biller_msg %></td>
+      <td style='text-align: right'><%= format_currency so.bill_amt rescue '' %></td>
+      <td style='text-align: right'><%= format_currency so.admin_amt rescue '' %></td>
+      <td style='text-align: right'><%= format_currency so.total_amt rescue '' %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan=8>
+      <% if @sales_onlines.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@sales_onlines, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+<tr>
+  <td colspan="13"><center>No Data Available</center></td>
+</tr>
+<% end %>

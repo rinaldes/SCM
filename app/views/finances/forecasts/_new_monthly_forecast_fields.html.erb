@@ -1,0 +1,51 @@
+<tr class="nested-fields">
+    <td>
+        <span class="monthly-forecast-input" style="<%= f.object.month_number.blank?  ?  "" : 'display:none;' %>">
+            <%= f.select :month_number, options_for_select((1..12).map {|m| [Date::MONTHNAMES[m], m]}, (f.object.month_number  unless f.object.month_number.blank?)) , class: 'select-month'%>
+            </span>
+        <span class="monthly-forecast-text">
+            <%= link_to raw(Time.new(2015, f.object.month_number).strftime("%B")), finances_forecast_monthly_forecast_path(@forecast.id, f.object.id)  unless f.object.month_number.blank? %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-forecast-text">
+             <%= number_with_precision(f.object.monthly_forecast_details.sum('qty').to_f, :precision => 0, :delimiter => ',') %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-forecast-text">
+            <%= number_with_precision(f.object.monthly_forecast_details.sum('amount').to_f, :precision => 0, :delimiter => ',') %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-forecast-text">
+            <%= number_with_precision(f.object.monthly_forecast_details.sum('realization_qty').to_f, :precision => 0, :delimiter => ',') %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-forecast-text">
+            <%= number_with_precision(f.object.monthly_forecast_details.sum('realization_amount').to_f, :precision => 0, :delimiter => ',') %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-forecast-ntext">
+            <%= f.object.monthly_forecast_details.count_qty_in_percent %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-forecast-ntext">
+            <%= f.object.monthly_forecast_details.count_amount_in_percent %>
+        </span>
+    </td>
+
+    <td>
+        <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), edit_finances_forecast_monthly_forecast_path(@forecast.id, f.object.id), class: "btn btn-primary btn-xs custom-edit-btn" unless f.object.id.blank? %>
+        <%= link_to_remove_association ('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>').html_safe, f, class: "btn btn-danger btn-xs custom-edit-btn"   %>
+    </td>
+</tr>

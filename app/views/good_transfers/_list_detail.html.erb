@@ -1,0 +1,4 @@
+<% @good_transfer.product_mutation_details.each do |prd| %>
+  <% product = prd.product %>
+  <%= render 'shared/tr_detail', product: product, key: "#{Time.now.to_i}#{product.id}", show_barcode: true, show_price: false, pod: prd, transaction_type: 'product_mutation' %>
+<% end %>

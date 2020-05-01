@@ -1,0 +1,38 @@
+<% if @purchase_orders.count > 0 %>
+  <% @purchase_orders.each_with_index do |po, i| %>
+    <tr>
+      <td><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+      <td class='nowrap'><%= link_to po.number, mobile_order_path(po), class: 'blue' %></td>
+      <td><%= po.hp %></td>
+      <td><%= po.name %></td>
+      <td><%= po.date %></td>
+      <td><%= po.time %></td>
+      <td>
+        <div class="row">
+          <section class="col col-md-9">
+            <%= po.status %>
+          </section>
+          <section class="col col-md-3">
+            <% if (po.status.upcase rescue 'TUNDA') == 'BARU' || (po.status.upcase rescue 'PENDING') == 'NEW' %>
+              <i class="fa fa-bell" style="color:red;"></i>
+            <% end %>
+          </section>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan=12>
+      <% if @purchase_orders.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@purchase_orders, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='11' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

@@ -1,0 +1,3 @@
+<% if @branches %>
+    $('#branch_city_id').html("<option value=''>Please Select</option><%= escape_javascript options_from_collection_for_select(@branches, :id, :name) %>");
+<% end %>

@@ -1,0 +1,6 @@
+<% details.group_by{|prd|prd.product_id}.each do |pod| %>
+  <% product = pod[1][0].product %>
+  <tr>
+    <%= render 'td_detail', product: product, pod: pod[1][0], quantity: pod[1][0].quantity, key: "#{Time.now.to_i}#{product.id}" %>
+  </tr>
+<% end %>

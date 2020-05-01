@@ -1,0 +1,110 @@
+<form class="smart-form">
+  <fieldset>
+    <div class="row">
+      <section class="col col-md-12">
+        <section class="col col-md-6">
+          <label class="col-md-4 label">No Stock Opname</label>
+          <label class="col-md-8 input custom-input-box">
+            <%= stock_opname.opname_number %>
+          </label>
+          <label class="col-md-4 label">Store </label>
+          <label class="col-md-8 input custom-input-box">
+            <%= stock_opname.office.office_name %>
+          </label>
+          <label class="col-md-4 label">Warehouse </label>
+          <label class="col-md-8 input custom-input-box">
+            <%= stock_opname.warehouse.office_name rescue '-' %>
+          </label>
+          <label class="col-md-4 label">Date</label>
+          <label class="col-md-8 input custom-input-box">
+            <%= stock_opname.start_date.strftime('%Y-%m-%d') %>
+          </label>
+          <label class="col-md-4 label">System Stock</label>
+          <label class="col-md-8 input custom-input-box">
+            <%= stock_opname.system_stock %>
+          </label>
+        </section>
+        <section class="col col-md-6">
+          <label class="col-md-4 label">Sold</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.sold %></label>
+          <label class="col-md-4 label">Received</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.received_from_transfer %></label>
+          <label class="col-md-4 label">Mutation In</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.mutation_in.to_i %></label>
+          <label class="col-md-4 label">Mutation Out</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.mutation_out.to_i %></label>
+          <label class="col-md-4 label">Retur</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.retur.to_i %></label>
+          <label class="col-md-4 label">Last Stock</label>
+          <label class="col-md-8 input custom-input-box"><%= @qty_virtual %></label>
+          <label class="col-md-4 label">Date Finished</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.end_date.strftime('%Y-%m-%d %H:%M:%S') %></label>
+          <label class="col-md-4 label">Actual Stock</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.actual_stock || 0 %></label>
+          <label class="col-md-4 label">Differences</label>
+          <label class="col-md-8 input custom-input-box"><%= stock_opname.actual_stock-@qty_virtual rescue 0 %></label>
+          <label class="col-md-4 label">Notes</label>
+          <label class="col-md-12 textarea custom-input-box"><%= stock_opname.note %></label>
+        </section>
+      </section>
+      <header>Opname Details</header>
+      <fieldset class="col col-md-12">
+        <div class="row">
+          <section class="col col-md-12">
+            <%= link_to "Export to Excel", stock_opname_path(params[:id], format: "xlsx"), :class => "btn btn-success btn-sm" %>
+            <%= link_to "Export to PDF", print_to_pdf_stock_opname_path(params[:id]), :class => "btn btn-success btn-sm" %>
+            <%= link_to "Print to LHSO", print_lkso_stock_opname_path(params[:id]), :class => "btn btn-success btn-sm" %>
+            <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>SKU</th>
+                  <th>Description</th>
+                  <th>Stock</th>
+                  <th>Sold</th>
+                  <th>Receive Transfer</th>
+                  <th>Retur</th>
+                  <th>Mutation In</th>
+                  <th>Mutation Out</th>
+                  <th>LPP</th>
+                  <th>Actual Stock</th>
+                  <th>Var</th>
+                  <th>Amount Variance</th>
+                </tr>
+              </thead>
+              <tbody id='brand'>
+                <% @stock_opname_details.each_with_index{|stock_opname_detail, i| %>
+                  <% product = stock_opname_detail.product %>
+                  <% next if product.blank? %>
+                  <% product_detail = ProductDetail.find_by_product_id_and_warehouse_id(product.id, @stock_opname.office_id) %>
+                  <tr>
+                    <td align="right"><%= i+1 %></td>
+                    <td>
+                      <label class="col-md-10 label"><%= product.article %></label>
+                    </td>
+                    <td>
+                      <label class="col-md-10 label"><%= product.description %></label>
+                    </td>
+                    <td align="right"><%= stock_opname_detail.system_stock.to_i %></td>
+                    <td align="right"><%= stock_opname_detail.sold.to_i %></td>
+                    <td align="right"><%= stock_opname_detail.received_from_transfer.to_i %></td>
+                    <td align="right"><%= stock_opname_detail.retur.to_i %></td>
+                    <td align="right"><%= stock_opname_detail.mutation_in.to_i %></td>
+                    <td align="right"><%= stock_opname_detail.mutation_out.to_i %></td>
+                    <td align="right"><%= stock_opname_detail.qty_virtual %></td>
+                    <td align="right"><%= stock_opname_detail.qty_actual %></td>
+                    <td align="right"><%= stock_opname_detail.diff %></td>
+                    <td align="right"><%= format_currency stock_opname_detail.diff*stock_opname_detail.hpp.to_f %></td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </fieldset>
+    </div>
+  </fieldset>
+  <footer>
+    <%= link_to "Back", stock_opnames_path, class: "btn btn-default" %>
+  </footer>
+</form>

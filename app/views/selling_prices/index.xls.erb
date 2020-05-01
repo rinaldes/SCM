@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">no</Data></Cell>
+        <Cell><Data ss:Type="String">article</Data></Cell>
+        <Cell><Data ss:Type="String">barcode</Data></Cell>
+        <Cell><Data ss:Type="String">product</Data></Cell>
+        <Cell><Data ss:Type="String">store</Data></Cell>
+        <Cell><Data ss:Type="String">start_date</Data></Cell>
+        <Cell><Data ss:Type="String">end_date</Data></Cell>
+        <Cell><Data ss:Type="String">hpp</Data></Cell>
+        <Cell><Data ss:Type="String">hpp_average</Data></Cell>
+        <Cell><Data ss:Type="String">ppn_in</Data></Cell>
+        <Cell><Data ss:Type="String">margin_percent</Data></Cell>
+        <Cell><Data ss:Type="String">margin_amount</Data></Cell>
+        <Cell><Data ss:Type="String">ppn_out</Data></Cell>
+        <Cell><Data ss:Type="String">selling_price</Data></Cell>
+      </Row>
+    <% nomor = 0 %>
+    <% @selling_prices.each do |sp| %>
+    <% selling_price = sp.selling_price %>
+    <% nomor += 1 %>
+      <Row>
+        <Cell><Data ss:Type="Integer"><%= nomor %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= (selling_price.product.article rescue nil) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= selling_price.product.barcode %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= (selling_price.product.description rescue nil) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= selling_price.office.office_name %></Data></Cell>
+        <Cell><Data ss:Type="Date"><%= selling_price.start_date %></Data></Cell>
+        <Cell><Data ss:Type="Date"><%= selling_price.end_date %></Data></Cell>
+        <Cell><Data ss:Type="Float"><%= selling_price.hpp %></Data></Cell>
+        <Cell><Data ss:Type="Float"><%= selling_price.hpp_average %></Data></Cell>
+        <Cell><Data ss:Type="Float"><%= selling_price.ppn_in %></Data></Cell>
+        <Cell><Data ss:Type="Float"><%= selling_price.margin_percent %></Data></Cell>%
+        <Cell><Data ss:Type="Float"><%= selling_price.margin_amount %></Data></Cell>
+        <Cell><Data ss:Type="Float"><%= selling_price.ppn_out %></Data></Cell>
+        <Cell><Data ss:Type="Float"><%= sp.price %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

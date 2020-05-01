@@ -1,0 +1,119 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Purchasing</li><li>Return To Supplier</li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Retur To Supplier</h2> <!-- header content --></header>
+          <div>
+            <div id="notice_template"><%= render 'layouts/notice' %></div>
+            <div class="widget-body no-padding">
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_retur)}"), new_returns_to_supplier_url,
+                class: "btn btn-labeled btn-primary edit-btn-primary" %>
+            </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                    Retur No
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'number-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'number-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Date
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                    <th class='nowrap'>
+                      <%= t(:reason_code) %>
+                      <%= link_to 'javascript:void(0)', id: 'reason_code-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'reason_code-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </th>
+                  <th>
+                    Supplier
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  <th>
+                    Store
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'branch_name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'branch_name-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  <th class='nowrap'>
+                    Retur Quantity
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'quantity-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'quantity-asc', class: 'sorting' %>
+                  </th>
+                  <th class='nowrap'>
+                    Total Cost Price
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                    Note
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'note-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'note-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    User
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'username-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'username-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Status
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'status-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'status-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput">
+                      <%= text_field_tag :number, params[:number], class: 'form-control search', name: "returns_to_suppliers.number" %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :date, params[:date], class: 'form-control search', name: "to_char(date, 'DD-MM-YYYY')" %>
+                    </th>
+                    <th class="hasinput"><%= text_field_tag :reason_code, params[:reason_code], class: 'form-control search' %></th>
+                    <th class="hasinput">
+                      <%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: "sup.name" %>
+                    </th>
+                    <th class="hasinput"><%= text_field_tag :office_name, params[:office_name], class: 'form-control search', name: 'ho.office_name' %></th>
+                    <th class="hasinput"></th>
+                    <th class="hasinput"><%= text_field_tag :note, params[:note], class: 'form-control search', name: "note" %></th>
+                    <th class="hasinput"><%= text_field_tag :username, params[:username], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :status, params[:status], class: 'form-control search' %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='returns_to_supplier-list'><%= render 'returns_to_supplier_list' %></tbody>
+              </table>
+            </div>
+          </div>
+      </article>
+    </div>
+  </section>
+</div>

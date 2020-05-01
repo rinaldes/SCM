@@ -1,0 +1,10 @@
+var inputValues = [];
+var date = new Date();
+key = date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+$("#table_size input[type=text]").each(function() {
+  inputValues.push($(this).val())
+  key = key+$(this).next().val()
+})
+$("#list_detail").append("<%= j(render 'tr_detail', product: @product) %>")
+$('#product_detail').append("<%= j(render 'modal_product', key: params[:key], product: @product, quantities: params[:quantities], product_sizes: @product.product_sizes) %>")
+clone_details()

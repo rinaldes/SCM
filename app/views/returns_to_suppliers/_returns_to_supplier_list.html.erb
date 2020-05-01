@@ -1,0 +1,26 @@
+<% @returns_to_suppliers.each_with_index do |returns_to_supplier, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><%= link_to returns_to_supplier.number, returns_to_supplier_url(returns_to_supplier) %></span></td>
+    <td class="hidden-phone"><%= returns_to_supplier.date %></td>
+    <td class="hidden-phone"><%= returns_to_supplier.reason_code %></td>
+    <td class="hidden-phone"><%= returns_to_supplier.supplier_name %></td>
+    <td class="hidden-phone"><%= returns_to_supplier.office_name %></td>
+    <td class="hidden-phone align-right"><%= format_currency returns_to_supplier.quantity %></td>
+    <td class="hidden-phone align-right"><%= format_currency returns_to_supplier.total %></td>
+    <td class="hidden-phone"><%= returns_to_supplier.note %></td>
+    <td class="hidden-phone"><%= returns_to_supplier.username %></td>
+    <td class="hidden-phone"><%= returns_to_supplier.status %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=11>
+    <% if @returns_to_suppliers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@returns_to_suppliers, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

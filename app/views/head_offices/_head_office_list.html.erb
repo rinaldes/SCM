@@ -1,0 +1,26 @@
+<% @head_offices.each_with_index do |head_office, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="nowrap"><%= head_office.code %></td>
+    <td><%= link_to head_office.office_name, head_office_path(head_office), class: 'blue' %></td>
+    <td class="nowrap"><%= head_office.city.name rescue '' %></td>
+    <td class="hidden-phone"><%= head_office.address %></td>
+    <td class="nowrap"><%= head_office.phone_number %></td>
+    <td class="nowrap"><%= head_office.description %></td>
+    <td class="nowrap">
+      <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_head_office_path(head_office), class: "btn btn-primary btn-xs custom-edit-btn" %>
+      <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{head_office.id}, 'head_offices')", class: "btn btn-danger btn-xs custom-edit-btn" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=10><!-- start pagination -->
+    <% if @head_offices.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@head_offices, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

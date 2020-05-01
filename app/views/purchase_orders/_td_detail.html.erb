@@ -1,0 +1,54 @@
+<% transaction_type = 'purchase_order' %>
+<td><span class='product_barcode hide'><%= product.barcode rescue '' %></span><%= product.article rescue '' %></td>
+<td><%= product.description rescue '' %></td>
+<% if (show_price rescue true) %>
+  <td>
+    <%= text_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp_separated]", format_currency(params[:hpp] || (pod.hpp rescue (hpp rescue ''))), class: "hpp",
+      onkeyup: "$(this).next().val(this.value)", readonly: true %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp]", params[:hpp] || (pod.hpp rescue (hpp rescue '')), class: 'hpp_origin' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp_middle]", (product.box_num.to_f)*(params[:hpp] || (pod.hpp rescue (hpp rescue ''))).to_f, class: 'hpp_middle_origin' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp_high]", (product.box2_num.to_f)*(params[:hpp] || (pod.hpp rescue (hpp rescue ''))).to_f, class: 'hpp_high_origin' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][fraction_box]", (product.box_num.to_f rescue 0), class: 'fraction_box' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][fraction_box2]", (product.box2_num.to_f rescue 0), class: 'fraction_box2' %>
+    <%= hidden_field_tag :disc_amount, PurchasePrice.get_hpp_disc(product.id), class: 'disc' %>
+  </td>
+<% end %>
+<td>
+  <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][product_id]", product.id %>
+  <%= text_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][quantity]", (params[:quantities] || (pod.quantity rescue '')), class: 'qty',
+    onkeyup: "set_subtotal(this)" %>
+</td>
+<td class='fraction'><%= text_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][fraction]", (pod.fraction rescue 1), readonly: true %></td>
+<td><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+<td><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+<td>
+  <%
+    unit_select = [[product.unit.try(:name), "Unit"]]
+    unit_select << [product.box.try(:name), "Box"] if product.box_id.present?
+    unit_select << [product.box2.try(:name), "Box 2"] if product.box2_id.present?
+  %>
+  <%= select_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][unit_type]", options_for_select(unit_select, (pod.unit_type rescue 'Unit')), class: 'uom',
+    onchange: "set_subtotal(document.getElementById('purchase_order_purchase_order_details_attributes_#{key}_quantity'))" %>
+</td>
+<% if (show_price rescue true) %>
+  <td class='subtotal'><%= number_with_precision(pod.nil?? ((hpp.to_f * quantity.to_f) rescue 0) : (pod.hpp * pod.quantity * pod.fraction rescue pod.hpp * pod.quantity ), :delimiter => ',', :precision => 0) %></td>
+<% end %>
+<td>
+  <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(this)">
+    <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+  </a>
+</td>
+<script type="text/javascript">
+  $(document).ready(function() {
+    Number.prototype.formatMoney = function(c, d, t){
+    var n = this,
+        c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "." : d,
+        t = t == undefined ? "," : t,
+        s = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+  });
+</script>

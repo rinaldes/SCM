@@ -1,0 +1,23 @@
+<tr class="alert alert-info alert-block">
+  <td>
+    <label class="col-md-10 input custom-input-box">
+      <%= text_field_tag "ar_voucher[ar_voucher_payment_schedules_attributes][#{key}][payment_number]", (object[:payment_number] rescue ''), class: "input-sm", value: "#{pay_num}", readonly: true %>
+    </label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= number_field_tag "ar_voucher[ar_voucher_payment_schedules_attributes][#{key}][amount]", (object[:amount] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-3 input custom-input-box">
+      <%= number_field_tag "ar_voucher[ar_voucher_payment_schedules_attributes][#{key}][due_date]", (object[:due_date] rescue ''), class: "input-sm", min: 1, max: 31, placeholder: "Date" %>
+    </label>
+    <label class="col-md-3 input custom-input-box">
+      <%= number_field_tag "ar_voucher[ar_voucher_payment_schedules_attributes][#{key}][due_date_number]", (object[:due_date_number] rescue ''), class: "input-sm", min: 1 %>
+    </label>
+    <label class="col-md-3 input custom-input-box">
+      <%= select_tag("ar_voucher[ar_voucher_payment_schedules_attributes][#{key}][due_date_month]", options_for_select(['Next Month', 'Month Later'], selected: (object.due_date_month rescue '')),
+        class: "input-sm") %>
+      <a class="close" data-dismiss="alert" href="#">×</a>
+    </label>
+  </td>
+</tr>

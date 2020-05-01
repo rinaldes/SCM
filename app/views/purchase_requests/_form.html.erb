@@ -1,0 +1,189 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Purchase Request</li><li><%= params[:action].capitalize %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>New Purchase Request</h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @purchase_request, html: {class: "smart-form", id: "form_request", :autocomplete => "off"} do |f| %>
+              <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Store</label>
+                      <label class="col-md-10 input custom-input-box">
+                        <% if current_user.branch_id.present? %>
+                          <%= f.select :branch_id, options_for_select([current_user.branch].map{|branch|[branch.office_name, branch.id]}, selected: @purchase_request.branch_id), {}, class: 'hide origin_branch_id ho_id' %>
+                          <%= current_user.branch.office_name %>
+                        <% else %>
+                          <%= f.select :branch_id, options_for_select(Branch.active_store.map{|branch|[branch.office_name, branch.id]}, selected: @purchase_request.branch_id), {}, class: 'origin_branch_id form-control ho_id' %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">TGL.PR</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :date,class: "input-sm", readonly: true %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">No.PR </label>
+                      <label class="col-md-10 input custom-input-box">
+                        <%= f.text_field :number, class: "input-sm", readonly: true, placeholder: 'Auto-generate' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">PR Note</label>
+                      <label class="col-md-10 textarea custom-input-box"><%= f.text_area :note, :class => "input-sm" %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <%= render "product_search" %>
+              <fieldset>
+                <div class="row">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                    <thead>
+                      <tr>
+                        <!-- <th>NO</th> -->
+                        <th>ARTICLE</th>
+                        <th>DESCRIPTION</th>
+                        <th>HPP</th>
+                        <th>QTY</th>
+                        <th>FRACTION</th>
+                        <th>DISC.1 %</th>
+                        <th>DISC.2 %</th>
+                        <th>UNIT</th>
+                        <th>COST</th>
+                        <th class="col-md-1">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody id="list_detail-list">
+                      <% if params[:action] == 'edit' %>
+                        <%= render 'list_detail' %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </fieldset>
+              <footer>
+                <% if current_user.branch_id.present? %>
+                  <button type="button" class="btn btn-primary" onclick="$('#create_po').val(1);return(beforeSave())">Generate PO</button>
+                <% end %>
+                <button type="button" class="btn btn-primary" onclick="$('#create_po').val(0);return(beforeSave())">Save</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              <%= hidden_field_tag :create_po %>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'>
+  <% if params[:action] == 'edit' %>
+    <% @purchase_request.purchase_request_details.each_with_index { |prd, i| %>
+      <% product = prd.product %>
+      <div class="modal fade" id="myModal<%= product.id rescue 0 %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      </div>
+    <% } %>
+  <% end %>
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    autocomplete_barcode()
+    autocomplete_supplier_name()
+    reset_form();
+
+    $("#branch_id").autocomplete({
+      source : function(request, response) {
+        $.ajax({
+          url : "/branches/autocomplete_branch_office_name",
+          dataType : "json",
+          data : {
+            term : request.term
+          },
+          success: function (data){
+            response(data),
+            nomor_ganti()
+          },
+        });
+      }
+    });
+
+    <% if params[:action] == 'edit' %>
+      $("#purchase_request_supplier_id").val("<%= @supplier.id rescue '' %>");
+      $("#supplier_name").val("<%= @supplier.name rescue '' %>")
+      $("#alamat").val("<%= @supplier.address rescue '' %>");
+      $("#supplier_code").val("<%= @supplier.code rescue '' %>");
+    <% end %>
+  });
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function removeList(event){
+    $(event.target).parent().parent().remove();
+  }
+
+
+  function reset_form(){
+    document.getElementById("form_request").reset();
+    $("#request tboby").html("");
+  }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_requests/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function nomor_ganti(){
+    $.ajax({
+        url: '/purchase_requests/get_last_number',
+        type: 'get',
+        dataType: 'json',
+        data: {
+          supplier_id: $('.supplier_id').val()
+        },
+        success: function(data){
+          //RTS/Name HO/No Supplier/Tahun-Bulan-Hari/No urut per supplier
+          $("#purchase_request_number").val("PR/"+$('#purchase_request_branch_id').get(0).options[$('#purchase_request_branch_id').get(0).selectedIndex].innerHTML+"/"+$('#purchase_request_date').val()+"/"+data.number);
+        }
+    })
+    $("#pr_number").val($("#purchase_request_number").val());
+  }
+
+  function changeBarcode(barcode){
+    $("#number").val(barcode);
+    getProduct()
+
+    $("#myModal").modal('hide');
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

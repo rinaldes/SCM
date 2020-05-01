@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">Shift</Data></Cell>
+        <Cell><Data ss:Type="String">komp</Data></Cell>
+        <Cell><Data ss:Type="String">Start</Data></Cell>
+        <Cell><Data ss:Type="String">End</Data></Cell>
+        <Cell><Data ss:Type="String">Cashier Name</Data></Cell>
+        <Cell><Data ss:Type="String">Total Receipt</Data></Cell>
+        <Cell><Data ss:Type="String">Capital</Data></Cell>
+        <Cell><Data ss:Type="String">Debit</Data></Cell>
+        <Cell><Data ss:Type="String">Credit</Data></Cell>
+        <Cell><Data ss:Type="String">Cash</Data></Cell>
+      </Row>
+      <% @cashiers.all.each do |session| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= session.s_created_at.to_date.strftime("%d-%m-%Y") %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= session.session %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.machine_id %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.start_time.to_datetime.strftime("%H:%M") %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.end_time.to_datetime.strftime("%H:%M") rescue '-' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.username rescue ''%></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= session.start_amount %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.debit %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.credit %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= session.cash %></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

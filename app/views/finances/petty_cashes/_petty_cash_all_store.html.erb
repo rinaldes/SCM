@@ -1,0 +1,77 @@
+<% unless @petty_cash.blank? %>
+        <fieldset>
+            <section>
+            </section>
+            <section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Days</th>
+                                <th>Initial Budget</th>
+                                <th>Cash In</th>
+                                <th>Cash Out</th>
+                                <th>Balance</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody id="petty-cashes">
+                            <% @petty_cash.each do |pc| %>
+                              <tr>
+                               <td><%= pc.date.strftime("%e") rescue '' %></td>
+                               <td><%= pc.date.strftime("%A") rescue '' %></td>
+                               <td><%= format_currency(pc.initial_budget * 1) rescue 0 %></td>
+                               <td><%= format_currency(pc.cash_in * 1) rescue 0 %></td>
+                               <td><%= format_currency(pc.cash_out * 1) rescue 0 %></td>
+                               <td><%= format_currency(pc.balance * 1) rescue 0 %></td>
+                               <td><%= pc.note %></td>
+                              </tr>
+                            <% end %>
+                            <%#= hidden_field_tag 'year', @petty_cash.year.to_date.year, id: "petty-cash-year" %>
+
+                            <tr style="font-weight:bold;">
+                                <td></td>
+                                <td>Total</td>
+                                <td  align="right"><%= format_currency(@petty_cash.sum(:initial_budget)) %></td>
+                                <td  align="right"><%= format_currency(@petty_cash.sum(:cash_in)) %></td>
+                                <td  align="right"><%= format_currency(@petty_cash.sum(:cash_out)) %></td>
+                                <td  align="right"><%= format_currency(@petty_cash.sum(:balance)) %></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </fieldset>
+<% else %>
+    <fieldset>
+        <section>
+        </section>
+        <section>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Days</th>
+                            <th>Initial Budget</th>
+                            <th>Cash In</th>
+                            <th>Cash Out</th>
+                            <th>Balance</th>
+                            <th>Note</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td  align="center" colspan="8">There No Petty Cash details yet!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </fieldset>
+    <footer>
+    </footer>
+<% end %>

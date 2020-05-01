@@ -1,0 +1,47 @@
+<fieldset style="padding-left: 0px;" id='product_search'>
+  <div class="row">
+    <section class="col col-md-12">
+      <section class="col col-md-8">
+        <div class="row">
+          <section class="col col-md-12">
+            <% if params[:controller] == 'purchase_orders' %>
+              <section class="col col-md-8">
+                <label class="btn btn-primary btn-sm choose-product-manual" onclick="importProductFile();" >Import Product From File</label>
+                <label class="btn btn-primary btn-sm import-product-from-file" onclick="chooseProductManual();" >Choose Product Manual</label>
+              </section>
+            <% end %>
+            <section class="col col-md-8">
+              <label class="col-md-3 label">CODE</label>
+              <label class="col-md-8 input custom-input-box">
+                <%= hidden_field_tag :product_id %>
+                <%= text_field_tag :number, '', class: 'input-sm', placeholder: "Barcode" %>
+              </label>
+              <div class="col col-md-1">
+                <button type="button" class="btn btn-primary btn-sm browser_product" onclick="searchManual()" <%= "disabled=disabled" unless ((params[:controller].include?'requests') || (params[:controller].include?'structures')) %>>
+                  Browse
+                </button>
+              </div>
+            </section>
+            <section class="col col-md-8">
+              <section>
+                <label class="col-md-3 label">SKU </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :article, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-3 label">Product Name </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :product_name, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-3 label">Unit Name </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :unit_name, '', :class => "input-sm", disabled: true %></label>
+              </section>
+            </section>
+          </section>
+        </div>
+        <section class="col col-md-8">
+          <button type='button' class="col-md-5 btn btn-primary" onclick="set_as_main_product()" style="padding:6px 10px 6px 10px; margin-left:33px">Set as Main Product</button>
+          <button type='button' class="col-md-5 btn btn-primary" onclick="add_to_product_structure()" style="padding:6px 10px 6px 10px; margin-left:33px">Add to Product Structure</button>
+        </section>
+      </section>
+  </div>
+</fieldset>

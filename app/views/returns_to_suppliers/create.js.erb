@@ -1,0 +1,6 @@
+<% if @returns_to_supplier.errors.full_messages.present? %>
+  <%= render 'layouts/errors' %>
+  window.scrollTo(0, 0);
+<% else %>
+  window.location = '/returns_to_suppliers'
+<% end %>

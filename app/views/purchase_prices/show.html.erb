@@ -1,0 +1,176 @@
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Purchase Price</li><li><%= @purchase_price.product.article %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid">
+    <div class="row">
+      <!-- NEW COL START -->
+      <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" role="widget">
+          <header role="heading">
+            <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+            <h2>Purchase Price Details </h2>
+          </header>
+
+          <!-- widget div-->
+          <div role="content">
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+              <form class="smart-form">
+                <header>Products</header>
+                <fieldset>
+                  <div class="row">
+                    <section class="col col-1">
+                      <label class="label">Name</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.product.description %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">SKU</label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="input">
+                        <%= @purchase_price.product.article %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Barcode</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.product.barcode %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-1">
+                      <label class="label">Supplier Code</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.product.product_suppliers.first.supplier.code %>
+                      </label>
+                    </section>
+                    <section class="col col-1">
+                      <label class="label">Supplier Name</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.product.product_suppliers.first.supplier.name %>
+                      </label>
+                    </section>
+                  </div>
+                </fieldset>
+                <header>Purchase Price</header>
+                <fieldset>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">Start Date</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.start_date %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">End Date</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.end_date %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">Purchase Price</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.price %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">Discount</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.total_discount %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">Unit Cost</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.total_unit_cost %>
+                      </label>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">Price Cost</label>
+                    </section>
+                    <section class="col col-3">
+                      <label class="input">
+                        <%= @purchase_price.total_price_cost %>
+                      </label>
+                    </section>
+                  </div>
+                </fieldset>
+                <header>Discounts</header>
+                <fieldset>
+                  <section>
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                      <thead>
+                        <tr>
+                          <th>Rule</th>
+                          <th>Type</th>
+                          <th>%</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody id='discount_list'>
+                        <% @purchase_price.purchase_price_discounts.each do |discount| %>
+                        <tr>
+                          <td><%= discount.disc_rules %></td>
+                          <td><%= discount.disc_type %></td>
+                          <td><%= discount.disc_percentage %></td>
+                          <td><%= discount.disc_amount %></td>
+                        </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </fieldset>
+                <footer>
+                  <button type="button" class="btn btn-default" onclick="window.history.back();">
+                    Back
+                  </button>
+                </footer>
+              </form>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </div>
+        <!-- end widget -->
+      </article>
+      <!-- END COL -->
+    </div>
+  </section>
+</div>

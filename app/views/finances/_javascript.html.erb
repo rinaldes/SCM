@@ -1,0 +1,408 @@
+<script type="text/javascript">
+    $('.view-receipt').click(function() {
+        $('#dialog_spending').dialog('open');
+        return false;
+    });
+
+    $('.dialog_spending').dialog({
+        autoOpen : false,
+        width : 650,
+        resizable : false,
+        modal : true,
+        title : "Spending",
+        buttons : [{
+        html : "Close",
+          "class" : "btn btn-primary",
+            click : function() {
+                $(this).dialog("close");
+            }
+        }]
+    });
+
+    $('.datepicker').datepicker({
+        dateFormat : 'yy/mm/dd',
+        prevText : '<i class="fa fa-chevron-left"></i>',
+        nextText : '<i class="fa fa-chevron-right"></i>',
+        onSelect : function(selectedDate) {
+        }
+    });
+
+    $('#by_date').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM, yy',
+        prevText : '<i class="fa fa-chevron-left"></i>',
+        nextText : '<i class="fa fa-chevron-right"></i>',
+        onSelect : function(selectedDate) {
+            submit_form()
+        },
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            submit_form()
+        }
+    });
+
+    $('.start').keyup(function () {
+        // initialize the sum (total price) to zero
+        var sum = 0;
+        // we use jQuery each() to loop through all the textbox with 'price' class
+        // and compute the sum for each loop
+        $('.start').each(function() {
+            number = $(this).unmask()
+            sum += Number(number.val()*$(this).attr("rel"));
+        });
+        // set the computed value to 'totalPrice' textbox
+        $('#total-start').text($.number( sum, ',' ));
+    });
+
+    $('.end').keyup(function () {
+        // initialize the sum (total price) to zero
+        var sum = 0;
+        // we use jQuery each() to loop through all the textbox with 'price' class
+        // and compute the sum for each loop
+        $('.end').each(function() {
+            number = $(this).unmask()
+            sum += Number(number.val()*$(this).attr("rel"));
+        });
+        // set the computed value to 'totalPrice' textbox
+        $('#total-end').text($.number( sum, ',' ));
+
+        // total_sales = Number($('#total-end').text().replace(/,/g, "")) - Number($('#total-start').text().replace(/,/g, ""))
+        // $('#total-sales').text($.number( total_sales, ',' ));
+
+        petty_cash = sum - Number($('#total-spending').text())
+        $('#petty-cash').text($.number( petty_cash, ',' ));
+    });
+
+    $('#actual-petty-cash').keyup(function () {
+        petty_cash = Number($('#petty-cash').text().replace(/,/g, ""))
+        number = $(this).unmask()
+        actual_petty_cash = Number(number.val())
+
+        difference =   petty_cash - actual_petty_cash
+        $('#difference').text($.number( difference, ',' ));
+    })
+
+    $(document).ready(function(){
+        $('.money').mask("#.##0", {reverse: true});
+        $('.numeric').mask('000000000', {reverse: true});
+        $('.time').mask('00:00');
+    });
+
+    $(document).ready(function(){
+        $("#branch").autocomplete({
+            source : function(request, response) {
+                $.ajax({
+                    url : "<%= get_branches_path %>",
+                    dataType : "json",
+                    data : {
+                      name_startsWith : request.term
+                    },
+                    success : function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label : item.office_name + ", " + item.description,
+                                value : item.office_name
+                            }
+                        }));
+                    }
+                });
+            },
+            minLength : 2,
+            select : function(event, ui) {
+                $("#office_id").val(ui.item.value)
+                $("#start-now").removeClass("disabled")
+            }
+        });
+    })
+
+    $(document).ready(function(){
+        $("#branch-forecast").autocomplete({
+            source : function(request, response) {
+                $.ajax({
+                    url : "<%= get_branches_path %>",
+                    dataType : "json",
+                    data : {
+                      name_startsWith : request.term
+                    },
+                    success : function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label : item.office_name + ", " + item.description,
+                                value : item.office_name
+                            }
+                        }));
+                    }
+                });
+            },
+            minLength : 2,
+            select : function(event, ui) {
+                $("#office_id").val(ui.item.value)
+                $("#start-now").removeClass("disabled")
+            }
+        });
+    })
+
+    $("#start-now").click(function() {
+        $(this).addClass('disabled')
+        $("#submit-petty-cash, .add-spending-btn").removeClass("disabled")
+        var time =  new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric"}).toString();
+        $("#start-time").text(time)
+        $("#start_time").val(time)
+        $(".start-of-the-day :input").prop("readonly", 'readonly');
+    })
+
+    $("#end-now").click(function() {
+        // $("#end-now-box").show();
+        $(".start-of-the-day :input").prop("readonly", 'readonly');
+        $(".end-of-the-day :input").prop("readonly", '');
+
+        $(".add-spending-btn").removeClass("disabled");
+
+        $(this).addClass('disabled')
+        var time =  new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric"}).toString();
+        $("#end-time").text(time)
+        $("#end_time").val(time)
+    })
+
+
+    function submit_form(){
+        $.get($("#petty-cash-filter-form").attr("action"), $("#petty-cash-filter-form").serialize(), null, "script");
+    }
+
+    $('#by_date').keyup(function () {
+        submit_form()
+    })
+
+    $('#by_branch').keyup(function () {
+        submit_form()
+    })
+
+    function submit_cash_detail_filter_form(){
+        $.get($("#petty-cash-details-filter-form").attr("action"), $("#petty-cash-details-filter-form").serialize(), null, "script");
+    }
+
+    $('.cash-details-month, .cash-details-year, .cash-details-branch').change(function () {
+        submit_cash_detail_filter_form()
+    })
+
+    $(document).ready(function(){
+        $(".cash-details-branch").autocomplete({
+            source : function(request, response) {
+                $.ajax({
+                    url : "<%= get_branches_path %>",
+                    dataType : "json",
+                    data : {
+                      name_startsWith : request.term
+                    },
+                    success : function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label : item.office_name + ", " + item.description,
+                                value : item.office_name
+                            }
+                        }));
+                    }
+                });
+            },
+            minLength : 2,
+            select : function(event, ui) {
+               submit_cash_detail_filter_form()
+            }
+        });
+    })
+
+    $('.click-edit-co').click(function() {
+        $(this).parent().parent().find('.cash-text').hide();
+        $(this).parent().parent().find('.click-edit-co').hide();
+        $(this).parent().parent().find('.cash-input').show();
+        $(this).parent().parent().find('.click-cancel-co').show();
+        return false;
+    })
+
+    $('.click-cancel-co').click(function() {
+        $(this).parent().parent().find('.cash-input').hide();
+        $(this).parent().parent().find('.click-cancel-co').hide();
+        $(this).parent().parent().find('.cash-text').show();
+        $(this).parent().parent().find('.click-edit-co').show();
+        return false;
+    })
+
+    $('.click-edit-payment-schedule').click(function() {
+        $(this).parent().parent().find('.payment-schedule-text').hide();
+        $(this).parent().parent().find('.click-edit-payment-schedule').hide();
+        $(this).parent().parent().find('.payment-schedule-input').show();
+        $(this).parent().parent().find('.click-cancel-edit-payment-schedule').show();
+        return false;
+    })
+
+    $('.click-cancel-edit-payment-schedule').click(function() {
+        $(this).parent().parent().find('.payment-schedule-input').hide();
+        $(this).parent().parent().find('.click-cancel-edit-payment-schedule').hide();
+        $(this).parent().parent().find('.payment-schedule-text').show();
+        $(this).parent().parent().find('.click-edit-payment-schedule').show();
+        return false;
+    })
+
+    $('.click-add-payment').click(function() {
+        $(this).parent().parent().find('.payment-text').hide();
+        $(this).parent().parent().find('.click-add-payment').hide();
+        $(this).parent().parent().find('.payment-input').show();
+        $(this).parent().parent().find('.click-cancel-add-payment').show();
+        return false;
+    })
+
+    $('.click-cancel-add-payment').click(function() {
+        $(this).parent().parent().find('.payment-input').hide();
+        $(this).parent().parent().find('.click-cancel-add-payment').hide();
+        $(this).parent().parent().find('.payment-text').show();
+        $(this).parent().parent().find('.click-add-payment').show();
+        return false;
+    })
+
+    $('.click-edit-add-payment').click(function() {
+        $(this).parent().parent().find('.payment-text').hide();
+        $(this).parent().parent().find('.click-edit-add-payment').hide();
+        $(this).parent().parent().find('.payment-input').show();
+        $(this).parent().parent().find('.click-cancel-add-payment').show();
+        return false;
+    })
+
+    function submit_ar_form(){
+        $.get($("#account-receivable-filter-form").attr("action"), $("#account-receivable-filter-form").serialize(), null, "script");
+    }
+
+    $('#by_ar_number').keyup(function () {
+        submit_ar_form()
+    })
+
+    $('#by_transaction_no').keyup(function () {
+        submit_ar_form()
+    })
+
+    $('#by_customer_name').keyup(function () {
+        submit_ar_form()
+    })
+
+    $('.months').click(function() {
+        var $this = $(this);
+        if ($this.is(':checked')) {
+            month = $(this).attr("rel");
+            $(this).prev('input').val( month);
+         } else {
+            $(this).prev('input').removeAttr('value');
+         }
+    })
+
+    $('.click-edit-monthly-budget').click(function() {
+        $(this).parent().parent().find('.monthly-budget-text').hide();
+        $(this).parent().parent().find('.click-edit-monthly-budget').hide();
+        $(this).parent().parent().find('.monthly-budget-input').show();
+        $(this).parent().parent().find('.click-cancel-edit-monthly-budget').show();
+        return false;
+    })
+
+    $('.click-cancel-edit-monthly-budget').click(function() {
+        $(this).parent().parent().find('.monthly-budget-input').hide();
+        $(this).parent().parent().find('.click-cancel-edit-monthly-budget').hide();
+        $(this).parent().parent().find('.monthly-budget-text').show();
+        $(this).parent().parent().find('.click-edit-monthly-budget').show();
+        return false;
+    })
+
+    $('.click-edit-petty-cash-details').click(function() {
+        $(this).parent().parent().find('.petty-cash-details-text').hide();
+        $(this).parent().parent().find('.click-edit-petty-cash-details').hide();
+        $(this).parent().parent().find('.petty-cash-details-input').show();
+        $(this).parent().parent().find('.click-cancel-edit-petty-cash-details').show();
+        return false;
+    })
+    $('.click-cancel-edit-petty-cash-details').click(function() {
+        $(this).parent().parent().find('.petty-cash-details-input').hide();
+        $(this).parent().parent().find('.click-cancel-edit-petty-cash-details').hide();
+        $(this).parent().parent().find('.petty-cash-details-text').show();
+        $(this).parent().parent().find('.click-edit-petty-cash-details').show();
+
+        inputs = $(this).parent().parent().find('.petty-cash-details-input')
+        inputs.each(function(){
+            $(this).val($(this).next('.petty-cash-details-text').text())
+        })
+        return false;
+    })
+
+    function submit_monthly_forecast_filter_form(){
+        $.get($("#monthly-forecasts-filter-form").attr("action"), $("#monthly-forecasts-filter-form").serialize(), null, "script");
+    }
+
+    $('#select-month-forecast, #select-department-forecast').change(function () {
+        submit_monthly_forecast_filter_form()
+    })
+
+    jQuery(function($) {
+      $('.view-purchased-item').each(function() {
+        $.data(this, 'dialog',
+          $(this).next('.view-purchased-item-dialog').dialog({
+            autoOpen: false,
+            modal: true,
+            title: 'Item Detail',
+            width: 900,
+            // height: 400,
+            // position: [200,0],
+            draggable: false,
+            // title : "Spending",
+            buttons : [{
+            html : "Close",
+              "class" : "btn btn-primary",
+                click : function() {
+                    $(this).dialog("close");
+                }
+            }]
+          })
+        );
+      }).click(function() {
+          $.data(this, 'dialog').dialog('open');
+          return false;
+      });
+    });
+
+    $('#account-payable-details').on('cocoon:after-insert', function(e, insertedItem) {
+        $('.datepicker').datepicker({
+            dateFormat : 'yy/mm/dd',
+            prevText : '<i class="fa fa-chevron-left"></i>',
+            nextText : '<i class="fa fa-chevron-right"></i>',
+            onSelect : function(selectedDate) {
+            }
+        });
+    });
+
+    $(document).ready(function(){
+        $('.select-payment-method').change(function () {
+            selected = $(this).val().toLowerCase();
+            if(selected == 'giro'){
+                $('.giro-no').show();
+            }else{
+                $('.giro-no').hide();
+            }
+        })
+        $('.select-payment-method').change(function () {
+            selected = $(this).val().toLowerCase();
+            if(selected == 'cash'){
+                $('.bank').hide();
+            }else{
+                $('.bank').show();
+            }
+        })
+
+        $('#other_charges').on('cocoon:after-insert', function(e, insertedItem) {
+            $('.other-charges').keyup(function(){
+                pending_payment = parseInt($('.pending-payment').text().replace(/\./g,''))
+                var sum = 0;
+                $('.other-charges').each(function() {
+                    number = $(this).unmask().val()
+                });
+                $('#sum-total-outstanding').text($.number( pending_payment-number, ',' ));
+            });
+        });
+    })
+</script>

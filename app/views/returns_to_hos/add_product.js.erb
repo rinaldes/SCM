@@ -1,0 +1,14 @@
+var inputValues = [];
+var date = new Date();
+key = date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+$("#table_size input[type=text]").each(function() {
+  inputValues.push($(this).val())
+  key = key+$(this).next().val()
+})
+$("#orders tbody").append("<tr><td>" + $('#product_id').val() + "<span class='product_barcode'>" + $('#number').val() + "</span></td><td>" + $('#merk').val() + "</td><td>" 
+  + $('#m_class').val() + "</td><td>" + $('#article').val() + "</td><td>" + $('#warna').val() + "</td><td>" + $('#harga_pokok').val() + "</td><td>"
+  +"<a href='javascript:void(0)' onclick='$(\"#myModal" + $('#product_id').val() + "\").modal()'>View</a>"
+  + "</td><td><a href='javascript:void(0)' class='btn btn-primary btn-xs custom-edit-btn' onclick='removeList(event)'><i class='fa fa-trash-o' rel='tooltip'></i></a></td></tr>");
+$("#orders tbody").append("<%= j(render 'tr_detail', product: @product) %>")
+$('#product_detail').append("<%= j(render 'modal_product', key: params[:key], product: @product, quantities: params[:quantities], product_sizes: @product.product_sizes) %>")
+clone_details()

@@ -1,0 +1,10 @@
+<%if @plano.present? %>
+$('#rack_type').text("<%= @plano.rack_type %>");
+<% end %>
+
+<% if @pd.present? %>
+$('#product_details_id').val("<%= @pd.id %>");
+$('#product_details_min_stock').val("<%= @pd.min_stock || 0 %>");
+$('#product_details_rop_stock').val("<%= @pd.rop_stock || 0 %>");
+$('#product_details_max_stock').val("<%= @pd.max_stock || 0 %>");
+<% end %>

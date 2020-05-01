@@ -1,0 +1,21 @@
+<% @vouchers.each_with_index do |voucher, i| %>
+  <tr>
+    <td><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><%= voucher.voucher_code %></td>
+    <td><%= voucher.name %></td>
+    <td><%= voucher.valid_from %></td>
+    <td><%= voucher.valid_until %></td>
+    <td><%= format_currency voucher.amount %></td>
+    <td><%= voucher.office_name %></td>
+    <td><%= voucher.used_date %></td>
+    <td>
+      <%= link_to raw("<i class='fa fa-pencil'> </i>"), edit_voucher_path(voucher), class: "btn btn-primary btn-xs edit-btn-dlt" %>
+      <%= link_to raw("<i class='fa fa-trash-o'></i>"), 'javascript:void(0)', onclick: "delete_one(#{voucher.id}, 'vouchers')", class: "btn btn-danger btn-xs edit-btn-dlt" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <%= will_paginate @vouchers %>
+  </td>
+</tr>

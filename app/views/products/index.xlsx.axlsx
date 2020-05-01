@@ -1,0 +1,33 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Stock Opname") do |sheet|
+  sheet.add_row ["No", "Article", "Division", "Department", "Category", "Sub Category", "Segment", "Uom 1", "Uom 2", "Uom 3", "Box Num", "Box2 Num", "Barcode", "Description", "Supplier Code", "Supplier Name", "Tag Status"]
+  @products.each_with_index do |product, i|
+    cat_ori = MClass.find(product.m_class_id) rescue ''
+    cat_level = cat_ori.level rescue 0
+    if cat_level == 1
+      cat1 = cat_ori
+      cat2 = ''
+      cat3 = ''
+      cat4 = ''
+    elsif cat_level == 2
+      cat2 = cat_ori
+      cat1 = MClass.find(cat_ori.parent_id) rescue ''
+      cat3 = ''
+      cat4 = ''
+    elsif cat_level == 3
+      cat3 = cat_ori
+      cat2 = MClass.find(cat_ori.parent_id) rescue ''
+      cat1 = MClass.find(cat2.parent_id) rescue ''
+      cat4 = ''
+    elsif cat_level == 4
+      cat4 = cat_ori
+      cat3 = MClass.find(cat_ori.parent_id) rescue ''
+      cat2 = MClass.find(cat3.parent_id) rescue ''
+      cat1 = MClass.find(cat2.parent_id) rescue ''
+    end
+    sheet.add_row [i+= 1, product.article, (product.department.name rescue ''), (cat1.name rescue ''), (cat2.name rescue ''), (cat3.name rescue ''), (cat4.name rescue ''), (product.unit.name rescue ''), (Unit.find(product.box_id).name rescue ''), (Unit.find(product.box2_id).name rescue ''), product.box_num, product.box2_num, product.barcode, product.description, (product.suppliers.last.code rescue ''), (product.suppliers.last.name rescue ''), product.status3]
+  end
+end

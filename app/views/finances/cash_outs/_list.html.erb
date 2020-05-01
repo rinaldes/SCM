@@ -1,0 +1,14 @@
+<% unless @cash_outs.blank? %>
+    <% @cash_outs.each_with_index do |cash, index| %>
+        <tr>
+            <td><%= index+1 %></td>
+            <td><%= cash.cash_out_type %></td>
+            <td  align="right" size="100"><%= format_currency(cash.amount) %></td>
+            <td><%= cash.description %></td>
+        </tr>
+    <% end %>
+<% else %>
+    <tr>
+        <td  align="center" colspan="8">There No Cash Out yet!</td>
+    </tr>
+<% end %>

@@ -1,0 +1,132 @@
+<style type="text/css">
+  .label{
+    color: #151313;
+  }
+</style>
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Size Detail</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E">
+
+        <div class="row">
+
+          <section class="col col-md-4">
+            <section>
+              <label class="col-md-2 label">CODE</label>
+              <label class="col-md-10 input custom-input-box">
+                <%= text_field_tag :barcode, product.barcode , :class => "input-sm", disabled: true %>
+              </label>
+            </section>
+            <section>
+              <label class="col-md-2 label">BRAND </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :merk, product.brand.name, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">ARTICLE </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :article, product.article, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">COLOR </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :warna, product.full_colour.join(' / '), :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">DEPT </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :departement, product.m_class.name, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">M-CLASS </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :m_class, product.m_class.department.name, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">DISC % </label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc1, product.margin_percent1, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc2, product.margin_percent2, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc3, product.margin_percent3, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc4, product.margin_percent4, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc5, product.margin_rp , :class => "input-sm", disabled: true %></label>
+            </section>
+          </section>
+          <section class="col col-md-4">
+            <section>
+              <label class="col-md-2 label">COST OF GOODS</label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :harga_pokok, product.cost_of_products, class: "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">SELLING PRICE </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :harga_jual, product.purchase_price, :class => "input-sm", disabled: true %></label>
+            </section>
+
+            <section>
+              <label class="col-md-2 label">PURCHASE PRICE </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :harga_beli, product.selling_price, :class => "input-sm", disabled: true %></label>
+            </section>
+
+            
+            <section>
+              <label class="col-md-2 label">STATUS 2 </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :status2, product.status2, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">STATUS 3 </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :status3, product.status3, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">STATUS 4 </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :status4, product.status4, :class => "input-sm", disabled: true %></label>
+            </section>
+          </section>
+          <section class="col col-md-4">
+            <%= image_tag product.image, width: '250px', height: '250px' %>
+          </section>
+          <section class="col col-md-12">
+            <label class="col-md-2 label">SIZE </label>
+            <label class="col-md-10 input custom-input-box">
+              <table class="table table-striped table-bordered" id="table_size">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <% list_product.each_with_index do |detail, i| %>
+                      <td><%= detail.product_size.size_detail.size_number.to_s %></td>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Min Stock</th>
+                    <% list_product.each_with_index do |detail, i| %>
+                      <td><%= detail.min_stock.to_i %></td>
+                    <% end %>
+                  </tr>
+                  <tr>
+                    <th>Available Quantity</th>
+                    <% list_product.each_with_index do |detail, i| %>
+                      <td><%= detail.available_qty.to_i %></td>
+                    <% end %>
+                  </tr>
+                  <tr>
+                    <th>Transfered Quantity</th>
+                    <% product_sizes.each_with_index do |product_size, i| %>
+                      <td>
+                        <%= text_field_tag "stock_transfer[stock_mutation_details_attributes][#{key}#{i}][quantity]", quantities[i], style: 'width: 17px' %>
+                        <%= hidden_field_tag "stock_transfer[stock_mutation_details_attributes][#{key}#{i}][product_size_id]", product_size.id %>
+                      </td>
+                    <% end %>
+                  </tr>
+                </tbody>
+              </table>
+            </label>
+          </section>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          OK
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

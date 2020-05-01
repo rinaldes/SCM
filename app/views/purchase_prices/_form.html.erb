@@ -1,0 +1,274 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="/js/jquery-ui.js" type="text/javascript"></script>
+<script src="/js/jquery.maskMoney.js" type="text/javascript"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Purchase Price</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header role="heading">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Purchase Price</h2>
+        </header>
+        <div role="content">
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <%= form_for @purchase_price, html: {class: "smart-form", :autocomplete => "off"} do |f| %>
+              <header>Products</header>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-2">
+                    <label class="label">Product</label>
+                    <%= link_to 'Browse', 'javascript:void(0)', onclick: "searchProduct()", class: 'btn btn-primary' %>
+                    <%= f.hidden_field :product_id %>
+                  </section>
+                  <section class="col col-2">
+                    <label class="label">SKU</label>
+                    <label class="input">
+                      <input type="text" id="product_article" placeholder="" readonly= true value="<%= @purchase_price.product.article if params[:action] == 'edit' %>">
+                    </label>
+                  </section>
+                  <section class="col col-8">
+                    <label class="label">Product Name</label>
+                    <label class="input">
+                      <input type="text" id="product_description" placeholder="" readonly= true value="<%= @purchase_price.product.description if params[:action] == 'edit' %>">
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-2">
+                    <label class="label">Barcode</label>
+                    <label class="input">
+                      <input type="text" id="product_barcode" placeholder="" readonly= true value="<%= @purchase_price.product.barcode if params[:action] == 'edit' %>">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="label">Supplier code</label>
+                    <label class="input">
+                      <input type="text" id="supl_code" placeholder="" readonly= true>
+                    </label>
+                  </section>
+                  <section class="col col-8">
+                    <label class="label">Supplier Name</label>
+                    <label class="input">
+                      <input type="text" id="supl_name" placeholder="" readonly= true>
+                    </label>
+                  </section>
+                </div>
+              </fieldset>
+              <header>Purchase Price</header>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Start Date</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input custom-input-box" style="padding: 0px;">
+                      <i class="icon-append fa fa-calendar"></i>
+                      <%= f.text_field :start_date, class: "input-sm", :value => DateTime.now.to_date %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">End Date</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input custom-input-box" style="padding: 0px;">
+                      <i class="icon-append fa fa-calendar"></i>
+                      <%= f.text_field :end_date, class: "input-sm", :value => DateTime.now.to_date+7.days %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Purchase Price</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= f.text_field :price %>
+                      <%= hidden_field_tag :hpp %>
+
+                      <%= hidden_field_tag :unit_num, 1 %>
+                      <%= hidden_field_tag :box_num %>
+                      <%= hidden_field_tag :box2_num %>
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="select">
+                      <%= f.select :unit_id, options_for_select("") %> <i></i>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Discount</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= f.text_field :total_discount, readonly: true %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Price Cost</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= f.text_field :total_price_cost, readonly: true %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Unit Cost</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= f.text_field :total_unit_cost, readonly: true %>
+                    </label>
+                  </section>
+                </div>
+              </fieldset>
+              <header>Discount Rules</header>
+              <fieldset>
+                <section>
+                  <table class="table table-bordered" width="100%">
+                    <thead>
+                      <tr>
+                        <th width="20%">Rules</th>
+                        <th>Discount Type</th>
+                        <th>% Discount</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody id="discount_rule_list"><%= render 'discount_rules', f: f %></tbody>
+                  </table>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+          <!-- end widget content -->
+
+        </div>
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<!-- Modal Product  -->
+<div class="modal fade" id="modal_product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+<script>
+  $.validate({
+    lang: 'en'
+  });
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  $(document).ready(function(){
+    $('#purchase_price_start_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+    });
+    $('#purchase_price_end_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+    });
+  })
+
+  $('#purchase_price_unit_id').on('change', function(){
+    hitung_unit_cost();
+  })
+
+  function add(a, b) {
+    return a + b;
+  }
+
+  function hitung_discount(e, obj){
+    var keyCode = e.keyCode || e.which;
+    if(keyCode === 13){
+      e.preventDefault();
+      rule = obj.parent().parent().parent().find('.rules').find('select').val();
+      if (rule == 'Hitung HPP'){
+        disc = Math.round($('#purchase_price_price').val() * obj.val() / 100);
+        obj.parent().parent().parent().find('.amount').text(disc);
+        obj.parent().parent().parent().find('.disc_amount').val(disc);
+      } else {
+        price_cost = $('#purchase_price_total_price_cost').val();
+        disc2 = Math.round(price_cost * obj.val() / 100);
+        obj.parent().parent().parent().find('.amount').text(disc2);
+        obj.parent().parent().parent().find('.disc_amount').val(disc2);
+      }
+
+      // Hitung Total Discount
+      total_amount = []
+      obj2 = obj.parent().parent().parent().parent().find('.amount')
+      $.each( obj2, function( key, value ) {
+        total_amount.push(parseFloat(value.innerHTML));
+      });
+      var sum = total_amount.reduce((a, b) => a + b, 0);
+      $('#purchase_price_total_discount').val(parseFloat(sum));
+
+      // Hitung Price Cost
+      price_cost = $('#purchase_price_price').val() - $('#purchase_price_total_discount').val();
+      $('#purchase_price_total_price_cost').val(price_cost);
+
+      hitung_unit_cost();
+      return false;
+    }
+  }
+
+  function hitung_unit_cost(){
+    if ($('#purchase_price_unit_id').val() == 'Unit'){
+      unit_cost = $('#purchase_price_total_price_cost').val() / $('#unit_num').val();
+    } else if ($('#purchase_price_unit_id').val() == 'Box'){
+      unit_cost = $('#purchase_price_total_price_cost').val() / $('#box_num').val();
+    } else if ($('#purchase_price_unit_id').val() == 'Box 2'){
+      unit_cost = $('#purchase_price_total_price_cost').val() / $('#box2_num').val();
+    }
+    $('#purchase_price_total_unit_cost').val(unit_cost);
+  }
+
+  function clear_textfield(obj){
+    input = obj.parent().parent().parent().find('.input').find('input').val("");
+    hitung_discount(input);
+  }
+
+  function chooseProduct(id) {
+    $.ajax({
+      dataType: "script",
+      url: '/products/choose_product',
+      type: 'get',
+      data: {product_id: id}
+    })
+  }
+  function searchProduct() {
+    $.ajax({
+      dataType: "script",
+      url: '/products/get_products_modal',
+      type: 'get'
+    });
+  }
+</script>

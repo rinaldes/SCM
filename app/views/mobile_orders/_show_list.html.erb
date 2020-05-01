@@ -1,0 +1,47 @@
+<% @mo.each_with_index do |po, i| %>
+  <tr>
+    <td width="5%" style="vertical-align:middle" align="center"><%= check_box_tag po.id %></td>
+    <td width="5%" style="vertical-align:middle" align="center"><%= i + 1%></td>
+    <td width="50%">
+      <div class="row">
+        <section class="col col-md-3">
+          <img id="img_prev" src="<%= po.image %>" />
+        </section>
+        <section class="col col-md-9">
+          <%= po.description %>&nbsp @ Rp <%= format_currency po.selling_price %><br>
+          <br>Quantity : &nbsp<%= po.quantity.to_i %>
+          <br>Total Harga : &nbsp Rp <%= format_currency po.price || (po.selling_price * po.quantity.to_f) %><br>
+          <br><b>
+            <% if po.status == "Ready" %>
+              <font color="green">Ready</font>
+            <% elsif po.status == "Reject" %>
+              <font color="red">Rejected</font>
+            <% end %>
+          </b>
+        </section>
+    </td>
+    <td>
+      Tulis Pesan: <br>
+      <%= text_area_tag (po.id.to_s + "-note"), po.note, class:"form-control" %><br>
+      <%= button_tag 'Send', class: "btn btn-default send_msg", onclick: "send_message();" %>
+      <%= hidden_field_tag (po.id.to_s + "-id"), po.id %>
+    </td>
+  </tr>
+  <script type="text/javascript">
+    var check, idnya, yg_checked, yg_unchecked;
+    $("#yg_unchecked").val($("#yg_unchecked").val() + <%= po.id %> + ";")
+    $("#" + <%= po.id %>).on("click", function(){
+      idnya = <%= po.id %> + ";"
+      yg_checked = $("#yg_checked").val()
+      yg_unchecked = $("#yg_unchecked").val()
+      check = $(this).prop("checked");
+      if(check) {
+        $("#yg_checked").val(yg_checked + idnya)
+        $("#yg_unchecked").val(yg_unchecked.replace(idnya, ''))
+      } else {
+        $("#yg_checked").val(yg_checked.replace(idnya, ''))
+        $("#yg_unchecked").val(yg_unchecked + idnya)
+      }
+    });
+  </script>
+<% end %>

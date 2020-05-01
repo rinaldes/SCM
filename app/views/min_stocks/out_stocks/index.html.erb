@@ -1,0 +1,77 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>Stok Kosong</li><li>List</li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header>
+            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+            <h2>List Stok Kosong</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <table class="table table-striped table-bordered" width="100%">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>
+                       Barcode <%= link_to 'v', 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                       <%= link_to '^', 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Size <%= link_to 'v', 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                       <%= link_to '^', 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Brand <%= link_to 'v', 'javascript:void(0)', id: 'brand_name-desc', class: 'sorting hide' %>
+                       <%= link_to '^', 'javascript:void(0)', id: 'brand_name-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Supplier<%= link_to 'v', 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+                      <%= link_to '^', 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Article <%= link_to 'v', 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+                       <%= link_to '^', 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Colour<%= link_to 'v', 'javascript:void(0)', id: 'colour_name-desc', class: 'sorting hide' %>
+                      <%= link_to '^', 'javascript:void(0)', id: 'colour_name-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Category <%= link_to 'v', 'javascript:void(0)', id: 'm_class_name-desc', class: 'sorting hide' %>
+                       <%= link_to '^', 'javascript:void(0)', id: 'm_class_name-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                       Purchase Price <%= link_to 'v', 'javascript:void(0)', id: 'purchase_price-desc', class: 'sorting hide' %>
+                      <%= link_to '^', 'javascript:void(0)', id: 'purchase_price-asc', class: 'sorting' %>
+                    </th>
+                    <th>Selling Price (Netto) <%= link_to 'v', 'javascript:void(0)', id: 'selling_price-desc', class: 'sorting hide' %>
+                      <%= link_to '^', 'javascript:void(0)', id: 'selling_price-asc', class: 'sorting' %></th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :brand_name, params[:brand_name], class: 'form-control search', name: 'brands.name' %></th>
+                    <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: 'suppliers.name' %></th>
+                    <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :colour_name, params[:colour_name], class: 'form-control search', name: 'colours.name' %></th>
+                    <th class="hasinput"><%= text_field_tag :m_class_name, params[:m_class_name], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :buy_price, params[:buy_price], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :sell_price, params[:sell_price], class: 'form-control search' %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='out_stock-list'><%= render 'out_stock_list' %></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

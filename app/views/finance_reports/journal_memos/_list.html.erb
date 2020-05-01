@@ -1,0 +1,36 @@
+<% received_qty = 0 %>
+<% sum_total_amount = 0 %>
+<% sum_total_paid = 0 %>
+<% @journal_memos.each_with_index do |journal_memo, index| %>
+  <% account_payables = journal_memo.account_payables %>
+  <% account_payables_total_amount = account_payables.map(&:total_amount).sum %>
+  <% account_payables_total_paid = account_payables.map(&:total_paid).sum %>
+  <tr>
+    <td><%= index+1 %></td>
+    <td><%= journal_memo.supplier.try(:name) %></td>
+    <td><%= journal_memo.date.try(:strftime, "%d-%m-%Y") %></td>
+    <td><%= journal_memo.consigment_number %></td>
+    <td><%= journal_memo.received_qty %></td>
+    <td><%= number_to_currency account_payables_total_amount, unit: "Rp."  %></td>
+    <td><%= journal_memo.discount1 %></td>
+    <td><%= journal_memo.discount2 %></td>
+    <td><%= journal_memo.discount3 %></td>
+    <td><%= journal_memo.discount4 %></td>
+    <td><%= number_to_currency account_payables_total_paid, unit: "Rp." %></td>
+  </tr>
+  <% received_qty += journal_memo.received_qty %>
+  <% sum_total_amount += account_payables_total_amount %>
+  <% sum_total_paid += account_payables_total_paid %>
+<% end %>
+<% if @journal_memos.present? %>
+  <tr>
+    <td style="font-weight: bold;" colspan="4">Total</td>
+    <td><%= received_qty %></td>
+    <td><%= number_to_currency sum_total_amount, unit: "Rp." %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><%= number_to_currency sum_total_paid, unit: "Rp." %></td>
+  </tr>
+<% end %>

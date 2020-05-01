@@ -1,0 +1,124 @@
+class SellingPricesController < ApplicationController
+  skip_before_filter :verify_authenticity_token, only: [:destroy]
+  def index
+    @selling_prices = SellingPrice.all
+    get_paginated_selling_prices
+    respond_to do |format|
+      format.html
+      format.js
+      format.xls
+      if(params[:a] == "a")
+        format.csv { send_data SellingPrice.where("parent_id IS NULL").to_csv2 }
+      else
+        format.csv { send_data SellingPrice.where("parent_id IS NULL").to_csv }
+      end
+    end
+  end
+
+  def import
+    import_result = SellingPrice.import(params[:file])
+    if params[:file].present?
+      if import_result[:error] == 1
+        flash[:error] = import_result[:message]
+      else
+        flash[:notice] = import_result[:message]
+      end
+    else
+      flash[:error] = "Please attach CSV File"
+    end
+    redirect_to selling_prices_path
+  end
+
+  def show
+    @selling_price = SellingPrice.find(params[:id])
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def new
+  @selling_price = SellingPrice.new(params[:selling_price])
+    respond_to do |format|
+      format.html # new.html.erb
+    end
+  end
+
+  def edit
+    @selling_price = SellingPrice.find(params[:id])
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def create
+    office = HeadOffice.find_by_office_name(params[:office])   
+    @selling_price = SellingPrice.new(selling_price_params.merge(:code => (('%03d' % ((SellingPrice.last.code.to_i rescue 0)+1))), :office_id => (office.id rescue nil), ))
+
+    if @selling_price.save
+      flash[:notice] = 'Selling Price was successfully created'
+      redirect_to selling_prices_path
+    else
+      flash[:error] = @selling_price.errors.full_messages
+      render "new"
+    end
+  end
+  
+
+  def update
+    @selling_price = SellingPrice.find(params[:id])
+    if @selling_price.update_attributes(selling_price_params)
+      flash[:notice] = 'Selling Price was successfully updated.'
+      redirect_to selling_prices_path
+    else
+      flash[:error] = @selling_price.errors.full_messages
+      render "edit"
+    end
+  end
+
+  def destroy
+    @selling_price = SellingPrice.find(params[:id])
+    @selling_price.destroy
+    get_paginated_selling_prices
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def search
+    @selling_price = SellingPrice.search(params[:search]).uniq.paginate(:page => params[:page], :per_page => 10) || []
+    respond_to do |format|
+      @selling_price = SellingPrice.new
+      format.js
+    end
+  end
+
+  def get_number
+    @selling_price = SellingPrice.number(params)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def render_404
+    respond_to do |format|
+      format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+      format.xml  { head :not_found }
+      format.any  { head :not_found }
+    end
+  end
+
+private
+  def selling_price_params
+    params.require(:selling_price).permit(:start_date, :end_date, :product_id ,:margin, :hpp, :dpp, :ppn_in, :ppn_out)
+  end
+
+  def get_paginated_selling_prices
+    conditions = ["parent_id IS NULL"]
+    params[:search].each{|param|
+      conditions << "LOWER(#{param[0]}) LIKE '%#{param[1]}%'"
+    } if params[:search].present?
+    @selling_price = SellingPrice.where(conditions.join(' AND ')).order(default_order('m_classes')).paginate(:page => params[:page], :per_page => 10) || []
+  end
+ 
+
+end

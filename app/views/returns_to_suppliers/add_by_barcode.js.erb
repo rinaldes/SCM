@@ -1,0 +1,30 @@
+<% if @goods_size %>
+var body = $('table#detail_returns_to_supplier tbody')
+if (!body.find('tr#<%= @goods_size.barcode %>').length){
+$("#detail_returns_to_supplier tbody").find('.text-no-data').remove()
+index = $("#detail_returns_to_supplier tbody tr").size()
+html = "<tr id='<%= @goods_size.barcode %>'><td>" + (index + 1) +"</td>"
+html += "<td><%= @goods_size.barcode %> <input type='hidden' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][goods_size_id]' value='<%= @goods_size.id %>'></td>";
+html += "<td><%= @goods_size.goods.brand.name rescue '-' %></td>"
+html += "<td><%= @goods_size.goods.article rescue '-' %></td>"
+html += "<td><%= @goods_size.goods.colour.name rescue '-' %></td>"
+html += "<td><%= fix_zero_float @goods_size.size_detail.size_number rescue '-' %></td>"
+html += "<td><input type='text' id='quantity"+ index +"' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][qty]' onchange='cek_stock(); limit_input(this);' onkeypress='number_only(event);' class='input-mini'></td>"
+// html += "<td><%= @goods_size.goods_details.first.store.name rescue '-' %><input type='hidden' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][store_id]' value='<%= @goods_size.goods_details.first.store_id rescue 0 %>' ></td>"
+html += "<td><select id='def"+ index +"' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][store_id]', onchange='cek_stock();'><% @gudang_ho.each do |x|%><option value='<%= x[0]%>' stock='<%= x[2]%>'><%= x[1] %></option><%end%></select></td>"
+html += '<td><%= link_to "Stok", "/purchase_orders/view_stock?barcode=#{@goods_size.barcode}", class: "view-stock" %></td>'
+html += "<td><%= to_local_currency(@goods_size.goods.cost_of_goods) rescue 0 %><input type='hidden' id='hargasd"+ index +"' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][cost_before_discount]' onkeypress='number_only(event);' onchange='hitung_total();' class='input-mini' value='<%= @goods_size.goods.cost_of_goods rescue 0 %>'></td>"
+html += "<td><%= @goods_size.goods.purchase_price_after_discount[:total_discount] rescue 0 %><input type='hidden' id='diskon"+ index +"' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][discount]' onkeypress='number_only(event);' onchange='hitung_total();' class='input-mini' value='<%= @goods_size.goods.purchase_price_after_discount[:total_discount] rescue 0 %>'></td>"
+html += "<td><%= to_local_currency(@goods_size.goods.purchase_price_after_discount[:purchase_price_after_discount]) rescue 0 %><input type='hidden' id='hargassd"+ index +"' class='input-mini' value='<%= @goods_size.goods.purchase_price_after_discount[:purchase_price_after_discount] rescue 0 %>'></td>"
+html += "<td></td>"
+html += "<td><input type='text' id='keterangan"+ index +"' name='returns_to_supplier[returns_to_supplier_details_attributes]["+ index +"][explanation]' class='input-mini'></td>"
+html += '<td class="text-center"><%= link_to "javascript:void(0)", :class => "remove", onclick: "removeRows(this)", title: "Remove" do %><i class="fa fa-trash-o fa-lg"></i><% end %></td></tr>'
+$('#barcode_distribution').val("");
+$('table#detail_returns_to_supplier tbody').append(html)
+$('.view-stock').colorbox({
+  width: '700px', height: '170px', fixed: true
+})
+html.show('fast')
+$('#barcode_distribution').val().focus()
+}else{alert('data has been present!')}
+<% end %>

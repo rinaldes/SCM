@@ -1,0 +1,26 @@
+<% if flash[:notice].present? %>
+  <div class="col-sm-12"><!-- FLASH MESSAGES -->
+    <div class="alert alert-success alert-block">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+      <h4 class="alert-heading">Success!</h4>
+      <%= flash[:notice] %>
+    </div>
+  </div>
+  <% flash[:notice] = nil %>
+<% elsif flash[:error].present? %>
+  <div class="col-sm-12"><!-- FLASH MESSAGES -->
+    <div class="alert alert-danger alert-block">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+      <h4 class="alert-heading">Error!</h4>
+      <%= flash[:error] %>
+    </div>
+  </div>
+<% elsif flash[:warning].present? %>
+  <div class="col-sm-12"><!-- FLASH MESSAGES -->
+    <div class="alert alert-warning alert-block">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+      <h4 class="alert-heading">Warning!</h4>
+      <%= flash[:warning] %>
+    </div>
+  </div>
+<% end %>

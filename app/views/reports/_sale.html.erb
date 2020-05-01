@@ -1,0 +1,36 @@
+<% if @sales_details.present? %>
+  <% @sales_details.each{|sd| %>
+    <% sale = sd.sale %>
+    <tr>
+      <td><%= sale.session.shift_no %></td>
+      <td><%= sd.quantity < 0 ? 'Retur' : 'Sale' %></td>
+
+      <td><%= sale.code %></td>
+      <td><%= sd.product.barcode rescue '' %></td>
+      <td><%= sd.product.description rescue '' %></td>
+      <td><%= sd.quantity rescue ''%></Data></td>
+      <td style='text-align: right'><%= format_currency sd.price rescue ''%></td>
+      <td style='text-align: right'><%= format_currency sd.total_price rescue ''%></td>
+      <td style='text-align: right'><%= format_currency sd.ppn %></td>
+      <td><%= sale.store.code rescue ''%></td>
+      <td><%= sd.created_at.strftime("%d-%m-%Y") rescue ''%></td>
+      <td><%= sd.created_at.strftime("%H : %M") rescue ''%></td>
+      <td style='text-align: right'><%= format_currency sd.capital_price %></td>
+    </tr>
+  <% } %>
+  <tr>
+    <td colspan=13>
+      <% if @sales_details.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@sales_details, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+<tr>
+  <td colspan="13"><center>No Data Available</center></td>
+</tr>
+<% end %>

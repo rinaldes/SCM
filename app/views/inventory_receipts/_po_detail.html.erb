@@ -1,0 +1,43 @@
+<thead>
+  <tr>
+    <th>NO</th>
+    <th>ITEM CODE</th>
+    <th>NAME</th>
+    <th>PURCHASE COST</th>
+    <th>PO QTY</th>
+    <th>UNIT</th>
+    <th>SUBTOTAL</th>
+    <th>RECEIVED QTY</th>
+    <th>OUTSTANDING QTY</th>
+    <th>QTY</th>
+    <th class="col-md-1">ACTION</th>
+  </tr>
+</thead>
+<tbody id='list_detail'>
+  <% purchase_order.purchase_order_details.sort_by{|pod|pod.product.description}.each_with_index do |pod, idx| %>
+    <% product = pod.product %>
+    <% received_qty = ReceivingDetail.joins(:receiving).where("product_id=#{product.id} AND purchase_order_id=#{pod.purchase_order_id}").map(&:quantity).compact.sum %>
+    <tr id="<%= product.id %>">
+      <td><%= idx+1 %></td>
+      <td class='product_barcode'><%= product.article rescue '' %></td>
+      <td><%= product.description rescue '' %></td>
+      <td><%= pod.hpp %></td>
+      <td>
+        <%= hidden_field_tag "receiving[receiving_details_attributes][#{key}#{pod.id}][product_id]", product.id %>
+        <%= hidden_field_tag "receiving[receiving_details_attributes][#{key}#{pod.id}][hpp]", pod.hpp %>
+        <%= hidden_field_tag "receiving[receiving_details_attributes][#{key}#{pod.id}][unit_type]", pod.unit_type %>
+        <%= pod.quantity %>
+      </td>
+      <td><%= pod.unit_type %></td>
+      <td class='subtotal'><%= pod.hpp*pod.quantity %></td>
+      <td><%= received_qty %></td>
+      <td><%= pod.quantity-received_qty %></td>
+      <td><%= text_field_tag "receiving[receiving_details_attributes][#{key}#{pod.id}][quantity]", (pod.quantity-received_qty).to_s %></td>
+      <td>
+        <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(this)">
+          <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+        </a>
+      </td>
+    </tr>
+  <% end %>
+</tbody>

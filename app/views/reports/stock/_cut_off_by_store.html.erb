@@ -1,0 +1,76 @@
+<table class="table table-bordered table-striped" id='stock_table'>
+  <thead>
+    <tr>
+      <th rowspan=2>Store Code</th>
+      <th rowspan=2>Store Name</th>
+      <th colspan=2>Start</th>
+      <th colspan=2>Sales</th>
+      <th colspan=2>Retur Sls</th>
+      <th colspan=2>BPB</th>
+      <th colspan=2>TaT In</th>
+      <th colspan=2>TaT Out</th>
+      <th colspan=2>Retur</th>
+      <th colspan=2>SO</th>
+      <th rowspan=2>Penyesuaian</th>
+      <th rowspan=2>HPP Satuan</th>
+      <th colspan=2>End</th>
+      <th rowspan=2>DSI</th>
+    </tr>
+    <tr>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+    </tr>
+    <tr>
+      <th class="hasinput"><%= text_field_tag :tanggal, params[:tanggal], class: 'form-control', onkeydown: "enter_pressed(event);" %></th>
+      <th colspan="22"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% total_sales_qty = 0 %>
+    <% total_sales_amt = 0 %>
+    <% @product_mutations.each_with_index{|pmh, i| %>
+      <% office = Office.find_by_id(pmh[0]) %>
+      <tr>
+        <td><%= office.code %></td>
+        <td><%= office.office_name %></td>
+        <%= render 'reports/stock/qty_amount_det', pmh: pmh, start_stock: @start_stock[pmh[0]], end_stock: @end_stock[pmh[0]] %>
+      </tr>
+    <% } if @product_mutations.present? %>
+    <%= render 'reports/stock/total_qty_amount_det' %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  function reload(){
+    $.ajax({
+      url: "/reports/stock?&all_stores="+$("#all_stores").val()+
+            "&date="+($('#tanggal').length == 1 ? $('#tanggal').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  } 
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

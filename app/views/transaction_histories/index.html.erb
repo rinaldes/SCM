@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Transaction </li><li>Transaction History</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id="notice_template"><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Transaction History</h2> <!-- header content --></header>
+          <div><!-- widget div-->
+            
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                    Transaction No 
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'transaction_no-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'transaction_no-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Date
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Customer Name
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Item QTY
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Transaction Amount
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Total Paid
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Exchange
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Outstanding
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :transaction_no, params[:transaction_no], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control search', name: "to_char(transaction_histories.date, 'DD-MM-YYYY')" %></th>
+                    <th class="hasinput"><%= text_field_tag :customer_name, params[:customer_name], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :item_qty, params[:item_qty], class: 'form-control search', name: "to_char(transaction_histories.item_qty, '99999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :transaction_amount, params[:transaction_amount], class: 'form-control search', name: "to_char(transaction_histories.transaction_amount, '99999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :total_paid, params[:total_paid], class: 'form-control search', name: "to_char(transaction_histories.total_paid, '99999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :exchange, params[:exchange], class: 'form-control search', name: "to_char(transaction_histories.exchange, '99999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :outstanding, params[:outstanding], class: 'form-control search', name: "to_char(transaction_histories.outstanding, '99999999D99')" %></th>
+                  </tr>
+                </thead>
+                <tbody id='transaction_history-list'><%= render 'transaction_history_list' %></tbody>
+              </table>
+          </div><!-- end widget -->
+        </div><!-- end widget div -->
+      </article><!-- WIDGET END -->
+    </div>  <!-- end row -->
+  </section><!-- end widget grid -->
+</div>  <!-- end row -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Unit</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag import_units_path(:id => params[:id]), multipart: true do %>
+          <%= file_field_tag :file %>
+      </div>
+      <div class="modal-footer">
+        <%= link_to "Download Template", units_path(format: "csv", :a => "a"), :class => "btn btn-success" %>
+        <%= submit_tag "Import", :class => "btn btn-primary", id: "commit"%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#commit').bind("click",function(){ 
+    if(!$('#file').val()){
+      alert("File not been chosen");
+      return false;
+    }
+  }); 
+});
+</script>

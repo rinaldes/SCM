@@ -1,0 +1,2 @@
+module RegionalsHelper
+end

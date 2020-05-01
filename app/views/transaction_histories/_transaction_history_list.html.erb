@@ -1,0 +1,24 @@
+<% @transaction_histories.each_with_index do |transaction_history, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><%= link_to transaction_history.code, transaction_history_path(transaction_history), class: 'blue' %></td>
+    <td><%= transaction_history.transaction_date %></td>
+    <td><%= transaction_history.member.name rescue '-' %></td>
+    <td><%= transaction_history.total_quantity %></td>
+    <td><%= format_currency transaction_history.total_price %></td>
+    <td><%= format_currency transaction_history.total_paid  %></td>
+    <td><%= format_currency transaction_history.exchange %></td>
+    <td><%= format_currency transaction_history.total_outstanding %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <% if @transaction_histories.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@transaction_histories, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

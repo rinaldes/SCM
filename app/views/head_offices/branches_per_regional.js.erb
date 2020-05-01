@@ -1,0 +1,4 @@
+<% if @cities  %>
+  $('#head_office_city_id').html("<option>Please Select</option>");
+  $('#head_office_city_id').append("<%= escape_javascript options_from_collection_for_select(@cities, :id, :name) %>");
+<% end %>

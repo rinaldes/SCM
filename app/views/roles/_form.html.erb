@@ -1,0 +1,96 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Setting</li><li>Role</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-role">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Role</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @role, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Code</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= f.text_field :code, class: "input-sm", placeholder: "Auto Generate", disabled: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Name <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :name, :class => "input-sm #{(error_field @role, :name)}" %></label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  <section class="col col-md-12">
+                    <section>
+                      <label class="col-md-2 label">Features <span class='important'>*</span></label>
+                    </section>
+                    <section>
+                      <label class="col-md-8 label">
+                      <% @feature_names.each{|m| %>
+                        <input id="<%= m.module_name.downcase.gsub(' ', '_') %>" value="1" type="checkbox" onclick="checkall('<%= m.module_name.downcase.gsub(' ', '_') %>')">
+                        <%= link_to m.module_name if m.module_name.present? %><br/>
+                        <% FeatureName.where("module_name='#{m.module_name}'").each{|feature| %>
+                          <%#= @role.has_privilege(feature) ? (check_box_tag "features[#{feature.id}]", 1, class: "asd", checked: true) : (check_box_tag "features[#{feature.id}]") %>
+                          <% if @role.has_privilege(feature) %>
+                            <input checked="checked" id="features_<%= feature.id %>" name="features[<%= feature.id %>]" value="1" type="checkbox" class="<%= m.module_name.downcase.gsub(' ', '_') %>">
+                          <% else %>
+                            <input id="features_<%= feature.id %>" name="features[<%= feature.id %>]" value="1" type="checkbox" class="<%= m.module_name.downcase.gsub(' ', '_') %>">
+                          <% end %>
+
+                          <%= feature.name %><br/>
+                        <% } %>
+                        <br/><br/>
+                      <% } %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+
+
+<script type="text/javascript">
+  function checkall(modul){
+    if($("#" + modul).is(':checked')){
+      $("."+ modul).prop('checked','checked')
+    }else{
+      $("."+ modul).prop('checked','')
+    }
+  }
+
+  $(document).ready(function(){
+    <% if params[:action] == "edit" %>
+      <% @feature_names.each do |m| %>
+        if($(".<%= m.module_name.downcase.gsub(' ', '_') %>[type=checkbox]:checked").length == $(".<%= m.module_name.downcase.gsub(' ', '_') %>").length){
+          $("#<%= m.module_name.downcase.gsub(' ', '_') %>").prop('checked','checked');
+        }
+      <% end %>
+    <% end %>
+  });
+
+</script>

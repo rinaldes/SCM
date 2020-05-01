@@ -1,0 +1,356 @@
+<%= csrf_meta_tag %>
+
+<script src="/js/jquery-2.1.1.min.js"></script>
+<script src="/js/plugin/highchart/highcharts.js"></script>
+<script src="/js/plugin/moment/moment.min.js"></script>
+
+<script>
+  loadTransaction();
+  function loadTransaction() {
+    $.ajax({
+      dataType: "json",
+      type: "get",
+      url: "/dashboards/line_chart",
+      data: {
+        text: $('#text_line_chart').val()
+      },
+      success: function (data) {
+        loadLineChart(data);
+      }
+    })
+  }
+
+  function loadCategorySales() {
+    window.setTimeout(function () {
+      $.ajax({
+        dataType: "json",
+        type: "get",
+        url: "/dashboards/category_sales",
+        data: {
+          text: $('#text_bar_chart2').val()
+        },
+        success: function (data) {
+          console.log(data);
+          loadPieChart(data);
+        }
+      })
+    }, 900);
+  }
+
+  function loadDailySales() {
+    window.setTimeout(function () {
+      $.ajax({
+        dataType: "json",
+        type: "get",
+        url: "/dashboards/daily_sales",
+        data: {
+          text: $('#text_bar_chart').val()
+        },
+        success: function (data) {
+          console.log(data);
+          loadBarChart(data);
+        }
+      })
+    }, 900);
+  }
+
+  function loadLineChart(data) {
+    $('#sec_sales').highcharts({
+      title: {
+        text: 'TRANSACTION PER HOUR IN ' + $('#text_line_chart').val(),
+        x: -20
+      },
+      subtitle: {
+        text: '',
+        x: -20
+      },
+      xAxis: {
+        categories: data.times
+      },
+      yAxis: {
+        title: {
+          text: ''
+        },
+        plotLines: [
+          {
+            value: 0,
+            width: 1,
+            color: '#808080'
+          }
+        ]
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle',
+        borderWidth: 0
+      },
+      series: data.line_chart
+    });
+  }
+
+  function loadBarChart(data) {
+    var d = new Date();
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    $('#container').highcharts({
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: monthNames[d.getMonth()] + ' ' + d.getFullYear() + ' Daily Sales by Store in ' + $('#text_bar_chart').val()
+      },
+      xAxis: {
+        categories: data.day,
+        title: {
+          text: null
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: $('#text_bar_chart').val(),
+          align: 'high'
+        },
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      tooltip: {
+        valuePrefix: ($('#text_bar_chart').val() == "Price" ? 'Rp' : ''),
+        formatter: function () {
+          return '<b>' + this.series.name + ', ' + this.point.category + ' ' + monthNames[d.getMonth()] + ' ' + d.getYear() + '</b><br/>' +
+              ($('#text_bar_chart').val() == "Price" ? "Total Price: Rp" : "Total Quantity: ") + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+        }
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -40,
+        y: 0,
+        borderWidth: 1,
+        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+        shadow: true
+      },
+      credits: {
+        enabled: false
+      },
+      series: data.values
+    });
+  }
+
+  $(function () {
+    pageSetUp();
+    loadDailySales();
+    loadCategorySales();
+    loadTransaction();
+    $("#sortable1").sortable({handle: '.handle', connectWith: ".todo"}).disableSelection();
+
+    // auto resize graph ketika widget diresize,
+    // tanpa ini, ukuran graph akan tetap kecil walau widget di restore ke ukuran semula
+    $(".jarviswidget-toggle-btn").on("click", function() {
+      var container = $(this).parent().parent().parent().find("#container, #sec_sales");
+      if (container.length == 0)
+        return;
+
+      setTimeout(function() {
+        container.highcharts().reflow();
+      }, 100);
+    });
+  });
+
+  function loadPieChart(data) {
+    var d = new Date();
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    $('#category_title').text("Daily Sales By " + $('#text_bar_chart2').val());
+
+    $('#container2').highcharts({
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: monthNames[d.getMonth()] + ' ' + d.getFullYear() + ' Daily Sales by ' + $('#text_bar_chart2').val()
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: true
+        }
+      },
+      series: [{
+        name: 'Percentage',
+        colorByPoint: true,
+          data: data.values
+      }]
+    });
+  }
+
+  $(function () {
+    pageSetUp();
+    loadDailySales();
+    loadCategorySales();
+    loadTransaction();
+    $("#sortable1").sortable({handle: '.handle', connectWith: ".todo"}).disableSelection();
+
+    // auto resize graph ketika widget diresize,
+    // tanpa ini, ukuran graph akan tetap kecil walau widget di restore ke ukuran semula
+    $(".jarviswidget-toggle-btn").on("click", function() {
+      var container = $(this).parent().parent().parent().find("#container2, #sec_sales");
+      if (container.length == 0)
+        return;
+
+      setTimeout(function() {
+        container.highcharts().reflow();
+      }, 100);
+    });
+  });
+</script>
+
+<div id="content">
+  <div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+      <h1 class="page-title txt-color-blueDark">
+        <i class="fa-fw fa fa-home"></i>
+        Dashboard
+        <span>&gt; My Dashboard</span>
+      </h1>
+    </div>
+    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+      <ul id="sparks" class="">
+        <li class="sparks-info">
+          <h5> Today Sales <span class="txt-color-blue"><%= format_currency @today_sales %></span></h5>
+          <div class="sparkline txt-color-blue hidden-mobile hidden-md hidden-sm"><canvas width="89" height="26" style="display: inline-block; width: 89px; height: 26px; vertical-align: top;"></canvas></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <section id="widget-grid" class="">
+
+    <div class="row">
+      <article class="col-xs-12 col-sm-6 col-md-6 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+          <header role="heading">
+            <span class="widget-icon">
+              <i class="fa fa-area-chart"></i>
+            </span>
+            <h2>Transaction per Hour</h2>
+          </header>
+          <div>
+            <div class="jarviswidget-editbox">
+              <input type="text"><!-- This area used as dropdown edit box -->
+            </div>
+            <div class="widget-body no-padding">
+              <section style="margin-top: 14px; margin-left: 14px;">
+                <label>Show in: </label>
+                <label class="select">
+                  <%= select_tag :text_line_chart, options_for_select(['Amount', 'Quantity']), onchange: "loadTransaction()", class: "input-sm form-control" %>
+                </label>
+              </section>
+
+              <div id="sec_sales" class="primsec" style="min-width: 310px; margin: 0 auto"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-4" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+          <header role="heading">
+            <span class="widget-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <h2>Daily Sales by Store</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <section style="margin-top: 14px; margin-left: 14px;">
+                <label>Show in: </label>
+                <label class="select">
+                  <%= select_tag :text_bar_chart, options_for_select(['Price', 'Quantity']), onchange: "loadDailySales()", class: "input-sm form-control" %>
+                </label>
+              </section>
+              <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+          <header role="heading">
+            <span class="widget-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <h2 id="category_title">Daily Sales by Category</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <section style="margin-top: 14px; margin-left: 14px;">
+                <label>Show in: </label>
+                <label class="select">
+                  <%= select_tag :text_bar_chart2, options_for_select(['Category', 'Department']), onchange: "loadCategorySales()", class: "input-sm form-control" %>
+                </label>
+              </section>
+              <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-3" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+          <header role="heading">
+            <span class="widget-icon">
+              <i class="fa fa-map-marker"></i>
+            </span>
+            <h2>Store Roadmap</h2>
+            <span class="jarviswidget-loader">
+              <i class="fa fa-refresh fa-spin"></i>
+            </span>
+          </header>
+          <div role="content">
+            <div class="jarviswidget-editbox">
+              <div>
+                <input type="text">
+                <label>Title:</label>
+              </div>
+            </div>
+            <div class="widget-body no-padding" style="overflow-x: scroll">
+              <div id="map_canvas" class="google_maps"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- end widget grid -->
+</div>

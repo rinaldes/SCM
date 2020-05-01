@@ -1,0 +1,31 @@
+  <% total = 0 %>
+  <% total_qty = 0 %>
+  <% @receiving_details.each_with_index do |prd, i| %>
+    <% product = prd.product %>
+    <tr>
+      <td><%= i+1 %></td>
+      <td><%= product.article rescue '' %></td>
+      <td><%= product.barcode rescue '' %></td>
+      <td><%= product.description rescue '' %></td>
+      <td style='text-align: right'><%= prd.quantity %></td>
+      <td style='text-align: right'><%= format_currency prd.quantity*prd.hpp rescue '' %></td>
+      <% total += prd.quantity*prd.hpp %>
+      <% total_qty += prd.quantity %>
+    </tr>
+  <% end %>
+  <tr>
+    <th colspan=4>Total</th>
+    <td style='text-align: right'><%= total_qty %></td>
+    <td style='text-align: right'><%= format_currency total rescue '' %></td>
+  </tr>
+  <tr>
+  <td colspan=6>
+    <% if @receiving_details.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@receiving_details, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

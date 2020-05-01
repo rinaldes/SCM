@@ -1,0 +1,132 @@
+  <thead>
+    <tr>
+      <th>Date
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Shift
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Kasir
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'quantity-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'quantity-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Start Time
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>End Time
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Cash
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'retur-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'retur-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Total Sales
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'ppn-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'ppn-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Net Sales
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sales_net-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sales_net-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>PPN
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'hpp-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'hpp-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Net Retur
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_rp-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_rp-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Retur
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_persen-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_persen-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Invoice
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_persen-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_persen-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>APC
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_persen-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_persen-asc', class: 'sorting' %>
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <!-- <th class="hasinput"><%#= text_field_tag :article, params[:article], class: 'form-control', onkeydown: "enter_pressed(event);" %></th> -->
+      <!-- <th class="hasinput"><%#= text_field_tag :description, params[:description], class: 'form-control', onkeydown: "enter_pressed(event);" %></th> -->
+      <th colspan="14"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th colspan=4><center>TOTAL</center></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+      <th class="align-right"></th>
+    </tr>
+  </tbody>
+<script>
+  $('.sorting').click(function(){
+          reload_list({sort: this.id})
+          $(this).addClass('hide')
+          if($(this).attr('id').split('-')[1] == 'desc')
+            $(this).next().removeClass('hide')
+          else
+            $(this).prev().removeClass('hide')
+        })
+
+  function reload(){
+    $.ajax({
+      url: "/reports/sale_item_reports?&dari=item"+
+            "&store_code="+($('#store_code').length == 1 ? $('#store_code').val() : '')+
+            "&article="+($('#article').length == 1 ? $('#article').val() : '')+
+            "&description="+($('#description').length == 1 ? $('#description').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

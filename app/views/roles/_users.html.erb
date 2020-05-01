@@ -1,0 +1,67 @@
+<div class="row" id="users_header">
+  <div class="col-lg-6">
+    <% unless current_user.role == "responder" %>
+      <div id="users_length" class="dataTables_length">
+        <%= form_tag search_users_path, :class => "search-content custom-per-page", remote: true do %>
+          <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+          <%= hidden_field_tag :name, params[:name], :class => "form-control medium" %>
+          <%= label_tag do %>
+            <%= select_tag(:per_page, options_for_select([5,10,20], users.per_page), size: 1, :"aria-controls" => "users", onchange: "$(this).parent('label').parent('form').submit()", class: "form-control xsmall") %>
+            records per page
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-lg-6">
+    <div class="dataTables_filter" id="users_filter">
+      <%= form_tag search_users_path, :class => "search-content", remote: true do %>
+        <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+        <%= label_tag do %>
+          Search: <%= text_field_tag :name, params[:name], :class => "form-control medium" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<table class="table table-striped table-hover table-bordered" id="users">
+  <thead>
+    <tr>
+      <th>Full name</th>
+      <th>Username</th>
+      <th>Gender</th>
+      <th>Place/Birthdate</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if users.count > 0 %>
+      <% users.each do |user| %>
+        <%= render 'user', :user => user %>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="7" align="center">No user data found!</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+        
+<div class="row" id="users_footer">
+  <div class="col-lg-6">
+    <% base = (params[:page].present? ? params[:page].to_i-1 : 0)*users.per_page %>
+    <div class="dataTables_info" id="users_info">
+      <% if @users_count > 0 %>
+        Showing <%= base+1 %> to <%= base+users.per_page %> of <%= @users_count %> entries
+      <% end %>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="dataTables_paginate paging_bootstrap pagination">
+      <%= pagination_links(users, :params => {:controller => controller_name, :action => action_name, :name => params[:name]}) %>
+    </div>
+  </div>
+</div>

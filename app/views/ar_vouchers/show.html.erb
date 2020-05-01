@@ -1,0 +1,195 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>AR Voucher</li><li><%= @ar_voucher.name %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-ar_voucher">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>AR Voucher <%= @ar_voucher.name %></h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <form class='smart-form'>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-6">
+                      <section>
+                        <label class="col-md-2 label">Name</label>
+                        <label class="col-md-9 input custom-input-box"><%= @ar_voucher.name %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-2 label">Valid From</label>
+                        <label class="col-md-9 input custom-input-box"><%= @ar_voucher.valid_from %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-2 label">Valid Until</label>
+                        <label class="col-md-9 input custom-input-box"><%= @ar_voucher.valid_until %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-2 label">Amount </label>
+                        <label class="col-md-9 input custom-input-box"><%= format_currency @ar_voucher.max_voucher_amt %></label>
+                      </section>
+                    </section>
+                    <section class="col col-md-6">
+                      <section>
+                        <label class="col-md-3 label">HO / Store </label>
+                        <label class="col-md-9 input custom-input-box"><%= @branch.office_name %></label>
+                      <section>
+                        <label class="col-md-3 label">Term & Condition </label>
+                        <label class="col-md-9 input custom-input-box"><%= @ar_voucher.term %></label>
+                      </section>
+                    </section>
+                  </section>
+                  <section class="col col-md-12">
+                    <section>
+                      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                        <thead>
+                          <tr>
+                            <th>Payment No</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                          </tr>
+                        </thead>
+                        <tbody id='payment'>
+                          <% @ar_voucher.ar_voucher_payment_schedules.each{|cp| %>
+                            <tr>
+                              <td>
+                                <label class="col-md-10 input custom-input-box"><%= cp.payment_number %></label>
+                              </td>
+                              <td>
+                                <label class="col-md-10 input custom-input-box"><%= format_currency cp.amount %></label></label>
+                              </td>
+                              <td>
+                                <% if cp.due_date_month == 'Next Month' %>
+                                <% else %>
+                                <% end %>
+                                <label class="col-md-3 input custom-input-box"><%= cp.due_date %></label>
+                                <label class="col-md-3 input custom-input-box"><%= cp.due_date_number %></label>
+                                <label class="col-md-3 input custom-input-box"><%= cp.due_date_month %></label>
+                              </td>
+                            </tr>
+                          <% } %>
+                        </tbody>
+                      </table>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+  function autocomp(){
+    $("#ar_voucher_office_id").val($("#office_name").val());
+  }
+  function add_payment(product_id){
+    var date = new Date();
+    $("#pay_num").val(parseInt($("#pay_num").val()) + 1)
+    $.ajax({
+      url: '/ar_vouchers/add_payment',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, pay_num: payment($("#pay_num").val())
+      }
+    })
+  }
+  function d_percent(){
+    var value=$.trim($("#ar_voucher_discount_percent").val());
+    if(value.length>0)
+    {
+      $("#ar_voucher_discount_amount").attr("disabled", true);
+
+    }
+    else
+    {
+      $("#ar_voucher_discount_amount").attr("disabled", false);
+    }
+  }
+  function d_amount(){
+    var value=$.trim($("#ar_voucher_discount_amount").val());
+    if(value.length>0)
+    {
+      $("#ar_voucher_discount_percent").attr("disabled", true);
+
+    }
+    else
+    {
+      $("#ar_voucher_discount_percent").attr("disabled", false);
+    }
+  }
+  $(document).ready(function() {
+    $("#ar_voucher_valid_from").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $("#ar_voucher_valid_until").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $('.add_payment').click(function(){
+      add_payment()
+    })
+    $("#office_name").autocomplete({
+      search: functiontn () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/branches/autocomplete_branch_office_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+      },
+        minLength: 1
+      });
+    })
+  function tanggal() {
+  $(document).ready(function(){
+      $('#sendButton').attr('disabled',true);
+      var a = $('#ar_voucher_valid_from').val().toString().split("-");
+      var b = $('#ar_voucher_valid_until').val().toString().split("-");
+      if(a[0] <= b[0] && a[1] <= b[1] && a[2] <= b[2]){
+        $('#sendButton').attr('disabled', false);  
+         $('#abc').hide();         
+      }
+      else{
+        $('#sendButton').attr('disabled',true);
+        $('#abc').show();
+      }
+  });
+}
+function payment(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
+}
+</script>
+<script src="/js/jquery-2.1.1.min.js"></script>

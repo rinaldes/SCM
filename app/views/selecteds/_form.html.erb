@@ -1,0 +1,70 @@
+<div class="modal-content">
+                                    <div class="modal-body">
+                         
+                                        <!-- <form class="form-horizontal" role="form"> -->
+                                          <%= form_for @selected, html: {class: "form-horizontal"} do |f| %>
+                                            <div class="form-group">
+                                                <%= f.label :"Aplicant Name", class: "col-sm-5 control-label" %>
+                                              <div class="col-sm-6">
+                                                <%= f.text_field :Aplicant_Name, class: "form-control" %>
+                                              </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <%= f.label :"Attachment", class: "col-sm-5 control-label" %>
+                                              <div class="col-sm-6">
+                                                <%= f.text_field :Attachment, class: "form-control" %>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <%= f.label :"Apply for Position", class: "col-sm-5 control-label" %>
+                                              <div class="col-sm-6">
+                                                <%= f.text_field :Apply_for_Position, class: "form-control" %>
+                                              </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <%= f.label :"Interview Result", class: "col-sm-5 control-label" %>
+                                              <div class="col-sm-6">
+                                                <%= f.text_field :Interview_Result, class: "form-control" %>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <%= f.label :"Status Interview", class: "col-sm-5 control-label" %>
+                                              <div class="col-sm-6">
+                                                <%= f.text_field :Status_Interview, class: "form-control" %>
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+    <%= f.submit "Submit", class: "btn btn-success", type: "submit" %>            
+    <%= button_tag "Cancel", :"data-dismiss" => "modal", class: "btn btn-default", type: "button" %>
+  </div>
+                                           <!-- <div class="form-group">
+                                                <div class="col-lg-offset-2 col-lg-10">
+                                                    <button type="submit" class="btn btn-info">Submit</button>
+                                                </div>
+                                            </div>-->
+                                            <% end %>
+                                        <!-- </form> -->
+                                      
+                                    </div>
+
+                                </div>
+<script type="text/javascript">
+    $('table .checkbox input').click( function() {      
+      if($(this).is(':checked')){     
+        $(this).parent().parent().parent().toggleClass('row_selected');
+        if($(this).parent().parent().parent().hasClass('new-rec')){
+          $('#toolbar_upload').removeClass('hide');
+          $('#toolbar_def').addClass('hide'); 
+        }else{
+          $('#toolbar_upload').addClass('hide');
+          $('#toolbar_def').removeClass('hide');  
+        }       
+      }else{  
+        $(this).parent().parent().parent().toggleClass('row_selected'); 
+        $('#toolbar_upload, #toolbar_def').addClass('hide');
+      }
+    });
+    </script>
+   <script type="text/javascript">
+    $('#text-editor').wysihtml5();
+    </script>

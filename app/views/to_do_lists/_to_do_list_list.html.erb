@@ -1,0 +1,35 @@
+<% @to_do_lists.each_with_index do |to_do_list, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= to_do_list.date %></td>
+    <td class="hidden-phone"><%= to_do_list.end_at %></td>
+    <td class="hidden-phone"><%= to_do_list.time.strftime("%I:%M:%S %p") rescue '' %></td>
+    <td class="hidden-phone"><%= to_do_list.user.first_name rescue '' %> <%= to_do_list.user.last_name rescue '' %></td>
+    <td class="hidden-phone"><%= to_do_list.description %></td>
+    <td class="hidden-phone">
+      <% BranchToDoList.where(to_do_list_id: to_do_list.id).each do |b| %>
+        <%= Office.find(b.office_id).office_name %>
+        <br />
+      <% end %>
+    </td>
+    <td class="hidden-phone nowrap">
+      <%= link_to edit_to_do_list_path(to_do_list), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{to_do_list.id}, 'to_do_lists')", class: "btn btn-danger btn-xs" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=7>
+    <% if @to_do_lists.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@to_do_lists, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,29 @@
+<tr>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][barcode]", (object[:barcode] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][brand]", (object[:brand] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][article]", (object[:article] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][colour]", (object[:colour] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][dept]", (object[:dept] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][total]", (object[:total] rescue ''), class: "input-sm" %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= number_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][qty]", (object[:qty] rescue ''), class: "input-sm", min: 0 %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_ho[returns_to_ho_detail_attributes][#{key}][status]", (object[:status] rescue ''), class: "input-sm", value: "Pending", disabled: true %></label>
+  </td>
+  <td>
+    <a class="close" data-dismiss="alert" href="#">×</a>
+  </td>
+</tr>

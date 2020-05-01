@@ -1,0 +1,70 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+      </button>
+      <h4 class="modal-title" id="myModalLabel">Browse PO</h4>
+    </div>
+    <div class="modal-body" style="color:#5E5E5E">
+      <table class="table table-striped table-brequested table-hover" width="100%">
+        <thead>
+          <tr>
+            <th>Nomor</th>
+            <th>
+              Date
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+            </th>
+            <th>
+              Supplier
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+            </th>
+            <th>
+              Status
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_code-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_code-asc', class: 'sorting' %>
+            </th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search_po', onchange: "reload_products();" %></th>
+            <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control search_po', onchange: "reload_products()" %></th>
+            <th class="hasinput"><%= text_field_tag :colour, params[:colour], class: 'form-control search_po', onchange: "reload_products()" %></th>
+            <th><%#= text_field_tag :size, params[:size], class: 'form-control search', onkeyup: "reload_products()" %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id='product-search'>
+          <%= render 'po_search_list' %>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+        Cancel
+      </button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+  $(document ).ready(function() {
+    $('.search_po').bind("enterKey",function(e){
+      // reload_products();
+    });
+  });
+
+  function reload_products(){
+    $.ajax({
+      url: "/purchase_orders/search_in_modal?&status='APPROVED'&number="+
+      ($('#barcode').length == 1 ? $('#barcode').val() : '')+
+      "&date="+($('#date').length == 1 ? $('#date').val() : '')+
+      "&sup_code="+($('#colour').length == 1 ? $('#colour').val() : ''),
+      method: "get",
+      data: {},
+      dataType: "script"
+    });
+  }
+</SCRIPT>

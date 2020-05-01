@@ -1,0 +1,2 @@
+$("#user_<%= @user.id %>").replaceWith("<%= j(render 'user', :user => @user) %>")
+$("#myModal").modal('hide')

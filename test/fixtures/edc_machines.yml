@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bank_name: MyString
+  branch: MyString
+  edc_serial_number: MyString
+  account_number: MyString
+  owner: MyString
+
+two:
+  bank_name: MyString
+  branch: MyString
+  edc_serial_number: MyString
+  account_number: MyString
+  owner: MyString

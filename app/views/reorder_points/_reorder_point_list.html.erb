@@ -1,0 +1,26 @@
+<% @product_detail.each_with_index do |pd, i| %>
+<tr>
+  <% product = pd.product %>
+  <td class="hidden-phone"><%= i + 1 %></td>
+  <td class="hidden-phone"><%= pd.warehouse.warehouse rescue nil%></td>
+  <td class="hidden-phone"><%= product.article rescue nil %></span></td>
+  <td class="hidden-phone"><%= product.barcode rescue nil%></span></td>
+  <td class="hidden-phone"><%= product.brand.name rescue nil %></span></td>
+  <td class="hidden-phone"><%= product.description rescue nil%></span></td>
+  <td class="hidden-phone"><%= pd.rop_stock rescue nil %></span></td>
+  <td class="hidden-phone"><%= pd.min_stock rescue nil %></span></td>
+  <td class="hidden-phone"><%= pd.available_qty rescue nil %></span></td>
+</tr>
+<% end %>
+
+<tr>
+  <td colspan=9>
+    <% if @product_detail.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@product_detail, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

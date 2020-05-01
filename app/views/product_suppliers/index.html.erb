@@ -1,0 +1,89 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product Supplier</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <!-- <header>
+            <span class="widget-icon"> <i class="fa fa-list-ul"></i> </span>
+            <h2>List Purchase Receipts</h2>
+          </header> -->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Product Supplier</h2> <!-- header content --></header>
+          <div style='overflow-y: hidden'><!-- widget div-->
+            <div class="widget-body no-padding" style='overflow-y: hidden'><!-- widget content -->
+              <%= link_to raw('<span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Add New'), new_product_supplier_path,
+              class: "btn btn-labeled btn-primary edit-btn-primary" %>
+                <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                  <li class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                      <ul class="dropdown-menu" >
+                        <li style="color:'black';" id="ekspor"><%= link_to "Export to Excel", product_suppliers_path(:id => params[:id], format: "xls") %></li>
+                      </ul>
+                    </li>
+                  </ul>
+            </div><!-- end widget content -->
+            <table class="table table-striped table-bordered table-hover" width="100%">
+              <thead>
+              <tr>
+                <th>No</th>
+                <th>
+                  SKU
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Product Name
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Supplier
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Division
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'contact_person_name-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'contact_person_name-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>Actions</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search', name: 'products.article',onkeyup: "reload();" %></th>
+                  <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search', name: "products.description",onkeyup: "reload();" %></th>
+                  <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: "suppliers.name",onkeyup: "reload();" %></th>
+                  <th class="hasinput"><%= text_field_tag :contact_person, params[:contact_person], class: 'form-control search', name: "contact_person.name",onkeyup: "reload();" %></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id='product_supplier-list'><%= render 'product_supplier_list' %></tbody>
+            </table>
+          </div>
+        </div><!-- end widget -->
+      </article><!-- WIDGET END -->
+    </div>	<!-- end row -->
+  </section><!-- end widget grid -->
+</div>	<!-- end row -->
+<script>
+  function reload(){
+    linknya = "/<%= params[:controller] %>.xls?&article="+($('#article').length == 1 ? $('#article').val() : '')+
+    "&description="+($('#description').length == 1 ? $('#description').val() : '')+
+    "&supplier_name="+($('#supplier_name').length == 1 ? $('#supplier_name').val() : '')+
+    "&cp_name="+($('#cp_name').length == 1 ? $('#cp_name').val() : '')
+    $("#ekspor").html("<a href='"+linknya+"'>Export to Excel</a>");
+  }
+</script>

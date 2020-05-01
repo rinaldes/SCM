@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Card Number</Data></Cell>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Address</Data></Cell>
+        <Cell><Data ss:Type="String">Birthday</Data></Cell>
+        <Cell><Data ss:Type="String">Gender</Data></Cell>
+        <Cell><Data ss:Type="String">HP</Data></Cell>
+        <Cell><Data ss:Type="String">Code</Data></Cell>
+        <Cell><Data ss:Type="String">Email</Data></Cell>
+      </Row>
+    <% Member.all.each do |colour| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= colour.card_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.address %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.birthday %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.gender %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.hp %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.code %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= colour.email %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

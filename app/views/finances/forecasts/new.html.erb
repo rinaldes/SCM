@@ -1,0 +1,44 @@
+<style>
+    input[type="checkbox"], input[type="radio"] {
+        margin: 5px 1px 0px 0px;
+    }
+</style><%= render 'shared/breadcrumb' %>
+<div id="content"><!-- MAIN CONTENT -->
+    <section id="widget-grid" class="">
+        <div id='notice_template'><%= render 'layouts/notice' %></div>
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>New Forecast </h2>
+                    </header>
+                   <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            <%= form_for @forecast, url: finances_forecasts_path, html: {class: "smart-form", id: "form-update-verify", :multipart => true } do |f| %>
+                                <%= render partial: 'form',  locals: { f: f }%>
+                            <% end %>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+    <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+</div>  <!-- end row -->
+

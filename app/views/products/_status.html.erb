@@ -1,0 +1,50 @@
+<section class="form-group">
+  <section class="col col-md-12">
+  <div class="row">
+    <section class="col col-md-3">
+      <label class="col-md-8 label">Status 1</label>
+      <label class="col-md-8"><%= f.radio_button :status1, 'Active', checked: @product.status1 == 'Active' %>Active</label>
+      <label class="col-md-8"><%= f.radio_button :status1, 'Inactive', checked: @product.status1 == 'Inactive' %>Inactive</label>
+    </section>
+    <section class="col col-md-3">
+      <label class="col-md-8 label">Status 2</label>
+        <label class="col-md-12"><%= f.radio_button :status2, 'Konsinyasi', checked: @product.status2 == 'Konsinyasi' %><%= t(:konsinyasi) %></label>
+        <label class="col-md-12"><%= f.radio_button :status2, 'Non-Konsinyasi', checked: @product.status2 == 'Non-Konsinyasi' %><%= t(:non_konsinyasi) %></label>
+    </section>
+    <section class="col col-md-6">
+      <label class="col-md-12 label">Status 3</label>
+      <section class="col col-md-4">
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'V', checked: @product.status3 == 'V' %>Very Fast Moving</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'F', checked: (@product.status3 == 'Fast Moving' || @product.status3 == 'F') %>Fast Moving</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'M', checked: @product.status3 == 'M' %>Medium Moving</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'S', checked: (@product.status3 == 'Slow Moving' || @product.status3 == 'S') %>Slow Moving</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'N', checked: @product.status3 == 'N' %>No Moving</label>
+      </section>
+      <section class="col col-md-6">
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'O', checked: @product.status3 == 'O' %>Stop Order</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'H', checked: @product.status3 == 'H' %>Habiskan Stok</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'T', checked: @product.status3 == 'T' %>Temporary</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'B', checked: @product.status3 == 'B' %>Bazar</label>
+        <label class="col-md-12 status4"><%= f.radio_button :status3, 'END', checked: (@product.status3 == 'END' || @product.status3 == 'Dead Moving') %>Dead Moving</label>
+      </section>
+    </section>
+  </div>
+  <div class="row">
+<!--    <section class="col col-md-4">
+      <label class="col-md-8 label"><%= t(:status_4) %></label>
+      <label for="" class="col-md-8">
+        <%= f.select :status4, options_for_select(CustomStatus.all.map(&:name)), {}, class: 'form-control' %>
+      </label>
+    </section>-->
+    <section class="col col-md-3">
+      <label class="col-md-8 label">Status Pajak</label>
+        <label class="col-md-8"><%= f.radio_button :flag_pajak, 'BKP', checked: @product.flag_pajak == 'BKP' %>BKP</label>
+        <label class="col-md-8"><%= f.radio_button :flag_pajak, 'NBKP', checked: @product.flag_pajak == 'NBKP' %>Non-BKP</label>
+    </section>
+    <section class="col col-md-3">
+      <label class="col-md-8 label">Status Retur</label>
+        <label class="col-md-8"><%= f.check_box :status_retur %> Yes</label>
+    </section>
+  </div>
+  </section>
+</section>

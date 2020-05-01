@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Store</Data></Cell>
+        <Cell><Data ss:Type="String">Product Name</Data></Cell>
+        <Cell><Data ss:Type="String">Cancel Date</Data></Cell>
+        <Cell><Data ss:Type="String">Quantity</Data></Cell>
+        <Cell><Data ss:Type="String">Price</Data></Cell>
+        <Cell><Data ss:Type="String">Capital Price</Data></Cell>
+        <Cell><Data ss:Type="String">Discount</Data></Cell>
+        <Cell><Data ss:Type="String">Discount Amount</Data></Cell>
+        <Cell><Data ss:Type="String">Total Discount Amount</Data></Cell>
+        <Cell><Data ss:Type="String">Discount Type</Data></Cell>
+        <Cell><Data ss:Type="String">Price After Discount</Data></Cell>
+        <Cell><Data ss:Type="String">Sales Person Bill Number</Data></Cell>
+        <Cell><Data ss:Type="String">Sub Total Price</Data></Cell>
+        <Cell><Data ss:Type="String">Total Price</Data></Cell>
+        <Cell><Data ss:Type="String">Username</Data></Cell>
+      </Row>
+    <% @receivings.each do |receiving| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= receiving.office_name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.description %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.cancel_date.strftime('%Y-%m-%d') %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.c_quantity %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.price %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.capital_price %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.discount %>%</Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.discount_amt %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.total_discount_amt %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.discount_type %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.price_after_discount %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.sales_person_bill_number %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.subtotal_price %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.total_price %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.user.username rescue '' %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

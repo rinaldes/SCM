@@ -1,0 +1,19 @@
+<% if params[:all_stores] == 'Store' %>
+  $("#stock").html("<%= j(render 'reports/stock/all_toko') %>");
+  $("#stock_per_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+<% elsif params[:all_stores] == 'Item' %>
+  $("#stock").html("<%= j(render 'reports/stock/all_pb', product_mutation_histories: @product_mutation_histories, stocks: @stocks) %>");
+<% else %>
+  $("#stock").html("<%= j(render 'reports/stock/all_tanggal') %>");
+  <% if params[:transaction_date].present? %>
+    $("#stock_per_item").html("<%= j(render 'reports/stock/all_pb', product_mutation_histories: @product_mutation_per_item, stocks: @stocks_per_item) %>");
+    $(".hide_detail").removeClass('hide');
+  <% else %>
+    $("#stock_per_item").html('');
+    $(".hide_detail").addClass('hide');
+  <% end %>
+<% end %>
+//$("#sale-list").html("<%#= j(render 'sale') %>");
+//paging()

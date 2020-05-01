@@ -1,0 +1,386 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Retur Goods To Supplier</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Retur To Supplier</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @returns_to_supplier, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+              <%= hidden_field_tag :ref_transaction %>
+              <%= hidden_field_tag :controllernya, params[:controller] %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Store</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <% if current_user.branch_id.present? %>
+                          <%= text_field_tag :head_office, (current_user.branch.office_name rescue Office.find(current_user.branch_id).office_name), disabled: true %>
+                          <%= f.hidden_field :head_office_id, value: current_user.branch_id %>
+                        <% else %>
+                          <%= f.select :head_office_id, options_for_select((Warehouse.active_warehouse+Branch.active_store).map{|office|[office.office_name, office.id]}), {include_blank: 'Please Select'},
+                            {class: "form-control ho_id origin_branch_id", onchange: 'udah_keisi();', onclick: 'bersih_data();'} %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Retur No</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :number, class: "input-sm", readonly: true, placeholder: 'Autogenerate' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Retur Date</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :date, value: Time.now.strftime('%d-%m-%Y'), class: "input-sm #{(error_field @returns_to_supplier, :date)}", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Status</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= label_tag "Pending", "Pending", class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Note</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_area :note, class: "input-sm" %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <%= render 'supplier_info' %>
+                    <section>
+                      <label class="col-md-3 label">Reason Code</label>
+                      <label class="col-md-9 custom-input-box">
+                        <%= f.hidden_field :reason_code %>
+                        <input type="radio" id = "rc1" name="rcodee" value="Retur Supplier" onclick="rcode('Retur Supplier');" <%= 'checked' if @returns_to_supplier.reason_code == 'supplier' %>>
+                        Retur Supplier<br>
+                        <input type="radio" id = "rc2" name="rcodee" value="Retur Revisi" onclick="rcode('Retur Revisi');" <%= 'checked' if @returns_to_supplier.reason_code == 'revisi' %>>
+                        Retur Revisi
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Invoice Number <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag :consignment_number, '', class: 'input-sm', placeholder: "Type to Autocomplete", onkeyup: 'udah_keisi();', onchange: 'udah_keisi();' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Receive No <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= f.text_field :receive_no, class: 'input-sm autocompletenya2', placeholder: "Type to Autocomplete" %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Receive Date </label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= text_field_tag "r_date", '', class: "input-sm r_date", readonly: true %>
+                      </label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <%= render "purchase_requests/product_search" %>
+              <fieldset class="col col-md-12">
+                <div class="row">
+                  <table class="table table-condensed table-striped table-bordered table-hover no-margin" id='request'>
+                    <thead>
+                      <tr>
+                        <th>SKU</th>
+                        <th>Barcode</th>
+                        <th>Product Name</th>
+                        <th>HPP</th>
+                        <th>Quantity</th>
+                        <th>Fraction</th>
+                        <th>Disc1 %</th>
+                        <th>Disc2 %</th>
+                        <th>Unit</th>
+                        <th>Total Price</th>
+                        <th class="col-md-1">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody id='list_detail'>
+                      <%#= render partial: "list_detail", locals: {details: @returns_to_supplier.returns_to_supplier_details} if params[:action] == 'edit' %>
+                    </tbody>
+                  </table>
+                </section>
+              </fieldset>
+              <footer>
+                <%= f.submit "Submit", :disable_with => "Saving...", :id => "submit_button", onclick: "disable_button();return(beforeSave());", :class => "btn btn-primary" %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<div id='product_detail'></div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<%= render 'shared/modal_supplier' %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    autocomplete_barcode()
+    autocomplete_receiving()
+    <% if current_user.branch_id.present? %>
+      $('.browser_product').prop("disabled", false);
+    <% end %>
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+    $('.add_list').click(function(){
+      add_list()
+    })
+  });
+
+  function rcode(r_code) {
+    $('#returns_to_supplier_reason_code').val(r_code);
+    $('.browser_product').prop("disabled", false);
+    add_receive_to_return({value: $('#returns_to_supplier_receive_no').val()})
+  }
+
+  function udah_keisi(){
+    if($('#returns_to_supplier_head_office_id').val() != '' && $('.supplier_id').val() != '' && $('#returns_to_supplier_reason_code').val() == 'Retur Supplier' || $('#returns_to_supplier_reason_code').val() == 'Retur Revisi' ){
+      $('.browser_product').prop("disabled", false);
+    }
+  }
+
+  function nomor_ganti(){
+    $.ajax({
+        url: '/returns_to_suppliers/get_last_number',
+        type: 'get',
+        dataType: 'json',
+        data: {
+          office_id: $('#returns_to_supplier_head_office_id').val()
+        },
+        success: function(data){
+          $("#returns_to_supplier_number").val(data.number);
+        }
+    })
+  }
+
+  function bersih_data(){
+    $("#returns_to_supplier_receive_no").val('');
+    $('#consignment_number').val('');
+    $('#r_date').val('');
+    $('#returns_to_supplier_reason_code').val('');
+    $('#supplier_code').val('');
+    $('#supplier_name').val('');
+    $('#alamat').val('');
+    $('#good_list').val('');
+    $('#rc1').attr('checked', false);
+    $('#rc2').attr('checked', false);
+    $('tbody#list_detail tr').remove();
+  }
+
+  function nomorkeisi(){
+    var value=$.trim($("#returns_to_supplier_receive_no").val());
+    if(value.length>0)
+    {
+      $(".barang").hide();
+      $("#returns_to_supplier_receive_no").val($("#returns_to_supplier_receive_no").val());
+
+    }
+    else
+    {
+      $(".barang").show();
+      $("#returns_to_supplier_receive_no").val('');
+    }
+  }
+  function disable_button(){
+    $('input[type="submit"]').prop('disabled', true);
+  }
+  function add_list(product_id){
+    var value=$.trim($("#number").val());
+    var value2=$.trim($("#returns_to_supplier_receive_no").val());
+    if(value.length>0 || value2.length>0)
+    {
+      var date = new Date();
+      $.ajax({
+        url: '/returns_to_suppliers/add_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), barcode: $("#number").val()
+        }
+      })
+      $("#number").val('');
+    }
+    else
+    {
+      alert("Isi Field Receive No atau Barcode terlebih dahulu..");
+    }
+  }
+
+  function add_brand(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_suppliers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, origin_branch: $("#stock_transfer_branch_id").val()
+      }
+    })
+  }
+
+  function get_receiving(){
+    $.ajax({
+      url: '<%= get_receiving_returns_to_suppliers_path %>',
+      type: 'get',
+      data: {
+        name: $("#returns_to_supplier_receive_no").val()
+      }
+    })
+  }
+/*
+  function get_product(){
+    $.ajax({
+      url: '<%#= get_product_returns_to_suppliers_path %>',
+      type: 'get',
+      data: {
+        name: $("#barcode").val()
+      }
+    })
+  }
+*/
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function autocomplete_receiving(){
+    $(".autocompletenya2").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/receivings/autocomplete_receiving_number",
+          dataType: "json",
+          data: {term: request.term, present_receiving: $('#ref_transaction').val(), head_office_id: $('#returns_to_supplier_head_office_id').val(), supplier_id: $('.supplier_id').val()},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        after_autocomplete_receiving(ui.item)
+        $('#consignment_number').val(ui.item.consignment_number)
+        autocomplete_receiving()
+        $('#ref_transaction').val(($('#ref_transaction').val() == '' ? "'" + ui.item.value : $('#ref_transaction').val()+", '"+ui.item.value) + "'")
+      },
+      minLength: 1
+    });
+    $('#consignment_number').autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/receivings/autocomplete_receiving_number",
+          dataType: "json",
+          data: {consignment_number: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        after_autocomplete_receiving(ui.item)
+        $('#returns_to_supplier_receive_no').val(ui.item.number)
+      },
+      minLength: 1
+    });
+  }
+
+  function after_autocomplete_receiving(obj){
+    $('#r_date').val(obj.date)
+    $('#supplier_code').val(obj.supplier_code)
+    $('#supplier_name').val(obj.supplier_name)
+    $('#alamat').val(obj.supplier_address)
+    $('#returns_to_supplier_supplier_id').val(obj.supplier_id)
+    <% if current_user.branch_id.blank? %>
+    $("#returns_to_supplier_head_office_id").val(obj.head_office_id).change();
+    <% end %>
+    add_receive_to_return(obj)
+  }
+
+  function add_receive_to_return(number){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_suppliers/add_product_receive',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number.value, details: number.receiving_details
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('tbody#list_detail tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("tbody#list_detail tr:eq("+ y +") td:eq(0) span:eq(0)").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/returns_to_suppliers",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            response(data)
+          },
+        });
+      }, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+      $('input[type="submit"]').prop('disabled', false);
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+
+  function searchManual(){
+    $.ajax({
+      url: '/purchase_requests/search_product_manual',
+      type: 'get'
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

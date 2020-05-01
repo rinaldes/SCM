@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Code</Data></Cell>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Regional</Data></Cell>
+        <Cell><Data ss:Type="String">Description</Data></Cell>
+      </Row>
+    <% City.all.each do |city| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= city.code %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= city.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= city.regional.name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= city.description %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

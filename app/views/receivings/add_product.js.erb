@@ -1,0 +1,13 @@
+var number = $("#request tbody tr:last-child td:first-child div").html() || 0;
+$('.po_only').remove()
+//$('.choose-product-manual input').val('')
+<% @product.each{|prod| %>
+  if ($("#request tbody tr#<%= prod.id %>").length){
+    alert("Product Already exist on the table");
+    }else{
+    $("#request tbody").append(
+      "<%= j(render 'shared/tr_detail', discount: @discount, product: prod, key: "#{Time.now.to_i}#{prod.id}", show_barcode: params[:transaction_type] == 'product_mutation', show_price: params[:transaction_type] != 'product_mutation', transaction_type: params[:transaction_type]) %>"
+    );
+    $("#request tbody tr:last-child td:first-child div").append(parseInt(number) + 1);
+    }
+<% } %>

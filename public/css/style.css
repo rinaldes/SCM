@@ -1,0 +1,61 @@
+#ribbon {
+    background: #f8ba03 none repeat scroll 0% 0%;
+}
+
+#ribbon .breadcrumb, #ribbon .breadcrumb a {
+    color: #fff !important;
+}
+
+#ribbon .breadcrumb li:last-child, #ribbon .breadcrumb > .active {
+    color: #fff;
+}
+
+aside {
+    background: transparent linear-gradient(to right, #FFBD14 93%, #f8ba03 100%) repeat scroll 0% 0%;
+}
+
+nav ul li a {
+    color: #FFF;
+}
+
+nav ul li a:hover {
+    background: #ed9016;
+}
+
+nav ul li a:focus {
+    color: #fff;
+}
+
+nav ul li a:active {
+    color: #ed9016 !important;
+}
+
+nav ul ul {
+    background: #FFCC48 none repeat scroll 0% 0%;
+}
+
+.minified nav ul li ul {
+	background: #FFCC48;
+}
+
+.minified nav ul ul li a {
+	background: #FFCC48;
+}
+
+.minified nav ul ul li a:hover {
+	background: #ed9016;
+}
+
+.minified nav ul li ul {
+	border: none;
+}
+
+.minifyme :hover {
+	color: #fff;
+}
+
+.jarviswidget-color-blueDark > header {
+    border-color: #DB810C !important;
+    background: #F8BA03 none repeat scroll 0% 0%;
+    color: #FFF;
+}

@@ -1,0 +1,8 @@
+<% if flash[:error].present? || flash.now[:error].present? %>
+  $.SmartMessageBox({
+    title : "Ada yang salah",
+    content : "<%= flash[:error] %>",
+    buttons : '[OK]'
+  });
+<% flash[:error] = nil %>
+<% end %>

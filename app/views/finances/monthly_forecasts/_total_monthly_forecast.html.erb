@@ -1,0 +1,16 @@
+<div class="form-group">
+    <label class="col-md-4 control-label">Total Forecast Qty</label>
+    <div class="col-md-8" id="total-forecast-qty">
+        <%= format_currency(@monthly_forecast.monthly_forecast_details.sum('qty')) %>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">&nbsp;</label>
+    <div class="col-md-10">&nbsp;</div>
+</div>
+<div class="form-group">
+    <label class="col-md-4 control-label">Total Amount</label>
+    <div class="col-md-8" id="total-forecast-amount">
+        <%= format_currency(@monthly_forecast.monthly_forecast_details.sum('amount')) %>
+    </div>
+</div>

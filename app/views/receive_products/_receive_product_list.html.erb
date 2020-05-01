@@ -1,0 +1,20 @@
+<% @receive_products.each_with_index do |receive_product, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= receive_product.created_at.to_s(:db)[0..9].to_time.strftime('%d-%m-%Y') %></span></td>
+          <td class="hidden-phone">
+            <%= receive_product.status == 'Pending' ? (link_to receive_product.code, edit_receive_product_path(receive_product), class: 'blue') : receive_product.code && receive_product.status != 'Pending' ? (link_to receive_product.code, receive_product_path(receive_product), class: 'blue') : receive_product.code %>
+          </td>
+          <td class="hidden-phone"><%= Branch.find_by_id(receive_product.origin_branch_id).head_office_name rescue '' %></td>
+          <% @receiver = User.find_by_id(receive_product.receiver_id) rescue '' %>
+          <td class="hidden-phone"><%= Branch.find_by_id(receive_product.destination_branch_id).head_office_name rescue '' %></td>
+          <td class="hidden-phone"><%= @receiver.first_name + " " + @receiver.last_name rescue '' %></td>
+          <td class="hidden-phone"><%= receive_product.no_surat_jalan rescue '' %></td>
+          <td class="hidden-phone"><%= receive_product.status rescue ''%></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=8>
+    <%= will_paginate @receive_products %>
+  </td>
+</tr>

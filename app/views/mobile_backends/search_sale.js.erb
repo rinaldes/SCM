@@ -1,0 +1,20 @@
+<% if @group_by == "Struk" %>
+  $(".tablenya").html("<%= j(render 'struck') %>");
+  <% unless @type == "report" %>
+    $(".m_report").addClass("hide");
+  <% else %>
+    $(".m_transaction").addClass("hide");
+  <% end %>
+<% elsif @group_by == "Cashier" %>
+  $(".tablenya").html("<%= j(render 'cashier') %>");
+<% elsif @group_by == "Item" %>
+  $(".tablenya").html("<%= j(render 'item') %>");
+<% elsif @group_by == "Member-Price" %>
+  $(".tablenya").html("<%= j(render 'member_price') %>");
+<% elsif @group_by == "Member-Item" %>
+  $(".tablenya").html("<%= j(render 'member_item') %>");
+<% elsif @group_by == "Sales-Summary Item" %>
+  $(".tablenya").html("<%= j(render 'sales_summary_item') %>");
+<% end %>
+
+paging()

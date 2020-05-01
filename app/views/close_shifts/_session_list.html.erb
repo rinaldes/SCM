@@ -1,0 +1,25 @@
+<% @sessions.each_with_index do |session, i| %>
+  <tr>
+    <td><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><%= session.office_name %></td>
+    <td><%= session.session %></td>
+    <td><%= session.user_name %></td>
+    <td><%= session.start_time.in_time_zone(ActiveSupport::TimeZone.new("Jakarta")).strftime("%d/%m/%Y %H:%M:%S") %></td>
+    <td><%= session.end_time.in_time_zone(ActiveSupport::TimeZone.new("Jakarta")).strftime("%d/%m/%Y %H:%M:%S") rescue '' %></td>
+    <td style="text-align:center">
+      <%= link_to "End Shift", close_shift_path(session), class: 'btn btn-primary' if session.end_time.blank? %>
+      <%= link_to "Show Detail", close_shift_path(session), class: 'btn btn-primary' if session.end_time.present? %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=7>
+    <% if @sessions.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@sessions, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

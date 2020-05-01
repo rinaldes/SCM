@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s01" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+    <Style ss:ID="columnheaders">
+      <Font ss:Bold="1"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+    <Column ss:Span="2"/>
+      <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">RECEIVE DATE</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @receiving.date %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">RECEIVE NO.</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @receiving.number %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">CONSIGMENT NO.</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @receiving.consigment_number %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">PO NO.</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @purchase_order.number rescue '-' %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">PO DATE</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @purchase_order.date rescue '-' %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">PO NOTE</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @purchase_order.note rescue '-' %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">SUPL. CODE</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @supplier.code %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">SUPPLIER</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @supplier.name.upcase %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell ss:StyleID="s01"><Data ss:Type="String">ALAMAT</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @supplier.address.upcase rescue '' %></Data></Cell>
+        </Row>
+        <Row></Row><Row></Row><Row></Row>
+        <Row>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">No</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Article</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Barcode</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Description</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Price Cost</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Disc1 %</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Disc2 %</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Quantity</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">PPN</Data></Cell>
+          <Cell ss:StyleID="columnheaders"><Data ss:Type="String">Total Price</Data></Cell>
+        </Row>
+        <% total = 0 %>
+        <% total_qty = 0 %>
+        <% grand_total, total_ppn = 0, 0 %>
+        <% @receiving.receiving_details.where("quantity>0").each_with_index do |prd, i| %>
+          <% product = prd.product %>
+          <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*prd.fraction %>
+          <% hpp_akhir = prd.hpp*prd.fraction-hpp_disc_amt %>
+          <% grand_total = grand_total + total %>
+          <% ppn = hpp_akhir*prd.quantity*0.1 %>
+          <Row>
+            <Cell><Data ss:Type="String"><%= i+1 %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= product.article rescue '' %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= product.barcode rescue '' %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= product.description rescue '' %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= prd.hpp %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= PurchasePrice.get_disc1_percent(product.id) %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= PurchasePrice.get_disc2_percent(product.id) %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= prd.quantity %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= product.flag_pajak == "BKP" ? (hpp_akhir*prd.quantity*0.1) : 0 %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= format_currency prd.quantity*hpp_akhir rescue '' %></Data></Cell>
+            <% total += prd.quantity*hpp_akhir %>
+            <% total_qty += prd.quantity %>
+            <% grand_total += total %>
+            <% total_ppn += ppn if product.flag_pajak == 'BKP' && @receiving.supplier.status_pkp %>
+          </Row>
+        <% end %>
+        <Row>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String">Total</Data></Cell>
+          <Cell><Data ss:Type="Number"><%= total_qty %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= total_ppn %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= total + total_ppn %></Data></Cell>
+        </Row>
+    </Table>
+  </Worksheet>
+</Workbook>

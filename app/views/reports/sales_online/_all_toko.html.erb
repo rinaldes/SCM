@@ -1,0 +1,180 @@
+<% sales_counts = 0 %>
+<% retur_counts = 0 %>
+<% apc = 0 %>
+  <thead>
+    <tr>
+      <th>Store Code
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'kode_toko-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'kode_toko-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Store Name
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Sales Price
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_price-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_price-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Sales Qty
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_quantity-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_quantity-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Retur sales
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'retur-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'retur-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>PPN
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_ppn-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_ppn-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Sales Net
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sales_net-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sales_net-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>HPP
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'capital_price-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'capital_price-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>CLAIM
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_claim-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_claim-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Margin Rp
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_rp-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_rp-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Margin %
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_persen-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_persen-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>
+        Struk
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sales_count-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sales_count-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>APC
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'apc-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'apc-asc', class: 'sorting' %>
+        </span>
+      </th>
+    </tr>
+      <tr>
+        <th class="hasinput"><%= text_field_tag :kode_toko, params[:kode_toko], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+        </th>
+        <th class="hasinput"><%= text_field_tag :office_name, params[:office_name], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+        </th>
+        <th colspan="11"></th>
+      </tr>
+  </thead>
+  <tbody>
+    <% if true %>
+      <% @sales.each{|sale| %>
+        <% conditions = [] %>
+        <% conditions << "offices.code='#{params[:store_code]}'" if params[:store_code].present? %>
+        <% conditions << "to_char(transaction_date, 'YYYY-MM-DD')='#{params[:transaction_date]}'" if params[:transaction_date].present? %>
+        <% conditions << "transaction_date>='#{params[:start_date]} 00:00:00'" if params[:start_date].present? %>
+        <% conditions << "transaction_date<='#{params[:end_date]} 23:59:59'" if params[:end_date].present? %>
+        <% sales_count = Sale.where("offices.code='#{sale.kode_toko}'").where(conditions.join(' AND ')).joins(:store).count %>
+        <% retur = SalesDetail.where("offices.code='#{sale.kode_toko}' AND quantity<0").joins(sale: :store).map(&:quantity).sum*-1 %>
+        <% sales_retur = SalesDetail.where("quantity<0").joins(sale: :store) %>
+        <% hpp = sale.capital_price-sales_retur.map(&:capital_price).sum %>
+        <% margin_rp = sale.total_price.to_f-sale.total_ppn.to_f-sale.capital_price.to_f %>
+        <% net_sales = sale.total_price.to_f-sale.total_ppn.to_f %>
+        <tr>
+          <td><%= sale.kode_toko %></td>
+          <td><%= sale.office_name %></td>
+          <td class='align-right'><%= format_currency sale.total_price rescue 0 %></td>
+          <td class='align-right'><%= format_currency sale.total_quantity rescue 0 %></td>
+          <td class='align-right'><%= format_currency retur rescue 0 %></td>
+          <td class='align-right'><%= format_currency sale.total_ppn %></td>
+          <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn rescue 0 %></td>
+          <td class='align-right'><%= format_currency sale.capital_price rescue 0 %></td>
+          <td class='align-right'><%= format_currency sale.total_claim rescue 0 %></td>
+          <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn-sale.capital_price rescue 0 %></td>
+          <td class='align-right'><%= hpp == 0 ? 0 : (margin_rp.to_f/net_sales.to_f*100).round(2) %>%</td>
+          <td class='align-right'><%= sales_count rescue 0 %></td>
+          <td class='align-right'><%= format_currency (sale.total_price-sale.total_ppn)/sales_count rescue 0 %></td>
+        </tr>
+        <% sales_counts += sales_count %>
+        <% apc += (sale.total_price.to_f-sale.total_ppn.to_f)/sales_count %>
+        <% retur_counts += retur %>
+      <% } %>
+      <tr>
+        <th colspan=2>Total</th>
+        <th class='align-right'><%= format_currency @sales.map(&:total_price).compact.sum rescue 0 %></th>
+        <th class='align-right'><%= format_currency @sales.map(&:total_quantity).sum rescue 0 %></th>
+        <th class='align-right'><%= format_currency retur_counts rescue 0 %></th>
+        <th class='align-right'><%= format_currency @sales.map(&:total_ppn).sum rescue 0 %></th>
+        <th class='align-right'><%= format_currency @sales.map{|sale|sale.total_price-sale.total_ppn}.sum rescue 0 %></th>
+        <th class='align-right'><%= format_currency @sales.map(&:capital_price).sum rescue 0 %></th>
+        <th class='align-right'><%= format_currency @sales.map(&:total_claim).sum rescue 0 %></th>
+        <th class='align-right'><%= format_currency @sales.map{|sale|sale.total_price-sale.total_ppn-sale.capital_price}.sum rescue 0%></th>
+        <th class='align-right'><%= (@sales.map{|sale|sale.total_price-sale.total_ppn-sale.capital_price}.sum/@sales.map{|sale|sale.total_price-sale.total_ppn}.sum.to_f*100).round(2) rescue 0 %>%</th>
+        <th class='align-right'><%= format_currency sales_counts rescue 0 %></th>
+        <th class='align-right'><%= format_currency apc rescue 0 %></th>
+      </tr>
+    <% else %>
+      <% @sales.each{|sale| %>
+        <tr>
+          <td><%= sale.kode_toko %></td>
+          <td><%= sale.office_name %></td>
+          <td class='align-right'><%= format_currency sale.total_price %></td>
+          <td class='align-right'><%= format_currency 0 %></td>
+          <td class='align-right'><%= format_currency sale.total_ppn %></td>
+          <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn %></td>
+          <td class='align-right'><%= format_currency Sale.find(sale.id).sales_details.map(&:capital_price).sum rescue 0 %></td>
+          <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn-Sale.find(sale.id).sales_details.map(&:capital_price).sum rescue 0 %></td>
+          <td><%= sale.code rescue ''%></td>
+          <td class='align-right'><%= format_currency sale.total_price-sale.total_ppn %></td>
+          <th class='align-right'><%= sales_counts %></th>
+          <th class='align-right'><%= format_currency apc %></th>
+        </tr>
+      <% } %>
+    <% end %>
+  </tbody>
+<script type="text/javascript">
+  function reload(){
+    $.ajax({
+      url: "/reports/sale_item_reports?&dari=store"+
+            // "&store_code="+($('#store_code').length == 1 ? $('#store_code').val() : '')+
+            "&kode_toko="+($('#kode_toko').length == 1 ? $('#kode_toko').val() : '')+
+            "&office_name="+($('#office_name').length == 1 ? $('#office_name').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

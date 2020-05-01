@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Inventory</li><li>Stock Opname</li><li><%= @stock_opname.opname_number %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-StockOpname">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Stock Opname <%= @stock_opname.opname_number %></h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding" id='so_form'>
+            <%= render partial: 'so_detail', locals: {stock_opname: @stock_opname} %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

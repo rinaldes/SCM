@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Code</Data></Cell>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Address</Data></Cell>
+        <Cell><Data ss:Type="String">City</Data></Cell>
+        <Cell><Data ss:Type="String">Return Address</Data></Cell>
+        <Cell><Data ss:Type="String">No Telephone</Data></Cell>
+        <Cell><Data ss:Type="String">No Fax</Data></Cell>
+        <Cell><Data ss:Type="String">Due Date</Data></Cell>
+        <Cell><Data ss:Type="String">Supplier Type</Data></Cell>
+        <Cell><Data ss:Type="String">Contact Person</Data></Cell>
+        <Cell><Data ss:Type="String">Phone Number</Data></Cell>
+        <Cell><Data ss:Type="String">Pin BB</Data></Cell>
+        <Cell><Data ss:Type="String">Email</Data></Cell>
+        <Cell><Data ss:Type="String">Bank Account Name</Data></Cell>
+        <Cell><Data ss:Type="String">Account Number</Data></Cell>
+        <Cell><Data ss:Type="String">Bank</Data></Cell>
+        <Cell><Data ss:Type="String">Branch</Data></Cell>
+        <Cell><Data ss:Type="String">City</Data></Cell>
+        <Cell><Data ss:Type="String">Department</Data></Cell>
+      </Row>
+    <% @sup_list.each do |supplier| %>
+      <% phone = supplier.phone.first == '0' ? "'#{supplier.phone}" : supplier.phone %>
+      <% first_cp = supplier.contact_people.first %>
+      <%  first_ba = supplier.bank_accounts.first %>
+      <% if first_cp.present? %>
+      <%   cp_phone = first_cp.phone.to_s.first == '0' ? "'#{first_cp.phone}" : first_cp.phone %>
+      <% end %>
+
+      <Row>
+        <Cell><Data ss:Type="String"><%= supplier.code %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.name.upcase %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.address %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.city %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.send_address %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.phone %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.fax %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.long_term %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= supplier.suptype %></Data></Cell>
+
+        <Cell><Data ss:Type="String"><%= first_cp.name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= cp_phone rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= first_cp.pinbb rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= first_cp.email rescue '' %></Data></Cell>
+
+        <Cell><Data ss:Type="String"><%= first_ba.name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= first_ba.account_number rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= first_ba.bank_name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= first_ba.branch rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= first_ba.city rescue '' %></Data></Cell>
+
+        <Cell><Data ss:Type="String"><%= supplier.departments.first.name rescue '' %></Data></Cell>
+      </Row>
+      <% 1.upto([supplier.bank_accounts.length, supplier.contact_people.length, supplier.departments.length].max-1) do |i| %>
+        <%  cp = supplier.contact_people[i] %>
+        <%  ba = supplier.bank_accounts[i] %>
+        <%  sd = supplier.departments[i] %>
+        <%  if cp.present?
+              cp_phone = cp.phone.to_s.first == '0' ? "'#{cp.phone}" : cp.phone
+            end
+        %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= '' %></Data></Cell>
+
+          <Cell><Data ss:Type="String"><%= cp.name rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= cp_phone rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= cp.pinbb rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= cp.email rescue '' %></Data></Cell>
+
+          <Cell><Data ss:Type="String"><%= ba.name rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= ba.account_number rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= ba.bank_name rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= ba.branch rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= ba.city rescue '' %></Data></Cell>
+
+          <Cell><Data ss:Type="String"><%= sd.name rescue '' %></Data></Cell>
+        </Row>
+      <% end %>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

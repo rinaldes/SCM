@@ -1,0 +1,28 @@
+<% @histories.each_with_index do |history, i| %>
+  <tr>
+    <% if history.mutation_type == 'Sales' %>
+      <% history_date = history.created_at %>
+    <% else %>
+      <% history_date = history.created_at + 7.hours %>
+    <% end %>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+    <td class="hidden-phone"><%= history_date.strftime('%Y-%m-%d %H:%M:%S') %></td>
+    <td class="hidden-phone punya_toko"><%= history.office_name %></td>
+    <td class="hidden-phone"><%= history.mutation_type %></td>
+    <td class="hidden-phone"><%= history.ref_code rescue '-' %></td>
+    <td class="align-right"><%= history.old_quantity %></td>
+    <td class="align-right"><%= history.moved_quantity %></td>
+    <td class="align-right"><%= history.new_quantity %></td>
+  </tr>
+<% end %>
+  <tr>
+    <td colspan=8>
+    <% if @histories.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@histories, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

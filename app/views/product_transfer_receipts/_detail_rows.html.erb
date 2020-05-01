@@ -1,0 +1,17 @@
+<% if details.present? %>
+  <tr id="no-data-row" class="<%= details.present? ? 'hide' : nil %>">
+    <td colspan="7" class="centered-text">No data exist</td>
+  </tr>
+  <% details.each do |d| %>
+    <% product_size = d.product_size %>
+    <% product = product_size.product %>
+    <tr class="transfered_quantity-<%= product.barcode %>" class="row-distribution">
+      <td><%= product.barcode %></td>
+      <td><%= product.brand.name rescue '-' %></td>
+      <td><%= product.article rescue '-' %></td>
+      <td><%= product.colour.name rescue '-' %></td>
+      <td><%= fix_zero_float product_size.size_detail.size_number rescue '-' %></td>
+      <td><%= d.quantity rescue '-' %></td>
+    </tr>
+  <% end %>
+<% end %>

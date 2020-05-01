@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Finances</li><li>AP Invoice</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div id='notification'></div>
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-promotion">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>AP Invoice</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <form class="smart-form">
+              <header>General Informations</header>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Number</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="label"><%= @ap_invoice.number %></label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Supplier</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="label"><%= @ap_invoice.supplier_id %></label>
+                  </section>
+                </div>
+              </fieldset>
+              <header>AP Invoice Details</header>
+              <fieldset class="col col-md-12" id="fs_pi">
+                <div class="row">
+                  <section class="col col-md-12">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin" id="pi">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>GR Number</th>
+                          <th>GR Date</th>
+                          <th>Store</th>
+                          <th>Tax Code</th>
+                          <th>Tax Number</th>
+                          <th>Tax Date</th>
+                          <th>Gross</th>
+                          <th>VAT</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @ap_invoice.ap_invoice_details.each do |apd| %>
+                        <tr>
+                          <td></td>
+                          <td><%= apd.receiving.number %></td>
+                          <td><%= apd.receiving.date %></td>
+                          <td><%= apd.receiving.head_office.office_name %></td>
+                          <td><%= apd.tax_code %></td>
+                          <td><%= apd.tax_number %></td>
+                          <td><%= apd.tax_date %></td>
+                          <td><%= apd.gross %></td>
+                          <td><%= apd.vat %></td>
+                          <td><%= apd.amount %></td>
+                        </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

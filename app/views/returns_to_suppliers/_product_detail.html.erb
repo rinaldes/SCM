@@ -1,0 +1,4 @@
+<% @receiving.receiving_details.each do |prd| %>
+  <% product = prd.product %>
+  <%= render partial: 'modal_product', locals: {product: product, key: "#{key}#{product.id}"} %>
+<% end %>

@@ -1,0 +1,106 @@
+<style type="text/css">
+  .label{
+    color: #151313;
+  }
+</style>
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Size Detail</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E">
+        <div class="row">
+          <section class="col col-md-4">
+            <section>
+              <label class="col-md-2 label">CODE</label>
+              <label class="col-md-10 input custom-input-box">
+                <%= text_field_tag :barcode, product.barcode , :class => "input-sm", disabled: true %>
+              </label>
+            </section>
+            <section>
+              <label class="col-md-2 label">BRAND </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :merk, product.brand.name, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">ARTICLE </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :article, product.article, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">COLOR </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :warna, product.full_colour.join(' / '), :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">DEPT </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :departement, product.m_class.name, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">M-CLASS </label>
+              <label class="col-md-10 input custom-input-box"><%= text_field_tag :m_class, product.m_class.department.name, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-2 label">DISC % </label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc1, product.margin_percent1, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc2, product.margin_percent2, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc3, product.margin_percent3, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc4, product.margin_percent4, :class => "input-sm", disabled: true %></label>
+              <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc5, product.margin_rp , :class => "input-sm", disabled: true %></label>
+            </section>
+          </section>
+          <section class="col col-md-4">
+            <section>
+              <label class="col-md-3 label">COST OF GOODS</label>
+              <label class="col-md-9 input custom-input-box"><%= text_field_tag :harga_pokok, product.cost_of_products, class: "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-3 label">SELLING PRICE </label>
+              <label class="col-md-9 input custom-input-box"><%= text_field_tag :harga_jual, product.purchase_price, :class => "input-sm", disabled: true %></label>
+            </section>
+            <section>
+              <label class="col-md-3 label">PURCHASE PRICE </label>
+              <label class="col-md-9 input custom-input-box"><%= text_field_tag :harga_beli, product.selling_price, :class => "input-sm", disabled: true %></label>
+            </section>
+          <section>
+            <label class="col-md-3 label">STATUS 2 </label>
+            <label class="col-md-9 input custom-input-box"><%= text_field_tag :status2, product.status2, :class => "input-sm", disabled: true %></label>
+          </section>
+          <section>
+            <label class="col-md-3 label">STATUS 3 </label>
+            <label class="col-md-9 input custom-input-box"><%= text_field_tag :status3, product.status3, :class => "input-sm", disabled: true %></label>
+          </section>
+          <section>
+            <label class="col-md-3 label">STATUS 4 </label>
+            <label class="col-md-9 input custom-input-box"><%= text_field_tag :status4, product.status4, :class => "input-sm", disabled: true %></label>
+          </section>
+        </section>
+        <section class="col col-md-4">
+          <%= image_tag product.image, width: '250px', height: '250px' %>
+        </section>
+        <section class="col col-md-12">
+          <table class="table table-striped table-bordered" id="table_size" width='100%'>
+              <tr>
+                <th>Size</th>
+                <% @receiving_details.each_with_index do |receiving_detail, i| %>
+                  <td><%= receiving_detail[0] rescue '-' %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th>Received Quantity</th>
+                <% @receiving_details.each_with_index do |receiving_detail, i| %>
+                  <%= hidden_field_tag "receiving_detail[#{receipt_detail.id}]" %>
+                  <td><%= text_field_tag "receiving[receiving_details_attributes][#{key}][inspected_quantity]", (receiving_detail[1] rescue '-'), style: 'width: 35px' %></td>
+                <% end %>
+              </tr>
+          </table>
+        </section>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+        Cancel
+      </button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

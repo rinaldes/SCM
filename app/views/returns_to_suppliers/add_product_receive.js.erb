@@ -1,0 +1,8 @@
+<% if @receiving.present? %>
+  if($('#returns_to_supplier_reason_code').val() == 'Retur Supplier')
+    $('#list_detail').html("<%= j(render 'list_detail', key: params[:key], details: @receiving.receiving_details, r_type: 'rs') %>")
+  else
+    $('#list_detail').html("<%= j(render 'list_detail', key: params[:key], details: @receiving.receiving_details, r_type: 'rr') %>")
+  $('#product_detail').append("<%= j(render 'product_detail', key: params[:key]) %>")
+  clone_details()
+<% end %>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="">
+    <information>
+        <title>Epson LX-310 Printer Job</title>
+        <vendor>Me</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.7+"
+            href="http://java.sun.com/products/autodl/j2se"/>
+        <jar href="/applet/epson.jar" main="true" />
+
+    </resources>
+    <applet-desc
+         name="Epson LX-310 Printer Job"
+         main-class="epson.Epson"
+         width="1"
+         height="1">
+     </applet-desc>
+     <security>
+       <all-permissions/>
+    </security>
+     <update check="background"/>
+</jnlp>

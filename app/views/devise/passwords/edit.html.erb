@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row login-container">
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+      <div class="col-md-5 col-md-offset-1">
+        <h2>Change your <strong class="text-info">password</strong></h2>
+        <%= devise_error_messages! %>
+      </div>
+      
+      <div class="col-md-5 ">
+        <br>
+        <div class="row">
+          <div class="form-group col-md-10">
+            <div class="controls">
+              <div class="input-with-icon right">                                       
+                <%= f.password_field :password, autofocus: true, class: "form-control", placeholder: "Password", autocomplete: "off" %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-10">
+            <div class="controls">
+              <div class="input-with-icon right">                                       
+                <%= f.password_field :password_confirmation, autofocus: true, class: "form-control", placeholder: "Password confirmation", autocomplete: "off" %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group  col-md-10">
+            <div class="checkbox checkbox check-success pull-right">
+              <%= link_to "Log in", new_session_path(resource_name) %>&nbsp;&nbsp;
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-10">
+            <%= button_tag "Change my password", class: "btn btn-primary btn-cons pull-right", type: "submit" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

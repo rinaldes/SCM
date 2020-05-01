@@ -1,0 +1,413 @@
+<%= csrf_meta_tags %>
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon">
+  <!-- RIBBON -->
+  <ol class="breadcrumb">
+    <!-- breadcrumb -->
+    <li>Master Data</li>
+    <li>Goods Transfer</li>
+    <li><%= label %></li>
+  </ol>
+  <!-- end breadcrumb -->
+</div>
+<!-- END RIBBON -->
+<div id="content">
+  <!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2><%= label %>
+            Goods Transfer</h2>
+        </header>
+        <div>
+          <!-- widget div-->
+          <div class="widget-body no-padding">
+            <!-- widget content -->
+            <%= form_for @good_transfer, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+            <%= f.hidden_field :no_surat_jalan, value: "SJ/#{Time.now.strftime('%m%y')}-#{'%06d' % ((@last_goods_transfer.id rescue 0)+1)}", class: "input-sm" %>
+            <%= f.hidden_field :receiver_id, value: current_user.id %>
+            <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+            <fieldset>
+              <div class="row">
+                <section class="col col-md-6">
+                  <section>
+                    <label class="col-md-4 label">Date</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= f.text_field :mutation_date, value: Time.now.strftime('%d-%m-%Y'), class: "input-sm #{(error_field @good_transfer, :transfer_date)}", disabled: true %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4 label">Goods Transfer No.</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= f.text_field :code, class: "input-sm", readonly: true %>
+                    </label>
+                  </section>
+                </section>
+                <!-- col-md-6 -->
+                <section class="col col-md-6">
+                  <section>
+                    <label class="col-md-3 label">From
+                      <span class='important'>*</span>
+                    </label>
+                    <label class="col-md-9 input custom-input-box">
+                      <%= (current_user.branch.office_name rescue nil) %>
+                      <%= f.collection_select(:origin_warehouse_id, (current_user.branch_id.present? ? @offices : Office.active_store.where("type IN ('Warehouse', 'Branch')")), :id, :office_name, {prompt: @offices.length > 1}, {class: "ho_id form-control origin_branch_id #{'hide' if
+                      @offices.length == 1}", onchange: "nomor_ganti();"}) %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-3 label">Destination
+                      <span class='important'>*</span>
+                    </label>
+                    <label class="col-md-9 input custom-input-box">
+                      <%= f.collection_select(:destination_warehouse_id, Office.active_store.where("type IN ('Warehouse', 'Branch')"), :id, :office_name, {prompt: true},
+                          {class: "form-control destination_warehouse_id", onchange: "nomor_ganti();" }) %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-3 label">
+                      <span class='important'></span>
+                    </label>
+                    <label class="col-md-9 input custom-input-box">
+                      <button id="download-template" class="btn btn-primary btn-sm disabled" disabled="disabled" onclick="return download_template();">Download Template</button>
+                    </label>
+                  </section>
+                </section>
+                <!-- col-md-6 -->
+              </div>
+              <!-- row -->
+              <div class='row hide'>
+                <section class="col col-md-12">
+                  <section class="col col-md-4">
+                    <label class="col-md-3 label">IR NO</label>
+                    <label class="col-md-6 input custom-input-box">
+
+                      <%= text_field_tag :inventory_request_number, (@request.number rescue ''), class: 'input-sm' %>
+                    </label>
+                    <label class="col-md-3 input custom-input-box">
+                      <button type="button" class="btn btn-primary btn-sm" onclick="searchIR()" style="margin-left: 10px;">Browse IR</button>
+                    </label>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="add_ir_to_ti($('#inventory_request_number').val())">Add IR to TI</button>
+                  </section>
+                  <section class="col col-md-4">
+                    <label class="col-md-3 label">IR DATE
+                    </label>
+                    <label class="col-md-9 input custom-input-box"><%= text_field_tag :ir_date, "", :class => "input-sm", disabled: true %></label>
+                  </section>
+                  <section class="col col-md-4">
+                    <label class="col-md-3 label">IR NOTE
+                    </label>
+                    <label class="col-md-9 textarea custom-input-box"><%= text_area_tag :ir_note, "", :class => "input-sm", disabled: true %></label>
+                  </section>
+                </section>
+              </div>
+            </fieldset>
+            <!-- tambah supplier -->
+            <%= render "inventory_requests/product_search" %>
+            <fieldset class="col col-md-12">
+              <!-- brand person -->
+              <div class="row">
+                <section class="col col-md-12">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                    <thead>
+                      <tr>
+                        <th>ITEM CODE</th>
+                        <th>BARCODE</th>
+                        <th>NAME</th>
+                        <th>QTY</th>
+                        <th>FRACTION</th>
+                        <th>DISC1 %</th>
+                        <th>DISC2 %</th>
+                        <th>UNIT</th>
+                        <th class="col-md-1">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if params[:action] == 'edit' %>
+                      <%= render 'list_detail' %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+              <!-- row -->
+            </fieldset>
+            <footer>
+              <button type="submit" id="button_submit" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing" onclick="return(beforeSaveTI());">Submit</button>
+              <!-- <button type="button" class="btn btn-primary" onclick="disable_button();">Submit</button> -->
+              <button type="button" class="btn btn-default" onclick="window.history.back();">
+                Back
+              </button>
+            </footer>
+            <div id='product_detail_tobe_submitted' style='display: none'></div>
+            <!-- end widget div -->
+            <% end %>
+          </div>
+          <!-- end widget content -->
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- END COL -->
+  </div>
+  <!-- end widget div -->
+</div>
+<!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="irModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.add_product').attr('disabled', $('#inventory_request_number').val() != '')
+    <% if session[:barcode].present? %>
+      changeBarcode('<%= session[:barcode] %>')
+    <% end %>
+    $("#number").autocomplete({
+      search: function () {},
+      source: function (request, response) {
+        $.ajax({
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {
+            term: request.term
+          },
+          success: function (data) {
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+
+    $("#inventory_request_number").autocomplete({
+      search: function () {},
+      source: function (request, response) {
+        $.ajax({
+          url: "/inventory_request/autocomplete_inventory_request",
+          dataType: "json",
+          data: {
+            term: request.term,
+            supplier_id: $('.supplier_id').val(),
+            status: "'Waiting Approval'"
+          },
+          success: function (data) {
+            response(data)
+          }
+        });
+      },
+
+      select: function (event, ui) {
+        $('#number').val(ui.item.number)
+        $('#date').val(ui.item.date)
+        $('#status').val(ui.item.status)
+        // $('#supplier_name').val(ui.item.supplier_name) $('#supplier_code').val(ui.item.supplier_code) $('#po_note').val(ui.item.po_note) $('#receiving_purchase_order_id').val(ui.item.id)
+        $('.add_product, .browser_product').attr('disabled', $('#inventory_request_number').val() != '')
+        // add_po_to_receive(ui.item.value)
+      },
+      minLength: 1
+    });
+  });
+
+function searchIR(){
+  $.ajax({
+    dataType: "script",
+    url: '/inventory_requests/autocomplete_inventory_request?supplier_code='+($('.supplier_id').length == 1 ? $('.supplier_id').val() : '')+"&status='WAITING APPROVAL'",
+    type: 'get'
+  })
+}
+function add_ir_to_ti(number){
+  var date = new Date();
+  $.ajax({
+    url: '/purchase_orders/add_product_pr',
+    data: {
+      key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+    }
+  })
+}
+  $(document).ready(function() {
+    $("#good_transfer_destination_warehouse_id").autocomplete({
+      source: function (request, response) {
+        $.ajax({
+          url: "/branches/autocomplete_branch_office_name",
+          dataType: "json",
+          data: {
+            term: request.term
+          },
+          success: function (data) {
+            response(data),
+            nomor_ganti()
+          }
+        });
+      }
+    });
+    clone_details()
+    autocomplete_barcode()
+    $('.add_brand').click(function () {
+      add_brand()
+    })
+    set_barcode()
+    autocomplete_supplier_name()
+
+  });
+
+  function set_barcode() {
+    if ($('#good_transfer_origin_branch_id').val() == '')
+      $('#barcode').attr('disabled', 'disabled')
+    else
+      $('#barcode').removeAttr('disabled')
+
+  }
+  function add_brand(product_id, good_transfer_detail_id) {
+    var date = new Date();
+    $.ajax({
+      url: '/good_transfers/add_brand',
+      data: {
+        key: date.getDay() + "" + date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(),
+        product_id: product_id,
+        warehouse_id: $('#good_transfer_origin_branch_id').val(),
+        id: '<%= @good_transfer.id %>'
+      }
+    })
+  }
+
+  function merk() {}
+
+  // $('#button_submit').on('click', function() {
+  //     var $this = $(this);
+  //   $this.button('loading');
+  //     setTimeout(function() {
+  //        $this.button('reset');
+  //    }, 4000);
+  //    return false;
+  // });
+
+  function beforeSaveTI() {
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if (tot != 0) {
+      for (var y = 0; y < tot; y += 1) {
+        good_id.push($("#request tbody tr:eq(" + y + ") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      <% if params[:id].blank? %>
+        $('#button_submit').button('loading');
+        setTimeout(function () {
+          $.ajax({
+            url: "/good_transfers",
+            dataType: "script",
+            method: 'POST',
+            data: $("form").serialize(),
+            success: function (data) {
+              response(data)
+            }
+          });
+        }, 1000);
+      <% else %>
+        $('#button_submit').button('loading');
+        setTimeout(function () {
+          $.ajax({
+            url: "/good_transfers/<%= params[:id] %>",
+            dataType: "script",
+            method: 'POST',
+            data: $("form").serialize(),
+            success: function (data) {
+              response(data)
+            }
+          });
+        }, 1000);
+      <% end %>
+      return false;
+    } else {
+      alert('Insert Data First!')
+      $('#button_submit').button('reset');
+      return false;
+    }
+  }
+
+function deleteRow(event) {
+  $(event.target).parent().parent().parent().remove();
+}
+
+function download_template() {
+  window.location = "/good_transfers/get_template?from=" + $('#good_transfer_origin_warehouse_id').val();
+  return false;
+}
+
+function nomor_ganti() {
+  if ($('#good_transfer_origin_warehouse_id').val() != '') {
+    $('#download-template').removeClass('disabled');
+    $('#download-template').removeAttr('disabled');
+    if ($('#good_transfer_destination_warehouse_id').val() != '') {
+      $('.browser_product').removeAttr('disabled')
+      /*      $.ajax({
+            url: '/good_transfers/get_last_number',
+            type: 'get',
+            dataType: 'json',
+            data: {
+              supplier_id: $('.supplier_id').val()
+            },
+            success: function(data){
+              //M/Name Branch atau Name HO asal -Name Branch atau Name HO penerima/No Supplier/Tahun-Bulan-Hari/No urut per supplier (terus berlanjut hingga 1 tahun)
+              $("#good_transfer_code").val("M/"+$('#good_transfer_origin_warehouse_id').get(0).options[$('#good_transfer_origin_warehouse_id').get(0).selectedIndex].innerHTML+" - "+$('#good_transfer_destination_warehouse_id').get(0).options[$('#good_transfer_destination_warehouse_id').get(0).selectedIndex].innerHTML+"/"+$("#supplier_code").val()+"/"+$('#good_transfer_mutation_date').val()+"/"+data.number);
+            }
+        })*/
+    }
+  } else {
+    $('#download-template').addClass('disabled');
+    $('#download-template').attr('disabled', 'disabled');
+  }
+}
+
+function importProductFile() {
+  $(".import-product-from-file").show();
+  $(".choose-product-manual").hide();
+  data_terisi_semua()
+}
+
+function chooseProductManual() {
+  $(".import-product-from-file").hide();
+  $(".choose-product-manual").show();
+  data_terisi_semua()
+}
+
+$("#import_excel").on("change", function (event) {
+  var files = event.target.files;
+  var data = new FormData();
+  $.each(files, function (key, value) {
+    data.append(key, value);
+  });
+
+  $("#import_excel").attr("disabled", "disabled");
+  $("#loading-info").show();
+
+  $.ajax({
+    url: "import",
+    type: "POST",
+    data: data,
+    cache: false,
+    processData: false, // Don't process the files
+    contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+    },
+    success: function (data, textStatus, jqXHR) {
+      $("#import_excel").removeAttr("disabled");
+      $("#loading-info").hide();
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log("ERRORS: " + textStatus);
+    }
+  });
+
+  $(this).val("");
+});
+</script>
+<script src="/js/jquery.min.js"></script>

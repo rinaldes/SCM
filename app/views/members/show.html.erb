@@ -1,0 +1,100 @@
+<script src="/js/jquery-1.10.2.js"></script>
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Member</li><li><%= @member.name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @member.name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @member, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                      <section>
+                        <label class="col-md-3 label">Code</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.code rescue '' %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-3 label">ID Card</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.card_number rescue '' %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-3 label">Name</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.name rescue '' %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-3 label">Birthday</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.birthday.strftime("%d/%m/%Y") rescue '' %></label>
+                      </section>
+                    </section>
+                    <section class="col col-md-6">
+                      <section>
+                        <label class="col-md-3 label">Address</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.address rescue ''%></label>
+                      </section><br>
+                      <section>
+                        <label class="col-md-3 label">HP</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.hp rescue '' %></label>
+                      </section><br>
+                      <section>
+                        <label class="col-md-3 label">Email</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.email rescue '' %></label>
+                      </section><br>
+                      <section>
+                        <label class="col-md-3 label">Gender</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.gender rescue '' %></label>
+                      </section>
+                      <section>
+                        <label class="col-md-3 label">Level</label>
+                        <label class="col-md-9 input custom-input-box"><%= @member.member_level.description rescue '-' %></label>
+                      </section>
+                    </section> <!-- col-md-6 -->
+                  </div> <!-- row -->
+              </fieldset>
+              <div id="sale-history">
+              </div>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div>
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#sale-history').append('<header><h2>Sale History</h2></header><table class="table table-striped table-bordered" width="100%" id="sales">');
+    reload();
+  })
+
+  function reload(){
+    $.ajax({
+      url: "/reports/sale_item_reports?&dari=member&member_id="+<%= params[:id] %>+
+            "&m_classes_name="+($('#name').length == 1 ? $('#name').val() : '')+
+            "&total_price="+($('#total_price').length == 1 ? $('#total_price').val() : '')+
+            "&retur="+($('#retur').length == 1 ? $('#retur').val() : '')+
+            "&quantity="+($('#quantity').length == 1 ? $('#quantity').val() : '')+
+            "&ppn="+($('#ppn').length == 1 ? $('#ppn').val() : '')+
+            "&sales_net="+($('#sales_net').length == 1 ? $('#sales_net').val() : '')+
+            "&hpp="+($('#hpp').length == 1 ? $('#hpp').val() : '')+
+            "&margin_rp="+($('#margin_rp').length == 1 ? $('#margin_rp').val() : '')+
+            "&margin_persen="+($('#margin_persen').length == 1 ? $('#margin_persen').val() : '')+
+            "&description="+($('#description').length == 1 ? $('#description').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+</script>

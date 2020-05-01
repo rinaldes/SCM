@@ -1,0 +1,56 @@
+<section class="col col-md-8">
+  <section class="col col-md-12">
+    <%  if %w(purchase_requests purchase_orders purchase_transfers).include?(params[:controller]) %>
+      <button type="button" class="btn btn-primary" onclick="view_transaction_history($('#number').val())">Transaction History</button>
+    <% end %>
+    <section>
+      <label class="col-md-1 label">CODE</label>
+      <label class="col-md-8 input custom-input-box">
+        <%= hidden_field_tag :product_id %>
+        <%= text_field_tag :number, '', class: 'input-sm', placeholder: "Barcode" %>
+      </label>
+      <div style="margin-left:15px;">
+        <button type="button" class="btn btn-primary" onclick="searchManual()" style="padding:1px 5px; margin: 3px 0px 0px 5px">Browse</button>
+        <%= link_to t(:add_new_product), new_product_url(ref: "/#{params[:controller]}/new"), class: 'btn btn-primary add_new_product' if %w(purchase_orders receivings).include?(params[:controller]) %>
+      </div>
+    </section>
+  </section>
+  <section class="col col-md-8">
+    <section>
+      <label class="col-md-3 label">BRAND </label>
+      <label class="col-md-9 input custom-input-box"><%= text_field_tag :merk, '', :class => "input-sm", disabled: true %></label>
+    </section>
+    <section>
+      <label class="col-md-3 label">ARTICLE </label>
+      <label class="col-md-9 input custom-input-box"><%= text_field_tag :article, '', :class => "input-sm", disabled: true %></label>
+    </section>
+    <section>
+      <label class="col-md-3 label">DEPT </label>
+      <label class="col-md-9 input custom-input-box"><%= text_field_tag :departement, '', :class => "input-sm", disabled: true %></label>
+    </section>
+    <section>
+      <label class="col-md-3 label">CATEGORY </label>
+      <label class="col-md-9 input custom-input-box"><%= text_field_tag :m_class, '', :class => "input-sm", disabled: true %></label>
+    </section>
+    <% unless params[:controller] == 'purchase_requests' %>
+      <section>
+        <label class="col-md-3 label">DISC % </label>
+        <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc1, '', :class => "input-sm", disabled: true %></label>
+        <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc2, '', :class => "input-sm", disabled: true %></label>
+        <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc3, '', :class => "input-sm", disabled: true %></label>
+        <label class="col-md-2 input custom-input-box"><%= text_field_tag :disc4, '', :class => "input-sm", disabled: true %></label>
+      </section>
+    <% end %>
+  </section>
+</section>
+<section class="col col-md-4" id="product_image" border="1"></section>
+
+<SCRIPT>
+  function view_transaction_history(barcode){
+    $.ajax({
+      url: '/products/transaction_history?barcode='+barcode,
+      method: "get",
+      dataType: "script"
+    })
+  }
+</SCRIPT>

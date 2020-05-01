@@ -1,0 +1,25 @@
+<% @branches.each_with_index do |branch, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= branch.code %></td>
+    <td><%= link_to branch.office_name, branch_path(branch), class: 'blue' %></td>
+    <td class="hidden-phone"><%= branch.area.name rescue '' %></td>
+    <td class="hidden-phone"><%= branch.address %></td>
+    <td class="hidden-phone"><%= branch.description %></td>
+    <td class="nowrap">
+      <%= link_to raw("<i class='fa fa-pencil'></i>"), edit_branch_path(branch), class: "btn btn-primary btn-xs custom-edit-btn" %>
+      <%= link_to raw("<i class='fa fa-trash-o'></i>"), 'javascript:void(0)', onclick: "delete_one(#{branch.id}, 'branches')", class: "btn btn-danger btn-xs custom-edit-btn" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=11><!-- start pagination -->
+    <% if @branches.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@branches, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,47 @@
+<% if params[:all_stores] == 'Store' %>
+  $("#sales-online").html("<%= j(render 'reports/sales_online/all_toko') %>");
+  $("#sales_online_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'Item' %>
+  $("#sales-online-list").html("<%= j(render 'reports/sales_online/sales_online') %>");
+  // $("#sales").html("<%= j(render 'reports/sales/all_item', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'Category' %>
+  $("#sales-online-list").html("<%= j(render 'reports/sales_online/sales_online') %>");
+  // $("#sales").html("<%= j(render 'reports/sales/all_category', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% else %>
+  $("#sales-online-list").html("<%= j(render 'reports/sales_online/sales_online') %>");
+  // $("#sales").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'YYYY-MM-DD', label: 'Date', sales: @sales, dari: 'tanggal') %>");
+  $("#tf_label").show();
+  $("#ut_label").show();
+  $("#sec_month").addClass('hide');
+  $("#start_date").show();
+  $("#end_date").show();
+  $("#months").hide();
+  <% if params[:transaction_date].present? %>
+    <% if params[:all_stores] == 'Hour' %>
+      $("#sales_per_hour").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'HH24 YYYY-MM-DD', label: 'Jam', sales: @sales_per_hour, dari: 'hour') %>");
+    <% end %>
+    <% if params[:show_item].present? %>
+      $("#sales_per_item").html("<%= j(render 'reports/sales/all_item', sales: @sales_per_item, dari: 'tanggal') %>");
+    <% end %>
+    $(".hide_detail").removeClass('hide');
+  <% else %>
+    $("#sales_per_item").html('');
+    $(".hide_detail").addClass('hide');
+    $("#show_item").html('');
+  <% end %>
+<% end %>
+$('#export_to_xls').attr('href', "/reports/sales_online.xlsx?locale=en&"+$("form").serialize())

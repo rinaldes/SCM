@@ -1,0 +1,26 @@
+<section>
+    <legend>Payments</legend>
+</section>
+<section>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+            <thead>
+                <tr>
+                    <th>Payment No</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Payment Amount</th>
+                    <th>Payment Date</th>
+                    <th>Penalty</th>
+                    <th>Invoice</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="payments">
+                <%= f.fields_for :payments, f.object.payments.order('payment_number ASC')  do |payment| %>
+                    <%= render 'payment_fields', f: payment %>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</section>

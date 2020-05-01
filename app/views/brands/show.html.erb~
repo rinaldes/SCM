@@ -1,0 +1,79 @@
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Brand</li><li><%= @brand.name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @brand.name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @brand, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Code</label>
+                      <label class="col-md-9 input custom-input-box"><%= @brand.code %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Name</label>
+                      <label class="col-md-9 input custom-input-box"><%= @brand.name %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Supplier</label>
+                      <label class="col-md-9 input custom-input-box"><%= @brand.supplier.name %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Department</label>
+                      <label class="col-md-9 input custom-input-box"><%= @brand.department.name %></label>
+                    </section>
+                    </section>
+                      <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Diskon Persen 1</label>
+                      <label class="col-md-8 input custom-input-box"><%= @brand.discount_percent1 %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-4 label">Diskon Persen 2</label>
+                      <label class="col-md-8 input custom-input-box"><%= @brand.discount_percent2 %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-4 label">Diskon Persen 3</label>
+                      <label class="col-md-8 input custom-input-box"><%= @brand.discount_percent3 %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-4 label">Diskon Persen 4</label>
+                      <label class="col-md-8 input custom-input-box"><%= @brand.discount_percent4 %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-4 label">Diskon Nominal</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= @brand.discount_rp %>
+                      </label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-4 label">Set Price</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= @brand.set_harga %>
+                      </label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

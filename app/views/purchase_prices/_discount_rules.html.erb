@@ -1,0 +1,23 @@
+<%= f.fields_for :purchase_price_discounts do |form| %>
+<tr>
+  <td class="rules">
+    <label class="select">
+      <%= form.select :disc_rules, options_for_select(['Hitung HPP','Multi Level']), {}, onchange: "clear_textfield($(this))" %> <i></i>
+    </label>
+  </td>
+  <td>
+    <label class="select">
+      <%= form.select :disc_type, options_for_select(['Disc.1','Disc.2']) %> <i></i>
+      <!-- <%#= form.select :disc_type, options_for_select(['Disc.1','Disc.2','Disc.3','Disc.4']) %> <i></i> -->
+    </label>
+  </td>
+  <td class="percent">
+    <label class="input">
+      <%#= form.text_field :disc_percentage, onkeyup: "hitung_discount($(this))" %>
+      <%= form.text_field :disc_percentage, onkeypress: "hitung_discount(event, $(this))" %>
+      <%= form.hidden_field :disc_amount, class: 'disc_amount' %>
+    </label>
+  </td>
+  <td class="amount">0</td>
+</tr>
+<% end %>

@@ -1,0 +1,20 @@
+<% @products.each_with_index do |product, i|%>
+  <tr>
+    <td class="hidden-phone"><%= i + 1 %></td>
+    <td><%= product.article %></td>
+    <td><%= product.barcode %></td>
+    <td><%= product.description %></td>
+    <td><a href="javascript:void(0)" onclick="changeArticle('<%= product.article %>')" class="btn btn-primary"> Choose </a></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=9>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

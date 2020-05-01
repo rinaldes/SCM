@@ -1,0 +1,183 @@
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+
+<b>Purchase Order</h2></b><br/>
+
+<b><%= @entity.name %></b><br />
+<b>NPWP:</b> 02.649.040.9-415.000<br />
+<b>ADDRESS:</b><%= @entity.address %><br />
+
+<hr />
+
+<table id="table-info">
+  <tr>
+    <td width="45%"><label>P.O. No</label>:<span><%= @purchase_order.number rescue ''%></span></td>
+    <td width="10"></td>
+    <td width="45%"></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td><b>SUPPLIER</b><hr /></td>
+    <td></td>
+    <td><b>SHIP TO</b><hr /></td>
+  </tr>
+  <tr>
+    <td><label>Name</label>:<span><%= @supplier.name rescue ''%></span></td>
+    <td></td>
+    <td><label>Name</label>:<span><%= @purchase_order.office.office_name rescue ''%></span></td>
+  </tr>
+  <tr>
+    <td><label>Address</label>:<span><%= @supplier.address rescue ''%></span></td>
+    <td></td>
+    <td><label>Address</label>:<span><%= @purchase_order.office.address rescue ''%></span></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td><label>TOP</label>:<span><%= @supplier.long_term rescue '' %> Hari</span></td>
+  </tr>
+  <tr>
+    <td><label>City</label>:<span><%= @supplier.city_name rescue '' %></span></td>
+    <td></td>
+    <td><label>City</label>:<span><%= @purchase_order.office.city.name rescue '' %></span></td>
+  </tr>
+  <tr>
+    <td><label>Phone</label>:<span><%= @supplier.phone rescue '' %></span></td>
+    <td></td>
+    <td><label>Phone</label>:<span><%= @purchase_order.office.phone_number rescue '' %></span></td>
+  </tr>
+  <tr>
+    <td><label>Fax</label>:<span><%= @supplier.fax rescue '' %></span></td>
+    <td></td>
+    <td><label>Fax</label>:<span><%= @purchase_order.office.fax rescue '' %></span></td>
+  </tr>
+  <tr>
+    <td><label>Email</label>:<span><%= @supplier.email rescue '' %></span></td>
+    <td></td>
+    <td><label>NPWP</label>:<span><%= @purchase_order.office.npwp rescue '' %></span></td>
+  </tr>
+  <tr>
+    <td><label>Contact Person</label>:<span><%= @supplier.contact_people.first.name rescue '' %></span></td
+  </tr>
+</table>
+
+<br />
+
+<table id="table-item">
+  <tr>
+    <th>No</th>
+    <th>Item Code</th>
+    <th>Name</th>
+    <th>Frac</th>
+    <th>Qty</th>
+    <th>Unit</th>
+    <th>Disc1 %</th>
+    <th>Disc2 %</th>
+    <th>PPN</th>
+    <th>Unit Price</th>
+    <th>Subtotal</th>
+  </tr>
+  <% total,total_ppn = 0,0 %>
+  <% @purchase_order_details.each_with_index do |pod, i| %>
+    <% product = pod.product %>
+
+    <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*pod.fraction %>
+    <% hpp_akhir = pod.hpp*pod.fraction-hpp_disc_amt %>
+    <% dpp = hpp_akhir*pod.quantity %>
+
+    <% ppn = dpp*0.1 if product.flag_pajak == 'BKP' && @supplier.status_pkp %>
+    <% ppn = 0 unless product.flag_pajak == 'BKP' && @supplier.status_pkp %>
+    <% subtotal = dpp+ppn %>
+    <tr>
+      <td><%= i + 1 %></td>
+      <td><%= product.article rescue '' %></td>
+      <td><%= product.description rescue '' %></td>
+      <td style='text-align: right; padding-right: 7px'><%= pod.fraction || 1 %></td>
+      <td style='text-align: right; padding-right: 7px'><%= pod.quantity rescue '' %></td>
+      <td style='text-align: center'><%= product.select_unit pod.unit_type %></td>
+      <td style='text-align: right; padding-right: 7px'><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+      <td style='text-align: right; padding-right: 7px'><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+      <td style='text-align: right'><%= format_currency ppn %></td>
+      <td style='text-align: right'><%= format_currency hpp_akhir %></td>
+      <td style='text-align: right'><%= format_currency subtotal %></td>
+    </tr>
+    <% total += subtotal %>
+    <% total_ppn += 0.1*subtotal if product.flag_pajak == 'BKP' && @purchase_order.supplier.status_pkp %>
+  <% end %>
+  <tr>
+    <td class="noborder" colspan=9></td>
+    <td>Total</td>
+    <td style='text-align: right'><%= format_currency total %></td>
+  </tr>
+</table>
+  <table id="table-info">
+    <% if @purchase_order.present? %>
+      <tr>
+        <td>Note: <%= @purchase_order.note %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>APPROVED BY</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><label></label></td>
+      <td></td>
+      <td></td>
+      <td><label></label></td>
+      <td></td>
+      <td></td>
+      <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+    </tr>
+  </table>
+  <table id="table-info">
+    <tr>
+      <td>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><label>Print By</label>:<span><%= current_user.fullname %></span></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><label>Date</label>:<span><%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %></span></td>
+    </tr>
+  </table>
+<style>
+  td, th {
+    font-size: 11px;
+  }
+</style>

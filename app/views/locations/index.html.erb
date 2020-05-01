@@ -1,0 +1,142 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:data_master) %></li><li>Location</li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Locations List</h2> <!-- header content --></header>
+          <div>
+            <div class="widget-body no-padding">
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{'add location'}"), new_location_url, class: "btn btn-labeled btn-primary edit-btn-primary" %>
+              <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                <li class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to t(:export_to_csv), locations_path(:id => params[:id], format: "csv") %></li>
+                    <li><%= link_to t(:export_to_excel), locations_path(:id => params[:id], format: "xls") %></li>
+                    <li data-toggle="modal" data-target="#myModal" style="cursor: pointer"><a>Import from CSV</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <table class="table table-striped table-bordered" border='1' width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <!-- <th>
+                    ID
+                    <span style="float: right;">
+                      <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'id-desc', class: 'sorting hide' %>
+                      <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'id-asc', class: 'sorting' %>
+                    </span>
+                  </th> -->
+                  <th>
+                  Name
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                  </span></th>
+                  <th>
+                    Type
+                    <span style="float: right;">
+                      <%= link_to 'javascript:void(0)', id: 'jenis-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'jenis-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                  </th>
+                  <th>
+                    Code
+                    <span style="float: right;">
+                      <%= link_to 'javascript:void(0)', id: 'locations.province_location-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'locations.province_location-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </span>
+                  </th>
+                  <th>
+                    Detail
+                    <span style="float: right;">
+                      <%= link_to 'javascript:void(0)', id: 'locations.province_location-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'locations.province_location-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </span>
+                  </th>
+                  <th>Action</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput">
+                      <%= text_field_tag :name, params[:name], class: 'form-control search name', name: 'locations.name' %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :id, params[:id], class: 'form-control search id', name: "locations.id" %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :jenis, params[:jenis], class: 'form-control search jenis', name: 'locations.jenis' %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :code, params[:code], class: 'form-control search code', name: 'locations.code' %>
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='location-list'><%= render partial: 'location_list', locals: {locations: @locations} %></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Location</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag import_locations_path(:id => params[:id]), multipart: true do %>
+          <%= file_field_tag :file %>
+      </div>
+      <div class="modal-footer">
+        <%= link_to "Download Template", locations_path(format: "csv", :a => "a"), :class => "btn btn-success" %>
+        <%= submit_tag "Import", :class => "btn btn-primary", id: 'commit' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#commit').bind("click",function(){
+    if(!$('#file').val()){
+      alert("File not been chosen");
+      return false;
+    }
+  });
+  $('.code').on("keyup",function(){
+    $('#code').val($(this).val());
+  });
+  $('.name').on("keyup",function(){
+    $('#name').val($(this).val());
+  });
+});
+</script>

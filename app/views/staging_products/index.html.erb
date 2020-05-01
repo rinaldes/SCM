@@ -1,0 +1,176 @@
+<% session[:selected_products] = nil %>
+<% session[:selected_products] = [] %>
+<div id="ribbon">
+  <span class="ribbon-button-alignment">
+    <span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true">
+      <i class="fa fa-refresh"></i>
+    </span>
+  </span>
+  <!-- breadcrumb -->
+  <ol class="breadcrumb">
+    <li>Home</li><li>Tools</li><li>Sync Products</li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+      <h1 class="page-title txt-color-blueDark"><i class="fa a-repeat"></i> Tools <span>&gt;
+        Sync Products </span></h1>
+    </div>
+  </div>
+  <section id="widget-grid">
+    <div class="row">
+      <!-- NEW WIDGET START -->
+      <article class="col-sm-12 sortable-grid ui-sortable">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget well" id="wid-id-0a" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget">
+          <!-- widget div-->
+          <div role="content">
+            <!-- widget content -->
+            <div class="widget-body">
+              <h1>Get products from data center...</h1>
+              <p>
+                get products master data from data center without a pain, just clik and choose what products you want from data center!
+              </p>
+              <div class="row">
+                <div class="col-sm-12">
+                  <button type="submit" id="button_submit" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing" onclick="return(sync_data());">Sync Data</button>
+                </div>
+              </div>
+              <div class="row"><div class="col-sm-12"><h1></h1></div></div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <input type="radio" id="radio_ap" onclick="all_products();" checked="checked">All
+                  <input type="radio" id="radio_sp" onclick="selected_products();">Selected
+                  <input type="radio" id="radio_up" onclick="unselect_products();">Unselected
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <h1></h1>
+                  <input type="hidden" id="selected_products">
+                </div>
+              </div>
+
+              <div class="table-responsive" style="display: none;">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>No</th>
+                      <th>Department</th>
+                      <th>Category</th>
+                      <th>Article</th>
+                      <th>Barcode</th>
+                      <th>Name</th>
+                      <th>Short Name</th>
+                      <th>Other Informations</th>
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th class="hasinput"><%= text_field_tag :department_name, params[:department_name], class: 'form-control search', name: 'departments.name' %></th>
+                      <th class="hasinput"><%= text_field_tag :m_class_name, params[:m_class_name], class: 'form-control search', name: 'm_classes.name' %></th>
+                      <th>
+                        <%= text_field_tag :article, params[:article], class: 'form-control search' %>
+                      </th>
+                      <th>
+                        <%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %>
+                      </th>
+                      <th>
+                        <%= text_field_tag :description, params[:description], class: 'form-control search' %>
+                      </th>
+                      <th>
+                        <%= text_field_tag :description_2, params[:description_2], class: 'form-control search' %>
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="snyc-list"><%#= render 'list' %></tbody>
+                </table>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <h1></h1>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <%= link_to 'Export to CSV', staging_products_path(format: "csv"), class: 'btn btn-primary', disabled: true, id: 'export-btn' %>
+                </div>
+              </div>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </div>
+        <!-- end widget -->
+      </article>
+      <!-- WIDGET END -->
+    </div>
+  </section>
+</div>
+<script type="text/javascript">
+
+  function sync_data(){
+    $('#button_submit').button('loading');
+
+    $.ajax({
+      url: "/staging_products/sync_products",
+      dataType: "script",
+      success: function (data){
+        response(data);
+        console.log(data);
+      }
+    });
+  }
+
+  function all_products(){
+    $('#radio_sp').prop('checked', false);
+    $('#radio_ap').prop('checked', true);
+    $('#radio_up').prop('checked', false);
+    $.ajax({
+      url: '/staging_products',
+      type: 'get',
+      dataType: 'script',
+      success: function (data){
+        response(data)
+      }
+    })
+  }
+
+  function selected_products(){
+    $('#radio_sp').prop('checked', true);
+    $('#radio_ap').prop('checked', false);
+    $('#radio_up').prop('checked', false);
+    $.ajax({
+      url: "/staging_products",
+      dataType: "script",
+      data: {
+        type: 'selected_products'
+      },
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+
+  function unselect_products(){
+    var str = $('#selected_products').val().slice(0, -1);
+    $('#radio_sp').prop('checked', false);
+    $('#radio_ap').prop('checked', false);
+    $('#radio_up').prop('checked', true);
+    $.ajax({
+      url: "/staging_products",
+      dataType: "script",
+      data: {
+        type: 'unselected_products'
+      },
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+</script>

@@ -1,0 +1,32 @@
+<% @members.each_with_index do |member, i| %>
+  <tr>
+    <td><span class="name"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></span></td>
+    <td><%= member.code rescue "" %></td>
+    <td><%= member.card_number rescue "" %></td>
+    <td><%= link_to member.name, member_path(member), class: 'blue' %></td>
+    <td><%= member.birthday %></td>
+    <td><%= member.gender rescue "" %></td>
+    <td class='nowrap'><%= member.address.truncate(28) rescue '' %></td>
+    <td><%= member.hp rescue "" %></td>
+    <td><%= member.email rescue "" %></td>
+    <td><%= member.member_level.description rescue "" %></td>
+    <td class='align-right'><%= member.point rescue "" %></td>
+    <td class='align-right'><%= format_currency member.balance rescue "" %></td>
+    <td class='align-right'><%= format_currency member.credit_limit rescue "" %></td>
+    <td class='nowrap'>
+      <%= link_to edit_member_path(member), class: "btn btn-primary btn-xs custom-edit-btn" do %>
+        <i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{member.id}, 'members')", class: "btn btn-danger btn-xs custom-edit-btn" do %>
+        <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=10><!-- start pagination -->
+    <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+      <%= pagination_links(@members, options = {}) %>
+    </div>
+  </td>
+</tr>

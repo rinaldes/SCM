@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data>RECID</Data></Cell>
+        <Cell><Data>DIV</Data></Cell>
+        <Cell><Data>PRDCD</Data></Cell>
+        <Cell><Data>CAT_COD</Data></Cell>
+        <Cell><Data>MIN</Data></Cell>
+        <Cell><Data>MAX</Data></Cell>
+        <Cell><Data>CTGR</Data></Cell>
+        <Cell><Data>SALDO_AWAL</Data></Cell>
+        <Cell><Data>RP_SLD_AWL</Data></Cell>
+        <Cell><Data>TRFIN</Data></Cell>
+        <Cell><Data>RP_TRFIN</Data></Cell>
+        <Cell><Data>RP_PPNIN</Data></Cell>
+        <Cell><Data>TRFOUT</Data></Cell>
+        <Cell><Data>RP_TRFOUT</Data></Cell>
+        <Cell><Data>RP_PPNOUT</Data></Cell>
+        <Cell><Data>SALES</Data></Cell>
+        <Cell><Data>RP_SALES</Data></Cell>
+        <Cell><Data>T_SALES</Data></Cell>
+        <Cell><Data>RETUR</Data></Cell>
+        <Cell><Data>RP_RETUR</Data></Cell>
+        <Cell><Data>T_RETUR</Data></Cell>
+        <Cell><Data>TPPN</Data></Cell>
+        <Cell><Data>HILANG</Data></Cell>
+        <Cell><Data>RP_HILANG</Data></Cell>
+        <Cell><Data>ADJ</Data></Cell>
+        <Cell><Data>RP_ADJ</Data></Cell>
+        <Cell><Data>RCOST</Data></Cell>
+        <Cell><Data>POTONGAN</Data></Cell>
+        <Cell><Data>SESUAI</Data></Cell>
+        <Cell><Data>SALDO_AKH</Data></Cell>
+        <Cell><Data>RP_SLD_AKH</Data></Cell>
+        <Cell><Data>PTAG</Data></Cell>
+        <Cell><Data>KONS</Data></Cell>
+        <Cell><Data>SUPCO</Data></Cell>
+        <Cell><Data>BKP</Data></Cell>
+        <Cell><Data>SUB_BKP</Data></Cell>
+        <Cell><Data>NRB_RSK</Data></Cell>
+        <Cell><Data>STO</Data></Cell>
+        <Cell><Data>HR_JUAL</Data></Cell>
+        <Cell><Data>NKL_MIN</Data></Cell>
+        <Cell><Data>RP_NKLM</Data></Cell>
+        <Cell><Data>BBS_PPN</Data></Cell>
+        <Cell><Data>PPN_PEM</Data></Cell>
+        <Cell><Data>TIPE_GDG</Data></Cell>
+        <Cell><Data>KD_GDG</Data></Cell>
+        <Cell><Data>RP_ADJ_K</Data></Cell>
+        <Cell><Data>RP_ADJ_L</Data></Cell>
+        <Cell><Data>QTY_BA</Data></Cell>
+        <Cell><Data>RP_BA_JUAL</Data></Cell>
+        <Cell><Data>QTY_BS</Data></Cell>
+        <Cell><Data>RP_BS_JUAL</Data></Cell>
+        <Cell><Data>RP_BA_HPP</Data></Cell>
+        <Cell><Data>RP_BS_HPP</Data></Cell>
+      </Row>
+      <% @sales.all.each{|sale| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%#= sale.RECID %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.sale.store_id rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.barcode rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.CAT_COD %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.MIN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.MAX %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.CTGR %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.SALDO_AWAL %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_SLD_AWL %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.TRFIN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_TRFIN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_PPNIN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.TRFOUT %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_TRFOUT %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_PPNOUT %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.SALES %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_SALES %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.T_SALES %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RETUR %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_RETUR %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.T_RETUR %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.TPPN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.HILANG %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_HILANG %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ADJ %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_ADJ %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RCOST %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.POTONGAN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.SESUAI %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.SALDO_AKH %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_SLD_AKH %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.PTAG %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.KONS %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.SUPCO %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.flag_pajak %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.SUB_BKP %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.NRB_RSK %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.STO %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.HR_JUAL %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.NKL_MIN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_NKLM %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.BBS_PPN %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.PPN_PEM %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.TIPE_GDG %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.KD_GDG %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_ADJ_K %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_ADJ_L %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.quantity %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_BA_JUAL %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.QTY_BS %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_BS_JUAL %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_BA_HPP %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.RP_BS_HPP %></Data></Cell>
+        </Row>
+      <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,20 @@
+<% i = 0 %>
+<% date = DateTime.new(2016, 3, 3) %>
+<% Sale.where(transaction_date: date.beginning_of_day .. date.end_of_day).each do |sale| %>
+  <% sale.sales_details.each do |saledetail| %>
+    <tr>
+      <td><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE-1) : i+1 %></td>
+      <td><%= Product.find(saledetail.product_id).barcode %></td>
+      <td><%= saledetail.quantity %></td>
+      <td><%= saledetail.price %></td>
+      <td><%= saledetail.capital_price %></td>
+    </tr>
+  <% end %>
+<% end %>
+<tr>
+  <td colspan=5>
+    <% if i == 0 %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,121 @@
+<div class="row">
+    <header>Account Receivable</header>
+    <section class="col col-6">
+        <section></section>
+        <section>
+            <label class="col-md-4 label">AR No</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_receivable.ar_number %>
+            </label>
+
+            <label class="col-md-4 label">Transaction No.</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_receivable.transaction_number %>
+            </label>
+
+            <label class="col-md-4 label">Transaction Amount</label>
+            <label class="col-md-6 input custom-input-box">
+                Rp. <%= format_currency(@account_receivable.total_amount) %>
+            </label>
+
+            <label class="col-md-4 label">Store</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_receivable.office.blank? ? '-' : @account_receivable.office.office_name %>
+            </label>
+
+            <label class="col-md-4 label">Date</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= format_date(@account_receivable.created_at) %>
+            </label>
+
+            <label class="col-md-4 label">Voucher No.</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_receivable.payment_discount.blank? ? '-' : @account_receivable.payment_discount %>
+            </label>
+
+            <label class="col-md-4 label">Payment Term</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_receivable.payment_term.blank? ? '-' : @account_receivable.payment_term.try(:titleize) %>
+            </label>
+
+            <label class="col-md-4 label">Payment Discount</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_receivable.payment_discount.blank? ? '-' : @account_receivable.payment_discount %>
+            </label>
+
+            <label class="col-md-4 label">Outstading</label>
+            <label class="col-md-6 input custom-input-box">
+                Rp. <%= format_currency(@account_receivable.outstanding) %>
+            </label>
+        </section>
+    </section>
+
+    <section class="col col-6">
+        <div id="start-now-box">
+            <section></section>
+            <section>
+                <label class="col-md-4 label">Customer Name</label>
+                <label class="col-md-6 input custom-input-box">
+                    <%= @account_receivable.member.name.blank? ? '-' : @account_receivable.member.name %>
+                </label>
+
+                <label class="col-md-4 label">Email</label>
+                <label class="col-md-6 input custom-input-box">
+                    <%= @account_receivable.member.email.blank? ? '-' : @account_receivable.member.email %>
+                </label>
+
+                <label class="col-md-4 label">Phone Number</label>
+                <label class="col-md-6 input custom-input-box">
+                    <%= @account_receivable.member.phone_number.blank? ? '-' : @account_receivable.member.phone_number %>
+                </label>
+
+                <label class="col-md-4 label">Address</label>
+                <label class="col-md-6 input custom-input-box">
+                    <%= @account_receivable.member.address.blank? ? '-' : @account_receivable.member.address %>
+                </label>
+
+                <label class="col-md-4 label">&nbsp;</label>
+                <label class="col-md-6 input custom-input-box">
+                    &nbsp;
+                </label>
+
+                <label class="col-md-4 label">Bill to Name</label>
+                <label class="col-md-6 input custom-input-box">
+                    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+                        <%= f.text_field :bill_to_name, class: "input-scm" %>
+                    <% else %>
+                        <%= @account_receivable.bill_to_name.blank? ? '-' : @account_receivable.bill_to_name %>
+                    <% end %>
+                </label>
+
+                <label class="col-md-4 label">Email</label>
+                <label class="col-md-6 input custom-input-box">
+                    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+                        <%= f.text_field :bill_to_email, class: "input-scm" %>
+                    <% else %>
+                        <%= @account_receivable.bill_to_email.blank? ? '-' : @account_receivable.bill_to_email %>
+                    <% end %>
+                </label>
+
+                <label class="col-md-4 label">Phone Number</label>
+                <label class="col-md-6 input custom-input-box">
+                    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+                        <%= f.text_field :bill_to_phone, class: "input-scm" %>
+                    <% else %>
+                        <%= @account_receivable.bill_to_phone.blank? ? '-' : @account_receivable.bill_to_phone %>
+                    <% end %>
+                </label>
+
+                <label class="col-md-4 label">Address</label>
+                <label class="col-md-6 input custom-input-box">
+                    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+                        <%= f.text_field :bill_to_address, class: "input-scm" %>
+                    <% else %>
+                        <%= @account_receivable.bill_to_address.blank? ? '-' : @account_receivable.bill_to_address %>
+                    <% end %>
+                </label>
+
+            </section>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,2 @@
+module SafetyStocksHelper
+end

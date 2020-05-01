@@ -1,0 +1,60 @@
+<style type="text/css">
+  .ui-autocomplete {
+    z-index:2147483647;
+    width: 174px !important;
+  }
+</style>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>M-Class</li><li><%= label %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-mclass">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> M-Class</h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <%= form_for @mclass, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <section>
+                  <label class="label">Code</label>
+                  <label class="input"><%= f.text_field :code, class: "input-sm #{(error_field @mclass, :code)}", :placeholder => "Auto Generate", :disabled => true %></label>
+                </section>
+                <section>
+                  <label class="label">Name <span class='important'>*</span></label>
+                  <label class="input"><%= f.text_field :name, placeholder: "Name", :class => "input-sm #{(error_field @mclass, :name)}" %></label>
+                </section>
+                <section>
+                  <label class="label">Department <span class='important'>*</span></label>
+                  <label class="input"><%= f.autocomplete_field :department_id, autocomplete_department_name_mclasses_url, :id_element =>"#id", class: "autocomplete-field-input", placeholder: "Department" %>
+                  </label>
+                </section>
+                <section>
+                  <%= link_to_add_association f, :m2classes, :class => "btn btn-primary", :"data-association-insertion-method" => "append" do %>
+                  Add m-class
+                  <% end %>
+                  <%= f.fields_for :m2classes do |mclass| %>
+                    <%= mclass.text_field :parent_id %>
+                  <% end %>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

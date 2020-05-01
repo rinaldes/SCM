@@ -1,0 +1,44 @@
+<tr class="alert alert-info alert-block">
+  <td><label class="col-md-10 label"><%= @product.barcode %></label></td>
+  <td><label class="col-md-10 label"><%= @product.brand.name %></label></td>
+  <td><label class="col-md-10 label"><%= @product.article %></label></td>
+  <td><label class="col-md-10 label"><%= @product.colour.name %></label></td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+        <tr>
+          <td>Size</td>
+          <% @product_details.each_with_index{|product_detail, i| %>
+            <% break if i > 13 %>
+            <% product_size = product_detail.product_size %>
+            <% size_detail = product_size.size_detail %>
+            <%= hidden_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][product_size_id]", product_size.id %>
+            <td><label class="col-md-10 input custom-input-box"><%= size_detail.size_number %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Available Qty</td>
+          <% @product_details.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td><label class="col-md-10 input custom-input-box"><%= a.available_qty.to_i %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Quantity</td>
+          <% @product_details.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td>
+              <%= text_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][quantity]",
+                (GoodTransferDetail.find_by_product_size_id_and_good_transfer_id(a.product_size_id, @good_transfer.id).quantity rescue ''), class: "qty_detail" %>
+            </td>
+          <% } %>
+        </tr>
+      </table>
+    </div>
+  </td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+    </div>
+  </td>
+</tr>

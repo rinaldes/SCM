@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Department</Data></Cell>
+        <Cell><Data ss:Type="String">m_class1</Data></Cell>
+        <Cell><Data ss:Type="String">m_class2</Data></Cell>
+        <Cell><Data ss:Type="String">m_class3</Data></Cell>
+        <Cell><Data ss:Type="String">m_class4</Data></Cell>
+      </Row>
+
+      <%
+      data = Array.new
+      MClass.all.where("parent_id is null").each do |depart|
+        par1 = depart.name
+        m_classes1 = MClass.all.where(parent_id: depart.id).order('created_at ASC')
+        if m_classes1.length == 0
+          data << [par1, "", "", "", "", ""]
+        else m_classes1.each do |m_class1|
+          par2 = m_class1.name
+          m_classes2 = MClass.all.where(parent_id: m_class1.id).order('created_at ASC')
+          if m_classes2.length == 0
+            data << [par1, par2, "", "", ""]
+            par1 = ""
+          else m_classes2.each do |m_class2|
+            par3 = m_class2.name
+            m_classes3 = MClass.all.where(parent_id: m_class2.id).order('created_at ASC')
+            if m_classes3.length == 0
+              data << [par1, par2, par3, "", ""]
+              par1, par2 = ""
+            else m_classes3.each do |m_class3|
+              par4 = m_class3.name
+              m_classes4 = MClass.all.where(parent_id: m_class3.id).order('created_at ASC')
+              if m_classes4.length == 0
+                data << [par1, par2, par3, par4, ""]
+                par1, par2, par3 = ""
+              else m_classes4.each do |m_class4|
+                par5 = m_class4.name
+                data << [par1, par2, par3, par4, par5]
+                par1, par2, par3, par4 = ""
+              end end
+            end end
+          end end
+        end end
+      end
+      %>
+
+      <% data.each do |row| %>
+        <Row>
+          <% row.each do |par| %>
+            <Cell><Data ss:Type="String"><%= par %></Data></Cell>
+          <% end %>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

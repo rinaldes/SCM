@@ -1,0 +1,14 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Stock Opname") do |sheet|
+  sheet.add_row ["SO Number", @stock_opname_details.opname_number]
+  sheet.add_row ["Store Name", @stock_opname_details.office.office_name]
+  sheet.add_row ["Date", @stock_opname_details.start_date.try(:strftime, "%d-%m-%Y")]
+  sheet.add_row [""]
+  sheet.add_row ["Barcode", "SKU", "Name", "Quantity"], :style => default
+   Product.all.each do |ap|
+    sheet.add_row [ap.barcode, ap.article, ap.description, ""], :style => default
+  end
+end

@@ -1,0 +1,32 @@
+<% id = "#{parent}#{key}".gsub('[', '').gsub(']', '') %>
+<% name = "#{parent}[location_attributes][#{key}]" %>
+<% if level == 2
+  jenis = 'kecamatan'
+elsif level == 3
+  jenis = 'kelurahan/desa'
+%><% end %>
+<% next_location = Location.find_by_level_and_parent_id(level+1, location.id) rescue nil %>
+<div class="alert alert-info alert-block" style='float: left; width: 98%; background-color: transparent; border-color: #9cb4c5 1px solid; border-width: 1px 1px 1px!important' id='level<%= id %>'>
+  <section class="col col-md-12">
+    <label class="col-md-2 label"> <%= jenis %></label>
+    <br/>
+  </section>
+  <%= hidden_field_tag "location#{name}[level]", level %>
+  <a class="close" data-dismiss="alert" href="#" onclick="$('#tobe_deleted').val($('#tobe_deleted').val()+', <%= location.code rescue '' %>')">×</a>
+  <section class="col col-md-4">
+    <label class="col-md-2 label">Code</label>
+    <label class="col-md-9 input custom-input-box">
+      <%= text_field_tag "location#{name}[code]", (location.code unless @blank_state), class: "input-sm" %>
+    </label>
+  </section>
+  <section class="col col-md-4">
+    <label class="col-md-2 label">Name <span class='important'>*</span></label>
+    <label class="col-md-9 input custom-input-box"><%= text_field_tag "location#{name}[name]", (location.name unless @blank_state), class: "input-sm" %></label>
+  </section>
+  <section class="col col-md-3">
+    <%= link_to "Add Level #{level+1}", 'javascript:void(0)', onclick: "add_sub_location(#{level+1}, id, '#{name}', '#{(location.id rescue '')}')", id: id, class: 'btn btn-primary btn-sm' %>
+  </section>
+  <% location.locations.sort_by(&:code).each{|locat| %>
+    <%= render partial: 'edit_sub_type', locals: {level: locat.level, key: "#{Time.now.to_i}#{locat.id}", parent: "#{name}", location: locat} %>
+  <% } if location.present? %>
+</div>

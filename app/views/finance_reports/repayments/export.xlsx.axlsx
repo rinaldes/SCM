@@ -1,0 +1,52 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Repayment") do |sheet|
+  sheet.merge_cells 'A2:A3'
+  sheet.merge_cells 'B2:B3'
+  sheet.merge_cells 'C2:C3'
+  sheet.merge_cells 'D2:D3'
+  sheet.merge_cells 'E2:E3'
+  sheet.merge_cells 'F2:G2'
+  sheet.merge_cells 'H2:K2'
+  sheet.merge_cells 'L2:M2'
+  sheet.merge_cells 'N2:N3'
+  sheet.merge_cells 'O2:O3'
+  sheet.merge_cells 'P2:Q2'
+  sheet.merge_cells 'R2:S2'
+  sheet.merge_cells 'T2:T3'
+  sheet.merge_cells 'U2:U3'
+
+  sheet.add_row ["063 BINTANG SEPATU"]
+  sheet.add_row ["Tgl Bon", "Faktur", "Nominal", "Sub Total", "Tgl Kontra", "Brg Kurang", "", "Retur", "", "", "", "Pending", "", "Okir", "Materai dan Adm Bank", "Tunai", "", "Giro", "", "Total", "Keterangan"], :style => default
+  sheet.add_row ["", "", "", "", "", "Qty", "Nominal", "Tgl", "No. Form", "Qty", "Nominal", "Qty", "Nominal", "", "", "Tgl", "Nominal", "Tgl", "Nominal", "", ""], :style => default
+
+  sheet.merge_cells 'D4:D9'
+  sheet.merge_cells 'E4:E9'
+  sheet.merge_cells 'F4:F9'
+  sheet.merge_cells 'G4:G9'
+  sheet.merge_cells 'H4:H9'
+  sheet.merge_cells 'I4:I9'
+  sheet.merge_cells 'J4:J9'
+  sheet.merge_cells 'K4:K9'
+  sheet.merge_cells 'L4:L9'
+  sheet.merge_cells 'M4:M9'
+  sheet.merge_cells 'N4:N9'
+  sheet.merge_cells 'O4:O9'
+  sheet.merge_cells 'P4:P9'
+  sheet.merge_cells 'Q4:Q9'
+  sheet.merge_cells 'R4:R9'
+  sheet.merge_cells 'S4:S9'
+  sheet.merge_cells 'T4:T9'
+  sheet.merge_cells 'U4:U9'
+
+  # @repayments.each do |ap|
+    sheet.add_row ["8-Jun-2015", "3140", "Rp.4.763.286", "Rp.43.920.427", "15-Sep-2015", "", "", "15-Jun-2015", "Manual 00786", "30", "Rp.1.901.049", "40", "Rp.2.534.680", "Rp.47.000", "Rp.11.698", "", "", "15-Sep-2015", "Rp.39.426.000", "Rp.43.920.427", "Lunas"], :style => default
+    sheet.add_row ["12-Jun-2015", "3147", "Rp.9.505.249", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => default
+    sheet.add_row ["12-Jun-2015", "3148", "Rp.6.872.100", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => default
+    sheet.add_row ["20-Jun-2015", "3149", "Rp.5.670.345", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => default
+    sheet.add_row ["23-Jun-2015", "3153", "Rp.6.336.832", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => default
+    sheet.add_row ["29-Jun-2015", "3158", "Rp.10.772.615", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => default
+  # end
+end

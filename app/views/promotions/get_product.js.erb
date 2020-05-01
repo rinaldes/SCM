@@ -1,0 +1,12 @@
+$('.add_promo').removeClass('disabled');
+$("#promotion_promo_item_lists_attributes_<%=@key%>_product_id").val("<%= @product.id %>");
+if ($("#promotion_prize_lists_attributes_<%=@key%>_product_id").length != 0)
+{
+  $('.add_prize').removeClass('disabled');
+  $("#promotion_prize_lists_attributes_<%=@key%>_product_id").val("<%= @product.id %>");
+}
+$("#article_<%=@key%>").text("<%= @product.article %>");
+$("#product_name_<%=@key%>").text("<%= @product.description %>");
+$("#unit_name_<%=@key%>").text("<%= Sku.find_by_barcode(@product.barcode).unit.name rescue nil %>");
+$("#sell_price_<%=@key%>").text("Rp.<%= @product.selling_prices.last.selling_price rescue 0 %>");
+$("#hpp_price_<%=@key%>").text("Rp.<%= @product.selling_prices.last.hpp rescue 0 %>");

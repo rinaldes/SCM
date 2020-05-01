@@ -1,0 +1,94 @@
+<div class="row">
+    <section class="col col-6">
+        <section></section>
+        <section>
+            <label class="col-md-4 label">Payment Term</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_payable.payment_term.try(:titleize) %> &nbsp;
+            </label>
+
+            <label class="col-md-4 label">Supplier Due Date</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= format_date(@account_payable.due_date) %> &nbsp;
+            </label>
+
+            <label class="col-md-4 label">Payment Due Date</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= format_date(@account_payable.due_date) %> &nbsp;
+            </label>
+
+        </section>
+    </section>
+
+    <section class="col col-6">
+        <section></section>
+        <section>
+            <label class="col-md-4 label">Supplier</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_payable.supplier.name %>
+            </label>
+
+            <label class="col-md-4 label">Phone No.</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_payable.supplier.phone %> &nbsp;
+            </label>
+
+            <label class="col-md-4 label">Supplier Address</label>
+            <label class="col-md-6 input custom-input-box">
+                <%= @account_payable.supplier.address %> &nbsp;
+            </label>
+
+            <label class="col-md-4 label">&nbsp;</label>
+            </label>
+        </section>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-6">
+        <legend class="sub-title">Payment Detail</legend>
+        <label class="col-md-5 label">Purchased Amount</label>
+         <label class="col-md-1 label">Rp.</label>
+        <label class="col-md-4 input custom-input-box">
+            <strong><span class='money'><%= format_currency(@account_payable.total_amount) %></span></strong>
+        </label>
+
+        <legend class="sub-title">Discount</legend>
+        <label class="col-md-5 label">Retur Amount</label>
+         <label class="col-md-1 label">Rp.</label>
+        <label class="col-md-4 input custom-input-box">
+            <span class='money'><%= format_currency(@account_payable.retur_amount) %></span>
+        </label>
+
+        <%= render partial: 'other_charges',  locals: { f: f } %>
+
+        <label class="col-md-5 label">Deposit</label>
+         <label class="col-md-1 label">Rp.</label>
+        <label class="col-md-4 input custom-input-box">
+             <span class='money'><%= format_currency(@account_payable.deposit.to_f) %></span>
+        </label>
+
+        <label class="col-md-5 label">Total Discount</label>
+        <label class="col-md-1 label">Rp.</label>
+        <label class="col-md-4 input custom-input-box">
+            <span class='money'><%= format_currency(@account_payable.total_discount) %></span>
+        </label>
+
+        <label class="col-md-5 label">Total Outstanding</label>
+         <label class="col-md-1 label">Rp.</label>
+        <label class="col-md-4 input custom-input-box">
+            <strong><span class='money' id='sum-total-outstanding'><%= format_currency(@account_payable.count_outstanding) %></span></strong>
+        </label>
+    </section>
+
+    <section class="col col-6">
+        <legend class="sub-title">Payment Method</legend>
+        <%#= link_to_add_association 'Add Payment', f, :account_payable_details,:"data-association-insertion-node" => "section#account-payable-details", :"data-association-insertion-method" => "append", :partial => "account_payable_detail_fields", :class => "btn btn-primary btn-sm" %>
+
+        <section id="account-payable-details">
+            <%= f.fields_for :account_payable_details, f.object.account_payable_details.build do |detail| %>
+                <%= render 'account_payable_detail_fields', f: detail %>
+            <% end %>
+        </section>
+    </section>
+</div>

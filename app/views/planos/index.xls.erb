@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Rack</Data></Cell>
+        <Cell><Data ss:Type="String">Shelving</Data></Cell>
+        <Cell><Data ss:Type="String">Row</Data></Cell>
+        <Cell><Data ss:Type="String">Rack Type</Data></Cell>
+        <Cell><Data ss:Type="String">Article</Data></Cell>
+        <Cell><Data ss:Type="String">Product Name</Data></Cell>
+        <Cell><Data ss:Type="String">Kiri Kanan</Data></Cell>
+        <Cell><Data ss:Type="String">Atas Bawah</Data></Cell>
+        <Cell><Data ss:Type="String">Depan Belakang</Data></Cell>
+        <Cell><Data ss:Type="String">Minimal Display</Data></Cell>
+      </Row>
+    <% @planos.each do |plano| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= plano.rak_name %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plano.shelving %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plano.rows %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= plano.rak_type %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= plano.product_article %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= plano.product_name %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plano.kir_ka %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plano.at_ba %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plano.de_be %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= plano.min %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

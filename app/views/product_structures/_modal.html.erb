@@ -1,0 +1,92 @@
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Convertion Details</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Article</th>
+              <th>Description</th>
+              <th>HPP</th>
+              <th>Quantity</th>
+              <th>Sub-Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% total_hpp_product = 0 %>
+            <% total_qty_product = 0 %>
+
+            <% @zfd.where("moved_qty > 0").each do |zfd| %>
+              <tr>
+                <% total = 0 %>
+                <% price = zfd.sku.product.product_price(Time.now).hpp_average.to_f rescue 0 %>
+                <td><%= zfd.sku.product.article %></td>
+                <td><%= zfd.sku.product.description %></td>
+                <td><%= format_currency(price) %></td><!-- HPP -->
+                <td><%= zfd.moved_qty.to_i.to_s %></td>
+                <% total += price*zfd.moved_qty.to_i %>
+                <td><%= format_currency(total) %></td>
+                <% total_hpp_product += total %>
+                <% total_qty_product += zfd.moved_qty.to_i %>
+              </tr>
+            <% end %>
+            <tr>
+              <td colspan=3>Total</td>
+              <td><%= total_qty_product.to_s %></td>
+              <td><%= format_currency(total_hpp_product).to_s %></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Article</th>
+              <th>Description</th>
+              <th>HPP</th>
+              <th>Quantity</th>
+              <th>Sub-Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% total_hpp_product = 0 %>
+            <% total_qty_product = 0 %>
+
+            <% @zfd.each do |zfd| %>
+            <% if zfd.moved_qty < 0 %>
+              <tr>
+                <% total = 0 %>
+                <% price = zfd.sku.product.product_price(Time.now).hpp_average.to_f rescue 0 %>
+                <%# price = SellingPrice.where("product_id = #{zfd.sku.product.id}").last.hpp_average id price == 0 %>
+                <td><%= zfd.sku.product.article %></td>
+                <td><%= zfd.sku.product.description %></td>
+                <td>
+                  <%= format_currency(price) %>
+                  <% if price == 0 %>
+                  <span class="label label-danger">Tiada harga jual yang aktif</span>
+                  <% end %>
+                </td><!-- HPP -->
+                <td><%= zfd.moved_qty.to_i %></td>
+                <% total += price*zfd.moved_qty.to_i %>
+                <td><%= format_currency(total) %></td>
+                <% total_hpp_product += total %>
+                <% total_qty_product += zfd.moved_qty.to_i %>
+              </tr>
+            <% end %>
+            <% end %>
+            <tr>
+              <td colspan=3>Total</td>
+              <td><%= total_qty_product %></td>
+              <td><%= format_currency(total_hpp_product) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>

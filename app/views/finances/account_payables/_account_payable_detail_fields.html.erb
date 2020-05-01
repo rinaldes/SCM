@@ -1,0 +1,45 @@
+<div class="nested-fields">
+    <label class="col-md-5 label">Date</label>
+    <label class="col-md-5 input custom-input-box">
+        <%= format_date(Time.now.to_date) %>
+        <%= f.hidden_field :payment_date, :value => Time.now.to_date %>
+    </label>
+
+    <div class="payment-method">
+        <label class="col-md-5 label">Method</label>
+        <label class="col-md-5 input custom-input-box">
+            <%= f.select :method, options_for_select(METHODS), {:prompt => 'Select Method'}, { :class => 'form-control select-payment-method' } %>
+        </label>
+    </div>
+
+    <div class="bank">
+        <label class="col-md-5 label">Bank</label>
+        <label class="col-md-5 input custom-input-box">
+            <%= f.select :method, options_for_select(BANKS), {:prompt => 'Select Bank'}, { :class => 'form-control' } %>
+        </label>
+    </div>
+
+    <div class="giro-no">
+        <label class="col-md-5 label">Giro No.</label>
+        <label class="col-md-5 input custom-input-box">
+            <%= f.text_field :giro_number %>
+        </label>
+    </div>
+
+    <label class="col-md-4 label">Payment Amount</label>
+    <label class="col-md-1 label">Rp.</label>
+    <label class="col-md-5 input custom-input-box">
+        <%= f.text_field :amount, class: 'numeric' %>
+    </label>
+
+    <label class="col-md-4 label">Pending Payment</label>
+    <label class="col-md-1 label">Rp.</label>
+    <label class="col-md-5 input custom-input-box">
+        <strong><span class='money pending-payment'><%= format_currency(@account_payable.count_outstanding) %></span></strong>
+    </label>
+
+    <label class="col-md-5 label">Notes</label>
+    <label class="col-md-5 input custom-input-box">
+        <%= f.text_area :note, class: "custom-scroll", size: "25x3"%>
+    </label>
+</div>

@@ -1,0 +1,23 @@
+<% @roles.each_with_index do |role, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= role.name %></td>
+    <% if current_user.can_manage_role? %>
+      <td class="hidden-phone">
+        <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_role_path(role), class: "btn btn-primary btn-xs edit-btn-dlt" %>
+        <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{role.id}, 'roles')", class: "btn btn-danger btn-xs edit-btn-dlt" %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=<%= current_user.can_manage_role? ? 3 : 2 %>>
+    <% if @roles.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@roles, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

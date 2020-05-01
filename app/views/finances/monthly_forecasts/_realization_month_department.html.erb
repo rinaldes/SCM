@@ -1,0 +1,84 @@
+<%= form_tag finances_forecast_monthly_forecast_path(@monthly_forecast.forecast_id, @monthly_forecast.id), :id => "monthly-forecasts-filter-form", class: "smart-form", :remote => false  do %>
+    <section>
+        <div class="row">
+            <section class="col col-6">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Month</label>
+                    <div class="col-md-10">
+                        <%= select_tag "month", options_for_select(( @monthly_forecast.forecast.monthly_forecasts.pluck('month_number').uniq      ).map {|m| [Date::MONTHNAMES[m], m]}, (@monthly_forecast.month_number)) ,  {:class => "form-control", id: "select-month-forecast"} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">&nbsp;</label>
+                    <div class="col-md-10">&nbsp;</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Department</label>
+                    <div class="col-md-10">
+                        <%= select_tag "department", options_from_collection_for_select(@monthly_forecast.forecast.office.departments, 'id', 'name', @monthly_forecast.monthly_forecast_details.first.department_id),  {:class => "form-control", id: "select-department-forecast"} %>  
+                    </div>
+                </div>
+            </section>
+            <section class="col col-6"></section>
+        </div>
+
+        <div class="row">
+            <section class="col col-4">
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Total Forecast Qty</label>
+                    <div class="col-md-6" id="total-forecast-qty">
+                        <%= format_currency(0) %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">&nbsp;</label>
+                    <div class="col-md-6">&nbsp;</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Total Amount</label>
+                    <div class="col-md-6" id="total-forecast-amount">
+                        <%= format_currency(0) %>
+                    </div>
+                </div>
+            </section>
+
+            <section class="col col-4">
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Total Realization Qty</label>
+                    <div class="col-md-6" id="total-forecast-qty">
+                        <%= format_currency(0) %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">&nbsp;</label>
+                    <div class="col-md-6">&nbsp;</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Total Realization Amount</label>
+                    <div class="col-md-6" id="total-forecast-amount">
+                        <%= format_currency(0) %>
+                    </div>
+                </div>
+            </section>
+
+            <section class="col col-4">
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Realization % Qty</label>
+                    <div class="col-md-6" id="total-forecast-qty">
+                        <%= format_currency(0) %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">&nbsp;</label>
+                    <div class="col-md-6">&nbsp;</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Realization % Amount</label>
+                    <div class="col-md-6" id="total-forecast-amount">
+                        <%= format_currency(0) %>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+<% end %>

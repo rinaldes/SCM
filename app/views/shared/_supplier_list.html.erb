@@ -1,0 +1,26 @@
+<% @suppliers_list = Supplier.where("LOWER(name) LIKE LOWER('%#{params[:supplier_name]}%')").paginate(page: params[:page], per_page: 10) if @suppliers_list2.blank? %>
+<% @suppliers_list = @suppliers_list2 if @suppliers_list2.present? %>
+<% @suppliers_list.each_with_index do |supplier, i| %>
+<tr id="supplier-<%= supplier.id %>">
+  <td class="hidden-phone"><%= i + 1 %></td>
+  <td class="hidden-phone"><%= supplier.code %></td>
+  <td class="hidden-phone"><%= supplier.name %></span></td>
+  <td class="hidden-phone"><%= supplier.address %></span></td>
+  <td class="hidden-phone"><%= supplier.city %></span></td>
+  <td class="hidden-phone" hidden><%= supplier.long_term %></span></td>
+  <td class="hidden-phone">
+    <button onclick="chooseSupplier('<%= supplier.id %>');get_supplier('<%= supplier.id %>');" "btn btn-primary btn-xs custom-edit-btn" data-dismiss="modal">Choose</button>
+  </td>
+</tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @suppliers_list.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@suppliers_list, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

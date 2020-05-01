@@ -1,0 +1,120 @@
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+
+<b><h2>Laporan Hasil Stock Opname <%= @stock_opname.office.office_name %> (<%= @stock_opname.office.code %>)</h2></b><br/>
+
+<table id="table-info">
+  <tr>
+    <td><label>TGL SO</label>:<span><%= @stock_opname.start_date.strftime('%Y-%m-%d %H:%M:%S') %></span></td>
+  </tr>
+  <tr>
+    <td><label>Petugas SO</label>:<span><%= @stock_opname.inspector.fullname rescue '' %></span></td>
+  </tr>
+</table>
+
+<hr />
+
+<br />
+
+<table id="table-item">
+  <tr>
+    <th>No</th>
+    <th>Artikel</th>
+    <th>Deskripsi</th>
+    <th>Department</th>
+    <th>UoM</th>
+    <th>Stock</th>
+    <th>Sold</th>
+    <th>Receive Transfer</th>
+    <th>Retur</th>
+    <th>Mutation In</th>
+    <th>Mutation Out</th>
+    <th>LPP</th>
+    <th>Store Qty</th>
+    <th>Warehouse Qty</th>
+    <th>Actual Qty</th>
+    <th>HPP</th>
+    <th>Var</th>
+    <th>Amount Variance</th>
+  </tr>
+  <%
+    total_var = 0
+    total_amount_var = 0
+  %>
+  <% @stock_opname_details.each_with_index do |stock_opname_detail, i| %>
+    <tr>
+      <% begin %>
+        <%
+          if stock_opname_detail.explanation.present?
+            store_dan_warehouse = stock_opname_detail.explanation.split(", ")
+            store_qty = store_dan_warehouse[0].gsub("store:", "").to_i
+            warehouse_qty = store_dan_warehouse[1].gsub("warehouse:", "").to_i
+          end
+        %>
+        <% product = stock_opname_detail.product %>
+        <% product_detail = ProductDetail.find_by_product_id_and_warehouse_id(product.id, @stock_opname.office_id) %>
+        <td><%= i+1 %></td>
+        <td><%= product.article %></td>
+        <td><%= product.description %></td>
+        <td><%= product.department.try(:name) %></td>
+        <td><%= product.unit.try(:short_name) %></td>
+        <td style='text-align: right'><%= stock_opname_detail.system_stock.to_i %></td>
+        <td style='text-align: right'><%= stock_opname_detail.sold.to_i %></td>
+        <td style='text-align: right'><%= stock_opname_detail.received_from_transfer.to_i %></td>
+        <td style='text-align: right'><%= stock_opname_detail.retur.to_i %></td>
+        <td style='text-align: right'><%= stock_opname_detail.mutation_in.to_i %></td>
+        <td style='text-align: right'><%= stock_opname_detail.mutation_out.to_i %></td>
+        <td style='text-align: right'><%= stock_opname_detail.qty_virtual %></td>
+        <td style='text-align: right'><%= store_qty rescue nil %></td>
+        <td style='text-align: right'><%= warehouse_qty rescue nil %></td>
+        <td style='text-align: right'><%= stock_opname_detail.qty_actual.to_i %></td>
+        <td style='text-align: right'><%= (stock_opname_detail.product.product_price(Time.now).hpp_average rescue 0) %></td>
+        <td style='text-align: right'><%= stock_opname_detail.diff %></td>
+        <td style='text-align: right'><%= format_currency stock_opname_detail.diff.to_f*stock_opname_detail.hpp.to_f %></td>
+        <%
+          total_var += stock_opname_detail.diff
+          total_amount_var += stock_opname_detail.diff.to_f*(stock_opname_detail.product.product_price(Time.now).hpp_average rescue 0)
+        %>
+      <% rescue %>
+      <% end %>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan="15"></td>
+    <td>Total</td>
+    <td><%= total_var %></td>
+    <td><%= format_currency total_amount_var %></td>
+  </tr>
+</table>
+<br><br><br>
+<table id="table-info">
+  <tr>
+    <td style="width: 10%"></td>
+    <td style="width: 20%; text-align: center">PELAKSANA,</td>
+    <td style="width: 5%"></td>
+    <td style="width: 5%"></td>
+    <td style="width: 20%; text-align: center">PENANGGUNG JAWAB,</td>
+    <td style="width: 5%"></td>
+    <td style="width: 5%"></td>
+    <td style="width: 20%; text-align: center">DIKETAHUI,</td>
+    <td style="width: 5%"></td>
+    <td style="width: 5%"></td>
+  </tr>
+  </tr><tr><td></td></tr><tr><td></td></tr></tr><tr><td></td></tr><tr><td></td></tr>
+  <tr>
+    <td style="width: 10%"></td>
+    <td style="width: 20%">(</td>
+    <td style="width: 5%">)</td>
+    <td style="width: 5%"></td>
+    <td style="width: 20%">(</td>
+    <td style="width: 5%">)</td>
+    <td style="width: 5%"></td>
+    <td style="width: 20%">(</td>
+    <td style="width: 5%">)</td>
+    <td style="width: 5%"></td>
+  </tr>
+</table>
+<style>
+  td, th {
+    font-size: 11px;
+  }
+</style>

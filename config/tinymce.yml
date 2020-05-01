@@ -1,0 +1,10 @@
+toolbar:
+  - styleselect | copy cut paste | bold italic underline | alignleft aligncenter alignright | undo redo | bullist numlist outdent indent | table forecolor backcolor | link uploadimage ltr rtl | insertdatetime
+plugins:
+ - table
+ - link
+ - image
+ - uploadimage
+ - textcolor
+ - directionality
+ - insertdatetime

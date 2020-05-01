@@ -1,0 +1,3 @@
+var number = $("#request tbody tr:last-child td:first-child div").html() || 0;
+$("#request tbody").append("<%= j(render 'tr_detail', product: @product, key: Time.now.to_i) %>");
+$("#request tbody tr:last-child td:first-child div").append(parseInt(number) + 1);

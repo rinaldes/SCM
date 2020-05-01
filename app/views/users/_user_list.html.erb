@@ -1,0 +1,28 @@
+<% @users.each_with_index do |user, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE-1) : i+1 %></td>
+    <td><span class="name"><%= user.fullname %></span></td>
+    <td class="hidden-phone"><%= user.username %></td>
+    <td class="hidden-phone"><%= user.email %></td>
+    <td class="hidden-phone"><%= user.role_name %></td>
+    <td class="hidden-phone"><%= user.branch_name %></td>
+    <% if current_user.can_manage_user? %>
+      <td class="hidden-phone nowrap">
+        <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_user_path(user), class: "btn btn-primary btn-xs" %>
+        <%= link_to "Change Password", change_password_user_path(user), class: "btn btn-primary btn-xs" %>
+        <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{user.id}, 'users')", class: "btn btn-danger btn-xs edit-btn-dlt" %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=<%= current_user.can_manage_user? ? 8 : 7 %>>
+    <% if @users.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@users, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

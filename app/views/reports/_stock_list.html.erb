@@ -1,0 +1,36 @@
+<% if @products.present? %>
+<% @products.each{ |p| %>
+<% pmh =  ProductMutationHistory.where("product_mutation_histories.created_at BETWEEN '#{Time.zone.now.beginning_of_day}' AND '#{Time.zone.now.end_of_day}'").where("product_id=#{p.id}").joins(product_detail: :product) %>
+<% rc =  ProductMutationHistory.where("product_mutation_histories.created_at BETWEEN '#{Time.zone.now.beginning_of_day}' AND '#{Time.zone.now.end_of_day}'").where("product_id=#{p.id} AND mutation_type='Receiving'").joins(product_detail: :product) %>
+
+  <tr>
+    <td><%= pmh.map(&:old_quantity).sum rescue 0 %></td>
+    <td><%= rc.map(&:moved_quantity).sum rescue 0 %></td>
+    <td><%= pmh.product_detail.product.barcode rescue '' %></td>
+    <td><%= pmh.product_detail.product.description rescue '' %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><%= pmh.product_detail.product.cost_of_products rescue '' %></td>
+    <td><%= ProductStock.where(pmh.product_detail_id).batas_kuantitas_maksimal rescue 0 %></td>
+    <td><%= ProductSupplier.where(pmh.product_detail.product_id).minimal_order rescue 0 %></td>
+    <td></td>
+  </tr>
+<% } %>
+<% else %>
+<tr>
+  <td colspan="13"><center>No Data Available</center></td>
+</tr>
+<% end %>
+<tr>
+  <td colspan=7>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

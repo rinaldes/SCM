@@ -1,0 +1,58 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Member Level</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-member_level">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Member Level</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @member_level, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+
+                    <section>
+                      <label class="col-md-3 label">Level <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.number_field :level, :class => "input-sm #{(error_field @member_level, :level)}", min: 0 %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Description <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :description, :class => "input-sm #{(error_field @member_level, :description)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Minimum Amount <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.number_field :minimum_amount, :class => "input-sm #{(error_field @member_level, :minimum_amount)}", min: 0 %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Discount Percent <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.number_field :discount_percent, :class => "input-sm #{(error_field @member_level, :discount_percent)}", min: 0, max: 100 %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Allow Credit <span class='important'>*</span></label>
+                      <label class="col-md-9 custom-input-box"><%= f.radio_button :is_credit, true %> Yes <%= f.radio_button :is_credit, false, style:"margin-left: 10px;" %>No</label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

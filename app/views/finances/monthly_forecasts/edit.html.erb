@@ -1,0 +1,39 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content"><!-- MAIN CONTENT -->
+    <section id="widget-grid" class="">
+        <div id='notice_template'><%= render 'layouts/notice' %></div>
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header class="header-monthly-forecast">
+                        <%= render 'header_monthly_forecast' %>
+                    </header>
+                   <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <%= render 'month_department' %>
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            <%= form_for @monthly_forecast, url: finances_forecast_monthly_forecast_path, html: {class: "monthly-forecast smart-form", id: "form-update-verify", :multipart => true} do |f| %>
+                                <%= render partial: 'form',  locals: { f: f }%>
+                            <% end %>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+    <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+</div>  <!-- end row -->

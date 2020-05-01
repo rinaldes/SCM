@@ -1,0 +1,208 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Purchase Order</li><li><%= @purchase_order.number %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @purchase_order.number %></h2>
+        </header>
+        <div> <!-- widget div-->
+        <div id="notice_template"><%= render 'layouts/notice' %></div>
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @purchase_order, url: approve_purchase_order_url(@purchase_order), html: {class: "smart-form", method: 'PUT'} do |f| %>
+              <%= f.hidden_field :status %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">TGL.PO</label>
+                      <label class="col-md-10 input custom-input-box"><%= @purchase_order.date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">No.PO </label>
+                      <label class="col-md-10 input custom-input-box"><%= @purchase_order.number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Note</label>
+                      <label class="col-md-12 textarea custom-input-box"><%= @purchase_order.note || '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Send To </label>
+                      <label class="col-md-2 input custom-input-box"><%= @purchase_order.office.office_name %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">SUP.CODE</label>
+                      <label class="col-md-10 input custom-input-box"><%= @supplier.code rescue '' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">SUPPLIER </label>
+                      <label class="col-md-10 input custom-input-box"><%= @supplier.name rescue '' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">ALAMAT </label>
+                      <label class="col-md-10 input custom-input-box"><%= @supplier.address rescue '' %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="row">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="orders">
+                    <thead>
+                      <tr>
+                        <th>NO</th>
+                        <th>SKU</th>
+                        <th>Barcode</th>
+                        <th>Product Name</th>
+                        <th>HPP</th>
+                        <th>Disc1 %</th>
+                        <th>Disc2 %</th>
+                        <th>Fraction</th>
+                        <th>Unit</th>
+                        <th>Qty</th>
+                        <th>Sub Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="list_detail-list">
+                      <% total = 0 %>
+                      <% total_qty = 0 %>
+                      <% @purchase_order.purchase_order_details.each_with_index do |pod, i| %>
+                        <% product = pod.product %>
+                        <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id) %>
+                        <% hpp_akhir = pod.hpp*pod.fraction-hpp_disc_amt %>
+                        <tr>
+                          <td><%= i + 1 %>
+                          <td><%= product.article rescue '' %></td>
+                          <td><%= product.barcode rescue '' %></td>
+                          <td><%= product.description rescue '' %></td>
+                          <td style='text-align: right'><%= format_currency pod.hpp %></td>
+                          <td style='text-align: right'><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+                          <td style='text-align: right'><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+                          <td style='text-align: right'><%= format_currency pod.fraction %></td>
+                          <td style='text-align: right'><%= product.select_unit pod.unit_type rescue '' %></td>
+                          <td style='text-align: right'><%= pod.quantity %></td>
+                          <td style='text-align: right'><%= format_currency hpp_akhir*pod.quantity %></td>
+                        </tr>
+                        <% total += hpp_akhir*pod.quantity %>
+                        <% total_qty += pod.quantity %>
+                      <% end %>
+                      <tr>
+                        <th colspan=9>Total</th>
+                        <td style='text-align: right'><%= total_qty %></td>
+                        <td style='text-align: right'><%= format_currency total rescue '' %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+                <%= link_to 'Send PO For Supplier', print_for_supplier_purchase_order_url(@purchase_order), class: 'btn btn-primary' %>
+                <%= link_to 'Print To PDF', print_to_pdf_purchase_order_url(@purchase_order), class: 'btn btn-primary' %>
+                <%= link_to 'Print To Excel', purchase_order_url(@purchase_order, format: 'xls'), class: 'btn btn-primary' %>
+                <% if @purchase_order.is_waiting_approval? %>
+                  <button type="button" class="btn btn-primary" onclick="$('#purchase_order_status').val('<%= PurchaseOrder::APPROVED %>');$('form').submit();">Approve</button>
+                  <button type="button" class="btn btn-danger" onclick="$('#purchase_order_status').val('<%= PurchaseOrder::REJECTED %>');$('form').submit();">Reject</button>
+                <% end %>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    autocomplete_barcode()
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (order, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: order.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#supplier_code').val(ui.item.code)
+        $('#purchase_order_supplier_id').val(ui.item.id)
+        $('#alamat').val(ui.item.address)
+      },
+      minLength: 1
+    });
+    reset_form();
+
+    <% if params[:action] == 'edit' %>
+      $("#purchase_order_supplier_id").val("<%= @supplier.id rescue '' %>");
+      $("#supplier_name").val("<%= @supplier.name rescue '' %>")
+      $("#alamat").val("<%= @supplier.address rescue '' %>");
+      $("#supplier_code").val("<%= @supplier.code rescue '' %>");
+    <% end %>
+  });
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_orders_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#order tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#order tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function removeList(event){
+    $(event.target).parent().parent().remove();
+  }
+
+
+  function reset_form(){
+    document.getElementById("form_order").reset();
+    $("#order tbody").html("");
+  }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_orders/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

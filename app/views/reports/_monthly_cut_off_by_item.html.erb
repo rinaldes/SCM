@@ -1,0 +1,87 @@
+<table class="table table-bordered table-striped" id='stock_table'>
+  <thead>
+    <tr>
+      <th rowspan=2>Article</th>
+      <th rowspan=2>Description</th>
+      <th colspan=2>Start</th>
+      <th colspan=2>Sales</th>
+      <th colspan=2>Retur Sls</th>
+      <th colspan=2>BPB</th>
+      <th colspan=2>TaT In</th>
+      <th colspan=2>TaT Out</th>
+      <th colspan=2>Retur</th>
+      <th colspan=2>SO</th>
+      <th rowspan=2>Penyesuaian</th>
+      <th rowspan=2>HPP Satuan</th>
+      <th colspan=2>End</th>
+      <th rowspan=2>DSI</th>
+    </tr>
+    <tr>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+    </tr>
+    <tr>
+      <th class="hasinput"><%= text_field_tag :tanggal, params[:tanggal], class: 'form-control', onkeydown: "enter_pressed(event);" %></th>
+      <th colspan="22"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% total_sales_qty = 0 %>
+    <% total_sales_amt = 0 %>
+    <% @product_mutations.each_with_index{|pmh, i| %>
+      <% if params[:all_stores] == 'Store' %>
+        <% first_sale = Sale.where("store_id=#{pmh.id} AND to_char(transaction_date, 'YYYY-MM')='#{params[:year]}-#{sprintf('%02d', Date::MONTHNAMES.index(params[:month]))}'").limit(1).first %>
+      <% else %>
+        <% first_sale = @first_sale %>
+      <% end %>
+      <% count_day = (Time.now.month == Date::MONTHNAMES.index(params[:month]) ? Time.now.day : "#{params[:year]}-#{params[:month]}-01".to_date.end_of_month.day+1)-first_sale.transaction_date.strftime('%d').to_i rescue 0 %>
+      <tr>
+        <td><%= pmh.article %></td>
+        <td><%= pmh.description %></td>
+        <td class='align-right'><%= format_currency pmh.start_qty %></td>
+        <td class='align-right'><%= format_currency pmh.start_amount %></td>
+        <td class='align-right'><%= format_currency pmh.sales_qty %></td>
+        <td class='align-right'><%= format_currency pmh.sales_amount %></td>
+        <td class='align-right'><%= format_currency pmh.retur_sales_qty.abs %></td>
+        <td class='align-right'><%= format_currency pmh.retur_sales_amount %></td>
+        <td class='align-right'><%= format_currency pmh.gr_qty %></td>
+        <td class='align-right'><%= format_currency pmh.gr_amount %></td>
+        <td class='align-right'><%= format_currency pmh.tat_in_qty %></td>
+        <td class='align-right'><%= format_currency pmh.tat_in_amount %></td>
+        <td class='align-right'><%= format_currency pmh.tat_out_qty %></td>
+        <td class='align-right'><%= format_currency pmh.tat_out_amount %></td>
+        <td class='align-right'><%= format_currency pmh.retur_qty %></td>
+        <td class='align-right'><%= format_currency pmh.retur_amount %></td>
+        <td class='align-right'><%= format_currency pmh.so_qty %></td>
+        <td class='align-right'><%= format_currency pmh.so_amount %></td>
+        <td class='align-right'>
+          <%= format_currency (pmh.end_qty)-(pmh.start_qty-pmh.sales_amount+pmh.retur_sales_amount+pmh.gr_amount-pmh.retur_amount+pmh.tat_in_amount-pmh.tat_out_amount+pmh.so_amount) %>
+        </td>
+        <td class='align-right'>
+          <%= format_currency pmh.last_cost %>
+        </td>
+        <td class='align-right'><%= format_currency pmh.end_qty %></td>
+        <td class='align-right'><%= format_currency pmh.end_amount %></td>
+        <td class='align-right'>
+          <%= (format_currency (pmh.end_qty.to_f/pmh.sales_qty*count_day) rescue 0) %>
+        </td>
+      </tr>
+    <% } if @product_mutations.present? %>
+  </tbody>
+</table>

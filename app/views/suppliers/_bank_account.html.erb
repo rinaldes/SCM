@@ -1,0 +1,33 @@
+<div class="alert alert-info alert-block" style='float: left; width: 98%'>
+  <a class="close" data-dismiss="alert" href="#">×</a>
+  <div style="margin-bottom: 25px;">Bank Account 1</div>
+  <section class="form-group">
+    <label class="col-md-3 label">Name <span class='important'>*</span></label>
+    <label class="col-md-9 input custom-input-box"><%= text_field_tag "supplier[bank_accounts_attributes][#{key}][name]", (object[:name] rescue ''), class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '. '} %></label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-3 label">Account No.<span class='important'>*</span></label>
+    <label class="col-md-9 input custom-input-box">
+      <%= number_field_tag "supplier[bank_accounts_attributes][#{key}][account_number]", (object[:account_number] rescue ''), class: "input-sm", data: {validation: 'number', validation_error_msg: 'The input value can only contain number'} %>
+    </label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-3 label">Bank <span class='important'>*</span></label>
+    <label class="col-md-9 input custom-input-box">
+      <%= text_field_tag "supplier[bank_accounts_attributes][#{key}][bank_name]", (object[:bank_name] rescue ''), class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '. '} %>
+    </label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-3 label">Branch <span class='important'>*</span></label>
+    <label class="col-md-9 input custom-input-box"><%= text_field_tag "supplier[bank_accounts_attributes][#{key}][branch]", (object[:branch] rescue ''), class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '. '} %></label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-3 label">City <span class='important'>*</span></label>
+    <label class="col-md-9 input custom-input-box"><%= text_field_tag "supplier[bank_accounts_attributes][#{key}][city]", (object[:city] rescue ''), class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '. '} %></label>
+  </section>
+</div>
+<SCRIPT>
+  for (i=0; i<$('#bank_account div.alert div').length; i++){
+    $('#bank_account div.alert div')[i].innerHTML = "Rekening Bank "+(i+1)
+  }
+</SCRIPT>

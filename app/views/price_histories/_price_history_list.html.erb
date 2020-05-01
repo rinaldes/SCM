@@ -1,0 +1,23 @@
+<% @price_histories.each_with_index do |transaction_history, i| %>
+  <% if transaction_history.harga_lama != transaction_history.harga_baru %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td class="hidden-phone"><%= transaction_history.created_at.strftime("%d-%m-%Y") %></td>
+      <td class="hidden-phone"><%= transaction_history.product.brand.name rescue ''%></td>
+      <td class="hidden-phone"><%= transaction_history.tipe_harga %></td>
+      <td class="hidden-phone"><%= transaction_history.harga_lama %></td>
+      <td class="hidden-phone"><%= transaction_history.harga_baru %></td>
+    </tr>
+  <% end %>
+<% end %>
+<tr>
+  <td colspan=6>
+    <% if @price_histories.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%#= pagination_links(@price_histories, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

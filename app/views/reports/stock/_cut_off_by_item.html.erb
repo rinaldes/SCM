@@ -1,0 +1,60 @@
+<table class="table table-bordered table-striped" id='stock_table'>
+  <thead>
+    <tr>
+      <th rowspan=2>Product Code</th>
+      <th rowspan=2>Product Name</th>
+      <th colspan=2>Start</th>
+      <th colspan=2>Sales</th>
+      <th colspan=2>Retur Sls</th>
+      <th colspan=2>BPB</th>
+      <th colspan=2>TaT In</th>
+      <th colspan=2>TaT Out</th>
+      <th colspan=2>Retur</th>
+      <th colspan=2>SO</th>
+      <th rowspan=2>Penyesuaian</th>
+      <th rowspan=2>HPP Satuan</th>
+      <th colspan=2>End</th>
+      <th rowspan=2>DSI</th>
+    </tr>
+    <tr>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+    </tr>
+    <tr>
+      <th class="hasinput"><%= text_field_tag :article, (params[:search][:article] rescue ''), class: 'form-control search', onkeydown: "enter_pressed(event);" %></th>
+      <th class="hasinput"><%= text_field_tag :description, (params[:search][:description] rescue ''), class: 'form-control search', onkeydown: "enter_pressed(event);" %></th>
+      <th colspan="21"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% total_sales_qty = 0 %>
+    <% total_sales_amt = 0 %>
+    <% @product_mutations.sort_by{|pm|pm[1].map(&:start_amount).compact.sum}.reverse.each_with_index{|pmh, i| %>
+      <% product = Product.find_by_id(pmh[0]) %>
+      <% if product %>
+      <tr>
+        <td><%= product.article %></td>
+        <td><%= product.description %></td>
+        <%= render 'reports/stock/qty_amount_det', pmh: pmh, start_stock: @start_stock[pmh[0]], end_stock: @end_stock[pmh[0]] %>
+      </tr>
+      <% end %>
+    <% } if @product_mutations.present? %>
+    <%= render 'reports/stock/total_qty_amount_det' %>
+  </tbody>
+</table>

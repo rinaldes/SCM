@@ -1,0 +1,33 @@
+<% if @purchase_orders.count > 0 %>
+<% nomor = params[:page] ? (params[:page].to_i*PER_PAGE) : 1 %>
+  <% @purchase_orders.each do |p| %>
+    <% p.sales_details.each_with_index do |po, i| %>
+      <% next if po.product.blank? %>
+      <tr>
+        <td><%= nomor %></td>
+        <td><%= p.sales_code %></td>
+        <td><%= po.product.article %></td>
+        <td><%= po.product.description %></td>
+        <td><%= po.quantity %></td>
+        <td><%= po.product.unit.try(:short_name) %></td>
+        <td><%= po.status %></td>
+        <% nomor += 1 %>
+      </tr>
+    <% end %>
+  <% end %>
+  <tr>
+    <td colspan=7>
+      <% if @purchase_orders.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@purchase_orders, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='10' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

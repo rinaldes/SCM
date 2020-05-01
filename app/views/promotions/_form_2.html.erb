@@ -1,0 +1,487 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<link href="/plugin/multiple-select/multiple-select.css" rel="stylesheet" />
+<script src="/js/plugin/clockpicker/clockpicker.min.js"></script>
+<script type="text/javascript">
+  function hide(key, product_id)
+  {
+    td_pl_sp = "#td_pl_sp_"+key;
+    td_pl_prize_promo = "#td_pl_prize_promo_"+key;
+    td_pl_disc_amt = "#td_pl_disc_amt_"+key;
+    td_pl_min_qty = "#td_pl_min_qty_"+key;
+    td_pl_qty = "#td_pl_qty_"+key;
+    td_pl_hpp = "#td_pl_hpp_"+key;
+    td_pl_max_qty = "#promotion_prize_lists_attributes_"+key+"_max_qty";
+    pl_p_id = "#promotion_prize_lists_attributes_"+key+"_product_id";
+
+
+    if ($("#promotion_promotion_type option:selected" ).text() == 'Buy One Get One')
+    {
+      $(td_pl_sp).hide();
+      $(td_pl_hpp).hide();
+      $(td_pl_prize_promo).hide();
+      $(td_pl_disc_amt).hide();
+      $(td_pl_min_qty).hide();
+      $(td_pl_qty).show();
+      $('.add_prize').text('Add Prize');
+      $('#prize_list_hdr').text('Prize List');
+    }
+    else if ($("#promotion_promotion_type option:selected" ).text() == 'Discount Period')
+    {
+      $(td_pl_qty).hide();
+      $(td_pl_hpp).show();
+      $(td_pl_prize_promo).hide();
+      $(td_pl_min_qty).hide();
+      $('.add_prize').text('Add Item');
+      $('#prize_list_hdr').text('Promo Item');
+    }
+    else if ($("#promotion_promotion_type option:selected" ).text() == 'Purchase to Purchase')
+    {
+      $(td_pl_disc_amt).hide();
+      $(td_pl_hpp).hide();
+      $(td_pl_qty).hide();
+      $(td_pl_max_qty).hide();
+      $(td_pl_min_qty).hide();
+      $('.add_prize').text('Add Prize');
+      $('#prize_list_hdr').text('Prize List');
+    }
+    else if ($("#promotion_promotion_type option:selected" ).text() == 'Happy Hour')
+    {
+      $(td_pl_qty).hide();
+      $(td_pl_hpp).hide();
+      $(td_pl_prize_promo).hide();
+      $('.add_prize').text('Add Item');
+      $('#prize_list_hdr').text('Promo Item');
+      $('#start_time').prop('disabled',false);
+      $('#end_time').prop('disabled',false);
+    }
+
+    // $.ajax({
+    //   url: '/promotions/get_product',
+    //   type: 'get',
+    //   data: {
+    //     product_id: product_id, key: key
+    //   }
+    // })
+  }
+</script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Promo</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div id='notification'></div>
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-promotion">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Promo</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @promotion, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= hidden_field_tag :promo_list %>
+              <header>General Informations</header>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Code</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <label class="input custom-input-box"><%= f.text_field :code, class: "input-sm", placeholder: "Auto Generate", disabled: true %></label>
+                    </label>
+                  </section>
+                  <section class="col col-1">
+                    <label class="label">Valid From</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= f.text_field :from, required: 'required' %>
+                    </label>
+                  </section>
+                  <section class="col col-1">
+                    <label class="label">Start Time</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= text_field_tag :start_time, @promotion.promo_item_lists.first.start_time.strftime("%H:%M") if params[:action] == 'edit' && @promotion.promotion_type == 'Happy Hour' %>
+                      <%= text_field_tag :start_time unless params[:action] == 'edit' %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Name</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <label class="input custom-input-box"><%= f.text_field :name, class: "input-sm", required: 'required' %></label>
+                    </label>
+                  </section>
+                  <section class="col col-1">
+                    <label class="label">Valid Until</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= f.text_field :to, required: 'required' %>
+                    </label>
+                  </section>
+                  <section class="col col-1">
+                    <label class="label">End Time</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <%= text_field_tag :end_time, @promotion.promo_item_lists.first.end_time.strftime("%H:%M") if params[:action] == 'edit' && @promotion.promotion_type == 'Happy Hour' %>
+                      <%= text_field_tag :end_time unless params[:action] == 'edit' %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-1">
+                    <label class="label">Type</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="select">
+                      <%= f.select :promotion_type, options_for_select([['Buy One Get One', 'Buy One Get One'], ['Purchase to Purchase', 'Purchase to Purchase'], ['Discount Period', 'Discount Period'], ['Happy Hour', 'Happy Hour']], selected: @promotion.promotion_type), include_blank: 'Please Select' %> <i></i>
+                    </label>
+                  </section>
+                  <section class="col col-1">
+                    <label class="label">Store</label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="select">
+                      <%= select_tag "promotion[office_id]", options_for_select(Branch.active_store.map { |str| [str.office_name, str.id] }, selected: @promotion.office_id), multiple: true, class: 'form_input', id: 'promotion_office_id' %>
+                    </label>
+                  </section>
+                </div>
+                <div class="row">
+                  <section class="col col-2">
+                    <label class="checkbox">
+                      <%= f.check_box :is_member %>
+                      <i></i>Is Member?
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="checkbox">
+                      <%= f.check_box :multi %>
+                      <i></i>Multiple?
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="checkbox">
+                      <%= f.check_box :is_claim %>
+                      <i></i>Is Claim?
+                    </label>
+                  </section>
+                </div>
+              </fieldset>
+              <header id="promo_item_hdr">Promo Item</header>
+              <fieldset class="col col-md-12" id="fs_pi">
+                <div class="row">
+                  <%= link_to 'Add Item', 'javascript:void(0)', class: 'btn btn-primary btn-sm add_promo', style: "margin: 0 0 20px 14px;" %>
+                  <section class="col col-md-12">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin" id="pi">
+                      <thead>
+                        <tr>
+                          <th>Article</th>
+                          <th>Name</th>
+                          <th>UoM</th>
+                          <th>Qty</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id='promo_item_list'>
+                        <% if params[:action] == 'edit' %>
+                          <% @promotion.promo_item_lists.each{|cp| %>
+                            <%= render partial: "promo_item_list", locals: {key: cp.id, object: cp} %>
+                          <% } %>
+                        <% else %>
+                          <% (params[:promotion][:item_lists_attributes].keys rescue []).each{|i| %>
+                            <%= render partial: "promo_item_list", locals: {key: i, object: (params[:promotion][:item_lists_attributes][i] rescue nil)} %>
+                          <% } %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </fieldset>
+              <header id="prize_list_hdr">Prize List</header>
+              <fieldset class="col col-md-12" id="fs_pl">
+                <div class="row">
+                  <%= link_to 'Add Prize', 'javascript:void(0)', class: 'btn btn-primary btn-sm add_prize', style: "margin: 0 0 20px 14px;" %>
+                  <section class="col col-md-12">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin" id="pl">
+                      <thead>
+                        <tr>
+                          <th>Article</th>
+                          <th>Name</th>
+                          <th>UoM</th>
+                          <th id="th_pl_hpp">HPP</th>
+                          <th id="th_pl_sp">Selling Price</th>
+                          <th id="th_pl_qty">Qty</th>
+                          <th id="th_pl_min_qty">Min Qty</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id='prize_list'>
+                        <% if params[:action] == 'edit' %>
+                          <% @promotion.prize_lists.each{|cp| %>
+                            <%= render partial: "prize_list", locals: {key: cp.id, object: cp} %>
+                            <%= javascript_tag "hide(#{cp.id}, #{cp.product_id})" %>
+                          <% } %>
+                        <% else %>
+                          <% (params[:promotion][:prize_lists_attributes].keys rescue []).each{|i| %>
+                            <%= render partial: "prize_list", locals: {key: i, object: (params[:promotion][:prize_lists_attributes][i] rescue nil)} %>
+                          <% } %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick="return(beforeSavePromo())">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+<script type="text/javascript">
+  $("#start_time").clockpicker({
+    placement: 'bottom',
+      donetext: 'Done'
+  });
+  $("#end_time").clockpicker({
+    placement: 'bottom',
+      donetext: 'Done'
+  });
+  function reload_products(){
+    $(document).keypress(function(e) {
+      if(e.which == 13){
+        $.ajax({
+          url: '/promotions/search_product_manual',
+          method: "get",
+          data: {department: $('.modal-body #department').val(), brand_name: $('.modal-body #brand').val(),article: $('.modal-body #article').val(), description: $('.modal-body #description').val(), barcode: $('.modal-body #barcode').val(), key: $('.modal-body #key').val()},
+          dataType: "script"
+        })
+      }
+    });
+  }
+  function get_promo_type()
+  {
+    if ($("#promotion_promotion_type option:selected" ).text() == 'Buy One Get One')
+    {
+      $('#th_pl_sp').hide();
+      $('#th_pl_hpp').hide();
+      $('#fs_pl').show();
+      $('#fs_pi').show();
+      $('#promo_item_hdr').text('Promo Type : Buy One Get One');
+      $('.add_prize').show();
+      $('#prize_list').show();
+      $('#th_pl_qty').text('Qty');
+      $('#pl').show();
+      $('#td_pl_prize_promo').hide();
+      $('.add_prize').text('Add Prize');
+      $('#prize_list_hdr').text('Prize List');
+      $('#start_time').prop('disabled',true);
+      $('#end_time').prop('disabled',true);
+      $('#th_pl_min_qty').hide();
+    }
+    else if ($("#promotion_promotion_type option:selected" ).text() == 'Purchase to Purchase')
+    {
+      $('#fs_pl').show();
+      $('#fs_pi').show();
+      $('#promo_item_hdr').text('Promo Type : Purchase to Purchase');
+      $('.add_prize').show();
+      $('#prize_list').show();
+      $('#th_pl_qty').text('Prize Promo');
+      $('#th_pl_sp').show();
+      $('#th_pl_hpp').hide();
+      $('#pl').show();
+      $('#td_pl_prize_promo').show();
+      $('.add_prize').text('Add Prize');
+      $('#prize_list_hdr').text('Prize List');
+      $('#start_time').prop('disabled',true);
+      $('#end_time').prop('disabled',true);
+      $('#th_pl_min_qty').hide();
+    }
+    else if ($("#promotion_promotion_type option:selected" ).text() == 'Discount Period')
+    {
+      $('#fs_pl').show();
+      $('#fs_pi').hide();
+      $('#td_pl_prize_promo').hide();
+      $('#promo_item_hdr').text('Promo Type : Discount Period');
+      $('.add_prize').show();
+      $('#prize_list').show();
+      $('#th_pl_sp').show();
+      $('#th_pl_hpp').show();
+      $('#th_pl_qty').text('Harga Jual Akhir');
+      $('#pl').show();
+      $('#th_pl_min_qty').hide();
+      $('.add_prize').text('Add Item');
+      $('#prize_list_hdr').text('Promo Item');
+      $('#start_time').prop('disabled',true);
+      $('#end_time').prop('disabled',true);
+    }
+    else if ($("#promotion_promotion_type option:selected" ).text() == 'Happy Hour')
+    {
+      $('#fs_pl').show();
+      $('#fs_pi').hide();
+      $('#td_pl_prize_promo').hide();
+      $('#promo_item_hdr').text('Promo Type : Happy Hour');
+      $('.add_prize').show();
+      $('#th_pl_sp').show();
+      $('#th_pl_hpp').hide();
+      $('#prize_list').show();
+      $('#th_pl_qty').text('Harga Jual Akhir');
+      $('#th_pl_min_qty').show();
+      $('#pl').show();
+      $('.add_prize').text('Add Item');
+      $('#prize_list_hdr').text('Promo Item');
+      $('#start_time').prop('disabled',false);
+      $('#end_time').prop('disabled',false);
+    }
+    else
+    {
+      $('#fs_pl').hide();
+      $('#fs_pi').hide();
+    }
+  }
+  $('#promotion_promotion_type').on('change', function()
+  {
+    get_promo_type();
+  });
+
+  function select_product_manual(key){
+    $.ajax({
+      url: '/promotions/search_product_manual?key='+key,
+      type: 'get'
+    })
+  }
+
+  function changeProduct(product_id,key){
+    getProductItem(product_id,key)
+    $("#myModal").modal('hide');
+  }
+
+  function getProductItem(product_id,key){
+    $.ajax({
+      url: '/promotions/get_product',
+      type: 'get',
+      data: {
+        product_id: product_id, key: key
+      }
+    })
+  }
+
+  function beforeSavePromo(){
+    var good_id = [];
+    var tot = $('#pl tbody tr').length;
+    if(tot != 0 || $('#prize_type').get(0).checked){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#pi tbody tr:eq("+ y +") td:eq(0) span:eq(0)").text())
+      }
+      $("#promo_list").val(good_id.toString());
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/promotions<%= "/#{params[:id]}" if params[:action] == 'edit' %>",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            response(data)
+          },
+        });
+      }, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  $(document).ready(function() {
+    <% if params[:action] == 'edit' %>
+      get_promo_type();
+    <% else %>
+    $('#discount_container').hide();
+    $('#fs_pl').hide();
+    $('#fs_pi').hide();
+    $('#th_pl_qty').show();
+    $('#start_time').prop('disabled',true);
+    $('#end_time').prop('disabled',true);
+    <% end %>
+
+    $('#promotion_office_id').multipleSelect();
+    $("#promotion_from").datepicker({
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+
+
+    $("#promotion_to").datepicker({
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+
+    $('.add_promo').click(function(){
+      $('.add_promo').addClass('disabled');
+      var date = new Date();
+      $.ajax({
+        url: '/promotions/add_promo_item_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+
+    $('.add_prize').click(function(){
+      $('.add_prize').addClass('disabled');
+      var date = new Date();
+      $.ajax({
+        url: '/promotions/add_prize_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+
+    $("#start").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $('#pesan').hide();
+  });
+
+  function date() {
+    $(document).ready(function(){
+        $('#sendButton').attr('disabled',true);
+        var a = $('#from').val().toString().split("/");
+        var b = $('#to').val().toString().split("/");
+        if(a[0] <= b[0] && a[1] <= b[1] && a[2] <= b[2]){
+          $('#sendButton').attr('disabled', false);
+          $('#pesan').hide();
+        }
+        else{
+          $('#sendButton').attr('disabled',true);
+          $('#pesan').show();
+        }
+    });
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/plugin/multiple-select/multiple-select.js"></script>

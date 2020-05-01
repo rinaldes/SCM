@@ -1,0 +1,156 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Supplier</li><li><%= @supplier.name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @supplier.name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <form class='smart-form'>
+              <fieldset> <!-- tambah supplier -->
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Code</label>
+                      <label class="col-md-9 input custom-input-box">: <%= @supplier.code %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-3 label">Name</label>
+                      <label class="col-md-9 input custom-input-box">: <%= @supplier.name %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-3 label">Address</label>
+                      <label class="col-md-9 textarea custom-input-box">: <%= @supplier.address %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-3 label">City</label>
+                      <label class="col-md-9 input custom-input-box">: <%= @supplier.city %></label>
+                    </section><br>
+                    <section>
+                      <label class="col-md-3 label">Kons/Non-Kons</label>
+                      <div class="col-md-9 input custom-input-box">: <%= @supplier.suptype %></div>
+                    </section><br>
+                    <section>
+                      <label class="col-md-3 label">Status PKP</label>
+                      <div class="col-md-9 input custom-input-box">: <%= @supplier.status_pkp ? "PKP" : "NPKP" %></div>
+                    </section><br>
+                    <section>
+                      <label class="col-md-3 label">Status BKT</label>
+                      <div class="col-md-9 input custom-input-box">: <%= @supplier.status_bkt ? "BKT" : "NBKT" %></div>
+                    </section><br>
+                    <header>Supplier Division</header>
+                    <fieldset class="col col-md-12"> <!-- contact person -->
+                      <div class="row">
+                        <section id='contact' class="col col-md-12">
+                          <% @supplier.contact_people.each_with_index{|cp, i| %>
+                            <div class="alert alert-info alert-block" style='float: left; width: 98%'>
+                              <div style="margin-bottom: 25px;">Supplier Division <%= i+1 %></div>
+                              <section class="form-group col-md-12">
+                                <label class="col-md-2 label">Division Name </label>
+                                <label class="col-md-10 input custom-input-box"><%= cp.division_name %></label>
+                              </section><br>
+                              <section class="form-group col-md-12">
+                                <label class="col-md-2 label">Name </label>
+                                <label class="col-md-10 input custom-input-box"><%= cp.name %></label>
+                              </section><br>
+                              <section class="form-group col-md-12">
+                                <label class="col-md-2 label">No HP</label>
+                                <label class="col-md-10 input custom-input-box"><%= cp.phone %></label>
+                              </section><br>
+                              <section class="form-group col-md-12">
+                                <label class="col-md-2 label">Pin BB</label>
+                                <label class="col-md-10 input custom-input-box"><%= cp.pinbb || '-' %></label>
+                              </section><br>
+                              <section class="form-group col-md-12">
+                                <label class="col-md-2 label">Email</label>
+                                <label class="col-md-10 input custom-input-box"><%= cp.email %></label>
+                              </section><br>
+                            </div>
+                          <% } %>
+                        </section>
+                      </div> <!-- row -->
+                    </fieldset> <!-- contact person -->
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-3 label">Return Address</label>
+                      <label class="col-md-9 textarea custom-input-box">: <%= @supplier.send_address %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">No Tlp</label>
+                      <label class="col-md-9 input custom-input-box">: <%= @supplier.phone %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">No Fax</label>
+                      <label class="col-md-9 input custom-input-box">: <%= @supplier.fax %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Due Date</label>
+                      <label class="col-md-9 input custom-input-box">: <%= @supplier.long_term %> Hari</label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Departement</label>
+                      <label class="col-md-9 label">:
+                      <% @depart.map(&:department).uniq.each_with_index do |depart, i| %>
+                          <%= depart.department.name %> <br>
+                        <% end %></label>
+                    </section><br>
+                    <fieldset class="col col-md-12"> <!-- rekening bank -->
+                      <header>Bank Account</header>
+                      <fieldset class="col col-md-12"> <!-- rekening bank -->
+                        <div class="row">
+                          <section id='bank_account' class="col col-md-12">
+                            <% @supplier.bank_accounts.each_with_index{|cp, i| %>
+                              <div class="alert alert-info alert-block" style='float: left; width: 98%'>
+                                <div style="margin-bottom: 25px;">Rekening Bank <%= i+1 %></div>
+                                <section class="form-group">
+                                  <label class="col-md-4 label">Name</label>
+                                  <label class="col-md-8 input custom-input-box"><%= cp.name %></label>
+                                </section><br>
+                                <section class="form-group">
+                                  <label class="col-md-4 label">Account Number</label>
+                                  <label class="col-md-8 input custom-input-box"><%= cp.account_number %></label>
+                                </section><br>
+                                <section class="form-group">
+                                  <label class="col-md-4 label">Bank</label>
+                                  <label class="col-md-8 input custom-input-box"><%= cp.bank_name %></label>
+                                </section><br>
+                                <section class="form-group">
+                                  <label class="col-md-4 label">Branch</label>
+                                  <label class="col-md-8 input custom-input-box"><%= cp.branch %></label>
+                                </section><br>
+                                <section class="form-group">
+                                  <label class="col-md-4 label">City</label>
+                                  <label class="col-md-8 input custom-input-box"><%= cp.city %></label>
+                                </section>
+                              </div>
+                            <% } %>
+                          </section>
+                        </div> <!-- row -->
+                      </fieldset> <!-- rekening bank -->
+
+                    </section> <!-- col-md-6 -->
+                  </fieldset> <!-- tambah supplier -->
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+              <footer>
+                <%= link_to "Edit", edit_supplier_path(params[:id]), class: "btn btn-primary", style: "float: right;" %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();" style="float: right;">Back</button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

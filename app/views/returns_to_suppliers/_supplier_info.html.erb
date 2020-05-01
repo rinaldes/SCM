@@ -1,0 +1,33 @@
+<%= hidden_field_tag :good_list %>
+<section class="col col-md-12">
+  <label for="" class="label col-md-3">Supplier Code</label>
+  <label for="" class="label col-md-9">
+    <label class="supl_code">
+    <% if params[:action] == "edit" %>
+      <%= @purchase_order.supplier.code rescue 'None is choosen' %>
+    <% else %>
+      None is choosen
+    <% end %>
+    </label><button type="button" class="btn btn-primary btn-sm" onclick="$('#modalSupplier').modal()" style="margin-left: 10px;">Browse</button>
+  </label>
+</section>
+<div class="row">
+  <section class="col col-md-12">
+    <label for="" class="label col-md-3">Supplier Name</label>
+    <label for="" class="label col-md-9 supl_name">
+      <% if params[:action] == "edit" %>
+        <%= @purchase_order.supplier.name rescue '' %>
+      <% end %>
+    </label>
+  </section>
+</div>
+<div class="row">
+  <section class="col col-md-12">
+    <label for="" class="label col-md-3">Supplier Address</label>
+    <label for="" class="label col-md-9 supl_address">
+      <% if params[:action] == "edit" %>
+        <%= @purchase_order.supplier.address rescue '' %>
+      <% end %>
+    </label>
+  </section>
+</div>

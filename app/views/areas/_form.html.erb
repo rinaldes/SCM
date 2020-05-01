@@ -1,0 +1,81 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Area</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-city">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Area</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @area, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Code <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :code, :class => "input-sm #{(error_field @area, :code)}", :disabled => true, :placeholder => "Autogenerate" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Name <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :name, :class => "input-sm #{(error_field @area, :name)}" %></label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Regional <span class='important'>*</span></label>
+                      <label class="col-md-9 custom-input-box">
+                        <%= f.select :regional_id, options_for_select(Regional.all.map{|reg|[reg.name, reg.id]}, selected: @area.regional_id), {include_blank: 'Please Select'},
+                          {class: 'form-control',onchange: "get_branch(this)"} %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Branch <span class='important'>*</span></label>
+                      <label class="col-md-9 custom-input-box">
+                        <%= f.grouped_collection_select :city_id, Regional.order(:name), :cities, :name, :id, :name , {prompt: "Select a City"}, {class: "form-control"} %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Description</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_area :description, :class => "input-sm #{(error_field @area, :description)}" %></label>
+                    </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<SCRIPT>
+  function disable_button(){
+    $('input[type="submit"]').prop('disabled', true);
+  }
+  function get_branch(obj){
+    $.ajax({
+      url: "/areas/branches_per_regional",
+      dataType: "script",
+      data: {regional_id: obj.value},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+</SCRIPT>

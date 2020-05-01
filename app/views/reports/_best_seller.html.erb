@@ -1,0 +1,59 @@
+<thead>
+  <tr>
+    <th>No</th>
+    <th>SKU</th>
+    <th>Barcode</th>
+    <th>Name</th>
+    <th>Brand</th>
+    <th>Department</th>
+    <th>Category</th>
+    <% if params[:group_by] == 'Amount' %>
+    <th>Total Sold (Amount)</th>
+    <% elsif params[:group_by] == 'Quantity' %>
+    <th>Total Sold (Qty)</th>
+    <% end %>
+  </tr>
+  <tr>
+    <th></th>
+    <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search' %></th>
+    <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+    <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search'%></th>
+    <th class="hasinput"><%= text_field_tag :brand, params[:brand], class: 'form-control search', name: 'brands.name'%></th>
+    <th class="hasinput"><%= text_field_tag :department, params[:department], class: 'form-control search', name:'departments.name'%></th>
+    <th class="hasinput"><%= text_field_tag :mclass, params[:mclass], class: 'form-control search', name: 'm_classes.name'%></th>
+    <% if params[:group_by].present? %>
+    <th></th>
+    <% end %>
+  </tr>
+</thead>
+<tbody>
+  <% if @products.present? %>
+    <% @products.each_with_index do |product, i| %>
+      <tr>
+        <td><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+        <td><%= product.article %></td>
+        <td><%= product.barcode %></td>
+        <td><%= product.description %></td>
+        <td><%= product.brand.name rescue '' %></td>
+        <td><%= product.department.name rescue '' %></td>
+        <td><%= product.m_class.name rescue '' %></td>
+        <% if params[:group_by] == 'Amount' %>
+        <td align="right"><%= format_currency product.total_amount %></td>
+        <% elsif params[:group_by] == 'Quantity' %>
+        <td align="right"><%= product.total_quantity %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  <% end %>
+  <!-- <tr>
+    <td colspan=7>
+      <%# if @products.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%#= pagination_links(@products, options = {}) %>
+        </div>
+      <%# else %>
+        <%#= raw '<center>No Data Available</center>' %>
+      <%# end %>
+    </td>
+  </tr> -->
+</tbody>

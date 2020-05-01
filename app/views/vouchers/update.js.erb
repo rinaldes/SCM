@@ -1,0 +1,5 @@
+$("#notification").html("<%= j(render 'dashboard/notification') %>");
+<% if @voucher.errors.blank? %>
+  $("#voucher-list").html("<%= j(render 'voucher_list') %>");
+<% end %>
+$("#form-voucher").html("<%= j(render 'form') %>");

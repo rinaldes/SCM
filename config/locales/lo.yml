@@ -1,0 +1,112 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  store: 'Store'
+  store_list: 'Store List'
+  add_store: 'Add Store'
+  konsinyasi: 'Non Lotte'
+  non_konsinyasi: 'Lotte'
+  status_4: 'Lock By CSO'
+  hello: "Hello world"
+  survey_name: "Survey Name"
+  description: "Description"
+  period: "Period"
+  language: "Language"
+  user_management: "User Management"
+  role_management: "Role Management"
+  dashboard: "Dashboard"
+  approval_level: "Approval Level"
+  data_master: "Data Master"
+  survey: "Survey"
+  vision: "Vision"
+  mision: "Mision"
+  culture: "Culture"
+  recruitment: "Recuitment"
+  employee: "Employee"
+  absence: "Absence"
+  overtime_request: "Overtime Request"
+  leave_request: "Leave Request"
+  approval: "Approval"
+  asset_assignment: "Asset Assignment"
+  successfully_updated: 'Successfully updated'
+  successfully_created: 'Successfully created'
+  name: 'Name'
+  data_master: 'Master Data'
+  models:
+    bank_account: "Bank Account"
+  attributes:
+    name: "Bank Account Name"
+    account_number: "Bank Account Number"
+    bank_name: "Bank Name"
+    branch: "Bank Branch"
+    city: "City"
+  models:
+    unit: "Unit"
+  attributes:
+    name: "Name"
+    description: "Description"
+  models:
+  supplier: "Supplier"
+  attributes:
+    name: "Name"
+    address: "Address"
+    city: "City"
+    send_address: "Send Address"
+    bank_name: "Bank"
+    branch: "Bank Branch"
+    account_number: "Bank Account Number"
+    email: "Contact Person Email"
+    phone: "Contact Person Phone"
+    pinbb: "Pin BB Contact Person"
+  models:
+  promotion: "Promotion"
+  attributes:
+    to: "Valid From"
+    from: "Valid Until"
+    max: "Maximum Budget"
+    promo_item_lists: "Promo Item"
+    prize_lists: "Prize List"
+    date: "Date"
+    end_at: "End Date"
+  data_already_in_used: "Data already in used"
+  product_mutation_history: "Product Mutation History"
+  product_detail_id: "Product Detail Id"
+  new_quantity: "New Quantity"
+  moved_quantity: "Moved Quantity"
+  old_quantity: "Old Quantity"
+  quantity_type: "Quantity Type"
+  mutation_type: "Mutation Type"
+  product_mutation_receipt: "Transfer Receipt"
+  purchase_summary: 'Purchase Summary'
+  purchase_detail: 'Purchase Detail'
+  selling_price: "Selling Price"
+  activerecord:
+    attributes:
+      unit:
+        name: "Unit Name"
+      branch:
+        city_id: "Branch"
+        office_name: "Store name"
+      warehouse:
+        office_name: "Warehouse name"
+        city_id: "Branch"
+

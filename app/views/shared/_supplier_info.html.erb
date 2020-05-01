@@ -1,0 +1,27 @@
+<%= hidden_field_tag :good_list %>
+<section>
+  <label class="col-md-3 label">SUPPLIER</label>
+  <label class="col-md-3 input custom-input-box">
+    <%= text_field_tag :supplier_code, (@supplier.code rescue ''), class: "input-sm", disabled: true, placeholder: 'CODE' %>
+  </label>
+  <label class="col-md-6 input custom-input-box">
+    <%= text_field_tag :supplier_name, (@supplier.name rescue ''), class: 'input-sm autocomplete-field', placeholder: 'NAME' %>
+    <a class="ui-button ui-widget ui-state-default ui-button-icon-only custom-combobox-toggle ui-corner-right" tabindex="-1">
+      <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text"></span>
+    </a>
+    <ul style="display: none; width: 100%; top: 29px;" tabindex="0" id="ui-id-1" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content">
+      <% @suppliers.each{|supplier| %>
+        <li tabindex="-1" id="ui-id-2" class="ui-menu-item" onclick="set_data_per_supplier(<%= supplier.attributes.to_json %>)"><%= supplier.name %></li>
+      <% } if @suppliers.present? %>
+    </ul>
+  </label>
+</section>
+<section>
+  <label class="col-md-3 label">ADDRESS</label>
+  <label class="col-md-9 input custom-input-box"><%= text_field_tag :alamat, (@supplier.address rescue ''), class: "input-sm", disabled: true %></label>
+</section>
+<script type="text/javascript">
+  $(document).ready(function() {
+    autocomplete_supplier_name()
+  })
+</script>

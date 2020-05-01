@@ -1,0 +1,184 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<div id="ribbon">
+  <!-- RIBBON -->
+  <ol class="breadcrumb">
+    <!-- breadcrumb -->
+    <li>Reports</li>
+    <li>Profit & Lost</li>
+  </ol>
+  <!-- end breadcrumb -->
+</div>
+<!-- END RIBBON -->
+<div id="content">
+  <!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2>Profit & Lost Report</h2>
+        </header>
+        <div>
+          <!-- widget div-->
+          <div class="widget-body no-padding">
+            <!-- widget content -->
+            <div style="margin: 20px 0px 6px 6px;">
+              <form class='smart-form' url="/products/stock">
+                <ul id="myTab1" class="nav nav-tabs" style='float: left'>
+                  <li class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                    <ul class="dropdown-menu" >
+                      <li id="export_xls" style="color:'black';"><%= link_to "Export to Excel", reports_pl_path(:id => params[:id],:branch_id => params[:branch_id], :prev_period => params[:prev_period], :period => params[:period], format: "xls") %></li>
+                      <li id="export_pdf" style="color:'black';"><%= link_to "Export to PDF", reports_pl_path(:id => params[:id],:branch_id => params[:branch_id], :prev_period => params[:prev_period], :period => params[:period], format: "pdf") %></li>
+                    </ul>
+                  </li>
+                </ul>
+                <fieldset> <!-- tambah supplier -->
+                  <% if current_user.role.name == 'Super Admin' %>
+                    <label class="col-md-1 label">Store</label>
+                    <label class="col-md-2 input custom-input-box">
+                      <%= select_tag :branch_id, options_for_select(Branch.all.map{|branch|[branch.office_name, branch.id]}, selected: Branch.first.id), class: 'origin_branch_id form-control ho_id', onchange: 'filter_pl()' %>
+                    </label>
+                  <% else %>
+                    <label class="col-md-1 label">Store</label>
+                    <label class="col-md-2 input custom-input-box">
+                      <% if current_user.branch_id.present? %>
+                        <%= select_tag :branch_id, options_for_select([current_user.branch].map{|branch|[branch.office_name, branch.id]}), class: 'hide origin_branch_id ho_id', onchange: 'filter_pl()' %>
+                        <%= current_user.branch.office_name %>
+                      <% else %>
+                        <%= select_tag :branch_id, options_for_select(Branch.all.map{|branch|[branch.office_name, branch.id]}, selected: Branch.first.id), class: 'origin_branch_id form-control ho_id', onchange: 'filter_pl()' %>
+                      <% end %>
+                    </label>
+                  <% end %>
+                </fieldset> <!-- tambah supplier -->
+                <fieldset> <!-- tambah supplier -->
+                  <label class="col-md-2" id="tf_label">Transaction From</label>
+                  <label class="col-md-2 input custom-input-box">
+                    <%= text_field_tag :start_date, '', onchange: "filter_pl()", class: 'input-sm', placeholder: 'Start Date' %>
+                  </label>
+                  <label class="col-md-1"></label>
+                  <label class="col-md-1" id="ut_label">Until</label>
+                  <label class="col-md-2 input custom-input-box">
+                    <%= text_field_tag :end_date, '', onchange: "filter_pl()", class: 'input-sm', placeholder: 'End Date' %>
+                  </label>
+                </fieldset> <!-- tambah supplier -->
+              </form>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div class="widget-body no-padding">
+            <!-- TABEL -->
+            <div class="table-responsive" id='sales'>
+              <table class="table table-striped table-brequested table-hover" width="100%">
+                <tbody id='list'><%= render 'list' %></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- END TABEL -->
+          <section class="col col-md-12 hide_detail hide">
+            <%= link_to 'Hide Detail', 'javascript:void(0)', onclick: "$('#transaction_date').val('');filter_pl()" %>
+          </section>
+          <section class="col col-md-12" id='sales_per_hour'></section>
+          <section class="col col-md-12" id='sales_per_item'></section>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- END COL -->
+  </div>
+  <!-- end widget div -->
+</div>
+<!-- end widget div -->
+
+<SCRIPT>
+  function filter_pl() {
+    $.ajax({
+      url: "/reports/pl",
+      dataType: "script",
+      data: $("form").serialize(),
+      success: function (data) {
+        // response(data)
+      }
+    });
+  }
+
+  function filter_by_months(){
+    $.ajax({
+      url: "/reports/sale",
+      dataType: "script",
+      data: $("form").serialize(),
+      success: function (data) {
+
+      }
+    })
+  }
+
+  $(document).ready(function () {
+    $("#months").hide();
+    $('#start_date, #end_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>'
+    })
+    $("#search_brand").autocomplete({
+      search: function () {},
+      source: function (request, response) {
+        $.ajax({
+          url: "/brands/autocomplete_brand_name",
+          dataType: "json",
+          data: {
+            term: request.term
+          },
+          success: function (data) {
+            // response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (request, response) {
+        $.ajax({
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {
+            term: request.term
+          },
+          success: function (data) {
+            // response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+  })
+
+  function all_store(is_all) {
+    if (is_all) {
+      $('.all_stores').html("<option value=''>Please Select</option><option value='Toko'>Toko</option><option value='Item'>Item</option><option value='Tanggal'>Tanggal</option><option value='Jam'>Jam</option><option value='Bulan'>Bulan</option>");
+      $('.one_store').addClass('hide');
+      $('#store_code').val('');
+    } else {
+      $('.all_stores').html("<option value=''>Please Select</option><option value='Item'>Item</option><option value='Tanggal'>Tanggal</option><option value='Jam'>Jam</option><option value='Bulan'>Bulan</option>");
+      $('.one_store').removeClass('hide');
+    }
+  }
+
+  function export_xls() {
+    if ($("#store_all").is(":checked")) {
+      // all store
+      window.location = "/reports/sale.xls?";
+    } else {
+      // per store
+      window.location = "/reports/sale.xls?store_code=" + $('#store_code').val();
+    }
+
+    return false;
+  }
+</SCRIPT>

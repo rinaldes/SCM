@@ -1,0 +1,10 @@
+<fieldset>
+    <%= render :partial => 'details', :locals => { :f => f } %>
+    <%= render :partial => 'payment_schedules', :locals => { :f => f } if (params[:action] != 'show') %>
+    <%= render :partial => 'payments', :locals => { :f => f }  if (params[:action] == 'show') %>
+</fieldset>
+
+<footer>
+    <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-account-receivable", data: { :disable_with => "Please wait..." }  %>
+    <%= link_to "Back", finances_account_receivables_path, :class => "btn btn-default"  %>
+</footer>

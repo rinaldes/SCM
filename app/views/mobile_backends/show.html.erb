@@ -1,0 +1,101 @@
+<script src="/js/jquery-2.1.1.min.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>Mobile Backends</li><li><%= @purchase_order.code %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Transaction Number : <%= @purchase_order.code %></h2>
+        </header>
+        <div>
+          <div class="row">
+            <section class="col col-md-11">
+              <section>
+                <label class="col-md-2">Transaction Number</label>
+                <label class="col-md-9 input custom-input-box">
+                  : <%= @purchase_order.code %>
+                </label>
+              </section>
+              <section>
+                <label class="col-md-2">Transaction Date</label>
+                <label class="col-md-9 input custom-input-box">
+                  : <%= @purchase_order.transaction_date.strftime("%d/%m/%Y") %>
+                </label>
+              </section>
+              <section>
+                <label class="col-md-2">Sales</label>
+                <label class="col-md-9 input custom-input-box">
+                  : <%= @purchase_order.name %>
+                </label>
+              </section>
+              <section>
+                <label class="col-md-2">Parent Store</label>
+                <label class="col-md-9 input custom-input-box">
+                  : <%= @purchase_order.office_name %>
+                </label>
+              </section>
+            </section>
+          </div>
+          <div style='overflow-x: scroll'>
+            <br>
+          	<table class="table table-striped table-bordered" width="100%" id="table_show">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>SKU</th>
+                <th>Item Description</th>
+                <th>Qty</th>
+                <th>UoM</th>
+                <th>Selling Price</th>
+                <th style="text-align:center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @mo.present? %>
+                <%= hidden_field_tag 'yg_checked' %>
+                <%= hidden_field_tag 'yg_unchecked' %>
+                <%= render 'show_list' %>
+              <% else %>
+                <tr>
+                  <td colspan='7' align='center'>No Data Entries</td>
+                </tr>
+              <% end %>
+            </tbody>
+            </table>
+          <footer>
+            <button type="button" class="btn btn-success" onclick="kirim_pesanan('terima')">Submit</button>
+            <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+            <%= link_to "Print to PDF", print_to_pdf_mobile_backend_path(params[:id]), :class => "btn btn-info btn-sm" %>
+          </footer>
+          <br>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    <% if (@purchase_order.status.downcase  == "ready" || @purchase_order.status.downcase  == "finished" || @purchase_order.status.downcase  == "reject" || @purchase_order.status.downcase  == "pending") && @purchase_order.status.downcase  != "new" %>
+      $(".btn-success").prop("disabled", true)
+    <% end %>
+  });
+
+	function kirim_pesanan(status){
+		$.ajax({
+      url: '<%= kirim_pesanan_mobile_backends_path %>',
+      type: 'get',
+      data: {
+        status: status,
+        id: '<%= params[:id] %>',
+        unchek: $("#yg_unchecked").val(),
+        chek: $("#yg_checked").val()
+      }
+    })
+	}
+</script>

@@ -1,0 +1,76 @@
+<html>
+    <style>
+        @font-face
+        {
+        font-family: Code39AzaleaFont;
+        src: url('/fonts/Code39Azalea.eot') format('embedded-opentype'), /* IE9 Compat Modes */
+           url('/fonts/Code39Azalea.woff') format('woff'), /* Modern Browsers */
+           url('/fonts/Code39Azalea.ttf') format('truetype'), /* Safari, Android, iOS */
+           url('/fonts/Code39Azalea.svg#Code39Azalea') format('svg'); /* Legacy iOS */
+        font-weight: normal;
+        font-style: normal;
+        }
+
+        div.kotak {
+            width: 4.9cm;
+            height: 3cm;
+            border:1px solid black;
+            display: inline-block;
+            /* margin-bottom: 1px; */
+            margin-right: 3px;
+            overflow: auto;
+        }
+        div.kotak .harga{
+            text-align: center;
+            margin: 0;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            font-weight: bold;
+            font-size: 26px;
+        }
+        div.kotak .judul{
+            margin: 0;
+            font-size: 9px;
+            text-align: center;
+            text-decoration: underline;
+        }
+
+
+        div.kotak .artikel{
+            text-align: center;
+            margin: 0;
+        }
+
+        div.kotak .barcode{
+             font-family:'Code39AzaleaFont';
+             font-size:26px;
+             text-align: center;
+             margin-bottom: 0;
+             margin-right: 2px;
+        }
+
+        div.kotak .no_barcode{
+             font-size: 10px;
+             text-align: center;
+             margin: 0;
+             margin-top: 0px;
+             margin-bottom: 0px
+        }
+    </style>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <title>Printed HTML</title>
+    </head>
+    <body>
+        <% @selling.each do |spd| %>
+          <% product = spd.selling_price.product %>
+        <div class="kotak">
+            <b><h3 class="harga"><%= number_to_currency((spd.price), unit: "Rp ", separator: ",", delimiter: ".", :precision => 0) %></h3></b>
+            <b><p class="judul"><%= product.description.upcase[0..30] rescue '' %></p></b>
+            <h6 class="artikel"><small><%= product.article rescue ''%></small></h6>
+            <div class="barcode">*<%= product.barcode rescue '' %>*</div>
+            <p class="no_barcode"><%= product.barcode rescue '' %></p>
+        </div>
+        <% end %>
+    </body>
+</html>

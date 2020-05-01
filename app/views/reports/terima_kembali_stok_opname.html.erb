@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Reports</li> / <li>Receive Return Stok Opname Product</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Receive Return Stok Opname Product <%= Time.now.strftime('%B %Y') %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_tag({:action => 'terima_kembali_stok_opname', format: [:xls]}, :method=>"get", id: "terimakembali") do %>
+              <div class="row"> 
+                <section class="col col-md-12">
+                  <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                      <li class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                          <ul class="dropdown-menu" >
+                            <li style="color:'black';"><%= link_to 'Export to Excel', "#", :onclick => "$('#terimakembali').submit()" %></li>
+                          </ul>
+                      </li>
+                  </ul>
+                </section>
+                <section class="col col-md-12">
+                  <section class="col col-md-4">
+                    <div class="smart-form">
+                      <section class="form-group">
+                        <label class="col-md-4 label">Date Start</label>
+                        <label class="col-md-8 input custom-input-box">
+                          <%= text_field_tag "date_start", nil, class: "input-sm datepicker" %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-4 label">Date End</label>
+                        <label class="col-md-8 input custom-input-box">
+                          <%= text_field_tag "date_end", nil, class: "input-sm datepicker" %>
+                        </label>
+                      </section>
+                    </div>
+                  </section>
+                </section>
+              </div>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<SCRIPT>
+  $(document).ready(function() {
+    $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+  })
+</SCRIPT> 

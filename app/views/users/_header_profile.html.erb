@@ -1,0 +1,30 @@
+<div class="col-sm-12">
+  <section class="panel">
+    <div class="panel-body profile-information">
+      <div class="col-md-3">
+        <div class="profile-pic text-center">
+          <!-- <img src="/assets/lock_thumb.jpg" alt=""/> -->
+          <img src="<%= current_user.image_url(:thumb) if current_user.image? %>" alt="" onerror="this.src='/assets/default-user.png'"/>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="profile-desk">
+          <h1><%= user.name %></h1>
+          <span class="text-muted"><%= user.username %> as <%= user.role %></span>
+          <!-- <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean porttitor vestibulum imperdiet. Ut auctor accumsan erat, a vulputate metus tristique non. Aliquam aliquam vel orci quis sagittis.
+          </p> -->
+          <!-- <a href="#" class="btn btn-primary">View Profile</a> -->
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="profile-statistics">
+          <h1><%= user.survey_responses.count %></h1>
+          <p>Survey Respons</p>
+          <h1><%= user.surveys.count %></h1>
+          <p>Surveys</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

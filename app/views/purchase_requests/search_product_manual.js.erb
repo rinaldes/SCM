@@ -1,0 +1,9 @@
+$("#myModal").html("<%= j( render 'product_list')%>")
+$("#myModal").modal()
+paging()
+$(function () {
+        $('.pagination a').click(function () {
+                $.get(this.href, null, null, 'script');
+                return false;
+        });
+});

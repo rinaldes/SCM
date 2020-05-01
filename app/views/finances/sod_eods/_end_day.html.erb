@@ -1,0 +1,183 @@
+<section class="col col-6 end-of-the-day">
+    <% if @sod_eod.has_started? %>
+        <a href="javascript:void(0);" class="btn btn-primary btn-sm <%= "disabled" if @sod_eod.has_ended? %>" id="end-now">End Now</a>
+    <% else %>
+        <div class="end-button-div"></div>
+    <% end %>
+
+    <div id="end-now-box">
+        <header>End of The Day</header>
+        <section></section>
+        <section>
+            <label class="col-md-4 label">End Time</label>
+            <label class="col-md-8 input custom-input-box"> <% if params[:action] == 'edit' || params[:action] == 'create' %>
+                    <strong><span id="end-time"><%= format_time(@sod_eod.end_time) %>&nbsp;</span></strong>
+                <% else %>
+                    <strong><span id="end-time">&nbsp;</span></strong>
+                <% end %>
+                <%= hidden_field_tag 'sod_eod[end_time]', '', id: "end_time" %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 100.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][100000]" type="text" value="<%= @sod_eod.cash[:end]['100000'].to_i if @sod_eod.cash.key?(:end) %>" rel="100000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][100000]" type="text" value="0" rel="100000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 50.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][50000]" type="text" value="<%= @sod_eod.cash[:end]['50000'].to_i if @sod_eod.cash.key?(:end) %>" rel="50000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][50000]" type="text" value="0" rel="50000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 20.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][20000]" type="text" value="<%= @sod_eod.cash[:end]['20000'].to_i if @sod_eod.cash.key?(:end) %>" rel="20000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][20000]" type="text" value="0" rel="20000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 10.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][10000]" type="text" value="<%= @sod_eod.cash[:end]['10000'].to_i if @sod_eod.cash.key?(:end) %>" rel="10000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][10000]" type="text" value="0" rel="10000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 5.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][5000]" type="text" value="<%= @sod_eod.cash[:end]['5000'].to_i if @sod_eod.cash.key?(:end) %>" rel="5000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][5000]" type="text" value="0" rel="5000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 2.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][2000]" type="text" value="<%= @sod_eod.cash[:end]['2000'].to_i if @sod_eod.cash.key?(:end) %>" rel="2000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][2000]" type="text" value="0" rel="2000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 1.000</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][1000]" type="text" value="<%= @sod_eod.cash[:end]['1000'].to_i if @sod_eod.cash.key?(:end) %>" rel="1000" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][1000]" type="text" value="0" rel="1000" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 500</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][500]" type="text" value="<%= @sod_eod.cash[:end]['500'].to_i if @sod_eod.cash.key?(:end) %>" rel="500" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][500]" type="text" value="0" rel="500" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 200</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][200]" type="text" value="<%= @sod_eod.cash[:end]['200'].to_i if @sod_eod.cash.key?(:end) %>" rel="200" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][200]" type="text" value="0" rel="200" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Rp. 100</label>
+            <label class="col-md-6 input custom-input-box">
+                <% if @sod_eod.has_ended? %>
+                    <input class="input-scm end numeric" name="end_cash[end][100]" type="text" value="<%= @sod_eod.cash[:end]['100'].to_i if @sod_eod.cash.key?(:end) %>" rel="100" disabled="disabled">
+                <% else %>
+                    <input class="input-scm end numeric" name="end_cash[end][100]" type="text" value="0" rel="100" disabled="disabled">
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">&nbsp;</label>
+            <label class="col-md-1 label"></label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label"><strong>SOD - EOD</strong></label>
+            <label class="col-md-1 label">&nbsp;</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">POS - Cash</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Debit</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Credit</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Transfer</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Voucher</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">&nbsp;</label>
+            <label class="col-md-1 label"></label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label"><strong>Retur</strong></label>
+            <label class="col-md-1 label"></label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Discount</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Discount Khusus</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Net Sales</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">&nbsp;</label>
+            <label class="col-md-1 label"></label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Actual</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+            <label class="col-md-4 label">Modal</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box total">
+                <% if @sod_eod.has_started? %>
+                    <strong><span id="total-end"><%=  format_currency(@sod_eod.start_amount) %></span></strong>
+                <% else %>
+                    <strong><span id="total-end" class="total">0</span></strong>
+                <% end %>
+            </label>
+
+            <label class="col-md-4 label">Net Sales</label>
+            <label class="col-md-1 label">Rp.</label>
+            <label class="col-md-5 input custom-input-box">&nbsp;</label>
+
+        </section>
+    </div>
+</section>

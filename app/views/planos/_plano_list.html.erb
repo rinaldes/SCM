@@ -1,0 +1,40 @@
+<% @planos.each_with_index do |plano, i| %>
+  <tr>
+    <td><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><%= link_to plano.product_article, plano_path(plano), class: 'blue' %></td>
+    <td><%= link_to plano.product_name, plano_path(plano), class: 'blue' %></td>
+    <td><%= plano.period %></td>
+    <td><%= plano.rak_name %></td>
+    <td><%= plano.planogram.rack_type %></td>
+    <td align="right"><%= plano.rows %></td>
+    <td align="right"><%= plano.shelving %></td>
+    <td align="right"><%= plano.kir_ka %></td>
+    <td align="right"><%= plano.at_ba %></td>
+    <td align="right"><%= plano.de_be %></td>
+    <td align="right"><%= plano.leadtime %></td>
+    <td align="right"><%= plano.nplus %></td>
+    <td align="right"><%= plano.min %></td>
+    <td align="right"><%= plano.product_detail.min_stock %></td>
+    <td align="right"><%= plano.product_detail.rop_stock %></td>
+    <td align="right"><%= plano.product_detail.max_stock %></td>
+    <td>
+      <%= link_to edit_plano_path(plano), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{plano.id}, 'planos')", class: "btn btn-danger btn-xs" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=18>
+    <% if @planos.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@planos, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

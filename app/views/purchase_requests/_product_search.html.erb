@@ -1,0 +1,111 @@
+<fieldset style="padding-left: 0px;" id='product_search'>
+  <div class="row">
+    <section class="col col-md-12">
+      <section class="col col-md-8">
+      <div class="row">
+        <section class="col col-md-12">
+          <% if params[:controller] == 'purchase_orders' %>
+            <section class="col col-md-12">
+              <label class="btn btn-primary btn-sm choose-product-manual" onclick="importProductFile();" >Import Product From File</label>
+              <label class="btn btn-primary btn-sm import-product-from-file" onclick="chooseProductManual();" >Choose Product Manual</label>
+              <label class="btn btn-primary btn-sm load_outstanding_pb" onclick="load_outstanding_pb();" >Load outstanding PB</label>
+            </section>
+          <% end %>
+          <div class="import-product-from-file" hidden>
+            <section class="col col-md-8">
+              <label class="col-md-8">
+                <%= file_field_tag :import_excel, onchange: "data_terisi_semua();", accept:".csv" %>
+              </label>
+              <%= submit_tag "Upload Data Product", class: 'btn btn-primary btn-sm tombol-export', disabled: 'true' %>
+
+                    <label class="col-md-9 input custom-input-box">
+                      <button id="download-template" class="btn btn-primary btn-sm disabled" disabled="disabled" onclick="return download_template();">Download Template</button>
+                    </label>
+            </section>
+          </div>
+          <div class="choose-product-manual"<%= ' hidden' if params[:controller] == 'purchase_orders' %>>
+            <section class="col col-md-8">
+              <label class="col-md-3 label">SKU </label>
+              <label class="col-md-8 input custom-input-box"><%= text_field_tag :article, '', :class => "input-sm" %></label>
+              <div class="col col-md-1">
+                <button type="button" class="btn btn-primary btn-sm browser_product" onclick="searchManual()" <%= "disabled=disabled" unless ((params[:controller].include?'requests') || (params[:controller].include?'structures') || (params[:controller] == 'returns_to_hos')) %>>
+                  Browse
+                </button>
+              </div>
+            </section>
+            <section class="col col-md-8">
+              <label class="col-md-3 label">BARCODE</label>
+              <label class="col-md-9 input custom-input-box">
+                <%= hidden_field_tag :product_id %>
+                <%= text_field_tag :number, '', class: 'input-sm', placeholder: "Barcode" %>
+              </label>
+            </section>
+            <section class="col col-md-8">
+              <section>
+                <label class="col-md-3 label">Product Name </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :product_name, '', :class => "input-sm" %></label>
+              </section>
+              <section>
+                <label class="col-md-3 label">Brand </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :merk, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-3 label">DEPT </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :departement, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-3 label">CATEGORY </label>
+                <label class="col-md-9 input custom-input-box"><%= text_field_tag :m_class, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-3 label">HPP</label>
+                <label class="col-md-2 input custom-input-box"><%= text_field_tag :product_hpp, '', :class => "input-sm", disabled: true %></label>
+              </section>
+            </section>
+            <section class="col col-md-4">
+              <section>
+                <label class="col-md-6 label">STATUS 2</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :status2, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-6 label">STATUS 3</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :status3, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-6 label">STATUS 4</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :status4, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-6 label">STATUS 5</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :status5, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-6 label">ROP</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :rop, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-6 label">Safety Stock</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :safety_stock, '', :class => "input-sm", disabled: true %></label>
+              </section>
+              <section>
+                <label class="col-md-6 label">Available Qty</label>
+                <label class="col-md-6 input custom-input-box"><%= text_field_tag :available_qty, '', :class => "input-sm", disabled: true %></label>
+              </section>
+            </div>
+          </section>
+        </div>
+      </section>
+    <section class="col col-md-4" id="product_image" border="1"></section>
+    <section class="col col-md-12" style="padding-left: 30px;">
+    </section>
+    <section id = "abcxyz" class="choose-product-manual"<%= ' hidden' if params[:controller] == 'purchase_orders' %>>
+      <button type='button' class="col-md-2 btn btn-primary" onclick="return(add_product('<%= params[:controller] %>'))" style="padding:6px 10px 6px 10px; margin-left:33px">Add Item</button>
+            <button type="button" class="col-md-2 btn btn-primary" onclick="view_transaction_history($('#number').val())" style="padding:6px 10px 6px 10px; margin-left:33px;">
+          Transaction History
+      </button>
+            <button type="button" class="col-md-2 btn btn-primary" onclick="view_transaction_history($('#number').val())" style="padding:6px 10px 6px 10px; margin-left:33px;">
+          New Product
+      </button>
+    </section>
+  </div>
+</fieldset>

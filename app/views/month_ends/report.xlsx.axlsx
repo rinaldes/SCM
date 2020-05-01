@@ -1,0 +1,32 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+subjudul = styles.add_style(:b => true)
+
+wb.add_worksheet(name: "Month End") do |sheet|
+  sheet.add_row ["Flag", "Periode", "Supplier", "Location", "Doc No", "Date", "Gross", "Tax", "Amount"], :style => subjudul
+  tgl_sementara = "01/01/1000".to_date
+  @receivings.each do |rec|
+    if tgl_sementara < rec.date
+      @returns.where(date: rec.date).each do |rec2|
+        dpp = 0
+        product = []
+        rec2.returns_to_supplier_details.each do |rtsd|
+          pp = rtsd.purchase_price.to_i * rtsd.quantity.to_i
+          dpp += pp
+          product << rtsd.product.flag_pajak
+        end
+        ppn = 0
+        ppn = dpp * 0.1 if (rec2.supplier.status_pkp rescue true)
+        sheet.add_row [rec2.flag_type, @periode, rec2.supplier.try(:name), Office.find(rec2.head_office_id).try(:office_name), rec2.number, rec2.date.strftime("%d/%m/%Y"), dpp, ppn, ppn + dpp], :styles => default
+        tgl_sementara = rec2.date
+      end
+    end
+    dpp = rec.receiving_details.map{|a|a.quantity.to_f*a.hpp.to_f}.sum rescue 0
+    ppn = (rec.supplier.status_pkp rescue true) ? (dpp.to_f * 0.1) : 0
+    sheet.add_row [rec.flag_type, @periode, rec.supplier.try(:name), rec.head_office.try(:office_name), rec.number, rec.date.strftime("%d/%m/%Y"), dpp, ppn, ppn + dpp], :styles => default
+  end
+  @sales.each do |rec2|
+    sheet.add_row ["C", @periode, nil, Office.find_by_code(rec2.kode_toko).try(:office_name), nil, @periode2, rec2.capital_price], :styles => default
+  end
+end

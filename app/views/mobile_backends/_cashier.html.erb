@@ -1,0 +1,45 @@
+<thead>
+  <tr>
+    <th><%= t(:no) %></th>
+    <th><%= t(:cashier) %>
+      <span style="float: right;">
+        <%#= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'user_id-desc', class: 'sorting hide' %>
+        <%#= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'user_id-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th class="punya_toko"><%= t(:store) %>
+      <span style="float: right;">
+        <%#= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'store_id-desc', class: 'sorting hide' %>
+        <%#= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'store_id-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th><%= t(:price) %>
+      <span style="float: right;">
+        <%#= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'price-desc', class: 'sorting hide' %>
+        <%#= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'price-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th><%= t(:receipt_count) %>
+      <span style="float: right;">
+        <%#= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'receipt_count-desc', class: 'sorting hide' %>
+        <%#= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'receipt_count-asc', class: 'sorting' %>
+      </span>
+    </th>
+  </tr>
+  <tr>
+    <th></th>
+    <th class="hasinput"><%= text_field_tag :sales, params[:sales], class: 'form-control pencarian', onchange: "load();" %></th>
+    <th class="punya_toko"></th>
+    <th></th>
+    <th></th>
+  </tr>
+</thead>
+<tbody id='purchase_order-list'><%= render 'cashier_list' %></tbody>
+<script type="text/javascript">
+  if($('#store').val() != 0){
+    $('.punya_toko').addClass("hide")
+  }
+  else{
+    $('.punya_toko').removeClass("hide")      
+  }
+</script>

@@ -1,0 +1,8 @@
+<% is_m_class = m_class.present? && m_class.parent_id.present? %>
+<%= render partial: "products/m_class", locals: {i: i+1, m_class: m_class.m_class} if is_m_class %>
+<section class="form-group">
+  <label class="col-md-6 label"><%= is_m_class ? 'M-Class' : 'Department' %> <%= m_class.level rescue '' %></label>
+  <label class="col-md-8 input custom-input-box">
+    <%= m_class.name rescue '' %>
+  </label>
+</section>

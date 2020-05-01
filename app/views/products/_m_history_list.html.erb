@@ -1,0 +1,24 @@
+<% @products.each_with_index do |product, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+    <td class="hidden-phone"><%= link_to product.article, product_url(product) %></td>
+    <td class='nowrap'><%= link_to product.barcode || '-', product_url(product)  %></span></td>
+    <td class='nowrap'><%= product.description.upcase rescue '' %></span></td>
+    <td class="hidden-phone"><%= product.department.name rescue ''%></td>
+    <td class="nowrap"><%= product.m_class.name rescue '' %></td>
+    <td class="nowrap">
+      <%= link_to raw('<i class="fa fa-history" rel="tooltip" data-placement="left" data-original-title="History"></i>'), mutation_history_product_url(product), class: "btn btn-info btn-xs custom-edit-btn" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

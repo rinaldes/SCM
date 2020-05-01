@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Purchase Summary</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content">
+  <!-- widget grid -->
+  <section id="widget-grid" class="">
+    <!-- START ROW -->
+    <div class="row">
+      <!-- NEW COL START -->
+      <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" role="widget">
+          <header role="heading"><h2>Purchase Summaries </h2></header>
+          <!-- widget div-->
+          <div role="content">
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+              <form class="smart-form">
+                <header>Filtering & Tools</header>
+                <fieldset>
+                  <div class="row">
+                    <section class="col col-2">
+                      <%= link_to "Export to Excel", purchase_summaries_path(:id => params[:id], format: "xls"),id: 'ekspor', class: 'btn btn-info btn-sm' %>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <section class="col col-2">
+                      <label class="label">Location :</label>
+                      <label class="select">
+                        <% if current_user.branch_id.present? %>
+                          <%= label_tag 'location', current_user.branch.office_name %>
+                        <% else %>
+                          <%= select_tag :store, options_for_select([["All Store", 0]] + Branch.all.map{|reg|[reg.office_name, reg.id]}), {class:"form-control", onchange: "reload();", onkeyup: "reload();"}%>
+                          <i></i>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="label">Start Date</label>
+                      <label class="input custom-input-box"><%= text_field_tag :start_date, '' , class: 'form-control tanggal', onchange: "reload();", onkeyup: "reload();" %></label>
+                    </section>
+                    <section class="col col-2">
+                      <label class="label">End Date</label>
+                      <label class="input custom-input-box"><%= text_field_tag :end_date, '' , class: 'form-control tanggal', onchange: "reload();", onkeyup: "reload();" %></label>
+                    </section>
+                  </div>
+                </fieldset>
+                <header>Lists</header>
+                <fieldset>
+                  <section>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Receipt No
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'number-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'number-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th>Ref. Purchase Order
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'number-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'number-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th class="store_all_store">Store
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th>Date
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th>Supplier
+                            <span style="float: right;">
+                              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+                              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+                            </span>
+                          </th>
+                          <th>DPP</th>
+                          <th>PPn</th>
+                          <th>Total</th>
+                        </tr>
+                        <tr>
+                          <th></th>
+                          <th class="hasinput"><%= text_field_tag :number, params[:number], class: 'form-control search', name: 'receivings.number' %></th>
+                          <th></th>
+                          <th class="hasinput store_all_store"><%= text_field_tag :office_name, params[:office_name], class: 'form-control search', name: 'offices.office_name' %></th>
+                          <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control search', name: "to_char(receivings.date, 'DD-MM-YYYY')" %></th>
+                          <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: "suppliers.name" %></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id='receiving-list'><%= render 'receiving_list' %></tbody>
+                    </table>
+                  </section>
+                </fieldset>
+                <footer></footer>
+              </form>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </div>
+        <!-- end widget -->
+      </article>
+      <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+  </section>
+  <!-- end widget grid -->
+</div>
+<script type="text/javascript">
+  $( document ).ready(function() {
+    <% if current_user.branch_id.present? %>
+      $(".store_all_store").addClass("hide");
+    <% end %>
+    //$('#store').select2();
+    $('.tanggal').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>'
+    });
+  });
+
+  function reload(){
+    linknya = "/<%= params[:controller] %>.xls?&start_date="+($('#start_date').length == 1 ? $('#start_date').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&end_date="+($('#end_date').length == 1 ? $('#end_date').val() : '')
+    $("#ekspor").html("<a href='"+linknya+"'>Export to Excel</a>");
+    $.ajax({
+          url: "/purchase_summaries/search_receiving?&start_date="+($('#start_date').length == 1 ? $('#start_date').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&end_date="+($('#end_date').length == 1 ? $('#end_date').val() : ''),
+          method: "get",
+          data: {
+            },
+            dataType: "script"
+        })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

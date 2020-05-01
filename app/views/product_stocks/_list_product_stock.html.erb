@@ -1,0 +1,27 @@
+<% @product_stocks.each_with_index do |product_stock, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="produk detail id"><%= product_stock.product_detail_id %></span></td>
+    <td><span class="stock"><%= product_stock.stock %></span></td>
+    <td><span class="stock type"><%= product_stock.stock_type %></span></td>
+    <td class="hidden-phone">
+      <%= link_to edit_product_stock_path(product_stock), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{product_stock.id}, 'product_stocks')", class: "btn btn-danger btn-xs" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=4>
+    <% if @product_stocks.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@product_stocks, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

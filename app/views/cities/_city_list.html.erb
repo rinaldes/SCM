@@ -1,0 +1,28 @@
+<% @cities.each_with_index do |city, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= city.code %></span></td>
+    <td><%= link_to city.name, city_path(city), class: 'blue' %></td>
+    <td><%= city.regional_name %></td>
+    <td><%= city.description %></td>
+    <td class="hidden-phone">
+      <%= link_to edit_city_path(city), class: "btn btn-primary btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{city.id}, 'cities')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=6>
+    <% if @cities.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@cities, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

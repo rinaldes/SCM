@@ -1,0 +1,38 @@
+<% if @receivings.count != 0 %>
+  <% @receivings.each_with_index do |receiving, i| %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td class='nowrap'><%= link_to receiving.number, receiving_path(receiving) %></td>
+      <td class='nowrap'><%= receiving.date %></td>
+      <td class='nowrap'><%= receiving.supplier_name %></td>
+      <% if use_purchase_order %>
+        <td class='nowrap'><%= receiving.po_number %></td>
+        <td class='nowrap punya_toko'><%= receiving.office_name %></td>
+      <% end %>
+      <td style='text-align: right'><%= receiving.received_qty %></td>
+      <% if use_purchase_order %>
+        <td style='text-align: right'><%= receiving.total_qty %></td>
+        <td style='text-align: right'><%= receiving.outstanding_qty %></td>
+      <% end %>
+      <td style='text-align: right'><%= format_currency receiving.receiving_details.where("quantity>0").map(&:subtotal).sum rescue 0 %></td>
+      <td style='text-align: right'><%= receiving.note rescue '' %></td>
+      <td class='nowrap'><%= receiving.status rescue '' %></td>
+      <td class='nowrap'>
+        <% if receiving.status == 'Ready For Inspection' %>
+          <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), edit_receiving_path(receiving.id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='13'>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@receivings, options = {}) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='13' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

@@ -1,0 +1,18 @@
+<% unless @petty_cashes.blank? %>
+    <% @petty_cashes.each do |cash| %>
+        <tr>
+            <td><%= link_to cash.year.strftime("%B, %Y"), finances_petty_cash_path(cash.id) %></td>
+            <td><%= format_currency(cash.office.try(:office_name)) %></td>
+            <td><%= format_currency(cash.petty_cash_details.sum(:initial_budget)) %></td>
+            <td><%= format_currency(cash.petty_cash_details.sum(:cash_in))  %></td>
+            <td><%= format_currency(cash.petty_cash_details.sum(:cash_out))  %></td>
+            <td><%= format_currency(cash.petty_cash_details.sum(:balance))  %></td>
+            <!-- <td><%#= cash.get_realization %></td> -->
+            <!-- <td><%#= number_to_percentage(cash.get_realization_in_percent, precision: 0) %></td> -->
+        </tr>
+    <% end %>
+<% else %>
+    <tr>
+        <td  align="center" colspan="8">There No Petty Cash yet!</td>
+    </tr>
+<% end %>

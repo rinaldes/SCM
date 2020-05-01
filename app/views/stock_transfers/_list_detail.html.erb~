@@ -1,0 +1,19 @@
+<% @list_products.each_with_index do |list_product, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+  <!--  <td><span class="name"><%= list_product.created_at.strftime('%d-%m-%Y') %></span></td> -->
+    <td></td>
+    <td class="hidden-phone"><%= list_product.available_qty %></td>
+    <td class="hidden-phone"><%= list_product.destination_stock %></td>
+    <td class="hidden-phone"><%= list_product.creator_name rescue '' %></td>
+    <td class="nowrap">
+      <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_stock_transfer_path(gt), class: "btn btn-primary btn-xs custom-edit-btn" %>
+      <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{gt.id}, 'stock_transfers')", class: "btn btn-danger btn-xs" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=8>
+    <%= will_paginate @good_transfers %>
+  </td>
+</tr>

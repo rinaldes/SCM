@@ -1,0 +1,34 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Browse Product</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E">
+
+        <table class="table table-striped table-btransfered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th>Departement</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Article</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id='product-search'>
+              <%= render 'product_search_list' %>
+            </tbody>
+        </table>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

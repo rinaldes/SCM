@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+    <Column ss:Span="3"/>
+
+      <Row>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String">YTD <%= Date.today.year %></Data></Cell>
+        <Cell><Data ss:Type="String">%</Data></Cell>
+        <Cell><Data ss:Type="String"><%= params[:prev_period].to_date.end_of_month.strftime('%B') %></Data></Cell>
+        <Cell><Data ss:Type="String">%</Data></Cell>
+        <Cell><Data ss:Type="String"><%= params[:period].to_date.end_of_month.strftime('%B') %></Data></Cell>
+        <Cell><Data ss:Type="String">%</Data></Cell>
+      </Row>
+      <Row><Cell><Data ss:Type="String">Net Sales</Data></Cell></Row>
+      <Row>
+        <Cell><Data ss:Type="String">Sales</Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_ytd.sum(:subtotal_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_prev_period.sum(:subtotal_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_period.sum(:subtotal_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">HPP</Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_ytd.sum(:capital_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_prev_period.sum(:capital_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_period.sum(:capital_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Gross Margin</Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_ytd.sum(:subtotal_price)-@sales_details_ytd.sum(:capital_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_prev_period.sum(:subtotal_price)-@sales_details_prev_period.sum(:capital_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_period.sum(:subtotal_price)-@sales_details_period.sum(:capital_price) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+      <Row><Cell><Data ss:Type="String">Expenses</Data></Cell></Row>
+      <% @cash_outs_ytd.each_with_index do |cash, index| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= cash.description %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= format_currency(cash.amount) %></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= format_currency(cash.amount) %></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+          <Cell><Data ss:Type="String">0</Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+        </Row>
+      <% end %>
+      <Row>
+        <Cell><Data ss:Type="String">Total Expenses</Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @cash_outs_ytd.sum(:amount) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @cash_outs_prev_period.sum(:amount) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @cash_outs_period.sum(:amount) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+      <Row><Cell><Data ss:Type="String">Other Income</Data></Cell></Row>
+      <% @cash_ins_ytd.each_with_index do |cash, index| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= cash.description %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= format_currency(cash.amount) %></Data></Cell>
+        </Row>
+      <% end %>
+      <Row>
+        <Cell><Data ss:Type="String">Total Other Income</Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @cash_ins_ytd.sum(:amount) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @cash_ins_prev_period.sum(:amount) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @cash_ins_period.sum(:amount) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><b>Profit/Lost</b></Data></Cell>
+        <Cell><Data ss:Type="String"><%= @sales_details_ytd.sum(:subtotal_price) - (@sales_details_ytd.sum(:capital_price)+@cash_outs.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= @sales_details_prev_period.sum(:subtotal_price) - (@sales_details_prev_period.sum(:capital_price)+@cash_outs_prev_period.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= @sales_details_period.sum(:subtotal_price) - (@sales_details_period.sum(:capital_price)+@cash_outs_period.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Profit/Lost Amount</Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_ytd.sum(:subtotal_price) - (@sales_details_ytd.sum(:capital_price)+@cash_outs_ytd.sum(:amount)) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_prev_period.sum(:subtotal_price) - (@sales_details_prev_period.sum(:capital_price)+@cash_outs_prev_period.sum(:amount)) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency @sales_details_period.sum(:subtotal_price) - (@sales_details_period.sum(:capital_price)+@cash_outs_period.sum(:amount)) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+      </Row>
+    </Table>
+  </Worksheet>
+</Workbook>

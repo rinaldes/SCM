@@ -1,0 +1,38 @@
+<fieldset>
+  <div class="row">
+    <%= render 'shared/product_detail' %>
+    <section class="col col-md-12">
+      <label class="col-md-1 label">SIZE</label>
+      <label class="col-md-11 input custom-input-box">
+        <%= hidden_field_tag :size_detail_id, '', :class => "input-sm" %>
+        <table class="table table-striped table-bordered" id="table_size">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <% 1.upto(14) do %>
+                <td></td>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Available Quantity</th>
+              <% 1.upto(14) do %>
+                <td></td>
+              <% end %>
+            </tr>
+            <tr>
+              <th>Quantity</th>
+              <% 1.upto(14) do %>
+                <td></td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+      </label>
+    </section>
+    <section>
+      <button type='button' class="col-md-2 btn btn-primary" onclick="return(add_product('<%= params[:controller] %>'))" style="padding:6px 10px 6px 10px; margin-left:20px">Add List</button>
+    </section>
+  </div>
+</fieldset>

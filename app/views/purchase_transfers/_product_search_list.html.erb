@@ -1,0 +1,9 @@
+<% @products.each do |product|%>
+	<tr>
+		<td><%= product.m_class.department.name %></td>
+		<td><%= product.m_class.name %></td>
+		<td><%= product.brand.name %></td>
+		<td><%= product.article %></td>
+		<td><a href="javascript:void(0)" onclick="changeBarcode('<%= product.barcode %>')" class="btn btn-primary"> Choose </a></td>
+	</tr>
+<% end %>

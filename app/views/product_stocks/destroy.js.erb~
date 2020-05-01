@@ -1,0 +1,3 @@
+$("#list-product_stock").html("<%= j(render 'list_product_stock') %>");
+paging()
+$("#notice_template").html("<%= j(render 'layouts/notice') %>");

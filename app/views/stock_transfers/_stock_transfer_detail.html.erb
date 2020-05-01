@@ -1,0 +1,45 @@
+<tr class="alert alert-info alert-block">
+  <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{key}][product_id]", @product.id %>
+  <td><label class="col-md-10 input custom-input-box"><%= @product.barcode %></label></td>
+  <td><label class="col-md-10 label"><%= @product.brand.name %></label></td>
+  <td><label class="col-md-10 label"><%= @product.article %></label></td>
+  <td><label class="col-md-10 label"><%= @product.colour.name %></label></td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+        <tr>
+          <td>Size</td>
+          <% @list_product.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <% size_detail = a.product_size.size_detail %>
+            <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{key}#{i}][size_detail_id]", size_detail.id %>
+            <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{key}#{i}][product_detail_id]",
+              a.id %>
+            <td><label class="col-md-10 input custom-input-box"><%= size_detail.size_number %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Available Qty</td>
+          <% @list_product.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td><label class="col-md-10 input custom-input-box"><%= a.available_qty %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Quantity</td>
+          <% @list_product.each_with_index{|a, i| %>
+            <td>
+              <% break if i > 13 %>
+              <%= text_field_tag "stock_transfer[stock_transfer_details_attributes][#{key}#{i}][quantity]", (object[:quantity] rescue ''), class: "qty_detail" %>
+            </td>
+          <% } %>
+        </tr>
+      </table>
+    </div>
+  </td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+    </div>
+  </td>
+</tr>

@@ -1,0 +1,117 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li><%= t(:inventory) %></li><li><%= t(:product_mutation) %></li><li><%= @good_transfer.code %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+
+<script src="https://www.java.com/js/deployJava.js"></script>
+<script type="text/javascript">
+  var attributes = { id:'epsonApplet',
+                     code:'epson.Epson',  width:1, height:1} ;
+  var parameters = { jnlp_href: '/applet/epson.jnlp'} ;
+  deployJava.runApplet(attributes, parameters, '1.7');
+</script>
+
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @good_transfer.code %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @good_transfer, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label"><%= t(:transfer_date) %></label>
+                      <label class="col-md-8 input custom-input-box"><%= @good_transfer.mutation_date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">No. Goods Transfer</label>
+                      <label class="col-md-8 input custom-input-box"><%= @good_transfer.code %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">From</label>
+                      <label class="col-md-9 input custom-input-box"><%= @good_transfer.origin_warehouse.office_name %></label>
+                    </section>
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">Destination</label>
+                      <label class="col-md-9 input custom-input-box"><%= @good_transfer.destination_warehouse.office_name %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+              <fieldset class="col col-md-12"> <!-- brand person -->
+                <div class="row">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                    <thead>
+                      <tr>
+                        <th>ARTICLE</th>
+                        <th>BARCODE</th>
+                        <th>NAME</th>
+                        <th>CATEGORY</th>
+                        <th>QUANTITY</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @good_transfer.product_mutation_details.each do |detail| %>
+                        <% product = detail.product %>
+                        <tr>
+                          <td><%= product.article rescue '' %></td>
+                          <td><%= product.barcode rescue '' %></td>
+                          <td><%= product.description rescue '' %></td>
+                          <td><%= product.m_class.name rescue '' %></td>
+                          <td><%= detail.quantity %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+                <%= link_to 'Print', "javascript:void(0);", class: 'btn btn-primary', onclick: 'print_tis();' %>
+                <%= link_to 'Print To PDF', print_to_pdf_good_transfer_url(@good_transfer), class: 'btn btn-primary' %>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  function print_tis() {
+    epsonApplet.tglterima = "<%= @good_transfer.mutation_date %>";
+    epsonApplet.noterima = "<%= @good_transfer.code %>";
+    epsonApplet.address1 = "<%= @good_transfer.origin_warehouse.office_name %>";
+    epsonApplet.address2 = "<%= @good_transfer.destination_warehouse.office_name %>";
+
+    var source = [
+      <% @good_transfer.product_mutation_details.each do |detail| %>
+        <% product = detail.product %>
+
+        ["<%= product.barcode rescue '' %>", "<%== product.description rescue '' %>",
+         "<%= product.m_class.name rescue '' %>", "<%= product.article rescue '' %>", "<%= detail.quantity %>"],
+      <% end %>
+    ];
+
+    epsonApplet.sperson = "<%= current_user.fullname %>";
+    epsonApplet.tgl = "<%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %>";
+
+    alert(epsonApplet.printTis(source));
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

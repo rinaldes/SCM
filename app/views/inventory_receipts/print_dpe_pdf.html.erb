@@ -1,0 +1,163 @@
+<% @receiving.update_attributes(has_printed_dpe: true) %>
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bukti Pemrosesan Data
+          </h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <div class="row">
+              <table id="table-info">
+                <tr>
+                  <td><label>Receive Date</label>:<span><%= @receiving.date %></span></td>
+                  <td></td>
+                  <td><label>Name</label>:<span><%= @receiving.head_office.office_name rescue ''%></span></td>
+                </tr>
+                <tr>
+                  <td><label>Receive Number</label>:<span><%= @receiving.number %></span></td>
+                  <td></td>
+                  <td><label>Code</label>:<span><%= @receiving.head_office.code %></span></td>
+                </tr>
+                <tr>
+                  <td><label>Invoice Number</label>:<span><%= @receiving.consigment_number %></span></td>
+                  <td></td>
+                  <td><label>Code Supplier</label>:<span><%= @supplier.code rescue '' %></span></td>
+                </tr>
+                <tr>
+                  <td><label><i>Remark</i></label>:<span><%= @receiving.note %></span></td>
+                  <td></td>
+                  <td><label>Name Supplier</label>:<span><%= @supplier.name rescue '' %></span></td>
+                </tr>
+                <tr>
+                  <td><label>Date PO</label>:<span><%= @purchase_order.date rescue '-' %></span></td>
+                </tr>
+                <tr>
+                  <td><label>No PO</label>:<span><%= @purchase_order.number rescue '-' %></span></td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <section class="col col-md-12">
+              <div class="row">
+                <table class="table" border="1" width="100%" id="orders">
+                  <thead>
+                    <tr>
+                      <th>NO BPB</th>
+                      <th>Date BPB</th>
+                      <th>No REF. PO</th>
+                      <th>STORE CODE</th>
+                      <th>STORE NAME</th>
+                      <th>TOTAL ITEM</th>
+                      <th>TOTAL QTY</th>
+                      <th>RUPIAH AMOUNT</th>
+                      <th>PPN AMOUNT</th>
+                    </tr>
+                  </thead>
+                  <tbody id='list_detail'>
+                    <tr>
+                      <% grand_total = 0 %>
+                      <% @receiving.receiving_details.where("quantity>0").each do |prd| %>
+                        <% product = prd.product %>
+                        <% total = prd.hpp*prd.quantity %>
+                        <% ppn = prd.hpp*prd.quantity*0.1 %>
+                        <% grand_total += total %>
+                      <% end %>
+                      <td><%= @receiving.consigment_number %></td>
+                      <td><%= @receiving.date %></td>
+                      <td><%= @purchase_order.number rescue '-' %></td>
+                      <td><%= @receiving.head_office.code %></td>
+                      <td><%= @receiving.head_office.office_name rescue ''%></td>
+                      <td><%= @receiving.receiving_details.where("quantity>0").count %></td>
+                      <td><%= @receiving.receiving_details.where("quantity>0").sum(:quantity) %></td>
+                      <td><%= format_currency grand_total %></td>
+                      <td><%= format_currency grand_total*0.1 %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="col col-md-12">
+              <div class="row">
+              <table id="table-info">
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                  <td>DELIVERED BY</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>RECEIVED BY</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+                </tr>
+              </table>
+              <table id="table-info">
+                <tr>
+                  <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Print By</label>:<span><%= current_user.fullname %></span></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Date</label>:<span><%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %></span></td>
+                </tr>
+              </table>
+              </div>
+            </section>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<style>
+td, th {
+  font-size: 11px;
+}
+</style>

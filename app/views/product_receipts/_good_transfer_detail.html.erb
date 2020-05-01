@@ -1,0 +1,41 @@
+<tr class="alert alert-info alert-block">
+  <td><label class="col-md-10 input custom-input-box"><%= @product.barcode %></label></td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+        <tr>
+          <td>Size</td>
+          <% @product_details.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <% size_detail = a.size_detail %>
+            <%= hidden_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][size_detail_id]", size_detail.id %>
+            <%= hidden_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][product_detail_id]", a.id %>
+            <td><label class="col-md-10 input custom-input-box"><%= size_detail.size_number %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Available Qty</td>
+          <% @product_details.each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td><label class="col-md-10 input custom-input-box"><%= a.available_qty %></label></td>
+          <% } %>
+        </tr>
+        <tr>
+          <td>Quantity</td>
+          <% 0.upto(@product_details.count-1).each_with_index{|a, i| %>
+            <% break if i > 13 %>
+            <td>
+              <% break if i > 13 %>
+              <%= text_field_tag "good_transfer[good_transfer_details_attributes][#{key}#{i}][quantity]", (object[:quantity] rescue ''), class: "input-sm", style: "width: 11px" %>
+            </td>
+          <% } %>
+        </tr>
+      </table>
+    </div>
+  </td>
+  <td>
+    <div class="nested-fields addform clearfix">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+    </div>
+  </td>
+</tr>

@@ -1,0 +1,33 @@
+<script type="text/javascript">
+  function submit_cash_detail_filter_form(){
+    $.get($("#petty-cash-details-filter-form").attr("action"), $("#petty-cash-details-filter-form").serialize(), null, "script");
+  }
+
+  $('.cash-details-month, .cash-details-year, .cash-details-office').change(function () {
+    submit_cash_detail_filter_form()
+  })
+
+  function submit_receivable_filter_form(){
+    $.get($("#receivables-filter-form").attr("action"), $("#receivables-filter-form").serialize(), null, "script");
+  }
+
+  $('.receivable-member').change(function () {
+    submit_receivable_filter_form()
+  })
+
+  function submit_repayment_filter_form(){
+    $.get($("#repayments-filter-form").attr("action"), $("#repayments-filter-form").serialize(), null, "script");
+  }
+
+  $('.repayment-supplier').change(function () {
+    submit_repayment_filter_form()
+  })
+
+  function submit_bank_out_filter_form(){
+    $.get($("#bank-outs-filter-form").attr("action"), $("#bank-outs-filter-form").serialize(), null, "script");
+  }
+
+  $('.bank-out-supplier, .bank-out-ap-number').change(function () {
+    submit_bank_out_filter_form()
+  })
+</script>

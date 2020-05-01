@@ -1,0 +1,16 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Cash Out") do |sheet|
+  sheet.add_row ["Perk", "Keterangan", "Jumlah"], :style => default
+  sum_amount = 0
+  @cash_outs.each do |cash_out|
+    sheet.add_row [cash_out.time.try(:strftime, "%d-%m-%Y"), cash_out.description, cash_out.amount], :style => default
+    sum_amount += cash_out.amount
+  end
+  if @cash_outs.present?
+    sheet.merge_cells 'A6:B6'
+    sheet.add_row ["Total", "", sum_amount], :style => default
+  end
+end

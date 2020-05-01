@@ -1,0 +1,198 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li><%= t(:inventory) %></li><li><%= t(:product_mutation) %></li><li><%= @good_transfer.code %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+
+<script src="https://www.java.com/js/deployJava.js"></script>
+<script type="text/javascript">
+  var attributes = { id:'epsonApplet',
+                     code:'epson.Epson',  width:1, height:1} ;
+  var parameters = { jnlp_href: '/applet/epson.jnlp'} ;
+  deployJava.runApplet(attributes, parameters, '1.7');
+</script>
+
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @good_transfer.code %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @good_transfer, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label"><%= t(:transfer_date) %></label>
+                      <label class="col-md-8 input custom-input-box"><%= @good_transfer.mutation_date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">No. Goods Transfer</label>
+                      <label class="col-md-8 input custom-input-box"><%= @good_transfer.code %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">From</label>
+                      <label class="col-md-9 input custom-input-box"><%= @good_transfer.origin_warehouse.office_name %></label>
+                    </section>
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">Destination</label>
+                      <label class="col-md-9 input custom-input-box"><%= @good_transfer.destination_warehouse.office_name %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+              <fieldset class="col col-md-12"> <!-- brand person -->
+                <div class="row">
+                  <section class="col col-md-12">
+                    <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                      <thead>
+                        <tr>
+                          <th>ARTICLE</th>
+                          <th>BARCODE</th>
+                          <th>DESCRIPTION</th>
+                          <th>CATEGORY</th>
+                          <th>QUANTITY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @good_transfer.product_mutation_details.each do |detail| %>
+                          <% product = detail.product %>
+                          <tr>
+                            <td>
+                              <span><%= product.article rescue '' %></span>
+                            </td>
+                            <td><%= product.barcode rescue '' %></td>
+                            <td><%= product.description rescue '' %></td>
+                            <td><%= product.m_class.name rescue '' %></td>
+                            <td><%= detail.quantity %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+                <%= link_to 'Print', "javascript:void(0);", class: 'btn btn-primary', onclick: 'print_tis();' %>
+                <%= link_to 'Print To PDF', print_to_pdf_product_receipt_url(@good_transfer), class: 'btn btn-primary' %>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    <% if params[:action] == 'edit' %>
+      <% @good_transfer.good_transfer_details.joins(product_size: :product).select("DISTINCT product_id").each{|cp| %>
+        add_brand('<%= cp.product_id %>')
+      <% } %>
+    <% end %>
+    autocomplete_barcode()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+    set_barcode()
+  });
+
+  function print_tis() {
+    epsonApplet.tglterima = "<%= @good_transfer.mutation_date %>";
+    epsonApplet.noterima = "<%= @good_transfer.code %>";
+    epsonApplet.address1 = "<%= @good_transfer.origin_warehouse.office_name %>";
+    epsonApplet.address2 = "<%= @good_transfer.destination_warehouse.office_name %>";
+
+    var source = [
+      <% @good_transfer.product_mutation_details.each do |detail| %>
+        <% product = detail.product %>
+
+        ["<%= product.barcode rescue '' %>", "<%== product.brand.name rescue '' %>",
+         "<%= product.m_class.name rescue '' %>", "<%= product.article rescue '' %>", "<%= detail.quantity %>"],
+      <% end %>
+    ];
+
+    epsonApplet.sperson = "<%= current_user.fullname %>";
+    epsonApplet.tgl = "<%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %>";
+
+    console.log(epsonApplet.printTis(source));
+  }
+
+  function set_barcode(){
+    if ($('#good_transfer_origin_branch_id').val() == '')
+      $('#barcode').attr('disabled', 'disabled')
+    else
+      $('#barcode').removeAttr('disabled')
+
+  }
+  function add_brand(product_id, good_transfer_detail_id){
+    var date = new Date();
+    $.ajax({
+      url: '/good_transfers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id,
+        warehouse_id: $('#good_transfer_origin_branch_id').val(), id: '<%= @good_transfer.id %>'
+      }
+    })
+  }
+
+  function merk(){
+  }
+
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

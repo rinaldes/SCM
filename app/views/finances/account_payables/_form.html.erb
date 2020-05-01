@@ -1,0 +1,12 @@
+<fieldset>
+    <%= render :partial => 'details', :locals => { :f => f } %>
+    <%= render :partial => 'purchased_items' if @account_payable.receiving.present? %>
+    <%= f.hidden_field :outstanding_amount, value: @account_payable.count_outstanding %>
+</fieldset>
+
+<footer>
+    <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-account-payable", data: { :disable_with => "Please wait..." }  %>
+    <button type="button" class="btn btn-default" onclick="window.history.back();">
+      Back
+    </button>
+</footer>

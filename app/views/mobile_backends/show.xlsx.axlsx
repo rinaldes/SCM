@@ -1,0 +1,33 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+subjudul_biru_tengah = styles.add_style(:fg_color => "ffffff", :b => true, :alignment => { :horizontal => :center, :vertical => :center, :wrap_text => true}, :bg_color => "307cf4", :border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "POS Mobile Transaction") do |sheet|
+  # sheet.add_row ""
+  total_amt = 0
+  total_qty = 0
+
+  # Judul
+  sheet.add_row ["", ""], style: subjudul_biru_tengah
+  sheet.merge_cells(sheet.rows.last.cells[(0..1)])
+  sheet.rows.first.cells[0].value = "Mobile Order Transaction"
+
+  # Informasi
+  sheet.add_row ["Transaction Number", @mo.first.sale.code], style: default
+  sheet.add_row ["Transaction Date", @mo.first.sale.transaction_date.in_time_zone(ActiveSupport::TimeZone.new("Jakarta")).to_s], style: default
+  sheet.add_row ["Sales", @kasir], style: default
+  sheet.add_row ["Store", @mo.first.sale.store.office_name], style: default
+
+  sheet.add_row [""]
+
+  sheet.add_row ["SKU", "Item Desc.", "Unit", "Qty", "Selling Price"], :style => subjudul_biru_tengah, widths: [:auto,:auto,:auto,:auto]
+  @mo.each do |mobile_order|
+    sheet.add_row [mobile_order.article, mobile_order.description, mobile_order.uom_short_name, mobile_order.quantity, mobile_order.price], style: default
+    total_qty += mobile_order.quantity
+    total_amt += mobile_order.price
+  end
+  sheet.add_row ["","","Total",total_qty,total_amt], style: default
+  sheet.merge_cells(sheet.rows.last.cells[(0..2)])
+  sheet.rows.last.cells[0].value = "Total"
+end

@@ -1,0 +1,25 @@
+<% @product_details.each_with_index{|product_detail, i| %>
+  <tr class="alert alert-info alert-block">
+    <td>
+      <label class="col-md-10 label"><%= @product.barcode %></label>
+      <% product_size = product_detail.product_size %>
+      <% size_detail = product_size.size_detail %>
+      <%= hidden_field_tag "stock_opname[stock_opname_details_attributes][#{key}#{i}][product_size_id]", product_size.id %>
+      <%= hidden_field_tag "stock_opname[stock_opname_details_attributes][#{key}#{i}][qty_virtual]", product_detail.available_qty, id: "quantity_v#{key}#{i}" %>
+    </td>
+    <td><label class="col-md-10 label"><%= @product.brand.name %></label></td>
+    <td><label class="col-md-10 label"><%= @product.article %></label></td>
+    <td><label class="col-md-10 label"><%= @product.colour.name %></label></td>
+    <td><label class="col-md-10 label"><%= size_detail.size_number %></label></td>
+    <td><label class="col-md-10 label"><%= product_detail.available_qty %></label></td>
+    <td>
+      <%= text_field_tag "stock_opname[stock_opname_details_attributes][#{key}#{i}][qty_actual]", '', onblur: "keterangan($(this), '#{key}#{i}')", id: "quantity_a#{key}#{i}" %>
+    </td>
+    <td class='stock_opname_details'></td>
+    <td>
+      <div class="nested-fields addform clearfix">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+      </div>
+    </td>
+  </tr>
+<% } %>

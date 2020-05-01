@@ -1,0 +1,21 @@
+<% @stock_transfers.each_with_index do |gt, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= gt.st_created_at.strftime('%d-%m-%Y') %></span></td>
+    <td class="hidden-phone"><%= link_to gt.number, stock_transfer_url(gt) %></span></td>
+    <td class="hidden-phone punya_toko"><%= gt.destination.office_name rescue '' %></td>
+    <td class="hidden-phone"><%= gt.remark rescue '' %></td>
+    <td class="hidden-phone"><%= gt.creator_name rescue '' %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=6>
+    <% if @stock_transfers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@stock_transfers, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

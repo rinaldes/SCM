@@ -1,0 +1,28 @@
+<fieldset style="padding-left: 0px;" id='product_search'>
+  <div class="row">
+    <section class="col col-md-12">
+      <h1></h1>
+    </section>
+  </div>
+  <div class="row">
+    <section class="col col-md-12">
+          <label class="col-md-1">CODE</label>
+          <label class="col-md-2 input custom-input-box" style="margin-right: 10px">
+            <%= hidden_field_tag :product_id %>
+            <%= text_field_tag :number, '', class: 'input-sm', placeholder: "Barcode" %>
+          </label>
+          <div class="col col-md-1">
+            <a data-toggle="modal" href="#myModal" class="btn btn-primary hidden-mobile"><i class="fa fa-circle-arrow-up fa-lg"></i> Browse</a>
+          </div>
+          <div class="col col-md-1">
+            <button class="btn btn-primary" onclick="print_to_pdf()">Print Selected</button>
+          </div>
+    </section>
+    <section class="col col-md-12">
+      <label class="col-md-11"><input type="hidden" id="selected_product"></label>
+    </section>
+  </div>
+  <div class="row">
+
+  </div>
+</fieldset>

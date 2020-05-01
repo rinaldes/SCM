@@ -1,0 +1,66 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Min Stock</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Min Stock</h2> <!-- header content --></header>
+          <div style="margin-top:-10px;"><!-- widget div-->
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                     Barcode <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     Brand <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'brand_name-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'brand_name-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     Supplier<%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+                </th>
+                <th>
+                   Article <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+                   <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+                </th>
+                  <th>
+                     Category <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'm_class_name-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'm_class_name-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     Purchase Price <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'purchase_price-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'purchase_price-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                    Selling Price (Netto) <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'selling_price-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'selling_price-asc', class: 'sorting' %>
+                  </th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :brand_name, params[:brand_name], class: 'form-control search', name: 'brands.name' %></th>
+                  <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: 'suppliers.name' %></th>
+                  <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :m_class_name, params[:m_class_name], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :buy_price, params[:buy_price], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :sell_price, params[:sell_price], class: 'form-control search' %></th>
+                </tr>
+              </thead>
+              <tbody id='out_stock-list'><%= render 'min_stock_list' %></tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

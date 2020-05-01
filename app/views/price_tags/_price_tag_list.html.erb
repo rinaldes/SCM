@@ -1,0 +1,23 @@
+<% @products.each_with_index do |product, i| %>
+<tr>
+  <td class="hidden-phone"><%= i + 1 %></td>
+  <td><%= product.article rescue '' %></td>
+  <td><%= product.barcode rescue '' %></td>
+  <td><%= product.description rescue '' %></td>
+  <td><%= number_to_currency((SellingPrice.find_by_product_id(product.id).selling_price rescue 0), unit: "Rp.", separator: ",", delimiter: ".") %></td>
+  <td>
+    <button onclick="add_item_to_table('<%= product.id %>');" class="btn btn-primary btn-xs custom-edit-btn" data-dismiss="modal">Add Item</button>
+  </td>
+</tr>
+<% end %>
+<tr>
+  <td colspan=6>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

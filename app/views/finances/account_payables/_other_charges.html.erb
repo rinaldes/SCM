@@ -1,0 +1,12 @@
+<table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox other-charge">
+    <tbody id="other_charges">
+        <%= f.fields_for :other_charges do |other| %>
+            <%= render 'other_charge_fields', f: other %>
+        <% end %>
+    </tbody>
+</table>
+
+<section>
+<%= link_to_add_association 'Add Other Charge', f, :other_charges,:"data-association-insertion-node" => "tbody#other_charges", :"data-association-insertion-method" => "append", :partial => "other_charge_fields", :class => "btn btn-primary btn-sm" %>
+</section>
+<section class='clear'></section>

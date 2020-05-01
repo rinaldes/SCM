@@ -1,0 +1,27 @@
+<% if @selling_price.present? %>
+<% @selling_price.each do |sp| %>
+  <tr>
+    <td><%= sp.code %></td>
+    <td><%= sp.product.description rescue '' %></td>
+    <td><%= sp.product.first_cost rescue 0 %></td>
+    <td><%= sp.product.cost rescue 0 %></td>
+    <td><%= sp.product.last_cost rescue 0 %></td>
+    <td><%= sp.selling_price rescue 0 %></td>
+    <td><%= sp.product.flag_pajak rescue '' %></td>
+    <td><%= sp.product.flag_barang rescue '' %></td>
+    <td><%= sp.product.fraction rescue 0 %></td>
+    <td><%= sp.product.minimal_order rescue 0 %></td>
+  </tr>
+<% end %>
+<% end %>
+<tr>
+  <td colspan=12>
+    <% if @selling_price.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@selling_price, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

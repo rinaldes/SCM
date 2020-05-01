@@ -1,0 +1,3 @@
+<tr id="<%= product.id %>">
+  <%= render 'td_detail', product: product, key: (key rescue Time.now.to_i), pod: (pod rescue nil), transaction_type: 'purchase_order', discount: Pu %>
+</tr>

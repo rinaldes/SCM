@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nik: 1
+  name: MyString
+  status: MyString
+  duedate: 2015-06-09
+  organization: MyText
+  position: MyString
+  shift: MyString
+
+two:
+  nik: 1
+  name: MyString
+  status: MyString
+  duedate: 2015-06-09
+  organization: MyText
+  position: MyString
+  shift: MyString

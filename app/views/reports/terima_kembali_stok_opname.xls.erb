@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+    <Column ss:Span="2"/>
+      <Row>
+        <Cell colspan="3"></Cell>
+        <Cell></Cell>
+        <Cell></Cell>
+        <Cell></Cell>
+        <Cell></Cell>
+        <Cell><Data ss:Type="String">Product Receive/Return/Stock Opname from date : <%= params[:date_start] %> sd <%= params[:date_end] %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Flag</Data></Cell>
+        <Cell><Data ss:Type="String">No Document</Data></Cell>
+        <Cell><Data ss:Type="String">Product Code</Data></Cell>
+        <Cell><Data ss:Type="String">Quantity</Data></Cell>
+        <Cell><Data ss:Type="String">Unit Price</Data></Cell>
+        <Cell><Data ss:Type="String">Total Price</Data></Cell>
+        <Cell><Data ss:Type="String">Tax</Data></Cell>
+        <Cell><Data ss:Type="String">No Referensi DC/BKL</Data></Cell>
+        <Cell><Data ss:Type="String">Code DC/Supplier</Data></Cell>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">Store Code</Data></Cell>
+      </Row>
+      <% @receiving_details.each_with_index do |rd, i| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= rd.flag %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.code %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.qty %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.hargasatuan %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.totalharga %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.pajak %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.noref_dc_bkl %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.name %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.created_at %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rd.kodetoko %></Data></Cell>
+        </Row>
+      <% end %>
+      <% @returns_to_supplier_details.each_with_index do |rtsd, i| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= rtsd.flag %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.code %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.qty %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.hargasatuan %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.totalharga %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.pajak %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.noref_dc_bkl %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.name %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.created_at %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rtsd.kodetoko %></Data></Cell>
+        </Row>
+      <% end %>
+      <% @stock_opname_details.each_with_index do |sod, i| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= sod.flag %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.code %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.qty %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.hargasatuan %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.totalharga %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.pajak %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.noref_dc_bkl %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.name %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.created_at %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sod.kodetoko %></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,30 @@
+<% @products.each_with_index do |product, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+    <td class="hidden-phone"><%= link_to product.article, product_url(product) %></td>
+    <td class='nowrap'><%= link_to product.barcode || '-', product_url(product)  %></span></td>
+    <td class='nowrap'><%= product.description.upcase rescue '' %></span></td>
+    <td class='nowrap'><%= product.short_name.upcase rescue '' %></span></td>
+    <td class="hidden-phone"><%= product.department.name rescue ''%></td>
+    <td class="nowrap"><%= product.m_class.name rescue '' %></td>
+    <td class="nowrap"><%= product.flag_pajak %></td>
+    <td class="nowrap">
+      <% if current_user.can_manage_product? %>
+      <%#= link_to raw('<i class="fa fa-history" rel="tooltip" data-placement="left" data-original-title="History"></i>'), mutation_history_product_url(product), class: "btn btn-info btn-xs custom-edit-btn" %>
+      <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>'), edit_product_path(product), class: "btn btn-primary btn-xs custom-edit-btn" %>
+      <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{product.id}, 'products')", class: "btn btn-danger btn-xs edit-btn-dlt custom-edit-btn" %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

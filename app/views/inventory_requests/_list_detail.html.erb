@@ -1,0 +1,5 @@
+<% @inventory_request.inventory_request_details.group_by{|prd|prd.product_id}.each_with_index do |ird, i| %>
+  <tr>
+    <%= render 'td_detail', num: i + 1, detail: ird[1][0], key: Time.now.to_i %>
+  </tr>
+<% end %>

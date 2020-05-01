@@ -1,0 +1,79 @@
+<tr>
+  <td><%= text_field_tag :no, 1, {:class => "input-block-level", :readonly => "readonly"} %></td>
+  <td class='barcode'>
+    <%= autocomplete_field_tag :barcode, nil, '', :class => 'input-block-level', placeholder: 'Barcode' %>
+    
+  </td>
+  <td class="brand">
+    <%= text_field_tag :brand, nil, {:class => "input-block-level", :placeholder => "Brand", :readonly => "readonly"} %>
+  </td>
+  <td class="article">
+    <%= text_field_tag :article, nil, {:class => "input-block-level", :placeholder => "Article", :readonly => "readonly"} %>
+  </td>
+  <td class="colour">
+    <%= text_field_tag :colour, nil, {:class => "input-block-level", :placeholder => "Colour", :readonly => "readonly"} %>
+  </td>
+  <td class="size">
+    <%= text_field_tag "size", nil, {:readonly => "readonly", :class => "input-block-level", :placeholder=>"Ukuran"} %>
+  </td>
+  <td class="qty">
+    <%= f.text_field :qty, {:class => "input-block-level", :placeholder => "Qty", :readonly => "readonly"} %>
+  </td>
+  <td>
+    Stok
+  </td>
+  <td>
+    <%= text_field_tag :price_before_disc, nil, {:placeholder => "Price Sebelum Diskon", :class => "input-block-level", :readonly => true} %>
+  </td>
+  <td>
+    <%= text_field_tag :discount, nil, {:placeholder => "Diskon", :class => "input-block-level", :readonly => true} %>
+  </td>
+  <td>
+    <%= text_field_tag :price_after_disc, nil, {:placeholder => "Price Setelah Diskon", :class => "input-block-level", :readonly => true} %>
+  </td>
+  <td>
+    <%= text_field_tag :total_price, nil, {:placeholder => "Total Price", :class => "input-block-level", :readonly => true} %>
+  </td>
+  <td class='netto'>
+    <%= text_field_tag :netto, nil, {:placeholder => "Selling Price", :class => "input-block-level", :readonly => true} %>
+  </td>
+  <td>
+    <%= text_field_tag :note, {:placeholder => "Keterangan", :class => "input-block-level", :readonly => true} %>
+  </td><%= link_to_remove_association delete_label, f, title: "Remove" %></td>
+</tr>
+<script>
+$(function() {
+  $('input[id*=barcode]').bind('railsAutocomplete.select', function(event, data){
+    getParent = $(this).parent().parent()
+    exist_goods = 0
+    $("[id^='detail_returns_to_ho'] tr:visible td:nth-child(2)").find(":input").each(function(i, o){
+      if ($(o).val() == data.item.value){
+        exist_goods+=1
+      }
+    })
+    if (exist_goods > 1) {
+      alert ("Data Produk Sudah Masuk")
+      getParent.children("td").children("input[id*=barcode]").val("").focus()
+      return false
+    }else{
+      getParent.children("td").eq(1).children("input[id*=goods_size_id]").val(data.item.id)
+      getParent.children("td").eq(2).children("input").val(((data.item.brand == null) ? "-" : data.item.brand.name))
+      getParent.children("td").eq(3).children("input").val(((data.item.goods == null) ? "-" : data.item.goods.article))
+      getParent.children("td").eq(4).children("input").val(((data.item.colour == null) ? "-" : data.item.colour.name))
+      getParent.children("td").eq(5).children("input").val(((data.item.size == null) ? "-" : data.item.size.size_number))
+      getParent.children("td").eq(6).children("input").attr("readonly", false)
+      getParent.children("td").eq(8).children("input").val(((data.item.goods == null) ? "-" : data.item.goods.purchase_price))
+      getParent.children("td").eq(9).children("input").val(((data.item.total_discount == null) ? "-" : data.item.total_discount))
+      getParent.children("td").eq(10).children("input").val(((data.item.price_after_discount == null) ? "-" : data.item.price_after_discount))
+      getParent.children("td").eq(12).children("input").val(((data.item.goods == null) ? "-" : data.item.goods.selling_price))
+      getParent.children("td").eq(13).children("input").attr("readonly", false)
+      getParent.children("td").eq(14).children("input[id*=store_id]").val(data.item.store_id)
+    }
+  })
+
+  $("td").on("keyup", "[id*=qty]", function(event){
+    getParent = $(this).parents().eq(1)
+    getParent.find("td:eq(11) input").val(Number($(this).val()) * Number(getParent.find("td:eq(10) input").val()))
+  })
+});
+</script>

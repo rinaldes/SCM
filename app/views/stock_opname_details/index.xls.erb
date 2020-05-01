@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">SO Number</Data></Cell>
+        <Cell><Data ss:Type="String"><%= @stock_opname_details.opname_number %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Store Name</Data></Cell>
+        <Cell><Data ss:Type="String"><%= @stock_opname_details.office.office_name rescue '' %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="Date"><%= @stock_opname_details.start_date.strftime('%m-%d-%Y') rescue '' %></Data></Cell>
+      </Row>
+      <Row></Row>
+      <Row>
+        <Cell><Data ss:Type="String">barcode</Data></Cell>
+        <Cell><Data ss:Type="String">sku</Data></Cell>
+        <Cell><Data ss:Type="String">name</Data></Cell>
+        <Cell><Data ss:Type="String">quantity actual</Data></Cell>
+        <Cell><Data ss:Type="String">quantity virtual</Data></Cell>
+        <Cell><Data ss:Type="String">quantity</Data></Cell>
+      </Row>
+    <% Product.all.each do |sod| %>
+      <Row>
+        <Cell><Data ss:Type="Number"><%= sod.barcode %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= sod.article %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= sod.description %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

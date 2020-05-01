@@ -1,0 +1,99 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>Size</li><li><%= label %></li>
+  </ol>
+</div>
+<div id="content">
+  <div id='notification'></div>
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-size">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Size</h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <%= form_for setup_size(@size), html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="label col-md-3">Code</label>
+                      <label class="input col-md-9 custom-input-box"><%= f.text_field :code, class: "input-sm", :placeholder => "Auto Generate", :disabled => true %></label>
+                    </section>
+                    <section>
+                      <label class="label col-md-3">Keterangan <span class='important'>*</span></label>
+                      <label class="input col-md-9 custom-input-box"><%= f.text_field :description, :class => "input-sm #{(error_field @size, :description)}" %></label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-12">
+                    <section>
+                      <label class="label">Size Detail</label>
+                      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                        <thead>
+                          <tr>
+                            <% (1..14).each do |i| %>
+                              <th style="width:4%"><%= i %></th>
+                            <% end %>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <% size_detail_i = 0 %>
+                            <%= f.fields_for :size_details do |ff| %>
+                              <td class="hidden-phone size-detail">
+                                <% if @size.new_record? %>
+                                  <%= ff.text_field :size_number, :class => "size_detail_text_input" %>
+                                <% else %>
+                                  <%= ff.text_field :size_number, value: (@size_number[size_detail_i].size_number rescue ''), :class => "size_detail_text_input" %>
+                                  <% size_detail_i += 1 %>
+                                <% end %>
+                              </td>
+                            <% end %>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </section>
+                  </section> <!-- col-md-12 -->
+
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick='beforeSave()'>
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<style>
+  .size-detail input{
+    width: 40px;
+  }
+</style>
+
+<SCRIPT>
+  function beforeSave(){
+    setTimeout(function(){
+      $.ajax(
+      {
+        url: "/sizes<%= "/#{params[:id]}" if params[:action] == 'edit' %>",
+        dataType: "script",
+        method: 'POST',
+        data: $("form").serialize(),
+        success: function (data){
+          response(data)
+        },
+      });
+    }, 1000);
+  }
+</SCRIPT>

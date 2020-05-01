@@ -1,0 +1,19 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+title = styles.add_style(:sz => 14, :b => true, :alignment => { :horizontal => :center })
+header = styles.add_style(:b => true, :alignment => { :horizontal => :center }, :bg_color => "FFFF66", :border => Axlsx::STYLE_THIN_BORDER)
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Account Receivable") do |sheet|
+  sheet.add_row []
+  sheet.merge_cells 'A2:F2'
+  sheet.add_row ["DATA PIUTANG #{@member_name}"], :style => title
+  sheet.add_row []
+  sheet.add_row ["Piutang", "Nominal", "Date Bayar", "Keterangan", "Nominal", "Sisa"], :style => header
+  total_payment_amount = 0
+  @payments.each do |payment|
+    sheet.add_row [payment.account_receivable.try(:created_at).try(:strftime, "%d-%b-%Y"), payment.account_receivable.try(:total_amount), payment.due_date.try(:strftime, "%d-%b-%Y"), "Keterangan", payment.amount, payment.account_receivable.try(:outstanding)], :style => default
+    total_payment_amount += payment.amount if payment.amount.present?
+  end
+  sheet.add_row ["Total", @get_total_account_receivables, "", "", total_payment_amount, @payments.last.account_receivable.try(:outstanding)], :style => default
+end

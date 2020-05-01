@@ -1,0 +1,28 @@
+<% @selling_prices.each_with_index do |spd, i| %>
+  <% selling_price = spd.selling_price %>
+  <tr>
+    <td class="hidden-phone">
+      <%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %>
+      <%= check_box_tag "product[#{spd.spd_id}]", spd.spd_id, {}, class: "product" %>
+    </td>
+    <td class="hidden-phone"><%= selling_price.product.barcode %></td>
+    <td class="hidden-phone"><%= link_to ((selling_price.product.article rescue nil)), selling_price_url(selling_price) %></td>
+    <td class="hidden-phone"><%= spd.office_name %></td>
+    <td class="hidden-phone"><%= link_to ((selling_price.product.description rescue nil)), selling_price_url(selling_price) %></td>
+    <td class="hidden-phone align-right"><%= format_currency spd.price %></td>
+    <td class='button_action<%= i %>'>
+      <button type="button" class="btn btn-primary" onclick="add_price_to_be_printed($(this), <%= i %>)">Add To Price To Be Printed</button>
+    </td>
+  </tr>
+<% end %>
+<tr class='paging'>
+  <td colspan=12>
+    <% if @selling_prices.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@selling_prices, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

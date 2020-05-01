@@ -1,0 +1,112 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Voucher</li><li><%= @voucher.name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-unit">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @voucher.name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <form class='smart-form'>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Voucher Name</label>
+                      <label class="col-md-8 label"><%= @voucher.name %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Valid From</label>
+                      <label class="col-md-8 label"><%= @voucher.valid_from %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Valid Until</label>
+                      <label class="col-md-8 label"><%= @voucher.valid_until %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Minimum Amount (Rp)</label>
+                      <label class="col-md-8 label"><%= @voucher.min_amount %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Discount</label>
+                      <% if @voucher.discount.present? %>
+                        <label class="col-md-8 label"><%= @voucher.discount %> %</label>
+                      <% else %>
+                        <label class="col-md-8 label">Rp.<%= @voucher.discount_amt %></label>
+                      <% end %>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Max Voucher</label>
+                      <% if @voucher.max_voucher.present? %>
+                        <label class="col-md-8 label"><%= @voucher.max_voucher %> Pcs</label>
+                      <% else %>
+                        <label class="col-md-8 label">Rp.<%= @voucher.max_voucher_amt %></label>
+                      <% end %>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Multiple</label>
+                      <label class="col-md-8 label"><%= @voucher.is_multiple ? 'Yes' : 'No' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Store</label>
+                      <label class="col-md-8 label">
+                        <% if @voucher.office_id.nil? %>
+                          <%= "All Store" %>
+                        <% elsif @voucher.office_id = 0 %>
+                          <%= "All HO" %>
+                        <% else %>
+                          <%= @voucher.office.office_name %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Term & Condition</label>
+                      <label class="col-md-8 label"><%= @voucher.term_condition %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-12">
+                    <table class="table table-striped table-bordered" width="100%">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Voucher Code</th>
+                          <th>Generated Date</th>
+                          <th>Available</th>
+                          <th>Order No</th>
+                          <th>Customer</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @voucher.voucher_details.each_with_index{|voucher_detail, i| %>
+                          <tr>
+                            <td><%= i+1 %></td>
+                            <td><%= voucher_detail.voucher_code %></td>
+                            <td><%= voucher_detail.generated_date %></td>
+                            <td><%= voucher_detail.available ? 'Yes' : 'No' %></td>
+                            <td><%= voucher_detail.order_no %></td>
+                            <td><%= voucher_detail.member.name rescue '' %></td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            </form>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

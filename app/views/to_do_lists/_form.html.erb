@@ -1,0 +1,217 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>To Do List</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-to_do_list">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> To Do List</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @to_do_list, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                <div id="pesan" hidden>
+                  <%= label_tag "End Date Harus Setelah Date Start" %>
+                </div>
+                  <section class="col col-md-6">
+                    <section class="row form-group">
+                      <label class="col col-md-2 label">Date</label>
+                      <label class="col col-md-9 input custom-input-box" style="padding-right: 0px;">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <%= f.text_field :date, class: "input-sm", :placeholder => DateTime.now.to_date, onchange: "tanggal();" %>
+                        <%= f.hidden_field :time, class: "input-sm", :value => Time.now.strftime("%I:%M:%S %p") %>
+                      </label>
+                    </section>
+                    <section class="row form-group">
+                      <label class="col col-md-2 label">End Date</label>
+                      <label class="col col-md-9 input custom-input-box" style="padding-right: 0px;">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <%= f.text_field :end_at, class: "input-sm", :placeholder => DateTime.now.to_date, onchange: "tanggal();" %>
+                      </label>
+                    </section>
+                    <section class="row form-group">
+                      <label class="col col-md-2 label">User</label>
+                      <label class="col col-md-9 input custom-input-box" style="padding-right: 0px;">
+                        <% nama = current_user.first_name + " " + current_user.last_name %>
+                        <%= text_field_tag :user_name, nama, class: "input-sm", 'list' => 'list' %>
+                        <%= f.hidden_field :user_id %>
+                        <datalist id="list">
+                          <% User.all.each do |user| %>
+                            <% nama = user.first_name + " " + user.last_name %>
+                            <option value="<%= nama %>" id="office-<%= user.id.to_s %>"><%= nama %></option>
+                          <% end %>
+                        </datalist>
+                      </label>
+                    </section>
+                    <section class="row form-group">
+                      <label class="col col-md-2 label">Goals</label>
+                      <section class="col col-md-9">
+                        <% abcd = "" %>
+                        <% Office.all.each do |ho|%>
+                          <% abcd = abcd + ho.office_name + ";"%>
+                        <% end %>
+                        <%= check_box_tag "select_all", "Semua", false, onclick: "selectAll();" %>
+                        <%= label_tag "Pilih Semua Branch"%>
+                        <br>
+                        <% Office.all.each do |ho|%>
+                          <% click = !BranchToDoList.where(to_do_list_id: @to_do_list.id, office_id: ho.id).blank? %>
+                          <%= check_box_tag "office[]", ho.id, click, class: "office-lists" %>
+                          <%= label_tag ho.office_name %>
+                          <br>
+                        <% end %>
+                      </section>
+                    </section><br>
+                    <section class="row form-group">
+                      <label class="col col-md-2 label">Description</label>
+                      <label class="col col-md-9 input custom-input-box" style="padding-right: 0px;">
+                        <%= f.text_area :description, class: "input-sm", :placeholder => "Deskripsi", style: 'width: 100%' %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <div class="profile-user del-mrg">
+                        <%= f.file_field :image, class: "hidden", :onchange =>"readURL(this);"%>
+                        <img id="img_prev" src="/img/Actions-insert-image-icon.png" width='135px'/>
+                        <a class="opt-profile change tip btn-upload" data-toggle="tooltip" data-original-title="Upload" onclick="$('#to_do_list_image').click();">
+                        <i class="fa fa-upload"></i>Upload Photo
+                        </a>
+                      </div>
+                    </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script>
+  $( document ).ready(function() {
+    $('#to_do_list_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      onSelect : function(selectedDate) {
+        $('#finishdate').datepicker('option', 'minDate', selectedDate);
+      }
+    });
+
+    $('#to_do_list_end_at').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      onSelect : function(selectedDate) {
+        $('#finishdate').datepicker('option', 'minDate', selectedDate);
+      }
+    });
+
+    // Check username sebelum submit, jika username tidak ada,
+    // maka tampilkan pesan error ke user
+    $('#form-update-verify').submit(function(e) {
+      var isUsernameExists = function() {
+        var exists = false;
+        $('#list').children().each(function() {
+          if ($(this).attr('value') == $('#user_name').val()) {
+            $('#to_do_list_user_id').val($(this).attr('id').slice(7));
+            exists = true;
+            return false;
+          }
+        });
+
+        return exists;
+      }
+
+      if (!isUsernameExists()) {
+        $('#user_name').parent().addClass('state-error');
+        if (!$('#username-warn').length) {
+          $('#user_name').after('<div id="username-warn" class="note note-error">User name does not exists.</div>');
+        }
+
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    $('#user_name').on('input', function() {
+      $('#user_name').parent().removeClass('state-error');
+    });
+  });
+
+  function selectAll() {
+    var on = true;
+    if ($('#select_all').prop("checked") == false)
+      on = false;
+
+    $('.office-lists').each(function() {
+      $(this).prop("checked", on);
+    });
+  }
+
+  function tanggal(){
+      var a = $('#to_do_list_date').val().toString().split("-");
+      var b = $('#to_do_list_end_at').val().toString().split("-");
+      if(parseInt(a[0]) < parseInt(b[0])){
+        $('#sendButton').attr('disabled', false);
+        $('#pesan').hide();
+      }
+      else if(parseInt(a[0]) == parseInt(b[0])){
+        if(parseInt(a[1]) < parseInt(b[1])){
+          $('#sendButton').attr('disabled', false);
+          $('#pesan').hide();
+        }
+        else if(parseInt(a[1]) == parseInt(b[1])){
+          if(parseInt(a[2]) <= parseInt(b[2])){
+            $('#sendButton').attr('disabled', false);
+            $('#pesan').hide();
+          }
+          else{
+            $('#sendButton').attr('disabled',true);
+            $('#pesan').show();
+          }
+        }
+        else{
+          $('#sendButton').attr('disabled',true);
+          $('#pesan').show();
+        }
+      }
+      else{
+        $('#sendButton').attr('disabled',true);
+        $('#pesan').show();
+      }
+  }
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#img_prev')
+          .attr('src', e.target.result)
+          .width(135)
+          .height(135);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

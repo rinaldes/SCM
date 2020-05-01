@@ -1,0 +1,25 @@
+<% @products.each_with_index do |product, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= link_to product.barcode, product_detail_url(product) %></span></td>
+    <td class="hidden-phone"><%= product.article %></td>
+    <td class="hidden-phone"><%= product.description %></td>
+    <td class="nowrap"><%= product.m_class_name %></td>
+    <td class="nowrap"><%= product.available_qty.to_i %></td>
+    <td><%= product.min_stock %></td>
+    <td><%= product.rop_stock %></td>
+    <td><%= product.max_stock %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=12>
+    <%#= will_paginate @products %>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

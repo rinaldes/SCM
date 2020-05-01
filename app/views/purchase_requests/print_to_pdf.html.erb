@@ -1,0 +1,90 @@
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Purchase Request</h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+              
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">TGL.PR</label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @purchase_request.date %></label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">No.PR </label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box">
+                        <%= @purchase_request.number %>
+                      </label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">Note </label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @purchase_request.note %></label>
+                    </section>
+                    <br/>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">SUP.CODE</label>
+                      &nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @supplier.code rescue ''%></label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">SUPPLIER </label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @supplier.name rescue '-' %></label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">ALAMAT </label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @supplier.address rescue '-' %></label>
+                    </section>
+                    <br/>
+                  </section>
+                </div>
+              
+
+
+                <br/>
+                <section class="col col-md-12">
+                  <div class="row">
+                    <table class="table" border="1" width="100%" id="orders">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Item Code</th>
+                          <th>Name</th>
+                          <th>Qty</th>
+                        </tr>
+                      </thead>
+                      <tbody id='list_detail'>
+                        <% @purchase_request.purchase_request_details.each_with_index do |prd, i| %>
+                          <% product = prd.product %>
+                          <tr>
+                            <td><%= i + 1 %></td>
+                            <td><%= product.article rescue '' %></td>
+                            <td><%= product.description rescue '' %></td>
+                            <td style='text-align: right'><%= prd.quantity rescue '' %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li><%= t(:brand) %></li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> <%= t(:brand) %></h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @brand, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                <section>
+                  <label class="col-md-3 label">Code</label>
+                  <label class="col-md-9 input custom-input-box"><%= f.text_field :code, class: "input-sm", placeholder: "Auto Generate", disabled: true %></label>
+                </section>
+                <section>
+                  <label class="col-md-3 label">Name <span class='important'>*</span></label>
+                  <label class="col-md-9 input custom-input-box"><%= f.text_field :name, :class => "input-sm" %></label>
+                </section>
+                <section class='hide'>
+                  <label class="col-md-3 label">Department</label>
+                  <label class="col-md-9 department">
+                    <%= render 'departments', f: f %>
+                  </label>
+                </section>
+              </section>
+              <section class="col col-md-6">
+                <section class='hide'>
+                  <label class="col-md-4 label">Set Price</label>
+                    <label class="col-md-8 custom-input-box">
+                      <%= f.radio_button :set_harga, 'Manual' %> Manual <br>
+                    </label>
+                  </label>
+                </section>
+              </section>
+            </div>
+
+              </fieldset>
+
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<SCRIPT>
+  $(document).ready(function() {
+    $("#supplier_id").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        collect_department(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    $('.discount_percent').keyup(function(){
+      set_discount_rp()
+    })
+    set_discount_rp()
+  });
+
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  function collect_department(supplier_id){
+      $.ajax(
+      {
+        url: "/departments/departments_per_supplier",
+        dataType: "script",
+        data: {supplier_id: supplier_id}
+      });
+  }
+
+  function set_discount_rp(){
+    for (i=0; i < $('.discount_percent').length; i++){
+      if($('.discount_percent')[i].value != ''){
+        $('#brand_discount_rp').attr('disabled', 'disabled')
+        break
+      }
+      else
+        $('#brand_discount_rp').removeAttr('disabled')
+    }
+  }
+</SCRIPT>
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->

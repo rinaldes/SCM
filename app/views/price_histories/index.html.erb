@@ -1,0 +1,57 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Transaction History</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Transaction History</h2> <!-- header content --></header>
+          <div style="margin-top:-10px;"><!-- widget div-->
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                     Date <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'created_at-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'created_at-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     Product <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'product_name-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'product_name-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     Price Type <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'tipe_harga-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'tipe_harga-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     Old Price<%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'harga_lama-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'harga_lama-asc', class: 'sorting' %>
+                  </th>
+                  <th>
+                     New Price <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'harga_baru-desc', class: 'sorting hide' %>
+                     <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'harga_baru-asc', class: 'sorting' %>
+                  </th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th class="hasinput"><%= text_field_tag :created_at, params[:created_at], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :product_name, params[:product_name], class: 'form-control search', name: 'product.brand.name' %></th>
+                  <th class="hasinput"><%= text_field_tag :tipe_harga, params[:tipe_harga], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :harga_lama, params[:harga_lama], class: 'form-control search' %></th>
+                  <th class="hasinput"><%= text_field_tag :harga_baru, params[:harga_baru], class: 'form-control search' %></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id='out_stock-list'><%= render 'price_history_list' %></tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

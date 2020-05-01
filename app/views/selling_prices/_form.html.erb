@@ -1,0 +1,411 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<link href="/plugin/multiple-select/multiple-select.css" rel="stylesheet" />
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script src="/plugin/multiple-select/multiple-select.js"></script>
+<style>
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 4px 3px 0 !important;
+  }
+  #offices {
+    margin-bottom: 17px;
+  }
+</style>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Selling Price</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-department">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Selling Price</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @selling_price, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= hidden_field_tag :flag_pajak %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">Product</label>
+                      <label class="col-md-8 label">
+                        <label class="col-md-8 input custom-input-box">
+                          <%= text_field_tag :product_name, (@selling_price.product.description rescue ''), class: "input-sm", placeholder: "No product choosen", readonly: true, id: 'product_name' %>
+                          <%= hidden_field_tag :product, (@selling_price.product.barcode rescue ''), id: 'number' %>
+                          <%= hidden_field_tag :flag_pajak, (@selling_price.product.flag_pajak rescue ''), id: 'flag_pajak' %>
+                          <%= hidden_field_tag :fraction_box1 %>
+                          <%= hidden_field_tag :fraction_box2 %>
+                        </label>
+                        <button type="button" class="btn btn-primary btn-sm browser_product" onclick="searchManualSP()" style="margin-left: 10px;">Browse</button>
+                      </label><br>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Store</label>
+                      <div id="offices" class="col-md-8 status4">
+                        <label class="select">
+                          <%= select_tag "selling_price[office_id]", options_for_select(Branch.active_store.map { |str| [str.office_name, str.id] }, selected: @selling_price.office_id), multiple: true, class: 'form_input', id: 'selling_price_office_id' %>
+                        </label>
+                      </div>
+                    </section>
+
+                    <section>
+                      <label class="col-md-3 label">Start Date</label>
+                      <label class="col col-md-8 input custom-input-box" style="padding: 0px;">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <%= f.text_field :start_date, class: "input-sm", :value => DateTime.now.to_date, onchange: "tanggal();" %>
+                        <%= f.hidden_field :time, class: "input-sm", :value => Time.now.strftime("%I:%M:%S %p") %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">End Date</label>
+                      <label class="col col-md-8 input custom-input-box" style="padding: 0px;">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <%= f.text_field :end_date, class: "input-sm", :value => (DateTime.now+10.years).to_date, onchange: "tanggal();" %>
+                        <%= f.hidden_field :time, class: "input-sm", :value => Time.now.strftime("%I:%M:%S %p") %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  <section class="col-md-4">
+                    <section>
+                      <label class="col-md-4 label">HPP</label>
+                      <label class="col-md-5 input custom-input-box"><%= text_field_tag :hpp_helper, '', class: "input-sm", onkeyup: "set_hpp_unit()" %></label>
+                      <label class="col-md-3 custom-input-box">
+                        <%= select_tag :unit, options_for_select(['Unit', 'Box 1', 'Box 2']), class: "input-sm", style: 'margin-left: 35px', onchange: "set_hpp_unit()" %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">HPP Unit</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :hpp, class: "input-sm" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">HPP Average</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :hpp_average, value: @selling_price.hpp_average, class: "input-sm", readonly: "true" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">HPP Out</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :hpp_2, class: "input-sm", readonly: "true" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Margin</label>
+                      <label class="col-md-7 custom-input-box">
+                        <%= radio_button_tag(:margin_type, "percent") %>
+                        <%= label_tag(:margin_percent, "Percent") %>
+                        <%= radio_button_tag(:margin_type, "amount") %>
+                        <%= label_tag(:margin_type, "Amount") %>
+                      </label>
+                    </section><br>
+                    <section id="margin-amount"><br>
+                      <label class="col-md-4 label">Margin Amount</label>
+                      <label class="col-md-7 input custom-input-box">
+                        <%= text_field_tag "margin_amount_input", '', data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section id="margin-percent"><br>
+                      <label class="col-md-4 label">Margin Percent</label>
+                      <label class="col-md-7 input custom-input-box">
+                        <%= text_field_tag "margin_percent_input", '', data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section class="col-md-12" style='margin-bottom: 0px !important'>
+                      <label class="col-md-4 label">Selling Price</label>
+                      <label class="col-md-7 input custom-input-box">
+                        <%= f.text_field :selling_price, class: "input-sm" %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Selling Price Box 1</label>
+                      <label class="col-md-7 input custom-input-box"><%= text_field_tag :selling_price_middle, '', class: "input-sm" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Selling Price Box 2</label>
+                      <label class="col-md-7 input custom-input-box"><%= text_field_tag :selling_price_high, '', class: "input-sm" %></label>
+                    </section>
+                  </section>
+                  <section class="col-md-4">
+                    <section>
+                      <label class="col-md-4 label">PPN In</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :ppn_in, class: "input-sm", readonly: "true" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">PPN Out</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :ppn_out, class: "input-sm", readonly: "true" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Margin Amount</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :margin_amount, class: "input-sm", readonly: "true" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Margin Percent</label>
+                      <label class="col-md-7 input custom-input-box"><%= f.text_field :margin_percent, class: "input-sm", readonly: "true" %></label>
+                    </section>
+                  </section>
+
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Browse Products</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E">
+        <!--List Product -->
+          </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <th>
+                    <%= t(:SKU) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sku-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sku-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:barcode) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                    </span>
+                    </th>
+                    <th>
+                    <%= t(:Name) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th><%= t(:action) %></th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :sku, params[:sku], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :name, params[:name], class: 'form-control search' %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='colour-list'></tbody>
+              </table>
+            </div>
+</div>
+</div>
+<script>
+  $.validate({
+    lang: 'en'
+  });
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  function set_hpp_unit(){
+    if($('#unit').val() == 'Unit')
+      $('#selling_price_hpp').val($('#hpp_helper').val())
+    else if($('#unit').val() == 'Box 1')
+      $('#selling_price_hpp').val(parseFloat($('#hpp_helper').val())/parseFloat($("#fraction_box1").val()))
+    else
+      $('#selling_price_hpp').val(parseFloat($('#hpp_helper').val())/parseFloat($("#fraction_box2").val()))
+  }
+
+  function detectPriceChange(e) {
+    var hpp = $('#selling_price_hpp_average').val() == '' || $('#selling_price_hpp_average').val() == '0' ? $('#selling_price_hpp').val() : $('#selling_price_hpp_average').val();
+    var margin_amount = $('#margin_amount_input').val();
+    var margin_percent = $('#margin_percent_input').val();
+    var hppOut = 0;
+    var margin_percent_result = 0;
+    var margin_amount_result = 0;
+
+    hpp = parseFloat(hpp);
+
+    if (margin_amount != "") {
+      margin_amount = parseFloat(margin_amount);
+      hppOut = hpp + margin_amount;
+      margin_percent_result = (margin_amount / hpp) * 100
+    }
+
+    if (margin_percent != "") {
+      margin_percent = parseFloat(margin_percent) / 100.0;
+      hppOut = hpp + (hpp * margin_percent);
+      margin_amount_result = hppOut - hpp;
+    }
+
+    var ppnOut = $('#flag_pajak').val() != 'NBKP' ? 0.1 * hppOut : 0;
+    var sellPrice = hppOut + ppnOut;
+
+
+    if ($(this).attr('id') == "margin_percent_input") {
+      $('#selling_price_margin_amount').val(parseFloat(margin_amount_result).toFixed(0));
+      $('#selling_price_margin_percent').val($('#margin_percent_input').val());
+      $('#selling_price_hpp_2').val(parseFloat(hppOut).toFixed(0))
+      $('#selling_price_ppn_out').val(parseFloat(ppnOut).toFixed(0));
+      $('#selling_price_selling_price').val(parseFloat(sellPrice).toFixed(0));
+    }
+    if ($(this).attr('id') == "margin_amount_input") {
+      $('#selling_price_margin_percent').val(parseFloat(margin_percent_result).toFixed(2));
+      $('#selling_price_margin_amount').val($('#margin_amount_input').val());
+      $('#selling_price_hpp_2').val(parseFloat(hppOut).toFixed(0))
+      $('#selling_price_ppn_out').val(parseFloat(ppnOut).toFixed(0));
+      $('#selling_price_selling_price').val(parseFloat(sellPrice).toFixed(0));
+    }
+    if ($(this).attr('id') == "selling_price_selling_price") {
+      this_hpp = $('#selling_price_hpp').val();
+      hppOut = $('#flag_pajak').val() != 'NBKP' ? $(this).val() / 1.1 : $(this).val();
+      ppnOut = $('#flag_pajak').val() != 'NBKP' ? 0.1 * hppOut : 0;
+      margin_amount_result = hppOut - this_hpp;
+      $('#selling_price_hpp_2').val(parseFloat(hppOut).toFixed(0));
+      $('#selling_price_ppn_out').val(parseFloat(ppnOut).toFixed(0));
+      $('#selling_price_margin_amount').val(parseFloat(margin_amount_result).toFixed(0));
+      margin_percent_result = (parseFloat($('#selling_price_margin_amount').val()).toFixed(0) / hppOut) * 100
+      $('#selling_price_margin_percent').val(parseFloat(margin_percent_result).toFixed(2));
+      $('#margin_amount_input').val("");
+      $('#margin_percent_input').val("")
+    }
+    if ($('#flag_pajak').val() != 'NBKP')
+      $('#selling_price_ppn_in').val(parseFloat($('#selling_price_hpp').val())*0.1)
+  }
+
+  $( document ).ready(function() {
+    $('#selling_price_office_id').multipleSelect();
+    $('#selling_price_hpp_average').on('input', detectPriceChange);
+    $('#margin_amount_input').on('input', detectPriceChange);
+    $('#margin_percent_input').on('input', detectPriceChange);
+    $('#selling_price_selling_price').on('input', detectPriceChange);
+    $('#margin-percent').hide();
+    $('#margin-amount').hide();
+    $('input[type="radio"]').click(function() {
+      $("#selling_price_hpp_2").val("");
+      $("#selling_price_ppn_out").val("");
+      $("#selling_price_selling_price").val("");
+      $('#selling_price_margin_percent').val("");
+      $('#selling_price_margin_amount').val("")
+      if ($(this).attr('id') == "margin_type_amount") {
+        $('#margin-percent').hide();
+        $('#margin-amount').show()
+        $('#margin_percent_input').val("");
+      } else if ($(this).attr('id') == "margin_type_percent") {
+        $('#margin-amount').hide();
+        $('#margin-percent').show();
+        $('#margin_amount_input').val("");
+      }
+    });
+    $('#selling_price_start_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      onSelect : function(selectedDate) {
+        $('#finishdate').datepicker('option', 'minDate', selectedDate);
+      }
+    });
+
+    $("#office").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/head_offices/autocomplete_head_office_office_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        generate_data_office(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    $('#selling_price_end_date').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>',
+      onSelect : function(selectedDate) {
+        $('#finishdate').datepicker('option', 'minDate', selectedDate);
+      }
+    });
+
+    $('#code').on('input', function() {
+      $('#code').parent().removeClass('state-error');
+    });
+  });
+
+  function tanggal(){
+      var a = $('#selling_price_start_date').val().toString().split("-");
+      var b = $('#selling_price_end_date').val().toString().split("-");
+      if(parseInt(a[0]) < parseInt(b[0])){
+        $('#sendButton').attr('disabled', false);
+        $('#pesan').hide();
+      }
+      else if(parseInt(a[0]) == parseInt(b[0])){
+        if(parseInt(a[1]) < parseInt(b[1])){
+          $('#sendButton').attr('disabled', false);
+          $('#pesan').hide();
+        }
+        else if(parseInt(a[1]) == parseInt(b[1])){
+          if(parseInt(a[2]) <= parseInt(b[2])){
+            $('#sendButton').attr('disabled', false);
+            $('#pesan').hide();
+          }
+          else{
+            $('#sendButton').attr('disabled',true);
+            $('#pesan').show();
+          }
+        }
+        else{
+          $('#sendButton').attr('disabled',true);
+          $('#pesan').show();
+        }
+      }
+      else{
+        $('#sendButton').attr('disabled',true);
+        $('#pesan').show();
+      }
+  }
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#img_prev')
+          .attr('src', e.target.result)
+          .width(135)
+          .height(135);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function generate_data_office(item_id){
+    $.ajax({
+      url: '/head_offices/generate_data_head_office',
+      data: {office_id: item_id}
+    })
+  }
+</script>

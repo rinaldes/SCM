@@ -1,0 +1,99 @@
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Purchase Transfer</h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+              
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Date</label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @good_transfer.mutation_date %></label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">No.Transfer </label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box">
+                        <%= @good_transfer.code %>
+                      </label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">From </label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @good_transfer.origin_warehouse.office_name %></label>
+                    </section>
+                    <br/>
+                    <section>
+                      <label class="col-md-2 label">To</label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label class="col-md-10 input custom-input-box"><%= @good_transfer.destination_warehouse.office_name rescue ''%></label>
+                    </section>
+                    <br/>
+                  </section>
+                <br/>
+                <section class="col col-md-12">
+                  <div class="row">
+                    <table class="table" border="1" width="100%" id="orders">
+                      <thead>
+                        <tr>
+                          <th>CODE</th>
+                          <th>BRAND</th>
+                          <th>TYPE</th>
+                          <th>ARTICLE</th>
+                          <th>COLOR</th>
+                          <th>TOTAL PRICE</th>
+                          <th>SIZE</th>
+                        </tr>
+                      </thead>
+                      <tbody id='list_detail'>
+                        <% @good_transfer.product_mutation_details.group_by{|prd|prd.product_size.product_id}.each do |prd| %>
+                          <% detail = prd[1][0].product_size %>
+                          <% product = detail.product %>
+                          <tr>
+                            <td >
+                              <span><%= product.barcode rescue '' %></span>
+                            </td>
+                            <td ><%= product.brand.name rescue '' %></td>
+                            <td ><%= product.m_class.name rescue '' %></td>
+                            <td ><%= product.article rescue '' %></td>
+                            <td ><%= product.colour.name rescue '' %></td>
+                            
+                            <td ><%= product.cost_of_products rescue '' %></td>
+                            <td>
+                              <table>
+                                <tr>
+                                  <% @good_transfer.product_mutation_details.joins(:product_size).where("product_sizes.product_id = ?", prd[1].first.product_size.product_id).each do |prod| %>
+                                    
+                                    <td><%= prod.product_size.size_detail.size_number %></td>
+                                  <% end %>
+                                </tr>
+
+                                <tr>
+                                  <% @good_transfer.product_mutation_details.joins(:product_size).where("product_sizes.product_id = ?", prd[1].first.product_size.product_id).each do |prod| %>
+                                    <td><%= @good_transfer.product_mutation_details.find_by_product_size_id(prod.product_size_id).quantity %></td>
+                                  <% end %>
+                                </tr>
+                                
+                              </table>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+        
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

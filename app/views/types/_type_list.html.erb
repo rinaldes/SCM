@@ -1,0 +1,58 @@
+<table class="table table-condensed table-striped table-bordered table-hover no-margin">
+  <thead>
+    <tr>
+      <th style="width:2%">No</th>
+      <th style="width:3%">Code</th>
+      <th style="width:60%" class="hidden-phone">Name</th>
+      <th style="width:4%" class="hidden-phone">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @types.present? %>
+      <% @types.each_with_index do |type, i| %>
+        <tr>
+          <td rowspan="<%= type.subtype.length + 1%>"><span class="name"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></span></td>
+          <td  ><span class="name"><%= type.code %></span></td>
+          <td class="hidden-phone" colspan="1">
+            <%= link_to detail_sub_type_types_path(type) do %>
+              <%= type.name %>
+            <% end %>
+          </td>
+          <td  rowspan="<%= type.subtype.length + 1%>" class="hidden-phone">
+            <div class="btn-group ">
+              <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">Action&nbsp;<span class="caret"></span></button>
+              <ul class="dropdown-menu pull-right">
+                <li><%= link_to 'Ubah', edit_type_path(type) %></li>
+                <li><%= link_to delete_label, type, method: :delete, remote: true, confirm: 'Remove jenis?' %></li>
+              </ul>
+            </div>
+          </td>
+
+
+
+          <% type.subtype.each do |subtype| %>
+          <tr>
+            <td style="width: 30px"><%= subtype.code %></td>
+            <td><%= subtype.name %> </td>
+          </tr>
+
+        <% end %>
+
+
+      <% end %>
+    <% else %>
+      <tr><td colspan='4' class='centered-text'>No Data</td></tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @types %>
+<script>
+  $('.pagination a').bind('click', function () {
+    $.ajax({
+      url: '<%= types_path %>'.split('?page')[0] + '?page=' + this.href.split('page=')[1],
+      method: "get",
+      dataType: "script"
+    })
+    return false
+  })
+</script>

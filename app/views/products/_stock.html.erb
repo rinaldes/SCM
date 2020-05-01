@@ -1,0 +1,52 @@
+<thead>
+  <tr>
+    <td rowspan="2">Department</td>
+    <td rowspan="2">Category</td>
+    <td rowspan="2">SKU</td>
+    <td rowspan="2">Barcode</td>
+    <td rowspan="2">Name</td>
+<!--    <td rowspan="2">Brand</td>-->
+    <% @offices.each{|office| %>
+      <td colspan=2><%= office.office_name %></td>
+    <% } %>
+  </tr>
+  <tr>
+    <% @offices.each{|office| %>
+<!--      <td>Qty received</td>
+      <td>Qty Transfer</td>-->
+      <td colspan=2>Qty</td>
+<!--      <td>Min Stock</td>-->
+    <% } %>
+  </tr>
+</thead>
+<tbody>
+  <% grand_total = {} %>
+  <% grand_min_stock = {} %>
+  <% count_min_stock = false %>
+  <% @products.each{|product| %>
+    <tr>
+      <td><%= product.m_class.department.name rescue '' %></td>
+      <td><%= product.m_class.name rescue '' %></td>
+      <td><%= product.article %></td>
+      <td><%= product.barcode %></td>
+      <td><%= product.description %></td>
+<!--      <td><%#= product.brand.name rescue '' %></td><!--
+      <% @offices.each{|office| %>
+        <% pd = ProductDetail.find_by_warehouse_id_and_product_id(office.id, product.id) %>
+        <% qty = pd.available_qty.to_i rescue 0 %>
+<!--        <td><%#= ProductMutationHistory.where("product_detail_id=#{pd.id} AND mutation_type='Receiving'").map(&:moved_quantity).sum %></td>
+        <td><%#= ProductMutationHistory.where("product_detail_id=#{pd.id} AND mutation_type='Good Transfer'").map(&:moved_quantity).sum %></td>-->
+        <td><%= qty rescue ''%></td>
+        <td><%= Unit.find_by_id(Sku.find_by_product_id_and_convertion_unit(product.id, 1).unit_id).name rescue nil %></td>
+<!--        <td><%#= ProductDetail.find_by_warehouse_id_and_product_id(office.id, product.id).min_stock.to_i rescue ''%></td>-->
+        <% grand_total[office.id.to_s] = grand_total[office.id.to_s].present? ? grand_total[office.id.to_s] + qty : qty %>
+      <% } %>
+    </tr>
+  <% } %>
+  <tr>
+    <td colspan="5">Grand Total</td>
+    <% @offices.each{|office| %>
+      <td colspan=2><%= grand_total[office.id.to_s] %></td>
+    <% } %>
+  </tr>
+</tbody>

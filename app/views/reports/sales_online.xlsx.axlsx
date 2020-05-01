@@ -1,0 +1,21 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+subjudul_biru_tengah = styles.add_style(:fg_color => "ffffff", :b => true, :alignment => { :horizontal => :center, :vertical => :center, :wrap_text => true}, :bg_color => "307cf4", :border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Sales Online") do |sheet|
+  sheet.add_row ['Sales Online Report']
+  sheet.add_row ['Toko', 'Semua Toko']
+  sheet.add_row []
+  sheet.add_row []
+  sheet.add_row ["No", "Tipe", "ID Pelanggan", "Tanggal", "Pesan Biller", "Tagihan", "Biaya Admin", "Total"], :style => subjudul_biru_tengah, widths: [:auto,:auto,:auto,:auto]
+  total = 0
+  @sales_onlines.each_with_index do |so, i|
+    sheet.add_row [(i+1), so.tipe, so.idpel, so.pay_date, so.biller_msg, so.bill_amt, so.admin_amt, so.total_amt], style: default
+
+    total += so.total_amt
+  end
+  sheet.add_row ['', '', '', '', '', '', '', total]
+  sheet.merge_cells sheet.rows.last.cells[(0..4)]
+  sheet.rows.last.cells[0].value = 'Total'
+end

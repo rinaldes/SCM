@@ -1,0 +1,31 @@
+<thead>
+  <tr>
+    <th><%= t(:no) %></th>
+    <th><%= t(:member) %>
+      <span style="float: right;">
+        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th><%= t(:price) %>
+      <span style="float: right;">
+        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'price-desc', class: 'sorting hide' %>
+        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'price-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th class="no-wrap"><%= t(:alamat) %></th>
+    <th><%= t(:kelurahan) %></th>
+    <th><%= t(:kecamatan) %></th>
+    <th><%= t(:kota) %></th>
+  </tr>
+  <tr>
+    <th></th>
+    <th class="hasinput"><%= text_field_tag :member, params[:member], class: 'form-control pencarian', onchange: "load();" %></th>
+    <th></th>
+    <th></th>
+    <th><%= text_field_tag :kelurahan, params[:kelurahan], class: 'form-control pencarian', onchange: "load();" %></th>
+    <th><%= text_field_tag :kecamatan, params[:kecamatan], class: 'form-control pencarian', onchange: "load();" %></th>
+    <th><%= text_field_tag :city, params[:city], class: 'form-control pencarian', onchange: "load();" %></th>
+  </tr>
+</thead>
+<tbody id='purchase_order-list'><%= render 'member_price_list' %></tbody>

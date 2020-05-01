@@ -1,0 +1,23 @@
+<% @products.each_with_index do |prd, i| %>
+  <tr>
+    <td><%= i+1 %></td>
+    <td>
+      <%= hidden_field_tag "product[#{prd.id}]", prd.id, class: 'product' %>
+      <%= prd.barcode %>
+    </td>
+    <td><%= prd.article %></td>
+    <td><%= prd.description %></td>
+    <td class"button_action<%= i %>"><button id= "add_to_so" type="button" class="btn btn-primary btn-sm" onclick="add_product_to_table_list($(this), <%= i %>)">Add To SO</button></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=5>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

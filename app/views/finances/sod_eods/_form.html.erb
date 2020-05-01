@@ -1,0 +1,65 @@
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <div class="form-group">
+                <label class="col-md-3 control-label">Branch</label>
+                <div class="col-md-9">
+                    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+                        <%= @sod_eod.office.office_name %>
+                    <% else %>
+                        <input class="form-control auto" placeholder="Type branch name for hints" type="text" id="branch">
+                        <%= hidden_field_tag 'sod_eod[office_id]', '', id: "office_id" %>
+                    <% end %>
+                </div>
+            </div>
+
+            <div class="col-md-12">&nbsp;</div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Cashier</label>
+                <div class="col-md-9">
+                    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+                        <%= @sod_eod.user.first_name %> <%= @sod_eod.user.first_name %>
+                    <% else %>
+                        <%= f.select :user_id, options_for_select(@cashiers.collect { |p| [p.name, p.id] }, @sod_eod.user_id ), {:prompt => 'Select Cashier'}, { :class => 'form-control' } %>
+                    <% end %>
+                </div>
+            </div>
+        </section>
+
+        <section class="col col-6">
+         <div class="col-md-12">&nbsp;</div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">Date</label>
+                <div class="col-md-9">
+                    <%= format_date(Time.now()) %>  
+                </div>
+            </div>
+
+            <div class="col-md-12">&nbsp;</div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Session</label>
+                <div class="col-md-9">
+                    1 
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <div class="row">
+        <%= render 'start_day' %>
+        <%= render partial: 'end_day',  locals: { f: f } %>
+    </div>
+</fieldset>
+
+<footer>
+    <% if params[:action] == 'edit' || params[:action] == 'update' %>
+        <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-petty-cash", data: { :disable_with => "Please wait..." }  %>
+    <% else %>
+        <%= f.submit "Submit", :class => "btn btn-primary disabled", :id => "submit-petty-cash", data: { :disable_with => "Please wait..." }  %>
+    <% end %>
+    <%= link_to "Back", finances_sod_eods_path, :class => "btn btn-default"  %>
+</footer>

@@ -1,0 +1,36 @@
+  <% if @cat_num == 0 %>
+    $('.category').show();
+    $('.category2').hide();
+    $('.category3').hide();
+    $('.category4').hide();
+    $('#m_class_id').html("<option>Please Select</option>");
+    $('#m_class_id').append("<%= escape_javascript options_from_collection_for_select(@cat, :id, :name) %>");
+    $('#m_class_id2').html("<%= escape_javascript options_for_select('') %>");
+    $('#m_class_id3').html("<%= escape_javascript options_for_select('') %>");
+    $('#m_class_id4').html("<%= escape_javascript options_for_select('') %>");
+  <% elsif @cat_num == 1 %>
+    $('.category2').show();
+    $('.category3').hide();
+    $('.category4').hide();
+    $('#m_class_id2').html("<option>Please Select</option>");
+    $('#m_class_id2').append("<%= escape_javascript options_from_collection_for_select(@cat, :id, :name) %>");
+    $('#m_class_id3').html("<%= escape_javascript options_for_select('') %>");
+    $('#m_class_id4').html("<%= escape_javascript options_for_select('') %>");
+    
+  <% elsif @cat_num == 2 %>
+    $('.category3').show();
+    $('.category4').hide();
+    $('#m_class_id3').html("<option>Please Select</option>");
+    $('#m_class_id3').append("<%= escape_javascript options_from_collection_for_select(@cat, :id, :name) %>");
+    $('#m_class_id4').html("<%= escape_javascript options_for_select('') %>");
+
+  <% elsif @cat_num == 3 %>
+    $('.category4').show();
+    $('#m_class_id4').html("<option>Please Select</option>");
+    $('#m_class_id4').append("<%= escape_javascript options_from_collection_for_select(@cat, :id, :name) %>");
+    
+  <% elsif @cat_num == 5 %>
+
+  <% else %>
+    alert("?");
+  <% end %>

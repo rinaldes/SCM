@@ -1,0 +1,3 @@
+module PurchasePricesHelper
+
+end

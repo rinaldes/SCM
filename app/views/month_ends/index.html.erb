@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:data_master) %></li><li><%= t(:month_end) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id="notice_template"><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> <%= t(:month_end) %></h2></header>
+          <div>
+            <fieldset>
+              <div class="row">
+                <section class="col col-md-6">
+                  <section>
+                    <h3 class="col-md-12">Periode</h3>
+                  </section>
+                  <section>
+                    <section class="col-md-5">
+                      <label class="col-md-1">Bulan</label>
+                      <label class="col-md-12 input custom-input-box">
+                        <%= select_month(Date.today, {}, {class:"form-control periode"}) %>
+                      </label>
+                    </section>
+                    <section class="col-md-5">
+                      <label class="col-md-1">Tahun</label>
+                      <label class="col-md-12 input custom-input-box">
+                        <%= number_field_tag :year, Time.now.strftime("%Y"), class:"form-control periode", min: 1900, max: 2100 %>
+                      </label>
+                    </section>
+                  </section>
+                  <section>
+                    <label class="col-md-12"></label>
+                  </section>
+                  <section>
+                    <section class="col-md-5">
+                      <label class="col-md-3">
+                        <div class="btn btn-primary" onclick="proses()">Process</div>
+                      </label>
+                    </section>
+                    <section class="col-md-5">
+                      <label class="col-md-3">
+                        <div id="btn_down" class = "btn btn-success export_xls hide" onclick="load()"><%= link_to t(:download), report_month_ends_path(:id => params[:id], format: "xlsx" ) %></div>
+                      </label>
+                    </section>
+                  </section>
+                </section>
+              </div>
+              <br>
+            </fieldset>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+<script type="text/javascript">
+  function proses(){
+    $("#btn_down").removeClass("hide");
+    $(".periode").prop("disabled", true);
+    $(".export_xls a").attr("href", "/month_ends/report.xlsx?bulan="+$("#date_month").val()+"&tahun="+$("#year").val())
+  }
+
+  function load(){
+    $("#btn_down").addClass("hide");
+    $(".periode").prop("disabled", false);
+  }
+</script>

@@ -1,0 +1,61 @@
+<div class="row-fluid">
+  <div class="span12">
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">Sub Type List <%= @type.name %></div>
+        <span class="tools">
+          <%= link_to 'Add Sub Tipe', new_sub_type_types_path(@type.id), :class => "btn btn-warning2" %>
+        </span>
+      </div>
+      <div class="widget-body">
+        <div class="container" id="type-list">
+          <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+            <thead>
+              <tr>
+                <th style="width:2%">No</th>
+                <th style="width:3%">Code</th>
+                <th style="width:60%" class="hidden-phone">Name</th>
+                <th style="width:4%" class="hidden-phone">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @sub_types.present? %>
+                <% @sub_types.each_with_index do |sub_type, i| %>
+                  <tr>
+                    <td><span class="name"><%= params[:page] ? (params[:page].to_i*100+i-99) : i+1 %></span></td>
+                    <td><span class="name"><%= sub_type.code %></span></td>
+                    <td class="hidden-phone">
+                      <%= sub_type.name %>
+                    </td>
+                    <td class="">
+                      <div class="btn-group ">
+                        <button data-toggle="dropdown" class="btn btn-mini dropdown-toggle">Action&nbsp;<span class="caret"></span></button>
+                        <ul class="dropdown-menu pull-right">
+                          <li><%= link_to 'Ubah', edit_sub_type_path(sub_type) %></li>
+                          <li><%= link_to delete_label, sub_type, method: :delete, remote: true, confirm: 'Remove Sub jenis?' %></li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr><td colspan='4' class='centered-text'>No Data</td></tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= will_paginate @sub_types %>
+          <script>
+            $('.pagination a').bind('click', function(){
+              $.ajax({
+                url: '<%= types_path %>'.split('?page')[0]+'?page='+this.href.split('page=')[1],
+                method: "get",
+                dataType: "script"
+              })
+              return false
+            })
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

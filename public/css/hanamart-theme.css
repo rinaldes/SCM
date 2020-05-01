@@ -1,0 +1,90 @@
+/* A CSS Document for Hanamart Template */
+/* ======== August 2, 2016 ======== */ 
+
+#logo img {
+    max-height: 130%;
+    margin-left: 3em;
+}
+#header {
+    background-image: linear-gradient(to bottom,#ecece3,#ecece3);
+    background-repeat: repeat-x;
+}
+.dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
+    text-decoration: none;
+    color: #fff;
+    background-color: rgb(154, 150, 132);
+}
+.btn-header > :first-child > a {
+    background: rgb(235, 237, 233);
+    border: 0px solid #bfbfbf;
+    color: #000;
+    font-size: 17px;
+}
+aside {
+    /*background: transparent linear-gradient(to right, #d76f09 93%, #fec845 100%) repeat scroll 0% 0%;*/
+    background: transparent linear-gradient(to right, #3a351d 100%, #3a351d 100%) repeat scroll 0% 0%;
+}
+nav ul ul {
+    background: transparent linear-gradient(to right, #443e20 100%, #443e20 100%) repeat scroll 0% 0%;
+}
+.login-info a {
+    text-decoration: none !important;
+    color: #fff;
+    display: inline-block;
+    margin-top: 6px;
+}
+.left-panel nav ul li {
+    
+}
+nav ul span.menu-item-parent {
+    color: #fff;
+}
+nav ul span.menu-item-parent li a:hover {
+    color: #fff;
+}
+nav ul li a:hover {
+    background-color: rgb(154, 150, 132);
+}
+nav ul li ul li a:hover {
+    background-color: rgb(154, 150, 132);
+}
+.minified nav ul li ul {
+    background: #443e20;
+}
+.minified nav ul ul li a {
+    background: #443e20;
+}
+.minified nav ul li ul li a:hover {
+    background-color: rgb(154, 150, 132);
+}
+.page-footer {
+    background-color: rgb(236, 236, 227);
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto auto;
+}
+.txt-color-dark-brown {
+    color: #2e231c !important;
+}
+
+/* Content Area */
+
+.btn-primary {
+	color: #fff;
+	background-color: #f78f25;
+	border-color: #fff;
+}
+.btn-primary:hover {
+	color: #fff;
+	background-color: #f79828;
+	border-color: #fff;
+}
+.jarviswidget-color-blueDark > header {
+    border-color: #fec845 !important;
+    background: #fec845 none repeat scroll 0% 0%;
+    color: #fff;
+}

@@ -1,0 +1,12 @@
+<td><%= product.article rescue '' %></td>
+<td><%= product.barcode rescue '' %></td>
+<td><%= product.description rescue '' %></td>
+<td>
+  <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{key}][product_id]", (product.id rescue '') %>
+<%= text_field_tag "stock_transfer[stock_transfer_details_attributes][#{key}][quantity]", (quantity rescue 0) %></td>
+<td><%= product.unit.name rescue '' %></td>
+<td>
+  <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(this)">
+    <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+  </a>
+</td>

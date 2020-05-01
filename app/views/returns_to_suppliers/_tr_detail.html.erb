@@ -1,0 +1,20 @@
+<tr>
+  <td class="purchase_request"><%= (purchase_request.number || '-') rescue '-' %></td>
+  <td>
+    <span class='hidden'><%= detail.product_id rescue '' %></span>
+    <span class="product_barcode"><%= product.barcode rescue '' %></span>
+  </td>
+  <td><%= product.brand.name rescue '' %></td>
+  <td><%= product.m_class.name rescue '' %></td>
+  <td><%= product.article rescue '' %></td>
+  <td><%= product.colour.name rescue '' %></td>
+  <td><%= product.cost_of_products rescue '' %></td>
+  <td>
+    <%= link_to 'View', 'javascript:void(0)', onclick: "$('#myModal#{product.id}').modal()" %>
+  </td>
+  <td>
+    <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(this)">
+      <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+    </a>
+  </td>
+</tr>

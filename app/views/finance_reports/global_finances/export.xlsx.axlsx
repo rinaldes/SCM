@@ -1,0 +1,35 @@
+wb = xlsx_package.workbook
+wb.use_autowidth = true 
+styles = wb.styles
+title = styles.add_style(:sz => 14, :b => true, :alignment => { :horizontal => :center })
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+green = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center }, :border => Axlsx::STYLE_THIN_BORDER, :bg_color => "93e731")
+orange = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center }, :border => Axlsx::STYLE_THIN_BORDER, :bg_color => "e79f31")
+yellow = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center }, :border => Axlsx::STYLE_THIN_BORDER, :bg_color => "FFFF66")
+white_blue = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center }, :border => Axlsx::STYLE_THIN_BORDER, :bg_color => "95c7ce")
+blue = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center }, :border => Axlsx::STYLE_THIN_BORDER, :bg_color => "18d1ec")
+grey = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center }, :border => Axlsx::STYLE_THIN_BORDER, :bg_color => "988d7c")
+
+wb.add_worksheet(name: "Global Finance") do |sheet|
+  sheet.merge_cells 'A2:A3'
+  sheet.merge_cells 'B2:D2'
+  sheet.merge_cells 'E2:I2'
+  sheet.merge_cells 'J2:J3'
+  sheet.merge_cells 'K2:K3'
+  sheet.merge_cells 'L2:N2'
+  sheet.merge_cells 'P2:P3'
+  sheet.merge_cells 'Q2:Q3'
+  sheet.merge_cells 'S2:S3'
+
+  sheet.add_row ["GLOBAL KEUANGAN ABC NOVEMBER 2015"], :style => title
+  sheet.add_row ["Date", "Omset", "", "", "Pendapatan Lain-Lain", "", "", "", "", "DP Masuk", "Total", "Pembayaran Via Merchant", "", "", "Pembayaran Via Transfer", "BTP 2X", "DP Keluar", "Setor", "Sisa"], :style => [green, orange, orange, orange, yellow, yellow, yellow, yellow, yellow, white_blue, blue, orange, orange, orange, orange, grey, grey, grey ,grey]
+  sheet.add_row ["", "Tk. Depan", "Tk. Blk", "Tk. Fashion", "Katalog", "Jasa Kado", "Charge Merchant", "Pembulatan", "Salah Transaksi", "", "", "BCA", "Mandiri", "BNI", "BNI", "", "", "BNI", ""], :style => [green, orange, orange, orange, yellow, yellow, yellow, yellow, yellow, white_blue, blue, grey, grey, grey, grey, grey, grey, orange, grey]
+  sheet.add_row ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => [green, orange, orange, orange, yellow, yellow, yellow, yellow, yellow, white_blue, blue, grey, grey, grey, grey, grey, grey, orange, grey]
+  # @bank_outs.each do |bo|
+    sheet.add_row ["01/11/2015", "Rp.12,872,590", "Rp.17,481,205", "Rp.35,286,801", "", "Rp.8.000", "", "Rp.36,879", "", "", "Rp.65,685,475", "Rp.3,385,540", "Rp.750,985", "Rp.1,419,450", "", "", "Rp.100,000", "Rp.60,029,500", "Rp.-"], :style => default
+    sheet.add_row ["02/11/2015", "Rp.6,408,700", "Rp.11,607,700", "Rp.27,103,375", "", "Rp.2,000", "", "Rp.32,605", "", "", "Rp.45,254,380", "Rp.10,054,000", "Rp.330,000", "Rp.1,205,300", "", "", "Rp.100,000", "Rp.45,916,500", "Rp.-"], :style => default
+    sheet.add_row ["03/11/2015", "Rp.10,120,505", "Rp.12,301,870", "Rp.26,237,710", "", "Rp.8,000", "", "Rp.49,985", "", "", "Rp.48,718,070", "Rp.1,166,270", "", "Rp.791,770", "", "", "", "Rp.39,151,000", "Rp.-"], :style => default
+  # end
+  sheet.add_row ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], :style => default
+  sheet.add_row ["Total", "Rp.296,696,825", "Rp.448,577,095", "Rp.867,631,218", "Rp.-", "Rp.220,000", "Rp.8,000", "Rp.889,134", "Rp.-", "Rp.1,720,500", "Rp.1,615,742,772", "Rp.70,603,920", "Rp.23,889,105", "Rp.50,616,147", "Rp.8,640,000", "Rp.52,500", "Rp.1,820,500", "Rp.1,460,120,600", "Rp.-"], :style => default
+end

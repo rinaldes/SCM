@@ -1,0 +1,20 @@
+<div class="row-fluid">
+  <div class="span12">
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          List Setting Poin Member
+        </div>
+        <span class="tools">
+          <%= link_to "List Member", members_path, class: "btn btn-info" %>
+          <%= link_to "Add Point", "#", class: "btn btn-success", "data-toggle" => "modal", "data-target" => "#myModalPoint" %>
+        </span>
+      </div>
+      <div class="widget-body">
+        <div class="container" id="member-list">
+          <%= render "point_member_list" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

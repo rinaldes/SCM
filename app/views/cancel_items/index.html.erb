@@ -1,0 +1,192 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Cancel Item</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Cancel Item</h2> <!-- header content --></header>
+            <div style='overflow-y: hidden'>
+              <div class="widget-body no-padding" style='overflow-y: hidden'>
+                <section>
+                  <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                    <li class="dropdown">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                      <ul class="dropdown-menu" >
+                        <li style="color:'black';" id="ekspor"><%= link_to "Export to Excel", cancel_items_path(:id => params[:id], format: "xls") %></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </section>
+                <br><br><br><br>
+                <section class="col col-md-12">
+                  <section class="form-group">
+                    <label class="col-md-1">Office : </label>
+                    <label class="col-md-5 input custom-input-box">
+                      <%= select_tag :store, options_for_select(Branch.all.map{|reg|[reg.office_name, reg.id]}), {include_blank: 'Please Select', class:"form-control", onchange: "reload();", onkeyup: "reload();"}%>
+                    </label>
+                    <label class="col-md-6"></label>
+                  </section>
+                </section>
+                <section class="col col-md-12">
+                  <section class="form-group">
+                    <label class="col-md-1">Start Date </label>
+                    <label class="col-md-2 input custom-input-box"><%= text_field_tag :start_date, '' , class: 'form-control tanggal', onchange: "reload();", onkeyup: "reload();" %></label>
+                    <label class="col-md-1">End Date </label>
+                    <label class="col-md-2 input custom-input-box"><%= text_field_tag :end_date, '' , class: 'form-control tanggal', onchange: "reload();", onkeyup: "reload();" %></label>
+                  </section>
+                </section>
+              </div>        
+                <table class="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Store
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Product Name
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Cancel Date
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'cancel_date-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'cancel_date-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Quantity
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'c_quantity-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'c_quantity-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Price
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'price-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'price-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Capital Price
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'capital_price-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'capital_price-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Discount
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'discount-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'discount-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Discount Amount
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'discount_amt-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'discount_amt-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Total Discount Amount
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_discount_amt-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_discount_amt-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Discount Type
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'discount_type-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'discount_type-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Price After Discount
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'price_after_discount-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'price_after_discount-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Sales Person Bill Number
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sales_person_bill_number-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sales_person_bill_number-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Sub Total Price
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'subtotal_price-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'subtotal_price-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Total Price
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_price-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_price-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Username
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'username-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'username-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :office_name, params[:office_name], class: 'form-control search', name: 'offices.office_name' %></th>
+                    <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search', name: "products.description" %></th>
+                    <th class="hasinput"><%= text_field_tag :cancel_date, params[:cancel_date], class: 'form-control search', name: "to_char(cancel_items.cancel_date, 'YYYY-MM-DD')" %></th>
+                    <th class="hasinput"><%= text_field_tag :c_quantity, params[:c_quantity], class: 'form-control search', name: "to_char(cancel_items.quantity, '999999')" %></th>
+                    <th class="hasinput"><%= text_field_tag :price, params[:price], class: 'form-control search', name: "to_char(cancel_items.price, '9999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :capital_price, params[:capital_price], class: 'form-control search', name: "to_char(cancel_items.capital_price, '9999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :discount, params[:discount], class: 'form-control search', name: "to_char(cancel_items.discount, '999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :discount_amt, params[:discount_amt], class: 'form-control search', name: "to_char(cancel_items.discount_amt, '999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :total_discount_amt, params[:total_discount_amt], class: 'form-control search', name: "to_char(cancel_items.total_discount_amt, '999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :discount_type, params[:discount_type], class: 'form-control search', name: 'cancel_items.discount_type' %></th>
+                    <th class="hasinput"><%= text_field_tag :price_after_discount, params[:price_after_discount], class: 'form-control search', name: "to_char(cancel_items.price_after_discount, '999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :sales_person_bill_number, params[:sales_person_bill_number], class: 'form-control search', name: "cancel_items.sales_person_bill_number" %></th>
+                    <th class="hasinput"><%= text_field_tag :subtotal_price, params[:subtotal_price], class: 'form-control search', name: "to_char(cancel_items.subtotal_price, '999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :total_price, params[:total_price], class: 'form-control search', name: "to_char(cancel_items.total_price, '999999D99')" %></th>
+                    <th class="hasinput"><%= text_field_tag :username, params[:username], class: 'form-control search', name: "users.username" %></th>
+                  </tr>
+                </thead>
+                <tbody id='receiving-list'><%= render 'receiving_list' %></tbody>
+              </table>
+          </div>
+        </div>
+      </article>
+    </div>  
+  </section>
+</div>
+<script type="text/javascript">
+  $( document ).ready(function() {
+    //$('#store').select2();
+    $('.tanggal').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>'
+    });
+  });
+
+  function reload(){
+    linknya = "/<%= params[:controller] %>.xls?&start_date="+($('#start_date').length == 1 ? $('#start_date').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&end_date="+($('#end_date').length == 1 ? $('#end_date').val() : '')
+    $("#ekspor").html("<a href='"+linknya+"'>Export to Excel</a>");
+    $.ajax({
+          url: "/cancel_items/search_receiving?&start_date="+($('#start_date').length == 1 ? $('#start_date').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&end_date="+($('#end_date').length == 1 ? $('#end_date').val() : ''),
+          method: "get",
+          data: {
+            },
+            dataType: "script"
+        })
+  } 
+</script>
+<script src="/js/jquery.min.js"></script>

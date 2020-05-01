@@ -1,0 +1,32 @@
+if ($("#m_class_<%= params[:key].to_i-1 %>").val() == ''){
+  alert("Please select parent before add mClass")
+}
+else{
+  <% if @first_m_class.blank? %>
+    alert("no Children for "+$("#m_class_<%= params[:key].to_i-1 %>").val()+", can't select mClass again")
+  <% else %>
+    $('#product_m_class').append("<%= j(render 'product_m_class', i: params[:key]) %>")
+    dropdown_autocomplete()
+    $("#m_class_<%= params[:key].to_i %>").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/m_classes/autocomplete_m_class_name",
+          dataType: "json",
+          data: {term: request.term, parent_id: $('#m_class_<%= params[:key].to_i-1 %>').val()},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+  <% end %>
+}
+$(this).removeAttr('disabled')
+
+function remove_m_class(mclass){
+  $('#<%= params[:key]').remove();
+}

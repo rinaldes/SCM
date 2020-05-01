@@ -1,0 +1,160 @@
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<script src="/js/notiny.min.js"></script>
+<link href="/js/notiny.min.css" rel="stylesheet">
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Product</h2> <!-- header content --></header>
+          <div style='overflow-y: hidden'><!-- widget div-->
+            <div class="widget-body no-padding"><!-- widget content -->
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_product)}"), new_product_url,
+                class: "btn btn-labeled btn-primary edit-btn-primary" if current_user.can_manage_product? %>
+              <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                <li class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to "Export to CSV",  products_path(:id => params[:id], format: "csv"), onclick: "$.notiny({ text: 'Berhasil Download!'});", id: "export_to_csv" %></li>
+                      <li><%= link_to "Export to Excel", products_path(:id => params[:id], format: "xlsx"), onclick: "$.notiny({ text: 'Berhasil Download!'});", id: "export_to_xlsx" %></li>
+                      <%= raw('<li data-toggle="modal" data-target="#myModal" style="cursor: pointer"><a>Import from CSV</a></li>') if current_user.can_manage_product? %>
+                    </ul>
+                  </li>
+                </ul>
+            </div>
+            <table class="table table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>
+                    SKU
+                    <span style="float: right;">
+                      <%= link_to 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' do %>
+                        <i class="fa fa-sort-desc"></i>
+                      <% end %>
+                      <%= link_to 'javascript:void(0)', id: 'article-asc', class: 'sorting' do %>
+                        <i class="fa fa-sort-asc"></i>
+                      <% end %>
+                    </span>
+                  </th>
+                  <th class='nowrap'>
+                    Barcode
+                    <%= link_to 'javascript:void(0)', id: 'barcode-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'barcode-asc', class: 'sorting' %>
+                  </th>
+                  <th class=''>
+                    Name
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th class=''>
+                    Short Name
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'short_name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'short_name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th class=''>
+                    Department
+                    <%= link_to 'javascript:void(0)', id: 'department_id-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to 'javascript:void(0)', id: 'department_id-asc', class: 'sorting' do %>
+                      <i class="fa fa-sort-asc"></i>
+                    <% end %>
+                  </th>
+                  <th class='nowrap'>
+                    Category
+                    <%= link_to 'javascript:void(0)', id: 'm_class_name-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'm_class_name-asc', class: 'sorting' %>
+                  </th>
+                  <th class='nowrap'>
+                    Status Pajak
+                    <%= link_to 'javascript:void(0)', id: 'flag_pajak-desc', class: 'sorting hide' do %>
+                      <i class="fa fa-sort-desc"></i>
+                    <% end %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'flag_pajak-asc', class: 'sorting' %>
+                  </th>
+                    <th>
+                      Action
+                    </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :short_name, params[:short_name], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :department_name, params[:department_name], class: 'form-control search', name: 'departments.name' %></th>
+                    <th class="hasinput"><%= text_field_tag :m_class_name, params[:m_class_name], class: 'form-control search', name: 'm_classes.name' %></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+              </thead>
+              <tbody id='product-list'><%= render 'product_list' %></tbody>
+            </table>
+          </div><!-- end widget content -->
+        </div><!-- end widget -->
+      </article><!-- WIDGET END -->
+    </div><!-- end row -->
+  </section><!-- end widget grid -->
+</div><!-- end row -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Product</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag import_products_path(:id => params[:id]), multipart: true do %>
+          <%= file_field_tag :file %>
+      </div>
+      <div class="modal-footer">
+        <%= link_to "Download Template", "/products_template.csv", :class => "btn btn-success" %>
+        <%= submit_tag "Import", :class => "btn btn-primary"%>
+        <%#= submit_tag "Upgrade Barcode", :class => "btn btn-primary"%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#commit').bind("click",function(){
+    if(!$('#file').val()){
+      alert("File not been chosen");
+      return false;
+    }
+  });
+  window.reset = function (e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();
+  }
+});
+function checkfile(sender) {
+    var validExts = new Array(".csv");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+      alert("This is not a csv file");
+      reset($("#file"));
+      return false;
+    }
+    else return true;
+};
+</script>

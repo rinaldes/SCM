@@ -1,0 +1,85 @@
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+
+<b>GOODS MUTATION</h2></b><br/>
+
+<b>Transfer Date : <%= @product_mutation.mutation_date.strftime('%d-%m-%Y') %></b><br />
+<b>No. Goods Transfer : </b> <%= @product_mutation.code %><br />
+<b>From : </b><%= @product_mutation.origin_warehouse.office_name %><br />
+<b>Destination : </b><%= @product_mutation.destination_warehouse.office_name %>
+
+<hr />
+<br></br>
+<table id="table-item">
+  <tr>
+    <th>BARCODE</th>
+    <th>DESCRIPTION</th>
+    <th>QUANTITY</th>
+  </tr>
+  <% @product_mutation.product_mutation_details.each{|pmd| %>
+    <% product = pmd.product %>
+        <tr>
+            <td><%= product.barcode rescue '' %></td>
+            <td><%= product.description rescue '' %></td>
+            <td><%= pmd.quantity rescue '' %></td>
+        </tr>
+  <% } %>
+</table>
+  <table id="table-info">
+    <tr>
+      <td>DELIVERED BY</td>
+      <td></td>
+      <td></td>
+      <td>RECEIVED BY</td>
+      <td></td>
+      <td></td>
+      <td>APPROVED BY</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+      <td></td>
+      <td></td>
+      <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+      <td></td>
+      <td></td>
+      <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+    </tr>
+  </table>
+  <table id="table-info">
+    <tr>
+      <td>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><label>Print By</label>:<span><%= current_user.fullname %></span></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><label>Date</label>:<span><%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %></span></td>
+    </tr>
+  </table>
+<style>
+td, th {
+  font-size: 11px;
+}
+</style>

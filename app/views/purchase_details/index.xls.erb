@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Receipt No</Data></Cell>
+        <% if @office_nya.blank? %>
+        <Cell><Data ss:Type="String">Store</Data></Cell>
+        <% end %>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">SKU</Data></Cell>
+        <Cell><Data ss:Type="String">Product Name</Data></Cell>
+        <Cell><Data ss:Type="String">UoM</Data></Cell>
+        <Cell><Data ss:Type="String">Quantity</Data></Cell>
+        <Cell><Data ss:Type="String">Supplier</Data></Cell>
+        <Cell><Data ss:Type="String">DPP</Data></Cell>
+        <Cell><Data ss:Type="String">PPn</Data></Cell>
+        <Cell><Data ss:Type="String">Total</Data></Cell>
+
+      </Row>
+    <% @receivings.each do |receiving| %>
+    <% dpp = receiving.hpp rescue 0 %>
+    <% ppn = dpp * 0.1 rescue 0%>
+      <Row>
+        <Cell><Data ss:Type="String"><%= receiving.number %></Data></Cell>
+        <% if @office_nya.blank? %>
+        <Cell><Data ss:Type="String"><%= receiving.office_name %></Data></Cell>
+        <% end %>
+        <Cell><Data ss:Type="String"><%= receiving.date rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.article %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.description %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.unit_type %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= receiving.quantity %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.supplier_name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= dpp %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= ppn %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= dpp + ppn %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

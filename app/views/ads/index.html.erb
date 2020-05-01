@@ -1,0 +1,134 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:data_master) %></li><li><%= t(:ad) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id="notice_template"><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> <%= t(:ad_list) %></h2> <!-- header content --></header>
+          <div>
+            <div class="widget-body no-padding">
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_ad)}"), new_ad_url,
+                class: "btn btn-labeled btn-primary edit-btn-primary" %>
+              <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                <li class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to t(:export_to_csv), ads_path(:id => params[:id], format: "csv") %></li>
+                    <li><%= link_to t(:export_to_excel), ads_path(:id => params[:id], format: "xls") %></li>
+                    <li data-toggle="modal" data-target="#myModal" style='cursor: pointer'><a>Import from CSV</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <th>
+                    <%= t(:url) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'url-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'url-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:ad_type) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'ad_type-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'ad_type-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:valid_from) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'valid_from-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'valid_from-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:valid_until) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'valid_from-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'valid_from-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:store) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'store-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'store-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th class="col-md-2"><%= t(:action) %></th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :url, params[:url], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :ad_type, params[:ad_type], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :valid_from, params[:valid_from], class: 'form-control search', name: "to_char(valid_from, 'YYYY-MM-DD')" %></th>
+                    <th class="hasinput"><%= text_field_tag :valid_until, params[:valid_until], class: 'form-control search', name: "to_char(valid_until, 'YYYY-MM-DD')" %></th>
+                    <th class="hasinput"><%= text_field_tag :store, params[:store], class: 'form-control search' %></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='ad-list'><%= render 'ad_list' %></tbody>
+              </table>
+            </div>
+          </div>
+      </article>
+    </div>
+  </section>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Ad</h4>
+      </div>
+      <%= form_tag import_ads_path(:id => params[:id]), multipart: true do %>
+        <div class="modal-body">
+          <%= file_field_tag :file, accept: ".csv", onchange: "checkfile(this);" %>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Download Template", ads_path(format: "csv", :a => "a"), :class => "btn btn-success" %>
+          <%= submit_tag "Import", :class => "btn btn-primary", :id => 'commit'%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#commit').bind("click",function(){ 
+    if(!$('#file').val()){
+      alert("File not been chosen");
+      return false;
+    }
+  }); 
+  window.reset = function (e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();
+  }
+});
+function checkfile(sender) {
+    var validExts = new Array(".csv");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+      alert("This is not a csv file");
+      reset($("#file"));
+      return false;
+    }
+    else return true;
+};
+</script>

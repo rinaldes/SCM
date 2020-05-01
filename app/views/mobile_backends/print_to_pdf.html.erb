@@ -1,0 +1,169 @@
+<%= wicked_pdf_stylesheet_link_tag "pdf.css" -%>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mobile POS Order
+          </h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <div class="row">
+              <table id="table-info">
+                <tr>
+                  <td><label>Transaction Number</label>:<span><%= @mo.first.sale.code %></span></td>
+                  <td></td>
+                  <td><label>Nama</label>:<span><%= @mo.first.sale.ship_address_name %></span></td>
+                </tr>
+                <tr>
+                  <td><label>Transaction Date</label>:<span><%= @mo.first.sale.transaction_date.in_time_zone(ActiveSupport::TimeZone.new("Jakarta")).strftime("%d-%m-%Y %H:%M:%S") %></span></td>
+                  <td></td>
+                  <td><label>No. Telp</label>:<span><%= @mo.first.sale.ship_address_phone %></span></td>
+                </tr>
+                <tr>
+                  <td><label>Kasir</label>:<span><%= @kasir %></span></td>
+                  <td></td>
+                  <td><label>Alamat</label>:<span><%= @mo.first.sale.ship_address %></span></td>
+                </tr>
+                <tr>
+                  <td><label>Store</label>:<span><%= @mo.first.sale.store.office_name %></span></td>
+                  <td></td>
+                  <td><label>kelurahan</label>:<span><%= @mo.first.sale.ship_address_kelurahan %></span></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Kecamatan</label>:<span><%= @mo.first.sale.ship_address_kecamatan %></span></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Kota</label>:<span><%= @mo.first.sale.ship_address_city %></span></td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <section class="col col-md-12">
+              <div class="row">
+                <table class="table" border="1" width="100%" id="orders">
+                  <thead>
+                    <tr>
+                      <th>NO</th>
+                      <th>ARTICLE</th>
+                      <th>DESCRIPTION</th>
+                      <th>UNIT</th>
+                      <th>SELLING PRICE</th>
+                      <th>QUANTITY</th>
+                      <th>TOTAL</th>
+                    </tr>
+                  </thead>
+                  <tbody id='list_detail'>
+                    <% total, grand_total = 0, 0 %>
+                    <% total_qty = 0 %>
+                    <% @mo.each_with_index do |sd, i| %>
+                      <% product = sd.product %>
+                      <% sp = product.product_price(Time.now).selling_price || 0 rescue 0 %>
+                      <% total_qty += sd.quantity %>
+                      <% total += sd.quantity*sp %>
+                      <tr>
+                        <td><%= i+1 %></td>
+                        <td><%= product.article rescue '' %></td>
+                        <td><%= product.description rescue '' %></td>
+                        <td><%= product.unit.name rescue '' %></td>
+                        <td style='text-align: right; padding-right: 10px'><%= sp %></td>
+                        <td style='text-align: right; padding-right: 10px'><%= sd.quantity %></td>
+                        <td style='text-align: right; padding-right: 10px'><%= format_currency sd.quantity*sp %></td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td class="noborder" colspan=4></td>
+                      <td>Grand Total</td>
+                      <td style='text-align: right; padding-right: 10px'><%= format_currency total_qty %></td>
+                      <td style='text-align: right; padding-right: 10px'><%= format_currency total %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="col col-md-12">
+              <div class="row">
+              <table id="table-info">
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                  <td>DELIVERED BY</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>RECEIVED BY</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><label>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</label></td>
+                </tr>
+              </table>
+              <table id="table-info">
+                <tr>
+                  <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Print By</label>:<span><%= current_user.fullname %></span></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td><label>Date</label>:<span><%= Time.now.strftime('%Y-%m-%d %H:%M:%d') %></span></td>
+                </tr>
+              </table>
+              </div>
+            </section>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<style>
+td, th {
+  font-size: 11px;
+}
+</style>

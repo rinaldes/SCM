@@ -1,0 +1,47 @@
+<% if @product.present? %>
+  $('#sku').val("<%= @product.sku %>");
+  $("#product_id").val("<%= @product.id %>");
+  $("#merk").val("<%= @product.brand.name %>");
+  $("#article").val("<%= @product.article %>");
+  $('#product_name').val("<%== @product.description %>");
+  $("#disc1").val("<%= @product.margin_percent1 %> %");
+  $("#disc2").val("<%= @product.margin_percent2 %> %");
+  $("#disc3").val("<%= @product.margin_percent3 %> %");
+  $("#disc4").val("<%= @product.margin_percent4 %> %");
+  $("#disc5").val("<%= @product.margin_rp %>");
+  $("#jenis").val("<%= @product.brand.id %>");
+  $("#warna").val("<%= @product.full_colour.join(' / ') %>");
+<<<<<<< HEAD
+  $("#rop").val("<%= @productdetail.rop rescue '' %>");
+  $("#quantity").val("<%= @productdetail.min_stock rescue '' %>");
+  $("#hpp").val("<%= @sellingprice.hpp %>");
+  $("#harga_pokok").val("<%= @product.cost_of_products %>");
+  $("#harga_jual").val("<%= @product.purchase_price %>");
+  $("#harga_beli").val("<%= @product.selling_price %>");
+  $("#size").val("<%= @product.size.code %>");
+  $("#number").val("<%= @product.barcode %>");
+=======
+  <% if @productdetail.present? %>
+    $("#rop").val("<%= @productdetail.rop_stock %>");
+    $("#safety_stock").val("<%= @productdetail.min_stock %>");
+    $("#available_qty").val("<%= @productdetail.available_qty.to_i %>");
+  <% end %>
+
+  $("#hpp").val("<%= @sellingprice.hpp unless @sellingprice.nil? %>");
+  $("#harga_pokok").val("<%= @product.cost_of_products %>");
+  $("#harga_jual").val("<%= @product.purchase_price %>");
+  $("#harga_beli").val("<%= @product.selling_price %>");
+>>>>>>> master
+  $("#status2").val("<%= @product.status2 %>");
+  $("#status3").val("<%= @product.status3 %>");
+  $("#status4").val("<%= @product.status4 %>");
+  $("#status5").val("<%= @product.status5 %>");
+  $("#m_class").val("<%= @product.m_class.name rescue '' %>")
+  $("#departement").val("<%= @product.brand.department.name rescue '' %>")
+  $("#product_image").html("<%= j(image_tag @product.image, width: '250px', height: '250px') %>")
+  $("#table_size thead tr:eq(0) td").html(" ")
+  $("#table_size tbody tr:eq(0) td").html(" ")
+  nomor_ganti()
+<% else %>
+  alert('Your Product not present!')
+<% end %>

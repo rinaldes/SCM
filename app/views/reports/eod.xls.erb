@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Barcode</Data></Cell>
+        <Cell><Data ss:Type="String">Qty Terjual</Data></Cell>
+        <Cell><Data ss:Type="String">Price</Data></Cell>
+        <Cell><Data ss:Type="String">Cost Price</Data></Cell>
+      </Row>
+
+      <% i = 0 %>
+      <% date = DateTime.new(2016, 3, 3) %>
+      <% Sale.where(transaction_date: date.beginning_of_day .. date.end_of_day).each do |sale| %>
+        <% sale.sales_details.each do |saledetail| %>
+          <Row>
+            <Cell><Data ss:Type="String"><%= Product.find(saledetail.product_id).barcode %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= saledetail.quantity %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= saledetail.price %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= saledetail.capital_price %></Data></Cell>
+          </Row>
+        <% end %>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

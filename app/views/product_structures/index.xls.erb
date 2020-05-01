@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">SKU</Data></Cell>
+        <Cell><Data ss:Type="String">Barcode</Data></Cell>
+        <Cell><Data ss:Type="String">Main Product</Data></Cell>
+        <Cell><Data ss:Type="String">Product Constituent</Data></Cell>
+        <Cell><Data ss:Type="String">Category</Data></Cell>
+      </Row>
+    <% @products2.each_with_index do |product, i| %>
+      <% product_s = ProductStructure.find_by_parent_id(Sku.find_by_product_id(product.id).id).id rescue nil %>
+      <% if product_s.present? %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= product.article %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.barcode || '-' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= product.description %></Data></Cell>
+          <% if ProductStructure.joins(sku: :product).where(parent_id: Sku.find_by_product_id(product.id)).present? %>
+            <Cell><Data ss:Type="String">Have <%= ProductStructure.joins(sku: :product).where(parent_id: Sku.find_by_product_id(product.id)).count %> Product Constituent</Data></Cell>
+          <% else %>
+            <Cell><Data ss:Type="String">Have <%= ProductStructure.where(parent_id: product.id).count %> Product Constituent</Data></Cell>
+          <% end %>
+          <Cell><Data ss:Type="String"><%= product.m_class_name %></Data></Cell>
+        </Row>
+      <% end %>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

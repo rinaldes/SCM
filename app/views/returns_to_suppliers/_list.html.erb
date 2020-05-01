@@ -1,0 +1,67 @@
+<tr>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][code]", (object[:code] rescue ''), class: "input-sm", value: @fieldnya.barcode, disabled: true %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][brand]", (object[:brand] rescue ''), class: "input-sm", value: @fieldnya.brand.name, disabled: true %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][article]", (object[:article] rescue ''), class: "input-sm", value: @fieldnya.article, disabled: true %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][color]", (object[:color] rescue ''), class: "input-sm", value: @fieldnya.colour.name, disabled: true %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][dept]", (object[:dept] rescue ''), class: "input-sm", value: @fieldnya.m_class.department.name, disabled: true %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= number_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][quantity]", (object[:quantity] rescue ''), class: "input-sm", onkeyup: "isi_qty();", onchange: "isi_qty();", min: 0 %></label>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][total]", (object[:total] rescue ''), class: "input-sm", disabled: true, value: 0 %></label>
+    <%= hidden_field_tag "total", @fieldnya.purchase_price %>
+  </td>
+  <td>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{key}][status]", (object[:status] rescue ''), class: "input-sm", value: @fieldnya.status1, disabled: true %></label>
+  </td>
+  <td class="hidden-phone">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal<%= params[:key] %>">
+      <i class="fa fa-pencil"> Detail</i>
+    </button>
+    <a class="close" data-dismiss="alert" href="#">×</a>
+  </td>
+</tr>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal<%= params[:key] %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Item Detail</h4>
+      </div>
+      <div class="modal-body">
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  function isi_qty(){
+    var a = parseFloat($("#total").val());
+    var b = parseFloat($("#returns_to_supplier_returns_to_supplier_details_attributes_<%= params[:key] %>_quantity").val());
+    var c = a * b;
+    if(isNaN(c)){
+      c = 0;
+      $("#returns_to_supplier_returns_to_supplier_details_attributes_<%= params[:key] %>_total").val(c);
+    }
+    else{
+      $("#returns_to_supplier_returns_to_supplier_details_attributes_<%= params[:key] %>_total").val(c);
+    }
+  }
+</script>

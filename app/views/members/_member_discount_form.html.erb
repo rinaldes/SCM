@@ -1,0 +1,45 @@
+<%= form_for @discount, url: create_member_discount_members_path(@discount), html: {class: "form-horizontal no-margin"}, :remote => true do |f| %>
+<div class="container-fluid">
+  <div class="row-fluid" style="margin-bottom: 20px;">
+    <div class="span4">
+      <div class="control-group marginB11px">
+         <%= label_tag :discount_type, raw("Level <span class='important'>*</span>"), :class => "control-label custom2-control-label" %>
+        <div class="controls custom2-controls controls-row">
+          <%= f.text_field :discount_type, :class => "span9 input_uppercase", :placeholder => "Level" %>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="control-group marginB11px">
+         <%= label_tag :nominal, raw("Akumulasi <span class='important'>*</span>"), :class => "control-label custom2-control-label" %>
+        <div class="controls custom2-controls controls-row">
+          <%= f.text_field :nominal, :class => "span9 input_uppercase", :placeholder => "Akumulasi" %>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="control-group marginB11px">
+         <%= label_tag :percent, raw("Diskon (%) <span class='important'>*</span>"), :class => "control-label custom2-control-label" %>
+        <div class="controls custom2-controls controls-row">
+          <%= f.text_field :percent, :class => "span9 input_uppercase", :placeholder => "Diskon" %>
+        </div>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="form-actions no-margin">
+          <button type="reset" class="btn btn-info span2 pull-right">Reset</button>
+          <%#= link_to "Reset", "javascript:void(0)", class: "btn btn-info span2 pull-right" %>
+          <%= submit_tag 'Simpan', class: 'btn btn-info span2 pull-right marginR10px' %>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<script>
+  $("button[type=reset]").click(function(){
+    $("#new_discount")[0].reset();
+  })
+</script>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+
+    <Table>
+      <Row>
+        <% @branches.each{|branch| %>
+          <Cell></Cell>
+          <Cell></Cell>
+          <Cell></Cell>
+          <Cell><Data ss:Type="String"><%= branch.description %> KE HO</Data></Cell>
+          <Cell></Cell>
+          <Cell></Cell>
+          <Cell></Cell>
+        <% } %>
+      </Row>
+      <Row>
+        <% @branches.each{|branch| %>
+          <Cell><Data ss:Type="String">TGL</Data></Cell>
+          <Cell><Data ss:Type="String">NO. SUPP</Data></Cell>
+          <Cell><Data ss:Type="String">NO SURAT</Data></Cell>
+          <Cell><Data ss:Type="String">QTY</Data></Cell>
+          <Cell><Data ss:Type="String">COST</Data></Cell>
+          <Cell><Data ss:Type="String">SELL</Data></Cell>
+          <Cell><Data ss:Type="String">KETERANGAN</Data></Cell>
+        <% } %>
+      </Row>
+
+      <% ReturnsToHo.all.each_with_index{|rth, i| %>
+        <Row>
+          <% @branches.each{|branch| %>
+            <% rthb = @returns_to_hos[branch.id][i] rescue nil %>
+              <Cell><Data ss:Type="String"><%= rthb.mutation_date rescue '' %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rthb.supplier.code rescue '' %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rthb.no_surat_jalan rescue '' %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rthb.total_quantity rescue '' %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rthb.total_price rescue '' %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rthb.sell_price rescue '' %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rthb.note rescue '' %></Data></Cell>
+          <% } %>
+        </Row>
+      <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

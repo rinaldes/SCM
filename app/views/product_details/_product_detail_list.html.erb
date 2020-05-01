@@ -1,0 +1,27 @@
+<% @product_details.each_with_index do |pd, i| %>
+<tr>
+  <% product = pd.product %>
+  <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE-1) : i+1 %></td>
+  <td class="hidden-phone"><%= product.article rescue ''%></td>
+  <td class="hidden-phone"><%= pd.warehouse.office_name rescue '' %></td>
+  <td class="hidden-phone"><%= product.description rescue ''%></span></td>
+  <td class="hidden-phone"><%= product.barcode rescue ''%></span></td>
+  <td class="hidden-phone"><%= pd.min_stock || 0 %></span></td>
+  <td class="hidden-phone"><%= pd.rop_stock || 0 %></span></td>
+  <td class="hidden-phone"><%= pd.max_stock || 0 %></span></td>
+  <td class="hidden-phone nowrap">
+    <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>'), edit_product_detail_path(pd.pd_id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+  </td>
+</tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @product_details.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@product_details, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

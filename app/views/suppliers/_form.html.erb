@@ -1,0 +1,260 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Supplier</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Supplier</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @supplier, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <div id='departments' style='display: none'></div>
+              <fieldset> <!-- tambah supplier -->
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Code</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <% if params[:action] == 'new' %>
+                        <%= f.text_field :code, class: "input-sm", value: ("S#{('%03d' % ((Supplier.last.code.gsub('S', '').to_i rescue 0)+1))}"), :disabled => true %>
+                        <% else %>
+                        <%= f.text_field :code, class: "input-sm", value: @supplier.code, :disabled => true %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Name <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :name, class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: "-. '"} %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label"><%= t(:address) %> <span class='important'>*</span></label>
+                      <label class="col-md-9 textarea custom-input-box">
+                        <%= f.text_area :address, size: "10", class: "custom-scroll", maxlength: 255 %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">City <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :city, class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '. '} %></label>
+                    </section>
+                    <fieldset style="padding-left: 0px;">
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Kons/Non-Kons</label>
+                        <div class="col-md-9">
+                          <%= f.radio_button :suptype, 'Non-Konsinyasi', onclick: "$('#supplier_long_term').removeAttr('disabled')" %> Non-Konsinyasi
+                          <%= f.radio_button :suptype, 'Konsinyasi', onclick: "$('#supplier_long_term').attr('disabled', true);$('#supplier_long_term').val('');", style: "margin-left: 10px;" %> Konsinyasi
+                        </div> <!-- col-md-10 -->
+                      </div> <!-- form-group -->
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Status PKP</label>
+                        <div class="col-md-9">
+                          <div class="col-md-2">
+                            <%= f.radio_button :status_pkp, 'PKP', :checked => @supplier.status_pkp == true , :value => true %> Yes
+                          </div>
+                          <div class="col-md-2">
+                            <%= f.radio_button :status_pkp, 'Non-PKP', :checked => @supplier.status_pkp == false  , :value => false %> No
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Status BKT</label>
+                        <div class="col-md-9">
+                          <div class="col-md-2">
+                            <%= f.radio_button :status_bkt, 'true', :checked => @supplier.status_bkt == true , :value => true %> Yes
+                          </div>
+                          <div class="col-md-2">
+                            <%= f.radio_button :status_bkt, 'false', :checked => @supplier.status_bkt == false  , :value => false %> No
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Default Qty</label>
+                        <div class="col-md-9">
+                          <%= f.check_box :default_qty %>
+                        </div> <!-- col-md-10 -->
+                      </div> <!-- form-group -->
+                    </fieldset>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-6">
+                    <section class="form-group">
+                      <label class="col-md-3 label">NPWP</label>
+                      <label class="col-md-9 textarea custom-input-box">
+                        <%= f.text_field :npwp, class: "input-sm" %>
+                      </label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Return Address</label>
+                      <label class="col-md-9 textarea custom-input-box">
+                        <%= f.text_area :send_address, size: "10", class: "custom-scroll#{(error_field @supplier, :send_address)}" %>
+                      </label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Phone</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :phone, class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '-.() '} %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Fax</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :fax, class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: '-.() '} %></label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">TOP</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= f.text_field :long_term, class: "input-sm is-number", disabled: @supplier.suptype == 'Konsinyasi', data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %><div class="icon-append" style="padding: 0 15px;">Hari</div>
+                      </label>
+                    </section><br>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Departement</label>
+                      <label class="col-md-8 label"><button type="button" class="btn btn-primary btn-sm" onclick="$('#myModal').modal()">Browse</button></label>
+                    </section>
+                    <section class="form-group">
+                      <label class="col-md-3 label">Selected Department</label>
+                      <label class="col-md-9 label" id='selected_department'></label>
+                    </section><br>
+                  </section> <!-- col-md-6 --><br>
+                  <fieldset class="col col-md-12">
+                    <section class="col col-md-6">
+                      <header>Supplier Division</header>
+                      <fieldset class="col col-md-12"> <!-- contact person -->
+                        <div class="row">
+                          <section id='contact' class="col col-md-12">
+                            <% if params[:action] == 'edit' %>
+                              <% @supplier.contact_people.each{|cp| %>
+                                <%= render partial: "contact_person", locals: {key: cp.id, object: cp} %>
+                              <% } %>
+                            <% else %>
+                              <% (params[:supplier][:contact_people_attributes].keys rescue (0.upto(@supplier.contact_people.size))).each{|i| %>
+                                <%= render partial: "contact_person", locals: {key: i, object: (params[:supplier][:contact_people_attributes][i] rescue nil)} %>
+                              <% } %>
+                            <% end %>
+                          </section>
+                          <%= link_to 'Add More Division', 'javascript:void(0)', class: 'btn btn-primary btn-sm add_contact', style: "margin-bottom:20px;margin-left: 15px;" %>
+                        </div> <!-- row -->
+                      </fieldset> <!-- contact person -->
+                    </section>
+                    <section class="col col-md-6">
+                      <header>Rekening Bank</header>
+                      <fieldset class="col col-md-12"> <!-- rekening bank -->
+                        <div class="row">
+                          <section id='bank_account' class="col col-md-12">
+                            <% if params[:action] == 'edit' %>
+                              <% @supplier.bank_accounts.each{|cp| %>
+                                <%= render partial: "bank_account", locals: {key: cp.id, object: cp} %>
+                              <% } %>
+                            <% else %>
+                              <% (params[:supplier][:bank_accounts_attributes].keys rescue (0.upto(@supplier.bank_accounts.size))).each{|i| %>
+                                <%= render partial: "bank_account", locals: {key: i, object: (params[:supplier][:bank_accounts_attributes][i] rescue nil)} %>
+                              <% } %>
+                            <% end %>
+                          </section>
+                          <%= link_to 'Add More Account', 'javascript:void(0)', class: 'btn btn-primary btn-sm add_bank_account', style: "margin-left: 15px;" %>
+                        </div> <!-- row -->
+                      </fieldset> <!-- rekening bank -->
+                    </section>
+                  </fieldset> <!-- tambah supplier -->
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Department</h4>
+      </div>
+      <div class="modal-body" style="color:#5E5E5E">
+        <% @departments.each{|department| %>
+          <% if ((params[:supplier][:supplier_departments_attributes]["#{department.id}"][:department_id]) rescue (@supplier.supplier_departments.find_by_department_id department.id)) %>
+            <%= check_box_tag "supplier[supplier_departments_attributes][#{department.id}][department_id]", department.id, 1, :class => "depart-check" %>
+            <label><%= department.name %></label>
+          <% else %>
+            <%= check_box_tag "supplier[supplier_departments_attributes][#{department.id}][department_id]", department.id, false, :class => "depart-check" %>
+            <label><%= department.name %></label>
+          <% end %>
+          <br/>
+        <% } %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="department();">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<SCRIPT>
+  $.validate({
+    lang: 'en'
+  });
+
+  function load_department(){
+    deps = []
+    $(".depart-check").each(function(){
+      if (this.checked)
+        deps.push($(this).next().html())
+    })
+    $("#selected_department").html(deps.join(', '));
+  }
+  $(document).ready(function() {
+    load_department()
+    $(".depart-check").change(function(){
+      load_department()
+    });
+
+    $('input[type="submit"]').click(function(e){
+      for (i=0; i<$('.modal-body input[type=checkbox]').length; i++){
+          if($('.modal-body input[type=checkbox]')[i].checked)
+            $('#departments').append("<input name='supplier[supplier_departments_attributes]["+i+"][department_id]' value="+$('.modal-body input[type=checkbox]')[i].value+" type='hidden'>")
+          }
+          setTimeout(function(){$('form').submit()}, 1000);
+
+      return false;
+    });
+
+    $('form').submit(function() {
+      $('input.btn-primary').prop("disabled", "disabled");
+    })
+
+    $('.add_contact').click(function(){
+      var date = new Date();
+      $.ajax({
+        url: '/suppliers/add_contact',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+    $('.add_bank_account').click(function(){
+      var date = new Date();
+      $.ajax({
+        url: '/suppliers/add_bank_account',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+  })
+  function department()
+  {
+
+  }
+</SCRIPT>

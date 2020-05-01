@@ -1,0 +1,16 @@
+<% @zf.each_with_index do |zf, i| %>
+  <% zf.zfood_details.each do |zfd| %>
+    <% if zfd.moved_qty > 0 %>
+    <tr>
+      <td><%= zfd.zfood.code %></td>
+      <td>
+        <a id="Details" href="#" onclick="get_convertion_details('<%=zf.id%>');return false;"><%= zfd.sku.product.article %></a>
+      </td>
+      <td><%= zfd.sku.product.barcode %></td>
+      <td><%= zfd.sku.product.description %></td>
+      <td class="qty"><%= zfd.moved_qty.to_i %></td>
+      <td><%= zf.product_detail.warehouse.office_name rescue '' %></td>
+    </tr>
+    <% end %>
+  <% end %>
+<% end %>

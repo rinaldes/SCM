@@ -1,0 +1,101 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content"><!-- MAIN CONTENT -->
+    <section id="widget-grid" class="">
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Cash for
+                          <% if @cash_out.present? %>
+                            <%= @cash_out.created_at.strftime('%d %B %Y') %>
+                          <% else %>
+                            <%= @cash_outs.first.created_at.strftime('%d %B %Y') rescue params[:date] %>
+                          <% end %>
+                        </h2>
+
+                    </header>
+                   <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+
+                        <div class="widget-body no-padding">
+                            <table class="table table-striped table-brequested table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="50">No.</th>
+                                        <th width="200">Type</th>
+                                        <th width="200" align="right">Amount</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='petty_cash_list'><%= render 'list' %></tbody>
+                                    <tr>
+                                        <th width="50"></th>
+                                        <th  width="200">TOTAL</th>
+                                        <th  width="200" style="text-align:right;"><%= format_currency(@cash_outs.sum(:amount)) %></th>
+                                        <th></th>
+                                    </tr>
+                            </table>
+                            <!-- start pagination -->
+                            <div class="dt-toolbar-footer">
+                                <div class="col-xs-12 col-sm-6 pull-right">
+                                <%= will_paginate @cash_outs %>
+                                    <!--div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+                                        <ul class="pagination pagination-sm">
+                                          <li class="paginate_button previous disabled" aria-controls="dt_basic" tabindex="0" id="dt_basic_previous">
+                                            <a href="#">Previous</a>
+                                          </li>
+                                          <li class="paginate_button active" aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">1</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">2</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">3</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">4</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">5</a>
+                                          </li>
+                                          <li class="paginate_button disabled" aria-controls="dt_basic" tabindex="0" id="dt_basic_ellipsis">
+                                            <a href="#">…</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">10</a>
+                                          </li>
+                                          <li class="paginate_button next" aria-controls="dt_basic" tabindex="0" id="dt_basic_next">
+                                            <a href="#">Next</a>
+                                          </li>
+                                        </ul>
+                                    </div-->
+                                </div>
+                            </div>
+                            <!-- end pagination -->
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+    <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+</div>  <!-- end row -->
+
+
+

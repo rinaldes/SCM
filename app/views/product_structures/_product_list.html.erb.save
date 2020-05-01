@@ -1,0 +1,31 @@
+<% @products.each_with_index do |product, i| %>
+<% product_s = ProductStructure.find_by_parent_id(Sku.find_by_product_id(product.id).id).id %>
+
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+    <td class="hidden-phone"><%= link_to product.article, product_structure_url(product_s) %></td>
+    <td class='nowrap'><%= link_to product.barcode || '-', product_structure_url(product_s)  %></span></td>
+    <td class='nowrap'><%= product.description %></span></td>
+    <% if ProductStructure.joins(sku: :product).where(parent_id: Sku.find_by_product_id(product.id)).present? %>
+      <td class="hidden-phone">Have <%= ProductStructure.joins(sku: :product).where(parent_id: Sku.find_by_product_id(product.id)).count %> Product Constituent</td>
+    <% else %>
+      <td class="hidden-phone">Have <%= ProductStructure.where(parent_id: product.id).count %> Product Constituent</td>
+    <% end %>
+    <td class="nowrap"><%= product.m_class.name rescue '' %></td>
+    <td class="nowrap">
+      <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>'), edit_product_structure_path(product_s), class: "btn btn-primary btn-xs custom-edit-btn" rescue '' %>
+      <%= link_to raw('<i class="fa fa-forward" rel="tooltip" data-placement="left" data-original-title="Convert"></i>'), "/product_structures/convert/#{product.id}", class: "btn btn-info btn-xs custom-edit-btn" rescue '' %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @products.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@products, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,279 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Transfer Issue</li><li><%= t(:new) %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Transfer Issue <%= t(:new) %></h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @purchase_transfer, html: {class: "smart-form", id: "form_transfer"} do |f| %>
+              <%= f.hidden_field :destination_warehouse_id, class: 'destination_warehouse_id' %>
+              <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+              <%= hidden_field_tag :ref_transaction %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Transfer No </label>
+                      <label class="col-md-10 input custom-input-box">
+                        <%= f.text_field :code, :class => "input-sm", readonly: true %>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Transfer Date </label>
+                      <label class="col-md-10 input custom-input-box">
+                        <%= f.text_field :mutation_date, class: "input-sm", readonly: true %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Status </label>
+                      <label class="col-md-10 input custom-input-box">
+                        Pending
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <div class="row">
+                    <section>
+                      <label class="col-md-2 label">IR No </label>
+                      <label class="col-md-7 input custom-input-box">
+                        <%= hidden_field_tag :good_list %>
+                        <%= text_field_tag :pr_name, (@pr.number rescue ''), class: 'input-sm autocomplete' %>
+                      </label>
+                      <label class="col-md-3"><button class="btn btn-primary">Browse</button></label>
+                    </section>
+                    </div>
+                    <div class="row">
+                    <section>
+                      <label class="col-md-2 label">From </label>
+                      <label class="col-md-7 input custom-input-box">
+                        <%= hidden_field_tag :good_list %>
+                        <%= text_field_tag :pr_name, (@pr.number rescue ''), class: 'input-sm autocomplete' %>
+                      </label>
+                      <label class="col-md-3"><button class="btn btn-primary">Browse</button></label>
+                    </section>
+                    </div>
+                    <div class="row">
+                    <section>
+                      <label class="col-md-2 label">To </label>
+                      <label class="col-md-7 input custom-input-box">
+                        <%= hidden_field_tag :good_list %>
+                        <%= text_field_tag :pr_name, (@pr.number rescue ''), class: 'input-sm autocomplete' %>
+                      </label>
+                      <label class="col-md-3"><button class="btn btn-primary">Browse</button></label>
+                    </section>
+                    </div>
+                  </section>
+                </div>
+              </fieldset>
+              <%= render "product_search" %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                  <table class="table table-striped table-btransfered table-hover" width="100%" id="transfer">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>SKU</th>
+                        <th>Barcode</th>
+                        <th>Brand</th>
+                        <th>Product Name</th>
+                        <th>IR Qty</th>
+                        <th>Received Qty</th>
+                        <th class="col-md-1">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id='list_detail'>
+                      <%= render partial: 'list_detail', locals: {details: @purchase_transfer.product_mutation_details} if params[:action] == 'edit' %>
+                    </tbody>
+                  </table>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick="return(beforeSave())">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'></div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  function add_pr_to_po(number){
+    var date = new Date();
+    $.ajax({
+      url: '/purchase_transfers/add_product_pr',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number,
+          origin_warehouse_id: $('.ho_id').val(), destination_warehouse_id: $('.destination_warehouse_id').val()
+      }
+    });
+    nomor_ganti();
+  }
+
+  $(document).ready(function() {
+    autocomplete_barcode()
+    $("#pr_name").autocomplete({
+      search: function () {},
+      source: function (transfer, response)
+      {
+        $.ajax(
+        {
+          url: "/purchase_requests/autocomplete_purchase_request",
+          dataType: "json",
+          data: {term: transfer.term, status: "'APPROVED', 'TRANSFER ON PROGRESS'", present_pr: $('#ref_transaction').val()},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        // add_pr_to_po(ui.item.value)
+      },
+      minLength: 1
+    });
+
+    $(".branch_name").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/branches/autocomplete_branch_office_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        $('#purchase_transfer_destination_warehouse_id').val(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    reset_form();
+
+    <% if params[:action] == 'edit' %>
+      $("#purchase_transfer_supplier_id").val("<%= @supplier.id rescue '' %>");
+      $("#supplier_name").val("<%= @supplier.name rescue '' %>")
+      $("#alamat").val("<%= @supplier.address rescue '' %>");
+      $("#supplier_code").val("<%= @supplier.code rescue '' %>");
+    <% end %>
+  });
+
+  function getProduct(){
+    $.ajax({
+      url: '<%= get_product_purchase_transfers_path %>',
+      type: 'get',
+      data: {
+        barcode: $("#number").val(), ho_id: $('#purchase_transfer_origin_warehouse_id').val()
+      }
+    })
+  }
+
+  function getPr(){
+    $.ajax({
+      url: '<%= get_pr_purchase_transfers_path %>',
+      type: 'get',
+      data: {
+        name: $("#pr_name").val()
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#transfer tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#transfer tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/purchase_transfers",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            response(data)
+          },
+        });
+      }, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function reset_form(){
+    document.getElementById("form_transfer").reset();
+    $("#transfer tboby").html("");
+  }
+
+  // function searchManual(){
+  //   $.ajax({
+  //     url: '/purchase_requests/search_product_manual',
+  //     type: 'get'
+  //   })
+  // }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_transfers/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function nomor_ganti(){
+    $.ajax({
+        url: '/purchase_transfers/get_last_number',
+        type: 'get',
+        dataType: 'json',
+        data: {
+          supplier_id: $('.supplier_id').val()
+        },
+        success: function(data){
+          //TRF/Name HO asal - Name Branch Penerima/No Supplier/Tahun-Bulan-Hari/No urut per supplier (terus berlanjut hingga 1 tahun)
+          $("#purchase_transfer_code").val("TRF/"+$('#purchase_transfer_origin_warehouse_id').get(0).options[$('#purchase_transfer_origin_warehouse_id').get(0).selectedIndex].innerHTML+" - " + $('.branch_name').val() +"/"+$("#supplier_code").val()+"/"+$('#purchase_transfer_mutation_date').val()+"/"+data.number);
+        }
+    })
+    $("#code").val($("#purchase_transfer_number").val());
+  }
+
+  function getProduct(){
+    $.ajax({
+      url: '/<%= params[:controller] %>/get_product',
+      type: 'get',
+      data: {
+        barcode: $("#number").val(), ho_id: $('.ho_id').val()
+      }
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

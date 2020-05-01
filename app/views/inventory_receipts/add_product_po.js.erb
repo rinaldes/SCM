@@ -1,0 +1,8 @@
+$('#list_detail').append("<%= j(render 'list_detail', key: params[:key], details: @purchase_order.purchase_order_details) %>")
+clone_details()
+$('#supplier_code').val('<%= @supplier.code rescue '-' %>')
+$('#supplier_name').val('<%= @supplier.name rescue '-' %>')
+$('#alamat').val('<%= @supplier.address rescue '-' %>')
+$('#receiving_supplier_id').val('<%= @supplier.id %>')
+$('#receiving_head_office_id').val('<%= @purchase_order.head_office_id %>')
+nomor_ganti()

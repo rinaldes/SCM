@@ -1,0 +1,29 @@
+<% if @product_suppliers.all.present? %>
+<% @product_suppliers.all.each do |product_supplier| %>
+  <tr>
+    <td><%= product_supplier.supplier.code rescue '' %></td>
+    <td><%= product_supplier.supplier.name rescue '' %></td>
+    <td><%= product_supplier.product.barcode rescue '' %></td>
+    <td><%= product_supplier.product.description  rescue '' %></td>
+    <td><%= product_supplier.supplier.address rescue '' %></td>
+    <td class='align-right'><%= format_currency product_supplier.product.cost %></td>
+    <% if (product_supplier.supplier.status_pkp rescue nil).blank? %>
+      <td>Non-PKP</td>
+    <% else %>
+      <td>PKP</td>
+    <% end %>
+    <td><%= product_supplier.product.flag_pajak rescue '' %></td>
+  </tr>
+<% end %>
+<% end %>
+<tr>
+  <td colspan=12>
+    <% if @product_suppliers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@product_suppliers, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

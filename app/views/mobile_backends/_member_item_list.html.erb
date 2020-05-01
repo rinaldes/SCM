@@ -1,0 +1,28 @@
+<% if @purchase_orders.present? %>
+  <% @purchase_orders.each_with_index do |po, i| %>
+    <tr>
+      <td><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+      <td><%= Member.find(po.member_id).name %></td>
+      <td><%= po.product.article %></td>
+      <td><%= po.product.description %></td>
+      <td><%= po.try(:qty) %></td>
+      <td><%= Sku.find(po.sku_id).unit.short_name rescue ''%></td>
+      <td><%= format_currency po.try(:sale_total_price) %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan=10>
+      <% if @purchase_orders.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@purchase_orders, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='10' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

@@ -1,0 +1,16 @@
+<%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post, class: "form-signin" }) do |f| %>
+  <h2 class="form-signin-heading">Resend unlock instructions</h2>
+  <div class="login-wrap">
+    <%= devise_error_messages! %>
+    <div class="user-login-info">
+      <%= f.email_field :email, autofocus: true, autocomplete: "off", class: "form-control", placeholder: "Email" %>
+    </div>
+    <%= button_tag "Resend unlock instructions".html_safe, class: "btn btn-lg btn-login btn-block", type: "submit" %>
+
+    <div class="registration">
+      Already remember your password?.
+      <%= link_to "Login", new_user_session_path %>
+    </div>
+
+  </div>
+<% end %>

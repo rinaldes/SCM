@@ -1,0 +1,44 @@
+<tr>
+  <td>
+    <label class="col-md-8 input custom-input-box">
+      <%= select_tag "product[branch_prices_attributes][#{key}][branch_id]", options_for_select(Branch.all.map{|branch|[branch.office_name, branch.id]},
+        selected: (key.branch_id rescue '')), class: "input-sm", style: 'width: 49px' %>
+    </label>
+  </td>
+  <td>
+    <label class="col-md-8 input custom-input-box">
+      <%= text_field_tag "product[branch_prices_attributes][#{key}][percentage]", (key[:percentage] rescue ''), class: "input-sm", style: 'width: 49px', onkeyup: "klik_percent();" %>
+    </label>
+  </td>
+  <td>
+    <label class="col-md-8 input custom-input-box">
+      <%= text_field_tag "product[branch_prices_attributes][#{key}][nominal]", (key[:nominal] rescue ''), class: "input-sm", style: 'width: 49px' %>
+    </label>
+  </td>
+  <td>
+    <label class="col-md-8 input custom-input-box">
+      <%= text_field_tag "product[branch_prices_attributes][#{key}][additional_min_stock]", (key[:additional_min_stock] rescue ''), class: "input-sm", style: 'width: 49px' %>
+    </label>
+  </td>
+</tr>
+<script type="text/javascript">  
+  $(document).ready(function() {
+    var key = <%= params[:key] %>
+    var percent = "#product_branch_prices_attributes_" + key + "_percentage";
+    var nominal = "#product_branch_prices_attributes_" + key + "_nominal";
+    $(percent).keyup(function(e) {
+      if($(this).val() != '') {
+        $(nominal).attr('disabled','disabled');
+      } else {
+        $(nominal).removeAttr('disabled');
+      }
+    });
+    $(nominal).keyup(function(e) {
+      if($(this).val() != '') {
+        $(percent).attr('disabled','disabled');
+      } else {
+        $(percent).removeAttr('disabled');
+      }
+    });
+  });
+</script>

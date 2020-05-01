@@ -1,0 +1,29 @@
+<% @member_levels.each_with_index do |member_level, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= member_level.level %></span></td>
+    <td><%= link_to member_level.description, member_level_path(member_level), class: 'blue' %></td>
+    <td><span><%= format_currency member_level.minimum_amount %></span></td>
+    <td><span><%= member_level.discount_percent %></span></td>
+    <td><span><%= member_level.is_credit ? 'Yes' : 'No' %></span></td>
+    <td class="hidden-phone">
+      <%= link_to edit_member_level_path(member_level), class: "btn btn-primary btn-xs" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{member_level.id}, 'member_levels')", class: "btn btn-danger btn-xs" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=7>
+    <% if @member_levels.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@member_levels, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

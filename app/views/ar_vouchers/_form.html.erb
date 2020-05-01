@@ -1,0 +1,214 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>AR Voucher</li><li><%= label %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-ar_voucher">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> AR Voucher</h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <%= form_for @ar_voucher, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <div id = "abc" hidden>
+                      <font color="red">Valid Until Must Before Valid From</font>
+                    </div>
+                    <section>
+                      <label class="col-md-2 label">Name <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :name, :class => "input-sm #{(error_field @ar_voucher, :name)}" %></label>
+                      <%= hidden_field_tag :pay_num, 0 %>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Valid From <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :valid_from, :class => "input-sm #{(error_field @ar_voucher, :valid_from)}", onchange: "tanggal();" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Valid Until <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :valid_until, :class => "input-sm #{(error_field @ar_voucher, :valid_until)}", onchange: "tanggal();" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Amount </label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= f.number_field :max_voucher_amt, :class => "input-sm #{(error_field @ar_voucher, :amount)}", min: 0 %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Discount </label>
+                      <section class="col-md-4 input custom-input-box">
+                        <%= f.number_field :discount_percent, :class => "input-sm", min: 0, max:100, onkeyup:"d_percent();", placeholder: "Percent" %>
+                        <div class="icon-append" style="margin-right: 40px;">%</div>
+                      </section>
+                      <!-- <section class="col-md-1"> % </section> -->
+                      <section class="col-md-1" style="text-align: center;"> or </section>
+                      <!-- <section class="col-md-1"> Rp </section> -->
+                      <section class="col-md-4 input custom-input-box">
+                        <%= f.number_field :discount_amount, :class => "input-sm", min: 0, onkeyup: "d_amount();", placeholder: "Rp" %>
+                        <div class="icon-append" style="margin-right: 60px;padding-left: 6px;">rupiah</div>
+                      </section>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">HO / Store </label>
+                      <label class="col-md-9 input custom-input-box">
+                      <%= text_field_tag :office_id, (@branch.office_name rescue ''), class: 'input-sm', onkeyup: "$(this).next().next().hide()", onchange: "autocomp();"%>
+                      <a class="ui-button ui-widget ui-state-default ui-button-icon-only custom-combobox-toggle ui-corner-right" tabindex="-1" onclick="$(this).next().show()">
+                        <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text"></span>
+                      </a>
+                      <ul style="display: none; width: 100%; top: 29px;" tabindex="0" id="ui-id-1" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content">
+                        <% @branches.each{|branch| %>
+                          <li tabindex="-1" id="ui-id-2" class="ui-menu-item"><%= branch[0] %></li>
+                        <% } %>
+                      </ul>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Term & Condition </label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_area :term, :class => "input-sm #{(error_field @ar_voucher, :term)}" %></label>
+                    </section>
+                  </section>
+                  <%= link_to 'Add Payment Schedule', 'javascript:void(0)', class: 'btn btn-primary btn-sm add_payment', style: "margin-left: 15px;" %>
+                  <fieldset class="col col-md-12">
+                    <div class="row">
+                      <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                        <thead>
+                          <tr>
+                            <th>Payment No</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                          </tr>
+                        </thead>
+                        <tbody id='payment'>
+                          <% if params[:action] == 'edit' %>
+                            <% @ar_voucher.ar_voucher_payment_schedules.each{|cp| %>
+                              <%= render partial: "payment", locals: {key: cp.id, object: cp, pay_num: cp.payment_number} %>
+                            <% } %>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </section>
+                  </fieldset>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#ar_voucher_valid_from").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $("#ar_voucher_valid_until").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $('.add_payment').click(function(){
+      add_payment()
+    })
+  $("#office_name").autocomplete({
+    search: function () {},
+    source: function (request, response)
+    {
+      $.ajax(
+      {
+        url: "/branches/autocomplete_branch_office_name",
+        dataType: "json",
+        data: {term: request.term},
+        success: function (data){
+          response(data)
+        },
+      });
+    },
+    select: function( event, ui ) {
+    },
+      minLength: 1
+    });
+  })
+  function autocomp(){
+    $("#ar_voucher_office_id").val($("#office_name").val());
+  }
+  function add_payment(product_id){
+    var date = new Date();
+    $("#pay_num").val(parseInt($("#pay_num").val()) + 1)
+    $.ajax({
+      url: '/ar_vouchers/add_payment',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, pay_num: payment($("#pay_num").val())
+      }
+    })
+  }
+  function d_percent(){
+    var value=$.trim($("#ar_voucher_discount_percent").val());
+    if(value.length>0)
+    {
+      $("#ar_voucher_discount_amount").attr("disabled", true);
+
+    }
+    else
+    {
+      $("#ar_voucher_discount_amount").attr("disabled", false);
+    }
+  }
+  function d_amount(){
+    var value=$.trim($("#ar_voucher_discount_amount").val());
+    if(value.length>0)
+    {
+      $("#ar_voucher_discount_percent").attr("disabled", true);
+
+    }
+    else
+    {
+      $("#ar_voucher_discount_percent").attr("disabled", false);
+    }
+  }
+  function tanggal() {
+  $(document).ready(function(){
+      $('#sendButton').attr('disabled',true);
+      var a = $('#ar_voucher_valid_from').val().toString().split("-");
+      var b = $('#ar_voucher_valid_until').val().toString().split("-");
+      if(a[0] <= b[0] && a[1] <= b[1] && a[2] <= b[2]){
+        $('#sendButton').attr('disabled', false);
+         $('#abc').hide();
+      }
+      else{
+        $('#sendButton').attr('disabled',true);
+        $('#abc').show();
+      }
+  });
+}
+function payment(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
+}
+</script>
+<script src="/js/jquery-2.1.1.min.js"></script>

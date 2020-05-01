@@ -1,0 +1,34 @@
+<% @sizes.each_with_index do |size, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= size.code %></span></td>
+    <td><%= link_to size.description, size_path(size), class: 'blue' %></td>
+      <% sidets = size.sorted_size_details %>
+      <% sidetco = 14 - sidets.count %>
+      <% sidets.each do |sidet| %>
+        <td><%= sidet.size_number %></td>
+      <% end %>
+      <% for i in 1..sidetco %>
+        <td>&nbsp;</td>
+      <% end %>
+    <td class="hidden-phone">
+      <%= link_to edit_size_path(size), class: "btn btn-primary btn-xs custom-edit-btn" do %>
+        <i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{size.id}, 'sizes')", class: "btn btn-danger btn-xs custom-edit-btn" do %>
+        <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=18>
+    <% if @sizes.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@sizes, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,13 @@
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "login-form"}) do |f| %>
+  <div class="control-group">
+    <%= f.text_field :username, autofocus: true, class: "login-field", placeholder: "Username", autocomplete: "off" %>
+    <label class="login-field-icon fui-user" for="login-name"></label>
+  </div>
+
+  <div class="control-group">
+    <%= f.password_field :password, autocomplete: "off", class: "login-field", placeholder: "Password" %>
+  <label class="login-field-icon fui-lock" for="login-pass"></label>
+  </div>
+
+  <%= f.submit "Login", class: 'btn btn-primary btn-large btn-block' %>
+<% end %>

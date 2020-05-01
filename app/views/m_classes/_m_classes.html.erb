@@ -1,0 +1,11 @@
+<% m_classes.sort_by(&:name).each_with_index do |m_class, idx| %>
+  <% no = "#{i}.#{idx+1}" %>
+  <tr>
+    <td class="hidden-phone"><%= raw "#{spliter}#{no}" %></td>
+    <td><span class="name"><%= raw "#{spliter}#{m_class.code}" %></span></td>
+    <td class="hidden-phone">
+      <%= raw "#{spliter}#{m_class.name}" %>
+      <%= render partial: 'm_classes', locals: {m_classes: m_class.m_classes, spliter: "#{spliter}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", i: no} if m_class.m_classes.present? %>
+    </td>
+  </tr>
+<% end %>

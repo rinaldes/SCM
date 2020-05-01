@@ -1,0 +1,6 @@
+<% if @returns_to_ho.errors.full_messages.present? %>
+  <%= render 'layouts/errors' %>
+  window.scrollTo(0, 0);
+<% else %>
+  window.location = '/returns_to_hos'
+<% end %>

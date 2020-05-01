@@ -1,0 +1,1 @@
+$("#po-list").html("<%= j( render 'po_search_list')%>")

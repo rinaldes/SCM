@@ -1,0 +1,12 @@
+<% if @purchase_request.present? %>
+  $('#list_detail').append("<%= j(render 'list_pr_detail', key: params[:key]) %>")
+  $('#product_detail').append("<%= j(render 'product_detail', key: params[:key]) %>")
+  clone_details()
+  $('#supplier_code').val('<%= @supplier.code rescue '-' %>')
+  $('#supplier_name').val('<%= @supplier.name rescue '-' %>')
+  $('#alamat').val('<%= @supplier.address rescue '-' %>')
+  $('#purchase_order_supplier_id').val('<%= @supplier.id rescue '-' %>')
+  nomor_ganti()
+<% else %>
+  alert("Purchase Request Number unknown")
+<% end %>

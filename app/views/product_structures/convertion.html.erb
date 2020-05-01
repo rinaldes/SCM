@@ -1,0 +1,88 @@
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product Convertion</li><li>Convertion History</li><li><%= params[:id] %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= params[:id] %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_tag convert_path(params[:id]), {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section>
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Code</th>
+                              <th>Article</th>
+                              <th>Barcode</th>
+                              <th>Description</th>
+                              <th>Quantity</th>
+                              <th>Warehouse</th>
+                            </tr>
+                            <tr>
+                            <th class="hasinput"><%= text_field_tag :code, params[:code], class: 'form-control searching' %></th>
+                            <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control searching' %></th>
+                            <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control searching' %></th>
+                            <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control searching' %></th>
+                            <th class="hasinput"><%= text_field_tag :quantity, params[:quantity], class: 'form-control searching' %></th>
+                            <th class="hasinput"><%= text_field_tag :warehouse, params[:warehouse], class: 'form-control searching' %></th>
+                          </tr>
+                          </thead>
+                          <tbody id="zf-list">
+                            <%= render 'convertion' %>
+                          </tbody>
+                        </table>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              </form>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade modal_details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"></div>
+
+<script type="text/javascript">
+  function get_convertion_details(id)
+  {
+    $.ajax({
+      url: '/product_structures/show_convertion_details',
+      data: {
+        id: id
+      }
+    })
+  }
+
+  $(".searching").change(function(){
+    $.ajax({
+      url: "/product_structures/search_convertion?&article="+($('#article').length == 1 ? $('#article').val() : '')+
+        "&code="+($('#code').length == 1 ? $('#code').val() : '')+
+        "&barcode="+($('#barcode').length == 1 ? $('#barcode').val() : '')+
+        "&description="+($('#description').length == 1 ? $('#description').val() : '')+
+        "&quantity="+($('#quantity').length == 1 ? $('#quantity').val() : '')+
+        "&id="+<%= params[:id]%>+
+        "&warehouse="+($('#warehouse').length == 1 ? $('#warehouse').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  });
+</script>

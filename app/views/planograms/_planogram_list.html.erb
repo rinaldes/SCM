@@ -1,0 +1,33 @@
+<% @planograms.each_with_index do |planogram, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td>
+      <%= link_to planogram.rack_number, planogram_path(planogram.planogram.id), class: 'blue' %>
+       <!-- ( <%#= ProductPlanogram.where(planogram_id: planogram).count() %> Products on this rack) -->
+    </td>
+    <td><span class="name"><%= planogram.rack_type %></span></td>
+    <td><%= planogram.office_name %></td>
+    <td class="hidden-phone">
+      <%= link_to edit_planogram_path(planogram), class: "btn btn-primary btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%#= link_to planogram_product_planograms_path(planogram), class: "btn btn-success btn-xs edit-btn-dlt" do %>
+        <!-- <i class="fa fa-pencil"></i> -->
+      <%# end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{planogram.id}, 'planograms')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=5>
+    <% if @planograms.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@planograms, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

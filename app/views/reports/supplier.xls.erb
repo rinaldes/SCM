@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Supplier Code</Data></Cell>
+        <Cell><Data ss:Type="String">Supplier Name</Data></Cell>
+        <Cell><Data ss:Type="String">Product Code</Data></Cell>
+        <Cell><Data ss:Type="String">Product Name</Data></Cell>
+        <Cell><Data ss:Type="String">Address Supplier</Data></Cell>
+        <Cell><Data ss:Type="String">Cost of Product</Data></Cell>
+        <Cell><Data ss:Type="String">Status PKP</Data></Cell>
+        <Cell><Data ss:Type="String">Flag Tax</Data></Cell>
+      </Row>
+      <% @product_suppliers2.each{|product_supplier| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= product_supplier.supplier.code rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product_supplier.supplier.name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product_supplier.product.barcode rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product_supplier.product.description  rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product_supplier.supplier.address rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= format_currency product_supplier.product.cost %></Data></Cell>
+        <% if (product_supplier.supplier.status_pkp rescue nil).blank? %>
+          <Cell><Data ss:Type="String">Non-PKP</Data></Cell>
+        <% else %>
+          <Cell><Data ss:Type="String">PKP</Data></Cell>
+        <% end %>
+        <Cell><Data ss:Type="String"><%= product_supplier.product.flag_pajak rescue '' %></Data></Cell>
+      </Row>
+      <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,82 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Category</li><li>Edit</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-department">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Edit Location</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @location, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= hidden_field_tag :tobe_deleted %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <label class="col-md-2 label">Code</label>
+                    <label class="col-md-9 input custom-input-box"><%= f.text_field :code, :class => "input-sm" %></label>
+                  </section>
+                  <section class="col col-md-6">
+                  <section class="form-group">
+                    <label class="col-md-3 label">Province <span class='important'>*</span></label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= f.select :id, options_for_select(@provinces.map{|province|[province.name, province.id]}, selected: @location.id), {include_blank: 'Please Select'},
+                          {class: 'form-control'} %>
+                    </label>
+                  </section>
+                    <label class="col-md-3 label">Name <span class='important'>*</span></label>
+                    <label class="col-md-8 input custom-input-box"><%= f.text_field :name, :class => "input-sm" %></label>
+                  </section>
+                </div> <!-- row -->
+                <header>Location Details</header>
+                <div id='level2'>
+                  <% @location.locations.each{|location| %>
+                    <%= render partial: 'edit_sub_type', locals: {level: 2, key: "#{Time.now.to_i}#{location.id}", parent: '', location: location} %>
+                  <% } %>
+                <div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick='submit_me()'>
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<SCRIPT>
+  function add_sub_location(level, id, parent, location_id){
+    var date = new Date();
+    $.ajax({
+      url: '/locations/add_sub_location',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), level: level, id: id, parent: parent, location_id: location_id
+      }
+    })
+  }
+
+  function submit_me(){
+    $.ajax({
+      url: "/locations/<%= params[:id] %>",
+      dataType: "script",
+      method: 'POST',
+      data: $("form").serialize(),
+      success: function (data){
+        response(data)
+      },
+    });
+  }
+
+</SCRIPT>

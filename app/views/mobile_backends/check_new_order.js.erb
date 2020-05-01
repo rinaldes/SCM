@@ -1,0 +1,14 @@
+<% if @check_ordernya.present? %>
+  $("#mobile_new_order")[0].currentTime = 0;
+  $('#mobile_new_order')[0].play();
+  $.SmartMessageBox({
+		title : "Order Baru",
+		content : "Anda mendapatkan mobile order baru",
+		buttons : '[OK]'
+	});
+  <% if params[:controller] == 'mobile_backends' %>
+    $("#purchase_order-list").html("<%= j(render 'purchase_order_list') %>");
+    paging()
+    $(".m_report").addClass("hide");
+  <% end %>
+<% end %>

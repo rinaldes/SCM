@@ -1,0 +1,48 @@
+<style type="text/css">
+  .label{
+    color: #151313;
+  }
+</style>
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+      </button>
+      <h4 class="modal-title" id="myModalLabel">Size Detail</h4>
+    </div>
+    <div class="modal-body" style="color:#5E5E5E">
+      <div class="row">
+        <%= render partial: 'shared/product_info', locals: {product: product} %>
+        <section class="col col-md-12">
+          <label class="col-md-12 input custom-input-box">
+            <table class="table table-striped table-bordered" id="table_size">
+              <thead>
+                <tr>
+                  <th>Size</th>
+                  <% product_sizes.each do |product_size| %>
+                    <td><%= product_size.size_detail.size_number.to_s %></td>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Quantity</th>
+                  <% product_sizes.each_with_index do |product_size, i| %>
+                    <td>
+                      <%= text_field_tag "returns_to_ho[product_mutation_details_attributes][#{Time.now.to_i}#{i}][quantity]", quantities[i], style: 'width: 17px', class: 'qty' %>
+                      <%= hidden_field_tag "returns_to_ho[product_mutation_details_attributes][#{Time.now.to_i}#{i}][product_size_id]", product_size.id %>
+                    </td>
+                  <% end %>
+                </tr>
+              </tbody>
+            </table>
+          </label>
+        </section>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

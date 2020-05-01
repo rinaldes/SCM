@@ -1,0 +1,5 @@
+<% if flash.now[:error].present? %>
+  <%= render 'layouts/errors' %>
+<% else %>
+  $("#stock_table").html("<table class='table table-bordered table-striped' id='stock'><%= j(render 'stock') %></table>");
+<% end %>

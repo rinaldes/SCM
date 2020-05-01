@@ -1,0 +1,106 @@
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Convert Product</li><li><%= @ps.id %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= "#{@ps.article} / #{@ps.barcode} #{@ps.description}" %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_tag convert_path(params[:id]), {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">Code</label>
+                      <input type="hidden" value="<%= params[:id] %>" id="product_id"></input>
+                        <label class="col-md-3 input custom-input-box"><%= @product_structure_detail.last.code %></label>
+                    </section>
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">Main Product</label>
+                      <label class="col-md-9 input custom-input-box"><%= @ps.description %></label>
+                    </section>
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">Store</label>
+                      <% if current_user.branch_id.present? %>
+                        <label class="col-md-3 input custom-input-box">
+                          <%= label_tag :branch_id, current_user.branch.office_name %>
+                          <%= hidden_field_tag :branch_id, current_user.branch_id %>
+                        </label>
+                      <% else %>
+                        <label class="col-md-3 input custom-input-box"><%= select_tag :branch_id, options_for_select(Branch.active_store.map{|a|[a.office_name, a.id]}), include_blank: true, class: 'form-control' %></label>
+                      <% end %>
+                    </section>
+                    <section class="col col-md-12">
+                      <label class="col-md-3 label">Qty</label>
+                      <input type="hidden" value="<%= params[:id] %>" id="product_id"></input>
+                        <label class="col-md-3 input custom-input-box"><%= text_field_tag :qty, 1 %></label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section>
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Barcode</th>
+                              <th>Article</th>
+                              <th>Description</th>
+                              <th>Quantity</th>
+                              <th>Unit</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% @product_structure_detail.each_with_index do |psd, i| %>
+                              <tr>
+                                <% if psd.sku.present? %>
+                                  <td><%= psd.sku.product.barcode %></td>
+                                  <td><%= psd.sku.product.article %></td>
+                                  <td><%= psd.sku.product.description %></td>
+                                  <td class="qty"><%= psd.quantity %></td>
+                                  <td><%= psd.sku.unit.name rescue '' %></td>
+                                <% else %>
+                                  <td><%= psd.product.barcode %></td>
+                                  <td><%= psd.product.article %></td>
+                                  <td><%= psd.product.description %></td>
+                                  <td class="qty"><%= psd.quantity %></td>
+                                  <td><%= psd.sku.unit.name rescue '' %></td>
+                                <% end %>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary" onclick="convert_product();">Submit</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              </form>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<script>
+  function convert_product(){
+    var input_qty = $("#input_qty").val();
+    var id = $("#product_id").val();
+    var codenya = $("#code").val();
+
+    window.location.href = "/convert/"+id+"?qty="+input_qty"&code="+codenya;
+  }
+</script>

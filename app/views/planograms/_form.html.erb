@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<link href="/plugin/multiple-select/multiple-select.css" rel="stylesheet" />
+
+<script src="/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<script src="/plugin/multiple-select/multiple-select.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Rack</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-regional">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Rack</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @planogram, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Rack Number <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :rack_number, :class => "input-sm #{(error_field @planogram, :rack_number)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Rack Type <span class='important'>*</span></label>
+                      <label class="col-md-9">
+                        <%= f.radio_button :rack_type, "Reguler" %> Reguler
+                        <%= f.radio_button :rack_type, "Sewa" %> Sewa
+                        <%= f.radio_button :rack_type, "Acrylic" %> Acrylic
+                      </label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Store</label>
+                        <div id="offices" class="col-md-8 status4">
+                          <label class="select">
+                          <%= select_tag "planogram[office_id]", options_for_select(@offices.map { |str| [str.office_name, str.id] }, selected: @planogram.office_id), multiple: true, class: 'form_input', id: 'planogram_office_id' %>
+                          </label>
+                        </div>
+                    </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <input class="btn btn-primary" type="submit" value="submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<script>
+  $(document).ready(function() {
+    $('#planogram_office_id').multipleSelect();
+    $('#temp_products').val("");
+  });
+
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  function add_temp_products(barcode)
+  {
+    $('#temp_products').val($('#temp_products').val() + barcode + ',')
+  }
+
+  function send_product_to_table(product)
+  {
+    alert(product);
+  }
+
+  function create_products_id_for_planogram()
+  {
+    $.ajax({
+        url: '/planograms/create_product_by_planogram',
+        type: 'post',
+        data: {
+          product_id: $('#temp_products').val()
+        }
+    })
+  }
+</script>

@@ -1,0 +1,49 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li><%= t(:data_master) %></li><li><%= t(:unit) %></li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-unit">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> <%= t(:unit) %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @unit, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="label col-md-3"><%= t(:unit_name) %> <span class='important'>*</span></label>
+                      <label class="input col-md-9 custom-input-box"><%= f.text_field :name, class: "input-sm #{(error_field @unit, :name)}" %></label>
+                    </section>
+                    <section>
+                      <label class="label col-md-3"><%= t(:short_name) %> <span class='important'>*</span></label>
+                      <label class="input col-md-9 custom-input-box"><%= f.text_field :short_name, :class => "input-sm #{(error_field @unit, :short_name)}" %></label>
+                    </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<SCRIPT>
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+</SCRIPT>

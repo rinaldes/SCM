@@ -1,0 +1,6 @@
+<% if @product.errors.full_messages.present? %>
+  <%= render 'layouts/errors' %>
+  window.scrollTo(0, 0);
+<% else %>
+  window.location = '/products'
+<% end %>

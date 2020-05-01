@@ -1,0 +1,9 @@
+$("#request").html("<%= j(render 'po_detail', purchase_order: @purchase_order, key: Time.now.to_i) %>");
+chooseSupplier("<%= @purchase_order.supplier_id %>")
+$('#receiving_head_office_id').val("<%= @purchase_order.head_office_id %>")
+$('.supl_code').html("<%= @purchase_order.supplier.code rescue '' %>");
+$('.supl_code2').val("<%= @purchase_order.supplier.code rescue '' %>");
+$('.supl_name').html("<%= @purchase_order.supplier.name rescue '' %>");
+$('.supl_address').html("<%= @purchase_order.supplier.address rescue '' %>");
+$('#purchase_order_top').val($("#supplier-" + id + " td:nth-child(6)").text());
+$('.supplier_id').val(<%= @purchase_order.supplier_id rescue '' %>)

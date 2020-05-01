@@ -1,0 +1,77 @@
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>User Profile</li><li><%= @user_profiles.username %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @user_profiles.first_name %> <%= @user_profiles.last_name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @user_profiles, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-6">
+                      <section class="form-group">
+                        <label class="col-md-3 label">First Name </label>
+                        <label class="col-md-7 input custom-input-box"><%= @user_profiles.first_name %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Last Name</label>
+                        <label class="col-md-7 input custom-input-box"><%= @user_profiles.last_name %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Username </label>
+                        <label class="col-md-7 input custom-input-box"><%= @user_profiles.username %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Role </label>
+                        <label class="col-md-7 custom-input-box">
+                          <%= @user_profiles.role.name %>
+                        </label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Status</label>
+                        <label class="col-md-4"><%=@user_profiles.status %></label>
+                      </section>
+                    </section>
+                    <section class="col col-md-6">
+                      <section class="form-group">
+                        <label class="col-md-3 label">Email </label>
+                        <label class="col-md-7 input custom-input-box"><%= @user_profiles.email %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Office </label>
+                        <label class="col-md-7 custom-input-box">
+                          <%= @user_profiles.head_office.office_name rescue '-' %>
+                        </label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Store </label>
+                        <label class="col-md-7 custom-input-box">
+                          <%= @user_profiles.branch.office_name rescue '-' %>
+                        </label>
+                      </section>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <%= link_to edit_user_profile_path(current_user), class: "btn btn-primary" do %>
+                <i class="fa fa-pencil"> Edit</i><% end %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

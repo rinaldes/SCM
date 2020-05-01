@@ -1,0 +1,78 @@
+<section>
+    <legend>Purchased Item List</legend>
+</section>
+<section>
+</section>
+<section>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Recieve No</th>
+                    <th>Invoice No</th>
+                    <th>Barcode</th>
+                    <th>Brand</th>
+                    <th>Article</th>
+                    <th>Accepted Qty</th>
+                    <th>Retur Qty</th>
+                    <th>Total Cost Price</th>
+                    <th>Paid Off</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="purchased-items">
+                <% @account_payable.receiving.receiving_details.each_with_index do |receiving_detail, index| %>
+                    <%# unless receiving_detail.product.blank? %>
+                        <tr class="nested-fields">
+                            <td>
+                                <span class="purchased-text"><%= index+1 %></span>
+                            </td>
+                            <td>
+                                <span class="purchased-text"><%= receiving_detail.receiving.number %></span>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <span class="purchased-text"><%= receiving_detail.product.try(:barcode) %></span>
+                            </td>
+                            <td>
+                                <span class="purchased-text"><%= receiving_detail.product.brand.name unless receiving_detail.product.blank? %></span>
+                            </td>
+                            <td>
+                                <span class="purchased-text"><%= receiving_detail.product.try(:article) %></span>
+                            </td>
+                            <td>
+                                <span class="purchased-text"><%= receiving_detail.quantity %></span>
+                            </td>
+                            <td>
+                                <span class="purchased-text"><%= format_currency(receiving_detail.total_price) %></span>
+                            </td>
+
+                            <td>
+                                <span class="purchased-text"><%= format_currency(0.0) %></span>
+                            </td>
+
+                            <td>
+                                <span class="purchased-text">
+                                <%#= check_box_tag 'name', receiving_detail.paid_off, {:checked => "checked"}  %>
+                                <%#=check_box_tag "account_payable[receiving_details][]#{receiving_detail.id}", checked: receiving_detail.paid_off %>
+                                <%= check_box 'receiving', "receiving_details[]#{receiving_detail.id}", {checked: receiving_detail.paid_off}, 'true', 'false' %>
+
+
+                                </span>
+                            </td>
+
+                            <td>
+                                <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), "#", :class => "view-purchased-item btn btn-primary btn-xs custom-edit-btn" %>
+                                <%= render :partial => 'purchased_item_details', :locals => { :receiving_detail => receiving_detail } %>
+                                <%= link_to raw('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>'), 'javascript:void(0)', onclick: "delete_one(#{receiving_detail.id}, 'receivings')", class: "btn btn-danger btn-xs custom-edit-btn" %>
+                            </td>
+                        </tr>
+                    <%# end %>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</section>

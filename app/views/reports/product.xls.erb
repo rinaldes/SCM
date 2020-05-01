@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+    <Column ss:Span="2"/>
+<!-- Product Code
+Product Name
+Price pokok awal (harga sebelum menjadi harga pokok yang baru)
+Price pokok (Rumus (harga lama*kuantitas akhir)+(harga baru*kuantitas baru))/2)
+Price pokok akhir bulan(harga pada saat tutup bulanan)
+Price jual
+Flag pajak(brg kena pajak atau tidak)
+Flag barang dc/bkl
+Fraction(jumlah per karton)
+Minimal order -->
+      <Row>
+        <Cell><Data ss:Type="String">Product Article</Data></Cell>
+      	<Cell><Data ss:Type="String">Product Name</Data></Cell>
+        <Cell><Data ss:Type="String">Cost of Product Start</Data></Cell>
+        <Cell><Data ss:Type="String">Cost of Product</Data></Cell>
+        <Cell><Data ss:Type="String">Cost of Product End</Data></Cell>
+        <Cell><Data ss:Type="String">Selling Price</Data></Cell>
+        <Cell><Data ss:Type="String">Flag Tax</Data></Cell>
+        <Cell><Data ss:Type="String">Flag Goods (dc/bkl)</Data></Cell>
+        <Cell><Data ss:Type="String">Fraction</Data></Cell>
+        <Cell><Data ss:Type="String">Minimal Order</Data></Cell>
+      </Row>
+
+ <% @product.each{|p| %>
+    <Row>
+      <Cell><Data ss:Type="String"><%= p.article %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= p.description %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%= p.first_cost %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%= p.cost %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%= p.last_cost %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%= p.selling_prices.last.selling_price %></Data></Cell>
+      <!-- <Cell><Data ss:Type="String"><%#= (sp.ppn_in != nil || sp.ppn_out != nil) ? "Berpajak" : "Tidak" %></Data></Cell> -->
+      <Cell><Data ss:Type="String"><%= p.flag_pajak %></Data></Cell>
+      <Cell><Data ss:Type="String"><%= p.flag_barang %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%= p.fraction %></Data></Cell>
+      <Cell><Data ss:Type="Number"><%= p.minimal_order %></Data></Cell>
+
+    </Row>
+  <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

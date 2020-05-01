@@ -1,0 +1,132 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Purchasing</li><li>Purchase Return Summary</li><li>List</li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Purchase Return Summary</h2></header>
+            <div style='overflow-y: hidden'>
+              <div class="widget-body no-padding" style='overflow-y: hidden'><br>
+                <section class="col col-md-7">
+                  <section class="col col-md-12">
+                    <section class="form-group">
+                      <label class="col-md-2">Office : </label>
+                      <label class="col-md-10 input custom-input-box">
+                        <% if current_user.branch_id.present? %>
+                          <%= label_tag 'location', current_user.branch.office_name %>
+                        <% else %>
+                          <%= select_tag :store, options_for_select([["All Store", 0]] + Branch.all.map{|reg|[reg.office_name, reg.id]}), {class:"form-control", onchange: "reload();", onkeyup: "reload();"}%>
+                        <% end %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-12">
+                    <section class="form-group">
+                      <label class="col-md-2">Start Date </label>
+                      <label class="col-md-4 input custom-input-box"><%= text_field_tag :start_date, '' , class: 'form-control tanggal', onchange: "reload();", onkeyup: "reload();" %></label>
+                      <label class="col-md-2">End Date </label>
+                      <label class="col-md-4 input custom-input-box"><%= text_field_tag :end_date, '' , class: 'form-control tanggal', onchange: "reload();", onkeyup: "reload();" %></label>
+                    </section>
+                  </section>
+                </section>
+                <section class="col col-md-4">
+                  <ul id="myTab1" class="nav nav-tabs" style='float: left'>
+                    <li class="dropdown">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                      <ul class="dropdown-menu" >
+                        <li style="color:'black';" id="ekspor"><%= link_to "Export to Excel", purchase_return_summaries_path(:id => params[:id], format: "xls"), id: "export_to_xls3" %></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </section>
+              </div>
+                <table class="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Return No
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'number-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'number-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Date
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th class="punya_toko">Store
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'office_name-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'office_name-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Return Code</th>
+                    <th>Receive No
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'receive_no-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'receive_no-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>Supplier
+                      <span style="float: right;">
+                        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+                        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>DPP</th>
+                    <th>PPn</th>
+                    <th>Total</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :number, params[:number], class: 'form-control search', name: 'returns_to_suppliers.number' %></th>
+                    <th class="hasinput"><%= text_field_tag :date, params[:date], class: 'form-control search', name: "to_char(returns_to_suppliers.date, 'DD-MM-YYYY')" %></th>
+                    <th class="punya_toko"></th>
+                    <th></th>
+                    <th class="hasinput"><%= text_field_tag :receive_no, params[:receive_no], class: 'form-control search' %></th>
+                    <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search', name: "sup.name" %></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='receiving-list'><%= render 'receiving_list' %></tbody>
+              </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+<script type="text/javascript">
+  $( document ).ready(function() {
+    //$('#store').select2();
+    $('.tanggal').datepicker({
+      dateFormat : 'yy-mm-dd',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>'
+    });
+  });
+
+  function reload(){
+    $.ajax({
+      url: "/purchase_return_summaries?&start_date="+($('#start_date').length == 1 ? $('#start_date').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&end_date="+($('#end_date').length == 1 ? $('#end_date').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

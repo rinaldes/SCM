@@ -1,0 +1,4 @@
+<% categories.each{|category| %>
+  <li tabindex="-1" id="ui-id-2" class="ui-menu-item"
+      onclick="hide_me(this);select_category(<%= category.id %>);"><%= category.name %></li>
+<% } %>

@@ -1,0 +1,36 @@
+$('#prize_list').append("<%= j(render 'prize_list', key: params[:key]) %>");
+
+if ($("#promotion_promotion_type option:selected" ).text() == 'Buy One Get One')
+{
+  $('#td_pl_prize_promo_<%=params[:key]%>').hide();
+  $('#td_pl_sp_<%=params[:key]%>').hide();
+  $('#td_pl_disc_amt_<%=params[:key]%>').hide();
+  $('#td_pl_qty_<%=params[:key]%>').show();
+  $('#td_pl_min_qty_<%=params[:key]%>').hide();
+  $('#td_pl_hpp_<%=params[:key]%>').hide();
+}
+else if ($("#promotion_promotion_type option:selected" ).text() == 'Purchase to Purchase')
+{
+  $('#td_pl_qty_<%=params[:key]%>').hide();
+  $('#td_pl_disc_amt_<%=params[:key]%>').hide();
+  $('#td_pl_sp_<%=params[:key]%>').show();
+  $('#td_pl_prize_promo_<%=params[:key]%>').show();
+  $('#td_pl_hpp_<%=params[:key]%>').hide();
+
+}
+else if ($("#promotion_promotion_type option:selected" ).text() == 'Discount Period')
+{
+  $('#td_pl_qty_<%=params[:key]%>').hide();
+  $('#td_pl_prize_promo_<%=params[:key]%>').hide();
+  $('#td_pl_disc_amt_<%=params[:key]%>').show();
+  $('#td_pl_min_qty_<%=params[:key]%>').hide();
+  $('#td_pl_hpp_<%=params[:key]%>').show();
+}
+else if ($("#promotion_promotion_type option:selected" ).text() == 'Happy Hour')
+{
+  $('#td_pl_qty_<%=params[:key]%>').hide();
+  $('#td_pl_prize_promo_<%=params[:key]%>').hide();
+  $('#td_pl_disc_amt_<%=params[:key]%>').show();
+  $('#td_pl_min_qty_<%=params[:key]%>').show();
+  $('#td_pl_hpp_<%=params[:key]%>').hide();
+}

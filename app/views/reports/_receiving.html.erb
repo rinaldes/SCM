@@ -1,0 +1,49 @@
+<thead>
+  <tr>
+    <td rowspan=2>Supplier</td>
+    <td rowspan=2>Tgl Masuk</td>
+    <td rowspan=2>No.Faktur</td>
+    <td rowspan=2>Nominal</td>
+    <td rowspan=2>QTY</td>
+    <% @branches.each{|branch| %>
+      <td colspan=2><%= branch.description %></td>
+    <% } %>
+    <td colspan=2>STOCK HO</td>
+    <td colspan=2>RETUR INV</td>
+    <td rowspan=2>QTY INV</td>
+    <td rowspan=2>TOTAL PEMBAYARAN INV</td>
+    <td rowspan=2>KET</td>
+    <td rowspan=2>Selisih</td>
+  </tr>
+  <tr>
+    <% 0.upto(@branches.size+1) do |branch| %>
+      <td>QTY</td>
+      <td>COST</td>
+    <% end %>
+  </tr>
+</thead>
+<tbody>
+  <% @receivings.each{|receiving| %>
+    <tr>
+      <td class='nowrap'><%= receiving.supplier.name %></td>
+      <td class='nowrap'><%= receiving.date %></td>
+      <td class='nowrap'><%= receiving.consigment_number %></td>
+      <td class='nowrap'><%= format_currency receiving.total %></td>
+      <td class='nowrap'><%= receiving.receiving_details.map(&:quantity).compact.sum rescue '' %></td>
+      <% @branches.each{|branch| %>
+        <% total = receiving.purchase_transfers.where("destination_warehouse_id=#{branch.id}") %>
+        <td><%= total.map(&:total_quantity).compact.sum %></td>
+        <td><%= total.map(&:total_price).compact.sum %></td>
+      <% } %>
+      <td><%#= ProductDetail.where() %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  <% } %>
+</tbody>

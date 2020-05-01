@@ -1,0 +1,12 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+subjudul_biru_tengah = styles.add_style(:fg_color => "ffffff", :b => true, :alignment => { :horizontal => :center, :vertical => :center, :wrap_text => true}, :bg_color => "307cf4", :border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Rack Display") do |sheet|
+  sheet.add_row ["Rack", "Shelving", "Row", "Rack Type", "Article", "Product Name", "Kiri Kanan", "Atas Bawah", "Depan Belakang", "Minimal Display", "Selling Price", "Tag Status"], :style => subjudul_biru_tengah, widths: [:auto,:auto,:auto,:auto]
+  @planos.each do |plano|
+    selling_price = Product.find(plano.product_id).selling_prices.last.selling_price rescue 0
+    sheet.add_row [plano.rak_name, plano.shelving, plano.rows, plano.rak_type, plano.product_article, plano.product_name, plano.kir_ka, plano.at_ba, plano.de_be, plano.min, selling_price, plano.status3], style: default
+  end
+end

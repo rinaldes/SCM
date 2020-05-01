@@ -1,0 +1,32 @@
+<%= form_tag finances_petty_cash_path(@petty_cash.id), class: "smart-form petty-cash", :id => "petty-cash-details-filter-form", :remote => true  do %>
+    <fieldset>
+        <div class="row">
+            <section class="col col-6">
+                <section></section>
+                <section>
+                    <label class="col-md-4 label">Store</label>
+                    <label class="col-md-6 input custom-input-box">
+                    <% if current_user.branch_id.present? %>
+                      <%= label "office_name", current_user.branch.office_name %>
+                    <% else %>
+                      <%#= select_tag :branch, options_for_select(Office.all.map{|reg|[reg.office_name, reg.id]}, selected: (@petty_cash.office_id)), {class:"form-control cash-details-branch"}%>
+                      <%= label "office_name", @petty_cash.office.office_name %>
+                      <%= hidden_field_tag 'petty_cash[office_id]', @petty_cash.office_id, id: "office_id" %>
+                      <%= hidden_field_tag 'branch', @petty_cash.office_id, id: "office_id" %>
+                    <% end %>
+                    </label>
+                    <label class="col-md-4 label">Periode : </label>
+                    <label class="col-md-6 input custom-input-box">
+                        <%#= select_year(@petty_cash.year, {:start_year => Date.today.year, :end_year => 5.years.from_now.year},  :class => 'form-control cash-details-year') %>
+                        <%= @petty_cash.year.strftime('%Y, %B') %>
+                    </label>
+                </section>
+            </section>
+        </div>
+    </fieldset>
+<% end %>
+<script type="text/javascript">
+  $( document ).ready(function() {
+    $('#store').select2();
+  });
+</script>

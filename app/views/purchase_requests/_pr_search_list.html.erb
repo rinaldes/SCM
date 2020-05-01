@@ -1,0 +1,9 @@
+<% (@pr || []).each do |request| %>
+  <tr>
+      <td><%= request.number %></td>
+      <td><%= request.date %></td>
+      <td><%= request.supplier.name rescue '' %></td>
+      <td><%= request.status %></td>
+      <td><a href="javascript:void(0)" onclick="loadPR('<%= request.number %>', '<%= request.date %>', '<%= request.note %>')" class="btn btn-primary"> Choose </a></td>
+  </tr>
+<% end %>

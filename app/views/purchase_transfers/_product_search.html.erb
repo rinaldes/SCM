@@ -1,0 +1,141 @@
+<fieldset>
+  <div class="row">
+    <section class="col col-md-12">
+      <section class="col col-md-4">
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Barcode</label>
+          <label class="col-md-6 input custom-input-box">
+            <%= hidden_field_tag :product_id %>
+            <%= text_field_tag :number, '', class: 'input-sm', placeholder: "Barcode", onkeyup: "$(this).next().next().hide()", onchange: "getProduct()" %>
+          </label>
+          <label class="col-md-2 input custom-input-box">
+            <button class="btn btn-primary" onclick="searchManual()">Browse</button>
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">SKU</label>
+          <label class="col-md-8 input custom-input-box">
+            null
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Product Name</label>
+          <label class="col-md-8 input custom-input-box">
+            null
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Brand</label>
+          <label class="col-md-8 input custom-input-box">
+            null
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Department</label>
+          <label class="col-md-8 input custom-input-box">
+            null
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Category</label>
+          <label class="col-md-8 input custom-input-box">
+            null
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">HPP</label>
+          <label class="col-md-8 input custom-input-box">
+            null
+          </label>
+        </section>
+        </div>
+        <div class="row">>
+        <button type='button' class="col-md-2 btn btn-primary" onclick="return(add_product('purchase_transfers'))">Add List</button>
+        <% if %w(purchase_requests purchase_orders purchase_transfers).include?(params[:controller]) || params[:controller] == 'purchase_transfers' %>
+            <button type="button" class="btn btn-primary" onclick="view_transaction_history($('#number').val())">Transaction History</button>
+        <% end %>
+        </div>
+      </section>
+      <section class="col col-md-4">
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Status 2</label>
+          <label class="col-md-8 input custom-input-box">
+            Konsinyasi
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Status 3</label>
+          <label class="col-md-8 input custom-input-box">
+            Fast Moving
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Status 4</label>
+          <label class="col-md-8 input custom-input-box">
+            Active
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Status 5</label>
+          <label class="col-md-8 input custom-input-box">
+            BKP
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">ROP</label>
+          <label class="col-md-8 input custom-input-box">
+            10
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Safety Stock</label>
+          <label class="col-md-8 input custom-input-box">
+            5
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Available Qty.</label>
+          <label class="col-md-8 input custom-input-box">
+            9
+          </label>
+        </section>
+        </div>
+        <div class="row">
+        <section>
+          <label class="col-md-4 label">Quantity</label>
+          <label class="col-md-8 input custom-input-box">
+            Konsinyasi
+          </label>
+        </section>
+        </div>
+      </section>
+      <section class="col col-md-4" id="product_image" border="1"></section>
+    </section>
+  </div>
+</fieldset>

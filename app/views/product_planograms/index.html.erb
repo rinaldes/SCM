@@ -1,0 +1,114 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js" type="text/javascript"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Planogram</li><li>Add Product for <%= params[:id] %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div role="widget" class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                <header role="heading">
+                <div role="menu" class="jarviswidget-ctrls"></div>
+                  <span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+                  <h2>Products for This Rack</h2>
+                </header>
+                <!-- widget div-->
+                <div role="content">
+                  <!-- widget content -->
+                  <div class="widget-body">
+                    <div class="row">
+                      <div class="col col-md-12">
+                        <a data-toggle="modal" href="#myModal" class="btn btn-primary hidden-mobile"><i class="fa fa-plus-square"></i> Add Product</a>
+                      </div>
+                    </div>
+                    <hr>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>No.</th>
+                          <th>Barcode</th>
+                          <th>Description</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="product-planogram-list"><%= render 'product_planogram_list' %></tbody>
+                    </table>
+                    <footer>
+                    <button type="button btn-success" class="btn btn-default" onclick="window.history.back();">Back</button>
+                    <%= link_to 'Submit',planograms_path , :class => "btn btn-primary" %>
+                  </footer>
+                  </div>
+                  <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+      </div>
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<!-- MODAL -->
+<div aria-hidden="true" style="display: none;" class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          ×
+        </button>
+        <h4 class="modal-title">
+          Choose Products
+        </h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form novalidate="novalidate" id="login-form" class="smart-form">
+              <fieldset>
+                <section>
+                  <div class="row">
+                    <div class="col col-md-12">
+                      <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>No</th>
+                            <th>Barcode</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id='product-list'><%= render 'product_list' %></tbody>
+                      </table>
+                    </div>
+                    </div>
+                  </div>
+                </section>
+              </fieldset>
+              <footer>
+              </footer>
+            </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#planogram_office_id').select2();
+    $('#temp_products').val("");
+  });
+
+  function add_product_planogram(product_id)
+  {
+    $.ajax({
+    url: '/planograms/<%= params[:planogram_id] %>/product_planograms',
+    type: 'post',
+    data: {product_id: product_id}
+    })
+  }
+</script>

@@ -1,0 +1,185 @@
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>Voucher</li><li><%= label %></li>
+  </ol>
+</div>
+<div id="content">
+  <div id="notice_template"><%= render 'layouts/notice' %></div>
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-unit">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Voucher</h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <%= form_for @voucher, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section id="pesan" hidden>
+                      <div style="color: red">
+                        <%= label_tag "Valid From must be before the Valid Until" %>
+                      </div>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Voucher Name <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box"><%= f.text_field :name, class: "input-sm #{(error_field @voucher, :name)}" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Valid From <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box"><%= f.text_field :valid_from, class: "input-sm #{(error_field @voucher, :valid_from)}", onchange: "valid_date();" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Valid Until <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box"><%= f.text_field :valid_until, class: "input-sm #{(error_field @voucher, :valid_until)}", onchange: "valid_date();" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Amount (Rp)<span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box">
+                          <%= f.text_field :amount, class: "input-sm #{(error_field @voucher, :amount)}", placeholder: "Rupiah", onkeyup: 'preventInput(event);preview_voucher();', onkeydown: 'preventInput(event);' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Prefix</label>
+                      <label class="col-md-8 input custom-input-box">
+                          <%= text_field_tag :prefix, '', class: "input-sm", placeholder: "HMV", onkeyup: 'preview_voucher();' %>
+                      </label>
+                    </section>
+                    <section id="dari_hingga">
+                      <label class="col-md-4 label">Nomor Voucher <span class='important'>*</span></label>
+                      <label class="col-md-3 input custom-input-box">
+                        <%= number_field_tag :dari, "", in: 0..9999, class: "input-sm", onkeyup: "preview_voucher();" %>
+                      </label>
+                      <label class="col-md-1 input custom-input-box right" style="margin-left:2px; text-align:center; margin-bottom: 0px;padding-top: 5px;">To</label>
+                      <label class="col-md-3 input custom-input-box">
+                        <%= number_field_tag :hingga, "", in: 0..9999, class: "input-sm", onkeyup: "preview_voucher();" %>
+                      </label>
+                    </section>
+                    <section style="color: #aaaaaa">
+                      <label class="col-md-4 preview2 hide">Preview Voucher Code </label>
+                      <label class="col-md-3 p_dari"></label>
+                      <label class="col-md-1 custom-input-box preview hide right" style="margin-left:2px; text-align:center; margin-bottom: 0px;padding-top: 5px;"> ~ </label>
+                      <label class="col-md-3 p_ke"></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    <% if params[:action] == 'edit' %>
+      $("#dari_hingga").addClass("hide")
+    <% end %>
+    $("#voucher_valid_from").datepicker({
+      dateFormat: 'yy-mm-dd', changeYear: true, changeMonth: true, yearRange: '<%= Time.now.year %>:<%= Time.now.year+7 %>'
+    });
+    $("#voucher_valid_until").datepicker({
+      dateFormat: 'yy-mm-dd', changeYear: true, changeMonth: true, yearRange: '<%= Time.now.year %>:<%= Time.now.year+7 %>'
+    });
+    $("#voucher_office_id").select2();
+  });
+
+  function valid_date(){
+    if(Date.parse($("#voucher_valid_from").val()) > Date.parse($("#voucher_valid_until").val())){
+      $("#pesan").show();
+    }
+    else{
+      $("#pesan").hide();
+    }
+  }
+
+  function preview_voucher(){
+    if($("#dari").filter(function() { return $(this).val(); }).length > 0 && $("#voucher_amount").filter(function() { return $(this).val(); }).length > 0) {
+      switch($("#dari").val().length){
+        case 1:
+          nol = "000"
+          break;
+        case 2:
+          nol = "00"
+          break;
+        case 3:
+          nol = "0"
+          break;
+        case 4:
+          nol = ""
+          break;
+      }
+      if($("#prefix").val().length > 0){
+        prefix = $("#prefix").val()
+      }
+      else{
+        prefix = "HMV"
+      }
+      amount = $("#voucher_amount").val();
+      if(amount == 100000){
+        amount = amount.slice(0,-4)
+      }
+      else{
+        amount = amount.slice(0,-3)
+      }
+      preview = prefix + amount + nol + $("#dari").val();
+      $(".preview2").removeClass("hide");
+      $(".p_dari").text(preview)
+    }
+    if($("#hingga").filter(function() { return $(this).val(); }).length > 0 && $("#voucher_amount").filter(function() { return $(this).val(); }).length > 0) {
+      switch($("#hingga").val().length){
+        case 1:
+          nol = "000"
+          break;
+        case 2:
+          nol = "00"
+          break;
+        case 3:
+          nol = "0"
+          break;
+        case 4:
+          nol = ""
+          break;
+      }
+      if($("#prefix").val().length > 0){
+        prefix = $("#prefix").val()
+      }
+      else{
+        prefix = "HMV"
+      }
+      amount = $("#voucher_amount").val();
+      if(amount == 100000){
+        amount = amount.slice(0,-4)
+      }
+      else{
+        amount = amount.slice(0,-3)
+      }
+      preview = prefix + amount + nol + $("#hingga").val();
+      $(".preview, .preview2").removeClass("hide");
+      $(".p_ke").text(preview)
+    }
+  }
+
+  function preventInput(e){
+    // keyCode > 47 && keyCode < 58 -> numeric
+    // keyCode == 8 -> backspace
+    // keyCode == 190 -> dot, decimal separator
+    // keyCode == 189 -> minus
+    var keyCode = (e.keyCode ? e.keyCode : e.which);
+     if (!((keyCode > 47 && keyCode < 58) || (keyCode == 8)
+       || (keyCode == 190) || (keyCode == 189))) {
+         e.preventDefault();
+     }
+  }
+</script>

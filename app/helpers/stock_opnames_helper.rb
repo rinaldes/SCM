@@ -1,0 +1,2 @@
+module StockOpnamesHelper
+end

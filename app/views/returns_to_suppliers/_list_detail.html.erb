@@ -1,0 +1,36 @@
+<% details.each do |prd| %>
+  <% product = prd.product %>
+  <% receiving = Receiving.find_by_number(params[:number]) || Receiving.find_by_consigment_number(params[:number]) %>
+  <% rd = ReceivingDetail.find_by_product_id_and_receiving_id(product.id, receiving.id) %>
+
+  <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*prd.fraction %>
+  <% hpp_akhir = prd.hpp*prd.fraction-hpp_disc_amt %>
+  <tr>
+    <td><%= product.article %></td>
+    <td><%= product.barcode %></td>
+    <td><%= product.description %></td>
+    <td class='align-right'><%= format_currency prd.hpp rescue (product.product_price(Time.now).hpp rescue 0) %></td>
+    <td class='align-right'>
+      <% if r_type == 'rs' %>
+        <%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{Time.now.to_i}#{prd.id}][quantity]", prd.quantity, class: 'detail-qty' %>
+      <% else %>
+        <%= format_currency prd.quantity %>
+        <%= hidden_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{Time.now.to_i}#{prd.id}][quantity]", prd.quantity, class: 'detail-qty' %>
+      <% end %>
+    </td>
+    <td class='fraction'><%= text_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{Time.now.to_i}#{prd.id}][fraction]", (rd.fraction), readonly: true %></td>
+    <td><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+    <td><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+    <td><%= product.select_unit(rd.unit_type) rescue nil %></td>
+    <td class='align-right'>
+      <%= format_currency prd.quantity*hpp_akhir rescue 0 %>
+      <%= hidden_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{Time.now.to_i}#{prd.id}][product_id]", prd.product_id %>
+      <%= hidden_field_tag "returns_to_supplier[returns_to_supplier_details_attributes][#{Time.now.to_i}#{prd.id}][purchase_price]", prd.hpp rescue 0 %>
+    </td>
+    <td>
+      <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(this)">
+        <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+      </a>
+    </td>
+  </tr>
+<% end %>

@@ -1,0 +1,50 @@
+<tr class="nested-fields">
+    <td>
+        <span class="payment-schedule-input payment-number" style="<%= f.object.payment_number.blank?  ?  "" : 'display:none;'  %>">
+            <%= f.number_field :payment_number, :class => 'number-field' , :max => 100, :min => 1 %>
+        </span>
+        <span class="payment-schedule-text payment-number"><%= f.object.payment_number%></span>
+    </td>
+
+    <td>
+        <span class="payment-schedule-input" style="<%= f.object.amount.blank?  ?  "" : 'display:none;'  %>"><%= f.text_field :amount,  :class => 'numeric'  %></span>
+        <span class="payment-schedule-text"><%= format_currency(f.object.amount) %></span>
+    </td>
+
+    <td>
+       <span class="payment-schedule-input"  style="<%= f.object.due_date.blank?  ?  "" : 'display:none;'  %>"><%= f.text_field :due_date, :class => 'datepicker' %>
+       &nbsp;<i class="fa fa-calendar" rel="tooltip" data-placement="left"></i></span>
+       <span class="payment-schedule-text"><%= format_date(f.object.due_date) %></span>
+    </td>
+
+    <td>
+        <span class="payment-schedule-text"><%= format_currency(f.object.payment_amount) %></span>
+    </td>
+
+    <td>
+        <span class="payment-schedule-text"><%= format_date(f.object.payment_date) %></span>
+    </td>
+
+    <td>
+        <span class="payment-schedule-text"><%= format_currency(f.object.penalty) %></span>
+    </td>
+
+    <td>
+        <span class="payment-schedule-text">&nbsp;</span>
+    </td>
+
+    <td>
+         <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), "#", :class => "click-edit-payment-schedule" if ( !f.object.payment_number.blank? && !f.object.amount.blank? && !f.object.due_date.blank? && f.object.payment_amount.blank? && f.object.payment_date.blank? ) || (f.object.payment_number.blank? || f.object.amount.blank? || f.object.due_date.blank?) %>
+        <%= link_to "Cancel", "#", :class => "click-cancel-edit-payment-schedule" %>
+        <%= link_to_remove_association ('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>').html_safe, f if (f.object.payment_number.blank? || f.object.amount.blank? || f.object.due_date.blank?) || ( !f.object.payment_number.blank? && !f.object.amount.blank? && !f.object.due_date.blank? && f.object.payment_amount.blank? && f.object.payment_date.blank? )%>
+    </td>
+</tr>
+<script type="text/javascript">
+    $('.datepicker').datepicker({
+        dateFormat : 'yy/mm/dd',
+        prevText : '<i class="fa fa-chevron-left"></i>',
+        nextText : '<i class="fa fa-chevron-right"></i>',
+        onSelect : function(selectedDate) {
+        }
+    });
+</script>

@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Reports</li><li>Product Movement</li><li>PURCHASING</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+       
+        <header id="header-product" role="heading">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Unsold Products for 3 Month From <%= Time.now.strftime('%d %B %Y') %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+              <li class="dropdown">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                <ul class="dropdown-menu" >
+                  <li style="color:'black';"><%= link_to "Export to Excel", reports_unsold_path(:id => params[:id], format: "xls") %></li>
+                </ul>
+              </li>
+            </ul>
+
+            <div class="row">
+              <section class="col col-md-12">
+                <h1></h1>
+              </section>
+            </div>
+            <form class='smart-form' url="/products/stock">
+              <section class="col col-md-12">
+              <div class="modal-body" style="color:#5E5E5E">
+                <table class="table table-striped table-bordered" width="100%">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>SKU</th>
+                      <th>Barcode</th>
+                      <th>Name</th>
+                      <th>Brand</th>
+                      <th>Department</th>
+                      <th>Category</th>
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search'%></th>
+                      <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search'%></th>
+                      <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search'%></th>
+                      <th class="hasinput"><%= text_field_tag :brand, params[:brand], class: 'form-control search', name: 'brands.name'%></th>
+                      <th class="hasinput"><%= text_field_tag :department, params[:department], class: 'form-control search', name:'departments.name'%></th>
+                      <th class="hasinput"><%= text_field_tag :mclass, params[:mclass], class: 'form-control search', name: 'm_classes.name'%></th>
+                    </tr>
+                  </thead>
+                  <tbody id='unsold-list'><%= render 'unsold' %></tbody>
+                </table>
+              </div>
+              </section>
+            </form>
+          </div><!-- end widget content -->
+
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

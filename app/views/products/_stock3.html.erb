@@ -1,0 +1,23 @@
+<% @products.each do |product|%>
+	<tr>
+		<td></td>
+		<% @offices.each do |office|%>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		<% end %>
+	</tr>
+<% end %>
+
+
+
+<!-- Product.all.each{|product|
+ Branch.all.each{|branch|
+   product.size.size_details.each{|size_detail|
+     ['Katalog', 'Non Katalog', 'Online'].each{|status2|
+       ProductDetail.create product_id: product.id, size_detail_id: size_detail.id, min_stock: 7, warehouse_id: branch.id, available_qty: 17, allocated_qty: 27, freezed_qty: 37, rejected_qty: 7, status2: status2, defect_qty: 21
+     }
+   }
+ }
+} -->

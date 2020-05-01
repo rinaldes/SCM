@@ -1,0 +1,361 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Inventory</li><li>Inventory Receipt</li><li>New</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>New Inventory Receipt</h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @receiving, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+              <%= hidden_field_tag :good_list %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <div class="row">
+                      <section class="col col-md-12">
+                        <label for="" class="label col-md-3">Supplier Code</label>
+                        <label for="" class="label col-md-9">
+                          <label class="supl_code">None is choosen</label><button type="button" class="btn btn-primary btn-sm" onclick="$('#modalSupplier').modal()" style="margin-left: 10px;">Browse</button>
+                        </label>
+                      </section>
+                    </div>
+                    <div class="row">
+                      <section class="col col-md-12">
+                        <label for="" class="label col-md-3">Supplier Name</label>
+                        <label for="" class="label col-md-9 supl_name"></label>
+                      </section>
+                    </div>
+                    <div class="row">
+                      <section class="col col-md-12">
+                        <label for="" class="label col-md-3">Supplier Address</label>
+                        <label for="" class="label col-md-9 supl_address"></label>
+                      </section>
+                    </div>
+                  </section>
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-4 label">Warehouse</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.select :head_office_id, options_for_select(Office.where("type IN ('Warehouse', 'Branch')").map{|branch|[branch.office_name, branch.id]}), {include_blank: 'Please Select'},
+                          class: 'form-control origin_branch_id ho_id', onchange: 'nomor_ganti()' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Receive Date</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :date, class: "input-sm", disabled: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Receive No. </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :number, class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Consigment No </label>
+                      <label class="col-md-8 input custom-input-box"><%= f.text_field :consigment_number, :class => "input-sm" %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <section class="col col-md-12">
+                <label class="col-md-12 label">Note</label>
+                <label class="col-md-12 textarea custom-input-box"><%= f.text_area :note %></label>
+              </section>
+              <%= render "/purchase_requests/product_search" %>
+              <fieldset>
+                <div class="row">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                    <thead>
+                      <tr>
+                        <th>ITEM CODE</th>
+                        <th>NAME</th>
+                        <th>PURCHASE COST</th>
+                        <th>QTY</th>
+                        <th>UNIT</th>
+                        <th>SUBTOTAL</th>
+                        <th class='po_only'>RECEIVED QTY</th>
+                        <th class="col-md-1">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody id='list_detail'>
+                      <% if params[:action] == 'edit' %>
+                        <%#= render 'list_detail' %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="submit" id="button_submit" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing" onclick="return(beforeSavePurchaseReceipt())">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<%= render 'shared/modal_supplier' %>
+<div id='product_detail'></div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="transaction_history" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="poModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $('#button_submit').on('click', function() {
+      var $this = $(this);
+    $this.button('loading');
+      setTimeout(function() {
+         $this.button('reset');
+     }, 4000);
+     return false;
+  });
+  $(document).ready(function() {
+    $('.add_new_product').attr('disabled', $('#purchase_order_number').val() != '')
+    <% if session[:barcode].present? %>
+      changeBarcode('<%= session[:barcode] %>')
+    <% end %>
+    $("#number").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+
+    $("#purchase_order_number").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/purchase_orders/autocomplete_purchase_order",
+          dataType: "json",
+          data: {term: request.term, supplier_id: $('.supplier_id').val(), status: "'APPROVED'"},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#po_date').val(ui.item.date)
+        $('#po_note').val(ui.item.po_note)
+        $('#alamat').val(ui.item.address)
+        $('#supplier_name').val(ui.item.supplier_name)
+        $('#supplier_code').val(ui.item.supplier_code)
+        $('#po_note').val(ui.item.po_note)
+        $('#receiving_purchase_order_id').val(ui.item.id)
+        $('.add_new_product, .browser_product').attr('disabled', $('#purchase_order_number').val() != '')
+        add_po_to_receive(ui.item.value)
+      },
+      minLength: 1
+    });
+  });
+
+  function add_po_to_receive(number){
+    var date = new Date();
+    $.ajax({
+      url: '/receivings/add_product_po',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+      }
+    })
+  }
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function addTabel(){
+    var inputValues = [];
+    $('#table_size input').each(function() {
+        inputValues.push(parseInt($(this).val()))
+    })
+    $("#orders tbody").append("<tr><td><span class='hidden'>" + $('#product_id').val() + "</span><span>" + $('#number').val() + "</span></td><td>" + $('#merk').val() + "</td><td>" + $('#article').val() + "</td><td>" + $('#warna').val() + "</td><td>" + $('#departement').val()+ "</td><td>" + ( parseInt($('#harga_pokok').val())*eval(inputValues.join('+'))) + "</td><td>" + eval(inputValues.join('+')) + "</td><td>" + "<a href='javascript:void(0)' onclick='get_size(" + $('#product_id').val() + ", ["+ inputValues.map(String) +"])'>view</a>"+ "</td><td><a href='javascript:void(0)' class='btn btn-primary btn-xs custom-edit-btn' onclick='removeList(event)'><i class='fa fa-pencil' rel='tooltip' data-placement='left' data-original-title='Edit'></i> Edit</a></td></tr>");
+  }
+
+  function beforeSavePurchaseReceipt(){
+    var good_id = [];
+
+    var ret = false;
+    $("#list_detail tr").each(function() {
+      var input = $(this).children("td").eq(8).children("input");
+      var out = parseInt($(this).children("td").eq(7).html());
+      var qty = parseInt(input.val());
+      if (qty > out) {
+        ret = true;
+
+        var me = this;
+        input.css("backgroundColor", "yellow");
+        input.on("input", function(e) {
+          input.css("backgroundColor", "");
+          input.off("input");
+        });
+      }
+    });
+    if (ret) {
+      $("#notification").html(' \
+        <div class="alert alert-danger alert-block"> \
+          <a class="close" data-dismiss="alert" href="#">×</a> \
+          <h4 class="alert-heading">Error!</h4> \
+          Quantity amount must not be higher than PO quantity. \
+        </div>');
+
+      var top = document.getElementById("notification").offsetTop;
+      window.scrollTo(0, top);
+
+      return false;
+    }
+
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span:eq(0)").text());
+      }
+      $("#good_list").val(good_id.toString());
+
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/receivings",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            document.getElementById('button_submit').disabled=false;
+            response(data)
+          },
+        });
+      }, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function reset_form(){
+    document.getElementById("form_request").reset();
+    $("#request tboby").html("");
+  }
+
+//   function searchManual(){
+//     $.ajax({
+//       url: '/purchase_requests/search_product_manual',
+// //      data: {present_product_ids: }
+//       type: 'get'
+//     })
+//   }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_requests/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function getPO(){
+    $.ajax({
+      url: '<%= get_purchase_order_receivings_path %>',
+      type: 'get',
+      data: {
+        number: $("#purchase_order_number").val()
+      }
+    })
+  }
+
+  // function clone_details(){
+  //   inputs = ''
+  //   for (a = 0; a < $('#product_detail td').length; a++){
+  //     inputs += $('#product_detail td')[a].innerHTML
+  //   }
+  //   $('#product_detail_tobe_submitted').html(inputs)
+  // }
+
+  function clone_inputs(){
+    for (a = 0; a < $('#product_detail input').length; a++){
+      obj = $('#product_detail input')[a]
+      $('#product_detail_tobe_submitted #'+obj.id).val(obj.value)
+    }
+  }
+
+  function nomor_ganti(){
+    $.ajax({
+      url: '/receivings/get_last_number',
+      type: 'get',
+      dataType: 'json',
+      data: {
+        office_id: $('#receiving_head_office_id').val()
+      },
+      success: function(data){
+        $("#receiving_number").val(data.number);
+      }
+    })
+  }
+
+  function view_transaction_history(barcode){
+    $.ajax({
+      url: '/products/transaction_history?barcode='+barcode,
+      method: "get",
+      dataType: "script"
+    })
+  }
+
+  function searchPO() {
+    $.ajax({
+      dataType: "script",
+      url: '/purchase_orders/autocomplete_purchase_order?supplier_id='+($('.supplier_id').length == 1 ? $('.supplier_id').val() : '')+"&status='APPROVED'",
+      type: 'get'
+    });
+  }
+
+  function loadPO(id, number, date, note) {
+    $('#purchase_order_number').val(number);
+    $('#receiving_purchase_order_id').val(id);
+    $('#po_date').val(date);
+    $('#po_note').val(note);
+    $("#poModal").modal('hide');
+
+    $.ajax({
+      dataType: "script",
+      url: '/receivings/get_product_details?purchase_orders_id=' + id,
+      type: 'get'
+    });
+  }
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

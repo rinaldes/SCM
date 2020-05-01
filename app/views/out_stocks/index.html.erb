@@ -1,0 +1,104 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Inventory</li><li>Empty Stock</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> List Empty Stock</h2> <!-- header content --></header>
+          <div style='overflow-y: hidden'><!-- widget div-->
+            <div class="widget-body no-padding" style='overflow-y: hidden'><!-- widget content -->
+                <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                  <li class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                      <ul class="dropdown-menu" >
+                        <li style="color:'black';"><%= link_to "Export to Excel", receivings_path(:id => params[:id], format: "xls") %></li>
+                      </ul>
+                    </li>
+                  </ul>
+            </div><!-- end widget content -->
+            <table class="table table-striped table-bordered table-hover" width="100%">
+              <thead>
+              <tr>
+                <th>No</th>
+                <th>
+                  Barcode
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  SKU
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Description
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Category
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'category-desc', class: 'sorting hide', name: 'm_classes.name' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'category-asc', class: 'sorting', name: 'm_classes.name' %>
+                  </span>
+                </th>
+                <th>
+                  Available Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'available_stock-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'available_stock-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Min Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'available_stock-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'available_stock-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  ROP Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'available_stock-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'available_stock-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                <th>
+                  Max Stock
+                  <span style="float: right;">
+                    <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'available_stock-desc', class: 'sorting hide' %>
+                    <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'available_stock-asc', class: 'sorting' %>
+                  </span>
+                </th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th class="hasinput"><%= text_field_tag :barcode, params[:barcode], class: 'form-control search', name: 'products.barcode' %></th>
+                  <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control search', name: "products.article" %></th>
+                  <th class="hasinput"><%= text_field_tag :brand_name, params[:brand_name], class: 'form-control search', name: "products.brand.name" %></th>
+                  <th class="hasinput"><%= text_field_tag :department, params[:department], class: 'form-control search', name: "products.department" %></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id='out_stock-list'><%= render 'out_stock_list' %></tbody>
+            </table>
+          </div>
+        </div><!-- end widget -->
+      </article><!-- WIDGET END -->
+    </div>  <!-- end row -->
+  </section><!-- end widget grid -->
+</div>  <!-- end row -->

@@ -1,0 +1,24 @@
+<% @suppliers.each_with_index do |supplier, i| %>
+<tr id="supplier-<%= supplier.id %>">
+  <td class="hidden-phone"><%= i + 1 %></td>
+  <td class="hidden-phone"><%= supplier.code %></td>
+  <td class="hidden-phone"><%= supplier.name %></span></td>
+  <td class="hidden-phone"><%= supplier.address %></span></td>
+  <td class="hidden-phone"><%= supplier.city %></span></td>
+  <td class="hidden-phone" hidden><%= supplier.long_term %></span></td>
+  <td class="hidden-phone">
+    <button onclick="chooseSupplier('<%= supplier.id %>');" "btn btn-primary btn-xs custom-edit-btn" data-dismiss="modal">Choose</button>
+  </td>
+</tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <% if @suppliers.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@suppliers, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

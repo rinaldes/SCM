@@ -1,0 +1,205 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Purchase Request</li><li><%= @purchase_request.number %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @purchase_request.number %></h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @purchase_request, html: {class: "smart-form", id: "form_request"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">TGL.PR</label>
+                      <label class="col-md-10 input custom-input-box"><%= @purchase_request.date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">No.PR </label>
+                      <label class="col-md-10 input custom-input-box"><%= @purchase_request.number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">PR Note</label>
+                      <label class="col-md-10 textarea custom-input-box"><%= @purchase_request.note || '-' %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="row">
+                  <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                    <thead>
+                      <tr>
+                        <th>NO</th>
+                        <th>Article</th>
+                        <th>Barcode</th>
+                        <th>Product Name</th>
+                        <th>HPP</th>
+                        <th>Unit</th>
+                        <th>Fraction</th>
+                        <th>Disc1 %</th>
+                        <th>Disc2 %</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody id="list_detail-list">
+                      <% total = 0 %>
+                      <% total_qty = 0 %>
+                      <% @purchase_request.purchase_request_details.each_with_index do |prd, i| %>
+                        <% product = prd.product %>
+                        <% hpp = SellingPrice.where("product_id=#{product.id} AND now() BETWEEN start_date AND end_date").limit(1).order('id DESC').last.hpp rescue 0 %>
+                        <% hpp_akhir = hpp-PurchasePrice.get_hpp_disc(product.id) %>
+                        <% subtotal = hpp_akhir*prd.quantity*prd.fraction %>
+                        <tr>
+                          <td><%= i + 1 %>
+                          <td><%= product.article rescue '' %></td>
+                          <td>
+                            <span class='hidden'><%= detail.product_id rescue '' %></span>
+                            <span><%= product.barcode rescue '' %></span>
+                          </td>
+                          <td><%= product.description rescue '' %></td>
+                          <td><%= format_currency hpp*prd.fraction %></td>
+                          <td><%= product.select_unit(prd.unit_type) %></td>
+                          <td><%= prd.fraction %></td>
+                          <td><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+                          <td><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+                          <td style='text-align: right'><%= prd.quantity %></td>
+                          <td style='text-align: right'><%= format_currency subtotal %></td>
+                        </tr>
+                        <% total += subtotal %>
+                        <% total_qty += prd.quantity %>
+                      <% end %>
+                      <tr>
+                        <th colspan=9>Total</th>
+                        <td style='text-align: right'><%= total_qty %></td>
+                        <td style='text-align: right'><%= format_currency total rescue '' %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+                <%= link_to 'Print To PDF', print_to_pdf_purchase_request_url(@purchase_request), class: 'btn btn-primary' %>
+                <%= link_to 'Export to Excel', purchase_request_path(@purchase_request.id, format: :xlsx), class: 'btn btn-info' %>
+                <%= link_to 'Generate PO', generate_po_purchase_requests_path(@purchase_request.id), class: 'btn btn-warning' %>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    clone_details()
+    autocomplete_barcode()
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#supplier_code').val(ui.item.code)
+        $('#purchase_request_supplier_id').val(ui.item.id)
+        $('#alamat').val(ui.item.address)
+      },
+      minLength: 1
+    });
+    reset_form();
+
+    <% if params[:action] == 'edit' %>
+      $("#purchase_request_supplier_id").val("<%= @supplier.id rescue '' %>");
+      $("#supplier_name").val("<%= @supplier.name rescue '' %>")
+      $("#alamat").val("<%= @supplier.address rescue '' %>");
+      $("#supplier_code").val("<%= @supplier.code rescue '' %>");
+    <% end %>
+  });
+
+  function getProduct(){
+    $.ajax({
+      url: '<%= get_product_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        barcode: $("#number").val()
+      }
+    })
+  }
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function removeList(event){
+    $(event.target).parent().parent().remove();
+  }
+
+
+  function reset_form(){
+    document.getElementById("form_request").reset();
+    $("#request tboby").html("");
+  }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_requests/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function changeBarcode(barcode){
+    $("#number").val(barcode);
+    getProduct()
+    $("#myModal").modal('hide');
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

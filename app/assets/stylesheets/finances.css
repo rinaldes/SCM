@@ -1,0 +1,107 @@
+<style type="text/css">
+  .click-cancel-co, .click-cancel-add-payment, .click-cancel-edit-payment-schedule, .click-cancel-edit-monthly-budget{
+    display: none;
+  }
+
+  #select-month-forecast, #select-department-forecast{
+    width: 200px;
+  }
+
+  #select-month-forecast{
+    /*margin-bottom: 10px;*/
+  }
+
+  .auto{
+    padding-left: 4px;
+  }
+
+  .petty-cash-form header{
+    margin-left: 0px;
+  }
+
+  .petty-cash-form input.numeric, .account-payable input.numeric, .sod-eod-form input.numeric, .total{
+    text-align: right;
+  }
+
+  .petty-cash-form input[disabled]{
+    background-color: rgb(235, 235, 228);
+  }
+
+  .end-button-div{
+    padding-top: 31px;
+  }
+
+  .petty-cash-form .total{
+    float: right;
+    padding-right: 10px;
+  }
+
+  .monhtly-forecast th{
+    text-align: center;
+    vertical-align: middle !important;
+  }
+
+  .other-charge{
+    margin-bottom: 10px;
+  }
+
+  .sub-title{
+    margin-bottom: 10px;
+  }
+
+  section.clear{
+    margin-bottom: 10px;
+  }
+
+  span.money{
+    float: right;
+  }
+
+  .product-image > img{
+    /*max-width: 100px;*/
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .product-image {
+    width: 100px;
+    /*border: 1px solid !important;*/
+  }
+
+  #dialog-purchased-item{
+    margin-top: 0px;
+  }
+
+  #dialog-purchased-item table,  #dialog-purchased-item td,  #dialog-purchased-item th{
+    border-left: 0px;
+    border-right: 0px;
+  }
+
+  #dialog-purchased-item .left-label,  .right-label{
+    width: 30px;
+    font-weight: bold;
+  }
+
+  #dialog-purchased-item .left-input,  #dialog-purchased-item .right-input{
+    width: 90px;
+  }
+
+  .sod-eod-form input[type="text"][disabled] {
+    background-color:  rgb(235, 235, 228) !important;
+  }
+
+  .petty-cash-details-input, .click-cancel-edit-petty-cash-details{
+    display: none;
+  }
+
+  .petty-cash th{
+    text-align: center;
+  }
+
+  table.overflow thead tr th, table.overflow tbody tr td {
+    vertical-align: middle;
+    text-align: center;
+    border: 2px solid #ddd;
+  }
+</style>

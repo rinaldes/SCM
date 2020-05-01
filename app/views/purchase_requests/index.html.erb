@@ -1,0 +1,104 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:data_master) %></li><li><%= t(:purchase_request) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id="notice_template"><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span><%= t(:purchase_request_list) %></h2> <!-- header content --></header>
+          <div>
+            <div class="widget-body no-padding">
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_purchase_request)}"), new_purchase_request_path,
+                class: "btn btn-labeled btn-primary edit-btn-primary" %>
+            </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <th>
+                    PR No
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Warehouse
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Date
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    Total Qty
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <!-- <th>
+                    Total HPP
+                    <span style="float: right;">
+                      <%#= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%#= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th> -->
+                  <th>
+                    Note
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:status) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'status-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'status-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th><%= t(:action) %></th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th class="hasinput">
+                    <%= text_field_tag :number, params[:number], class: 'form-control search' %>
+                  </th>
+                  <th class="hasinput">
+                    <%= text_field_tag :date, params[:date], class: 'form-control search', name: "to_char(date, 'DD-MM-YYYY')" %>
+                  </th>
+                  <th class="hasinput">
+                    <%= text_field_tag :status, params[:status], class: 'form-control search' %>
+                  </th>
+                  <th class="hasinput">
+                  </th>
+                  <th></th>
+                  <th class="hasinput">
+                    <%= text_field_tag :status, params[:status], class: 'form-control search' %>
+                  </th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody id='purchase_request-list'><%= render 'purchase_request_list' %></tbody>
+              </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

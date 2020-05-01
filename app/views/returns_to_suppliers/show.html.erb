@@ -1,0 +1,307 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Purchasing</li><li>Retur Goods To Supplier</li><li><%= @returns_to_supplier.number %></li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @returns_to_supplier.number %></h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <%= form_for @returns_to_supplier, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= f.hidden_field :supplier_id %>
+              <%= f.hidden_field :head_office_id, value: current_user.head_office_id %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-4 label">Retur No</label>
+                      <label class="col-md-8 input custom-input-box"><%= @returns_to_supplier.number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Retur Date</label>
+                      <label class="col-md-8 input custom-input-box"><%= @returns_to_supplier.date %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Status</label>
+                      <label class="col-md-8 input custom-input-box"><%= @returns_to_supplier.status %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Note</label>
+                      <label class="col-md-8 input custom-input-box"><%= @returns_to_supplier.note %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Receive No</label>
+                      <label class="col-md-9 input custom-input-box"><%= @receiving.number rescue '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Receive Date </label>
+                      <label class="col-md-9 input custom-input-box"><%= @receiving.date rescue '-' %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Supplier Code</label>
+                      <label class="col-md-9 input custom-input-box"><%= @supplier.code rescue '-' %></label>
+                    <section>
+                      <label class="col-md-3 label">Supplier Name</label>
+                      <label class="col-md-9 input custom-input-box"><%= @supplier.name rescue '-' %></label>
+                    <section>
+                      <label class="col-md-3 label">Supplier Address</label>
+                      <label class="col-md-9 input custom-input-box"><%= @supplier.address rescue '-' %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <fieldset class="col col-md-12">
+                <div class="row">
+                  <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Barcode</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Article</th>
+                        <th>Purchase Price</th>
+                        <th>Disc1 %</th>
+                        <th>Disc2 %</th>
+                        <th>Retur QTY</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id='list_detail'>
+                      <% grand_total, total_ppn = 0, 0 %>
+                      <% @returns_to_supplier.returns_to_supplier_details.each_with_index do |rts, i| %>
+                        <% product = rts.product %>
+                        <% receiving = Receiving.find_by_number(@returns_to_supplier.receive_no) %>
+                        <% rd = ReceivingDetail.find_by_product_id_and_receiving_id(product.id, receiving.id) rescue nil %>
+
+                        <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*rts.fraction %>
+                        <% hpp_akhir = rts.purchase_price*rts.fraction-hpp_disc_amt %>
+                        <tr>
+                          <td>
+                            <span><%= i+1 %></span>
+                          </td>
+                          <td>
+                            <span><%= product.barcode rescue '' %></span>
+                          </td>
+                          <td><%= product.description rescue '' %></td>
+                          <td><%= product.m_class.name rescue '' %></td>
+                          <td><%= product.article rescue '' %></td>
+                          <td><%= format_currency rts.purchase_price*rts.fraction rescue '' %></td>
+                          <td><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+                          <td><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+                          <td class='align-right'><%= rts.quantity rescue '' %></td>
+                          <td class='align-right'><%= format_currency hpp_akhir*rts.quantity rescue '' %></td>
+                          <% ppn = hpp_akhir*rts.quantity*0.1 %>
+                          <% grand_total += hpp_akhir*rts.quantity %>
+                          <% total_ppn += ppn if product.flag_pajak == 'BKP' && @returns_to_supplier.supplier.status_pkp %>
+                        </tr>
+                      <% end %>
+                      <tr>
+                        <td class="noborder" colspan=7></td>
+                        <td>Total</td>
+                        <td style='text-align: right; padding-right: 21px' colspan="2"><%= format_currency grand_total %></td>
+                      </tr>
+                      <% if @returns_to_supplier.supplier.status_pkp %>
+                        <tr>
+                          <td class="noborder" colspan=7></td>
+                          <td>PPN</td>
+                          <td style='text-align: right; padding-right: 21px' colspan="2"><%= format_currency total_ppn %></td>
+                        </tr>
+                      <% end %>
+                      <tr>
+                        <td class="noborder" colspan=7></td>
+                        <td>Grand Total</td>
+                        <td style='text-align: right; padding-right: 21px' colspan="2"><%= format_currency grand_total + total_ppn %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+                <%= link_to 'Print To PDF', print_to_pdf_returns_to_supplier_url(@returns_to_supplier), class: 'btn btn-primary' %>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    autocomplete_barcode()
+    autocomplete_receiving()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+    $('.add_list').click(function(){
+      add_list()
+    })
+    $("#abcxyz").hide();
+  });
+
+  function nomorkeisi(){
+    var value=$.trim($("#receive_no").val());
+    if(value.length>0)
+    {
+      $(".barang").hide();
+      $("#returns_to_supplier_receive_no").val($("#receive_no").val());
+
+    }
+    else
+    {
+      $(".barang").show();
+      $("#returns_to_supplier_receive_no").val('');
+    }
+  }
+
+  function add_list(product_id){
+    var value=$.trim($("#number").val());
+    var value2=$.trim($("#receive_no").val());
+    if(value.length>0 || value2.length>0)
+    {
+      var date = new Date();
+      $.ajax({
+        url: '/returns_to_suppliers/add_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), barcode: $("#number").val()
+        }
+      })
+      $("#number").val('');
+    }
+    else
+    {
+      alert("Isi Field Receive No atau Barcode terlebih dahulu..");
+    }
+  }
+
+  function add_brand(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_suppliers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, origin_branch: $("#stock_transfer_branch_id").val()
+      }
+    })
+  }
+
+  function get_receiving(){
+    $.ajax({
+      url: '<%= get_receiving_returns_to_suppliers_path %>',
+      type: 'get',
+      data: {
+        name: $("#receive_no").val()
+      }
+    })
+  }
+/*
+  function get_product(){
+    $.ajax({
+      url: '<%#= get_product_returns_to_suppliers_path %>',
+      type: 'get',
+      data: {
+        name: $("#barcode").val()
+      }
+    })
+  }
+*/
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function autocomplete_receiving(){
+    $(".autocompletenya2").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/receivings/autocomplete_receiving_number",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        $('#r_date').val(ui.item.date)
+        $('#supplier_code').val(ui.item.supplier_code)
+        $('#supplier_name').val(ui.item.supplier_name)
+        $('#supplier_address').val(ui.item.supplier_address)
+        $('#returns_to_supplier_supplier_id').val(ui.item.supplier_id)
+        add_receive_to_return(ui.item.value)
+      },
+      minLength: 1
+    });
+  }
+
+  function add_receive_to_return(number){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_suppliers/add_product_receive',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('tbody#list_detail tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("tbody#list_detail tr:eq("+ y +") td:eq(0) span:eq(0)").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      return false;
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+
+  function searchManual(){
+    $.ajax({
+      url: '/purchase_requests/search_product_manual',
+      type: 'get'
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

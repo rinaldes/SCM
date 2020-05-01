@@ -1,0 +1,19 @@
+<% @forecasts.each do |forecast| %>
+    <tr>
+        <td><%= link_to forecast.year.year, finances_forecast_path(forecast.id) %></td>
+        <td><%= forecast.target_qty.to_f %></td>
+        <td><%= format_currency(forecast.target_amount.to_f) %></td>
+        <td><%= forecast.realization_qty.to_f %></td>
+        <td><%= format_currency(forecast.realization_amount.to_f) %></td>
+        <td><%= 0.to_f %></td>
+        <td><%= 0.to_f %></td>
+        <td><%= 0.to_f %></td>
+        <td><%= 0.to_f %></td>
+        <td>
+            <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), finances_forecast_path(forecast.id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+            <%= link_to raw('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>'), 'javascript:void(0)', onclick: "delete_one(#{forecast.id}, 'forecasts')", class: "btn btn-danger btn-xs custom-edit-btn" %>
+        </td>
+    </tr>
+<% end %>
+
+

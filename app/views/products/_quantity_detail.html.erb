@@ -1,0 +1,8 @@
+<td><%= product_size.size_detail.size_number rescue nil %></td>
+<% @offices.each{|office| %>
+  <% product_detail = ProductDetail.find_by_product_size_id_and_warehouse_id(product_size.id, office.id) %>
+  <td><%= product_detail.available_qty rescue 0 %></td>
+  <%  if office.class == Branch %>
+    <td><%= product_detail.min_stock.to_i rescue 0 %></td>
+  <% end %>
+<% } %>

@@ -1,0 +1,336 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<style>
+  input[type="checkbox"], input[type="radio"] {
+    margin: -5px 0 0;
+}
+</style>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Promo</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div id='notification'></div>
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-promotion">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Promo</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @promotion, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= hidden_field_tag :promo_list %>
+              <fieldset> <!-- tambah supplier -->
+                <div class="row">
+                  <section class="col col-md-6">
+                    <div id="pesan" hidden>
+                      <%= label_tag "start date must be before the end date" %>
+                    </div>
+                    <section>
+                      <label class="col-md-3 label">Code <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :code, class: "input-sm", placeholder: "Auto Generate", disabled: true %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label"><%= t(:name) %> <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :name, :class => "input-sm" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Valid From <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :from, class: "input-sm" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Valid Until <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :to, class: "input-sm" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Is Member <span class='important'>*</span></label>
+                      <label class="col-md-9"><%= f.check_box :is_member, {class: "input-sm"} %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Is P2P</label>
+                      <label class="col-md-9"><%= f.check_box :is_p2p, {class: "input-sm"} %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Is Claim <span class='important'>*</span></label>
+                      <label class="col-md-9"><%= f.check_box :is_claim, {class: "input-sm"} %></label>
+                    </section>
+                  </section>
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-3 label">Minimum Transaction</label>
+                      <label class="col-md-3 input custom-input-box">
+                        <%= f.text_field :min_qty, id: 'max_pcs', class: "input-sm", placeholder: "Pieces", onkeyup: 'disable_max_amt(event)', onkeydown: 'disable_max_amt(event)' %>
+                        <div class="icon-append" style="padding: 0 3px 0 5px;">pcs</div>
+                      </label>
+                      <label class="col-md-1 input custom-input-box" style="margin-left:2px; text-align:center; margin-bottom: 0px;padding-top: 5px;">Or</label>
+                      <label class="col-md-3 input custom-input-box">
+                        <%= f.text_field :min_amount, id: 'max_amt', class: "input-sm", placeholder: "Rp", onkeyup: 'disable_max_pcs(event)', onkeydown: 'disable_max_pcs(event)' %>
+                        <div class="icon-append" style="width: 51px;">rupiah</div>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Multiple</label>
+                      <label class="col-md-9"><%= f.check_box :multi, {class: "input-sm"}, "check", "uncheck" %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Store/HO <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%= f.select :office_id,
+                          options_for_select(Office.all.map{|office|[office.office_name, office.id]}.push(['All Store', 'All Store'], ['All HO', 'All HO'])) %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Term & Condition</label>
+                      <label class="col-md-9 textarea custom-input-box"><%= f.text_area :term_and_condition, class: "input-sm" %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <header>Promo Item</header>
+              <fieldset class="col col-md-12" style="margin-bottom: 25px;">
+                <div class="row">
+                  <table class="table table-condensed table-striped table-bordered table-hover no-margin" id="pi">
+                    <thead>
+                      <tr>
+                        <th>Barcode</th>
+                        <th>Department</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                        <th>Article</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id='promo_item_list'>
+                      <% if params[:action] == 'edit' %>
+                        <% @promotion.promo_item_lists.each{|cp| %>
+                          <%= render partial: "promo_item_list", locals: {key: cp.id, object: cp} %>
+                        <% } %>
+                      <% else %>
+                        <%= render partial: "promo_item_list", locals: {key: Time.now.to_i, object: (params[:promotion][:promo_item_lists_attributes][i] rescue nil)} %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div> <!-- row -->
+              </fieldset>
+              <header>Prize List</header>
+              <fieldset class="col col-md-12"> <!-- contact person -->
+                <div class="row">
+                  <section class="col-md-12" style='margin-left: 21px'>
+                    <label class="col-md-6 label">
+                      Prize by Discount
+                      <%= check_box_tag :prize_type, 1, false, onclick: "toggleDiscount()" %>
+                      <div id='discount_container' class='hide'>
+                        <label class="col-md-3 input custom-input-box">
+                          <%= f.text_field :discount_percent, class: "input-sm", onkeyup: 'disable_discount_rp()', onkeydown: 'disable_discount_rp()' %>
+                          <div class="icon-append" style="padding: 0 3px 0 5px;">%</div>
+                        </label>
+                        <label class="col-md-1 input custom-input-box" style="margin-left:2px; text-align:center; margin-bottom: 0px;padding-top: 5px;">Or</label>
+                        <label class="col-md-3 input custom-input-box">
+                          <%= f.text_field :discount_amount, class: "input-sm", placeholder: "Rp", onkeyup: 'disable_discount_percent()', onkeydown: 'disable_discount_percent()' %>
+                          <div class="icon-append" style="width: 51px;">rupiah</div>
+                        </label>
+                      </div>
+                    </label>
+                  </section>
+
+                  <%= link_to 'Add Hadiah', 'javascript:void(0)', class: 'btn btn-primary btn-sm add_prize', style: "margin: 0 0 20px 14px;" %>
+                  <section id='contact' class="col col-md-12">
+                    <table class="table table-condensed table-striped table-bordered table-hover no-margin" id="pl">
+                      <thead>
+                        <tr>
+                          <th>Barcode</th>
+                          <th>Department</th>
+                          <th>Category</th>
+                          <th>Brand</th>
+                          <th>Article</th>
+                          <th>Qty</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id='prize_list'>
+                        <% if params[:action] == 'edit' %>
+                          <% @promotion.prize_lists.each{|cp| %>
+                            <%= render partial: "prize_list", locals: {key: cp.id, object: cp} %>
+                          <% } %>
+                        <% else %>
+                          <% (params[:promotion][:prize_lists_attributes].keys rescue []).each{|i| %>
+                            <%= render partial: "prize_list", locals: {key: i, object: (params[:promotion][:prize_lists_attributes][i] rescue nil)} %>
+                          <% } %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div> <!-- row -->
+              </fieldset> <!-- contact person -->
+              <footer>
+                <button type="button" class="btn btn-primary" onclick="return(beforeSavePromo())">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+
+  function beforeSavePromo(){
+    var good_id = [];
+    var tot = $('#pi tbody tr').length;
+    if(tot != 0 || $('#prize_type').get(0).checked){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#pi tbody tr:eq("+ y +") td:eq(0) span:eq(0)").text())
+      }
+      $("#promo_list").val(good_id.toString());
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/promotions<%= "/#{params[:id]}" if params[:action] == 'edit' %>",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            response(data)
+          },
+        });
+      }, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function disable_max_amt(){
+    if($('#max_pcs').val() != ""){
+      $('#max_amt').val('')
+      $('#max_amt').attr('readonly', 'readonly')
+      $('#voucher_is_max_pcs').val('true')
+    }
+    else{
+      $('#max_amt').removeAttr('readonly')
+      $('#voucher_is_max_pcs').val('')
+    }
+  }
+
+  function disable_max_pcs(){
+    if($('#max_amt').val() != ""){
+      $('#max_pcs').val('')
+      $('#max_pcs').attr('readonly', '')
+      $('#voucher_is_max_pcs').val('false')
+    }
+    else{
+      $('#max_pcs').removeAttr('readonly')
+      $('#voucher_is_max_pcs').val('')
+    }
+  }
+
+  function disable_discount_percent(){
+    if($('#promotion_discount_amount').val() != ""){
+      $('#promotion_discount_percent').val('')
+      $('#promotion_discount_percent').attr('readonly', 'readonly')
+    }
+    else{
+      $('#promotion_discount_percent').removeAttr('readonly')
+    }
+  }
+
+  function disable_discount_rp(){
+    if($('#promotion_discount_percent').val() != ""){
+      $('#promotion_discount_amount').val('')
+      $('#promotion_discount_amount').attr('readonly', 'readonly')
+    }
+    else{
+      $('#promotion_discount_amount').removeAttr('readonly')
+    }
+  }
+
+
+  function toggleDiscount(){
+    if($('#prize_type').get(0).checked){
+      $('#discount_container').removeClass('hide')
+      $('.add_prize').addClass('hide')
+      $('#contact').addClass('hide')
+    }
+    else{
+      $('#discount_container').addClass('hide')
+      $('.add_prize').removeClass('hide')
+      $('#contact').removeClass('hide')
+    }
+  }
+
+  $(document).ready(function() {
+    $("#promotion_from").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $("#promotion_to").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+
+    $('.add_promo').click(function(){
+      var date = new Date();
+      $.ajax({
+        url: '/promotions/add_promo_item_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+
+    $(".autocomp-article").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+
+    $('.add_prize').click(function(){
+      var date = new Date();
+      $.ajax({
+        url: '/promotions/add_prize_list',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+
+    $("#start").datepicker({
+      dateFormat: 'dd-mm-yy', changeYear: true, changeMonth: true
+    });
+    $('#pesan').hide();
+  });
+  function date() {
+    $(document).ready(function(){
+        $('#sendButton').attr('disabled',true);
+        var a = $('#from').val().toString().split("/");
+        var b = $('#to').val().toString().split("/");
+        if(a[0] <= b[0] && a[1] <= b[1] && a[2] <= b[2]){
+          $('#sendButton').attr('disabled', false);
+          $('#pesan').hide();
+        }
+        else{
+          $('#sendButton').attr('disabled',true);
+          $('#pesan').show();
+        }
+    });
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

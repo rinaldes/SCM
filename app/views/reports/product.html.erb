@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Reports</li><li>Product</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Product <%= Time.now.strftime('%B %Y') %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+              <li class="dropdown">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                <ul class="dropdown-menu" >
+                  <li style="color:'black';"><%= link_to "Export to Excel", reports_product_path(:id => params[:id], format: "xls") %></li>
+                </ul>
+              </li>
+            </ul>
+
+            <div class="row">
+              <section class="col col-md-12">
+                <h1></h1>
+              </section>
+            </div>
+            <form class='smart-form' url="/products/stock">
+              <section class="col col-md-12">
+              <div class="modal-body" style="color:#5E5E5E">
+                <table class="table table-striped table-bordered" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Product Code</th>
+                      <th>Product Name</th>
+                      <th>Cost of Product Start</th>
+                      <th>Cost of Product</th>
+                      <th>Cost of Product End</th>
+                      <th>Selling Price</th>
+                      <th>Flag Tax</th>
+                      <th>Flag Goods (dc/bkl)</th>
+                      <th>Fraction</th>
+                      <th>Min.Order</th>
+                    </tr>
+                    <tr>
+                      <th class="hasinput"><%= text_field_tag :code, params[:code], class: 'form-control search', name: "selling_prices.code"%></th>
+                      <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control search', name: "products.description"%></th>
+                      <th class="hasinput"><%= text_field_tag :first_cost, params[:first_cost], class: 'form-control search', name: "to_char(products.cost_of_products, '999D9')"%></th>
+                      <th class="hasinput"><%= text_field_tag :cost, params[:cost], class: 'form-control search', name: "to_char(products.cost_of_products, '999D9')"%></th>
+                      <th class="hasinput"><%= text_field_tag :last_cost, params[:last_cost], class: 'form-control search', name: "to_char(products.cost_of_products, '999D9')"%></th>
+                      <th class="hasinput"><%= text_field_tag :harga_jual, params[:harga_jual], class: 'form-control search', name:"to_char(selling_prices.selling_price, '999D9')"%></th>
+                      <th class="hasinput"><%= text_field_tag :flag_pajak, params[:flag_pajak], class: 'form-control search', name: 'products.flag_pajak'%></th>
+                      <th class="hasinput"><%= text_field_tag :flag_barang, params[:flag_barang], class: 'form-control search', name: 'products.flag_barang'%></th>
+                      <th class="hasinput"><%= text_field_tag :fraction, params[:fraction], class: 'form-control search', name: "to_char(products.fraction, '999D9')"%></th>
+                      <th class="hasinput"><%= text_field_tag :min_order, params[:min_order], class: 'form-control search', name: "to_char(products.minimal_order, '999D9')"%></th>
+                    </tr>
+                  </thead>
+                  <tbody id="product-list"><%= render 'product'%></tbody>
+                </table>
+              </div>
+              </section>
+            </form>
+
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

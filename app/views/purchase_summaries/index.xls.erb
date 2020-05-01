@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Receipt No</Data></Cell>
+        <Cell><Data ss:Type="String">Ref. Purchase Order</Data></Cell>
+        <Cell><Data ss:Type="String">Store</Data></Cell>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">Supplier</Data></Cell>
+        <Cell><Data ss:Type="String">DPP</Data></Cell>
+        <Cell><Data ss:Type="String">PPn</Data></Cell>
+        <Cell><Data ss:Type="String">Total</Data></Cell>
+
+      </Row>
+    <% @receivings.each do |receiving| %>
+    <% dpp = receiving.receiving_details.map{|a|a.quantity.to_f*a.hpp.to_f}.sum rescue 0 %>
+    <% ppn = (receiving.supplier.status_pkp rescue true) ? (dpp.to_f * 0.1) : 0 %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= receiving.number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.purchase_order.number rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.office_name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.date rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= receiving.supplier.name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= format_currency dpp %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= format_currency ppn %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= format_currency dpp + ppn %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,56 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content">
+  <section id="widget-grid">
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Global Finance Report List</h2></header>
+          <div style="margin-top:-10px;">
+            <div class="widget-body no-padding">
+              <%= link_to export_finance_reports_global_finances_path(format: "xlsx"), :class => "btn btn-labeled btn-primary edit-btn-primary" do %>
+                <span class="btn-label"><i class="glyphicon glyphicon-download"></i></span>Export XLSX
+              <% end %>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped table-brequested table-hover table-bordered overflow" width="100%">
+                <thead>
+                  <tr>
+                    <th rowspan="2">Date</th>
+                    <th colspan="3">Omset</th>
+                    <th colspan="5">Another Income</th>
+                    <th rowspan="2">DP In</th>
+                    <th rowspan="2">Total</th>
+                    <th colspan="3">Payment Via Merchant</th>
+                    <th>Payment Via Transfer</th>
+                    <th rowspan="2">BTP 2X</th>
+                    <th rowspan="2">DP Out</th>
+                    <th>Deposited</th>
+                    <th rowspan="2">Rest</th>
+                  </tr>
+                  <tr>
+                    <th>Tk. Depan</th>
+                    <th>Tk. Blk</th>
+                    <th>Tk. Fashion</th>
+                    <th>Catalog</th>
+                    <th>Gift Service</th>
+                    <th>Charge Merchant</th>
+                    <th>Rounding Off</th>
+                    <th>Wrong Transaction</th>
+                    <th>BCA</th>
+                    <th>Mandiri</th>
+                    <th>BNI</th>
+                    <th>BNI</th>
+                    <th>BNI</th>
+                  </tr>
+                </thead>
+                <tbody id='global_finance_list'><%= render 'list' %></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

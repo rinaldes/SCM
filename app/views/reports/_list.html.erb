@@ -1,0 +1,56 @@
+<tr>
+  <td colspan=3><b>Net Sales</b></td>
+</tr>
+<tr>
+  <td>Sales</td>
+  <td align="right" size="100"><%= format_currency @sales_details.sum(:subtotal_price) %></td>
+  <td></td>
+</tr>
+<tr>
+  <td>HPP</td>
+  <td></td>
+  <td align="right" size="100"><%= format_currency @sales_details.map{|a|a.capital_price.to_f*a.quantity.to_f}.sum %></td>
+</tr>
+<tr>
+  <td>Gross Margin</td>
+  <td></td>
+  <td align="right" size="100"><%= format_currency @sales_details.sum(:subtotal_price)-@sales_details.map{|a|a.capital_price.to_f*a.quantity.to_f}.sum %></td>
+</tr>
+<tr>
+  <td colspan=3><b>Expense</b></td>
+</tr>
+<% @cash_outs.each_with_index do |cash, index| %>
+  <tr>
+    <td><%= cash.description %></td>
+    <td  align="right" size="100"><%= format_currency(cash.amount) %></td>
+    <td></td>
+  </tr>
+<% end %>
+<tr>
+  <td>Total Expense</td>
+  <td></td>
+  <td align="right" size="100"><%= format_currency @cash_outs.sum(:amount) %></td>
+</tr>
+<tr>
+  <td colspan=3><b>Other Income</b></td>
+</tr>
+<% @cash_ins.each_with_index do |cash, index| %>
+  <tr>
+    <td><%= cash.description %></td>
+    <td align="right" size="100"><%= format_currency(cash.amount) %></td>
+    <td></td>
+  </tr>
+<% end %>
+<tr>
+  <td>Total Other Income</td>
+  <td></td>
+  <td align="right" size="100"><%= format_currency @cash_ins.sum(:amount) %></td>
+</tr>
+<tr>
+  <td colspan=3><b>Profit/Lost</b></td>
+</tr>
+<tr>
+  <td><%= @sales_details.sum(:subtotal_price) - (@sales_details.sum(:capital_price)+@cash_outs.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></td>
+  <td></td>
+  <td align="right" size="100"><%= format_currency (@sales_details.sum(:subtotal_price)-@sales_details.map{|a|a.capital_price.to_f*a.quantity.to_f}.sum-@cash_outs.sum(:amount)+@cash_ins.sum(:amount)) %></td>
+</tr>

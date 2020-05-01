@@ -1,0 +1,72 @@
+Signature-Version: 1.0
+SHA-256-Digest-Manifest-Main-Attributes: unhsrIGpRyKqXh6axycpk1GbcmWYw
+ mfYWJ4ostEEqmM=
+SHA-256-Digest-Manifest: RxSwsmFe29l56RRDXJe4MJN3OI0c9ZS8ViKL6N5ri+o=
+Created-By: 1.7.0_09 (Oracle Corporation)
+
+Name: jzebra/RawPrintApplet.class
+SHA-256-Digest: 80lk9FfVTVfe1RcjgvJlqgl5vxczs5ROE5douShILJ0=
+
+Name: jzebra/PrintRaw$1.class
+SHA-256-Digest: xGjMDGHKEMFbBrXXIGXgI+6BPAZPKp74B7V7ggcbQA8=
+
+Name: jzebra/PrintApplet$2.class
+SHA-256-Digest: d4g+p7LdFrNrwdFjr1f7dsrBJKDi/TJaXe55JCQ4GSM=
+
+Name: jzebra/Base64$InputStream.class
+SHA-256-Digest: 1q6bNVS99QNOV5qFbO9SEkGFrwIJW2X9TBx0zxLHttg=
+
+Name: jzebra/Base64$OutputStream.class
+SHA-256-Digest: XpUJC7tci0lHZ9s/FvM4Pp47yxfi7+9oJZX1gRTGjW8=
+
+Name: jzebra/ImageWrapper$1.class
+SHA-256-Digest: P+9f6RdCwcC8LMgJI6d7d+1dW8HEH39FaAliOGmizZQ=
+
+Name: jzebra/LanguageType.class
+SHA-256-Digest: 32CGMjiOpmj+kiECxaNoSZF1nfIVuFQEcHa6KWuMw0M=
+
+Name: jzebra/LogIt.class
+SHA-256-Digest: Ia44Y3Tu/gywY8HijVkxcWVwuxTcsuhiEh85FT5O5JU=
+
+Name: jzebra/exception/NullCommandException.class
+SHA-256-Digest: A1xGlKDdgs/xBlqcdlkZBY1hZA1tdrfRkaJjk9LgrcY=
+
+Name: jzebra/PrintApplet$1.class
+SHA-256-Digest: bQoEH+HVrpePEHiCZWdcPxrF0ydH7ZMWXQfD79nM61U=
+
+Name: jzebra/newfile
+SHA-256-Digest: /jXV679QEXyt5Q6/lrWa7kEsX3e5WgzG4QJuafddfDs=
+
+Name: jzebra/exception/NullPrintServiceException.class
+SHA-256-Digest: y42X84wsVq6yyluZ0oq8iCuwM0Lpp4VWOoMWHL2hKtw=
+
+Name: jzebra/PrintApplet.class
+SHA-256-Digest: 5mqgH3jt4fgyhX0p9asAzYWJSKyKWhH5IP8WjQvHkBs=
+
+Name: jzebra/Main.class
+SHA-256-Digest: 8qatHjVUW67x0Zf+FyVXc9GQFh8DLNqMiL59izS07gM=
+
+Name: jzebra/Base64.class
+SHA-256-Digest: Ub/td3CZlRMWYI7CUg2Um73SjFOXEgSSQUKoWL2O4v0=
+
+Name: jzebra/PaperFormat.class
+SHA-256-Digest: ajAPW/Jw5dXZV/h9ULv1j9CMn4IqP6SVdf+hApD3oVU=
+
+Name: jzebra/PrintPostScript.class
+SHA-256-Digest: nZhUnRhuzEQViq5UoTWgG02W0nB2whqtwFXr46qRd2I=
+
+Name: jzebra/ImageWrapper.class
+SHA-256-Digest: 4jVbJYs4Yhkmmj49shNH5lZJBjzRxKhG16jPosuohd4=
+
+Name: jzebra/PrintHTML.class
+SHA-256-Digest: GQYm5E5wcWqxnajod+L51tspmkNe0wnIRYJz1fEGubk=
+
+Name: jzebra/PrintServiceMatcher.class
+SHA-256-Digest: UakTMvToeRlqsDoYvb13pZ7LwVcl2OYlvQiAdb88iPw=
+
+Name: META-INF/INDEX.LIST
+SHA-256-Digest: /JkCHyT+0CgAEoX981oT057zz7rnktG8q/bTNA92bVk=
+
+Name: jzebra/PrintRaw.class
+SHA-256-Digest: LKKV+M3EwgDSeFPE2JIDhyjV9XUyMO/pjLgu6gzdlC0=
+

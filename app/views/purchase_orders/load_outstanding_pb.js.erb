@@ -1,0 +1,4 @@
+chooseProductManual();
+<% @products.each{|prod| %>
+  $('#list_detail').append("<%= j(render 'shared/tr_detail', product: prod, key: "#{Time.now.to_i}#{prod.id}", show_barcode: params[:transaction_type] == 'product_mutation', show_price: params[:transaction_type] != 'product_mutation', quantity: ProductDetail.find_by_product_id_and_warehouse_id(prod.id, params[:head_office_id]).po_stock, transaction_type: 'purchase_order') %>")
+<% } %>

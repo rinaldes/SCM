@@ -1,0 +1,5 @@
+<div class="widget-body no-padding">
+    <%= form_for @monthly_forecast, url: finances_forecast_monthly_forecast_path(@monthly_forecast.forecast_id, @monthly_forecast.id), html: {class: "smart-form", id: "form-update-verify", :multipart => true} do |f| %>
+        <%= render partial: 'form',  locals: { f: f }%>
+    <% end %>
+</div>

@@ -1,0 +1,7 @@
+<% if @receiving.errors.full_messages.present? %>
+  <%= render 'layouts/errors' %>
+  window.scrollTo(0, 0);
+  $('#button_submit').button('reset');
+<% else %>
+  window.location.href = '/receivings'
+<% end %>

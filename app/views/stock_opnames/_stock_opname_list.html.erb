@@ -1,0 +1,37 @@
+<% @stock_opnames.each_with_index do |sop, i| %>
+  <% qty_virtual = sop.stock_opname_details.where("qty_virtual IS NOT NULL").map(&:qty_virtual).sum %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= link_to sop.opname_number, sop.status == 'COMPLETED' ? stock_opname_url(sop) : edit_stock_opname_url(sop) %></span></td>
+    <td class="hidden-phone"><%= sop.so_type %></td>
+    <td class="hidden-phone"><%= sop.status %></td>
+    <td class="hidden-phone punya_toko"><%= sop.office.office_name %></td>
+    <td class="hidden-phone"><%= sop.start_date.strftime('%d-%m-%Y') %></td>
+    <td class="hidden-phone"><%= sop.end_date.strftime('%d-%m-%Y') rescue '' %></td>
+    <td class="hidden-phone"><%= sop.system_stock %></td>
+    <td class="hidden-phone"><%= sop.sold rescue '' %></td>
+    <td class="hidden-phone"><%= sop.received_from_transfer rescue '' %></td>
+    <td class="hidden-phone"><%= sop.retur rescue '' %></td>
+    <td class="hidden-phone"><%= sop.mutation_in rescue '' %></td>
+    <td class="hidden-phone"><%= sop.mutation_out %></td>
+    <td class="hidden-phone"><%= qty_virtual %></td>
+    <td class="hidden-phone"><%= sop.actual_stock %></td>
+    <td class="hidden-phone"><%= sop.actual_stock.to_i - qty_virtual %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=15>
+    <% if @stock_opnames.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@sops, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>
+<!-- <tr>
+  <td colspan=10>
+    <%#= will_paginate @sops %>
+  </td>
+</tr> -->

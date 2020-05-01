@@ -1,0 +1,36 @@
+<fieldset>
+    <section>
+        <%= link_to_add_association 'Add New', f, :monthly_forecasts,:"data-association-insertion-node" => "tbody#monthly-forecasts", :"data-association-insertion-method" => "append", :partial => "new_monthly_forecast_fields", :class => "btn btn-primary btn-sm" %>
+    </section>
+    <section>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Target Qty</th>
+                        <th>Target Amount</th>
+                        <th>Realization Qty</th>
+                        <th>Realization Amount</th>
+                        <th>% Qty</th>
+                        <th>% Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="monthly-forecasts">
+                    <%= f.fields_for :monthly_forecasts do |monthly_forecast| %>
+                        <%= render 'new_monthly_forecast_fields', f: monthly_forecast %>
+                    <% end %>
+                    <%= hidden_field_tag 'year', @forecast.year.to_date.year, id: "forecast-year" %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</fieldset>
+
+<footer>
+    <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-forecast", data: { :disable_with => "Please wait..." }  %>
+    <button type="button" class="btn btn-default" onclick="window.history.back();">
+        Back
+    </button>
+</footer>

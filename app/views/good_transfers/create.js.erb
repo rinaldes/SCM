@@ -1,0 +1,7 @@
+<% if @good_transfer.errors.full_messages.present? %>
+  <%= render 'layouts/errors' %>
+  $('#button_submit').button('reset');
+  window.scrollTo(0, 0);
+<% else %>
+  window.location = '/good_transfers'
+<% end %>

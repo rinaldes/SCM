@@ -1,0 +1,219 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>End Shift</li>
+  </ol>
+</div>
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12">
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+          <% @sod_eod = @session %>
+          <form class="smart-form">
+            <fieldset>
+              <div class="row">
+                <section class="col col-md-4">
+                  <section>
+                    <label class="col-md-4">Store</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @session.office.office_name %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Username</label>
+                    <label class="col-md-8 input custom-input-box"><%= @session.user.username %></label>
+                  </section>
+                </section>
+                <section class="col col-md-4">
+                  <section>
+                    <label class="col-md-4">Start Date</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @session.start_time.strftime("%d-%m-%Y") rescue '-' %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Start Time</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @session.start_time.in_time_zone(ActiveSupport::TimeZone.new("Jakarta")).strftime("%H:%M:%S") rescue '-' %>
+                    </label>
+                  </section>
+                </section>
+                <section class="col col-md-4">
+                  <section>
+                    <label class="col-md-4">End Date</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @session.end_time.strftime("%d-%m-%Y") rescue '-' %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">End Time</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @session.end_time.in_time_zone(ActiveSupport::TimeZone.new("Jakarta")).strftime("%H:%M:%S") rescue '-' %>
+                    </label>
+                  </section>
+                </section>
+              </div>
+              <hr>
+              <div class="row">
+                <section class="col col-md-4">
+                  <section>
+                    <section class="col-md-10">
+                      <header><b>Cash</b></header>
+                    </section>
+                    <label class="col-md-4">Cash Income</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= text_field_tag "cash_income", @sod_eod.end_amount, {class: "input-sm ended"} %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-3 btn btn-default ended" onclick="save_income()">Save</label>
+                  </section>
+                </section>
+                <section class="col col-md-4">
+                  <section>
+                    <section class="col-md-10">
+                      <header><b>Sales</b></header>
+                    </section>
+                    <label class="col-md-4">Net Sales</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.total_cash_sales %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Net Return</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.retur %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">PPn</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.ppn %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4"><b>Total Sales</b></label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.total_sales %>
+                    </label>
+                  </section>
+                </section>
+                <section class="col col-md-4">
+                  <section>
+                    <section class="col-md-10">
+                      <header><b>Actual</b></header>
+                    </section>
+                    <label class="col-md-4">Cash</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.cash %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Cash Income</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.end_amount %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Debit</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.debit %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Credit</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.credit %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Voucher</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.voucher %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Claim Promo</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.claim_promo || 0 %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4"><b>Total Actual</b></label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.actual_end_amount %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Variance</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.difference %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Variance Paid</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= text_field_tag "v_paid", @sod_eod.paid_difference, {class:"input-sm ended"} %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-4">Receipt Count</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= @sod_eod.receipt_count %>
+                    </label>
+                  </section>
+                </section>
+              </div>
+            </fieldset>
+            <footer>
+              <%= link_to 'Print To PDF', print_to_pdf_close_shift_url(params[:id]), class: 'btn btn-primary' if @session.end_time.present? %>
+              <button type="button" class="btn btn-success ended" onclick="end_shift(<%= params[:id] %>)">End</button>
+              <%= link_to "Back", close_shifts_path, class: "btn btn-default" %>
+            </footer>
+            </form>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  <% if @session.end_time.present? %>
+    $(".ended").prop('disabled', true)
+    $(".ended").addClass('disabled')
+  <% end %>
+});
+
+function end_shift(idnya){
+  $.ajax({
+    url: "/close_shifts/tutup_shift?&shift="+($('#shift').length == 1 ? $('#shift').val() : '')+
+     "&v_paid="+($('#v_paid').length == 1 ? $('#v_paid').val() : '')+
+     "&cash_income="+($('#cash_income').length == 1 ? $('#cash_income').val() : '')+
+     "&id="+idnya,
+    method: "get",
+    data: {
+      },
+      dataType: "script"
+  })
+}
+
+function save_income(){
+  $.ajax({
+    url: "/close_shifts/save_income?&shift="+($('#shift').length == 1 ? $('#shift').val() : '')+
+     "&cash_income="+($('#cash_income').length == 1 ? $('#cash_income').val() : '')+
+     "&id="+ <%= params[:id] %>,
+    method: "get",
+    data: {
+      },
+      dataType: "script"
+  })
+}
+</script>

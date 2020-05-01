@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data>Flag</Data></Cell>
+        <Cell><Data>Periode</Data></Cell>
+        <Cell><Data>Supplier</Data></Cell>
+        <Cell><Data>Location</Data></Cell>
+        <Cell><Data>Doc No</Data></Cell>
+        <Cell><Data>Date</Data></Cell>
+        <Cell><Data>Gross</Data></Cell>
+        <Cell><Data>Tax</Data></Cell>
+        <Cell><Data>Amount</Data></Cell>
+      </Row>
+    <% tgl_sementara = "01/01/1000".to_date %>
+    <% @receivings.all.each do |rec| %>
+      <% if tgl_sementara < rec.date %>
+        <% @returns.where(date: rec.date).each do |rec2| %>
+            <% dpp = 0 %>
+            <% product = [] %>
+            <% rec2.returns_to_supplier_details.each do |rtsd| %>
+              <% pp = rtsd.purchase_price.to_i * rtsd.quantity.to_i %>
+              <% dpp += pp %>
+              <% product << rtsd.product.flag_pajak %>
+            <% end %>
+            <% ppn = 0 %>
+            <% ppn = dpp * 0.1 if (rec2.supplier.status_pkp rescue true) %>
+            <Row>
+              <Cell><Data ss:Type="String"><%= rec2.flag_type %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= @periode %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rec2.supplier.try(:name) %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= Office.find(rec2.head_office_id).try(:office_name) %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= rec2.number %></Data></Cell>
+              <Cell><Data ss:Type="Date"><%= rec2.date.strftime("%d/%m/%Y") %></Data></Cell>
+              <Cell><Data ss:Type="Number"><%= dpp %></Data></Cell>
+              <Cell><Data ss:Type="Number"><%= ppn %></Data></Cell>
+              <Cell><Data ss:Type="Number"><%= ppn + dpp %></Data></Cell>
+            </Row>
+          <% tgl_sementara = rec2.date %>
+        <% end %>
+      <% end %>
+
+      <% dpp = rec.receiving_details.map{|a|a.quantity.to_f*a.hpp.to_f}.sum rescue 0 %>
+      <% ppn = (rec.supplier.status_pkp rescue true) ? (dpp.to_f * 0.1) : 0 %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= rec.flag_type %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= @periode %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= rec.supplier.try(:name) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= rec.head_office.try(:office_name) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= rec.number %></Data></Cell>
+        <Cell><Data ss:Type="Date"><%= rec.date.strftime("%d/%m/%Y") %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= dpp %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= ppn %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= ppn + dpp %></Data></Cell>
+      </Row>
+    <% end %>
+    <% @sales.each do |rec2| %>
+        <Row>
+          <Cell><Data ss:Type="String">C</Data></Cell>
+          <Cell><Data ss:Type="String"><%= @periode %></Data></Cell>
+          <Cell><Data></Data></Cell>
+          <Cell><Data ss:Type="String"><%= rec2.kode_toko %></Data></Cell>
+          <Cell><Data></Data></Cell>
+          <Cell><Data ss:Type="Date"><%= @periode2 %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= rec2.capital_price %></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

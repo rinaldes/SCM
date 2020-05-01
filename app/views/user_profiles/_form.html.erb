@@ -1,0 +1,80 @@
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>User Profile</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-User">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> User Profile</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @user_profile, url: update_profile_user_profile_url(@user_profile), html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-6">
+                      <section class="form-group">
+                        <label class="col-md-3 label">First Name <span class='important'>*</span></label>
+                        <label class="col-md-7 input custom-input-box"><%= f.text_field :first_name, class: "input-sm" %></label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Last Name</label>
+                        <label class="col-md-7 input custom-input-box"><%= f.text_field :last_name, class: "input-sm" %></label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Username <span class='important'>*</span></label>
+                        <label class="col-md-7 input custom-input-box"><%= f.text_field :username, class: "input-sm" %></label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Role</label>
+                        <label class="col-md-7 custom-input-box">
+                          <%= current_user.role.name %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Status</label>
+                        <label class="col-md-4"><%= current_user.status%></label>
+                      </section>
+                    </section>
+                    <section class="col col-md-6">
+                      <section class="form-group">
+                        <label class="col-md-3 label">Email <span class='important'>*</span></label>
+                        <label class="col-md-7 input custom-input-box"><%= f.email_field :email, class: "input-sm" %></label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Password <span class='important'>*</span></label>
+                        <label class="col-md-7 input custom-input-box"><%= f.password_field(:password, value: current_user.password, class: "input-sm") %></label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Office</label>
+                        <label class="col-md-7 custom-input-box">
+                          <%= current_user.head_office.office_name rescue '-' %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Store</label>
+                        <label class="col-md-7 custom-input-box">
+                          <%= current_user.branch.office_name rescue '-' %>
+                        </label>
+                      </section>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

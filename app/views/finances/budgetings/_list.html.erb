@@ -1,0 +1,14 @@
+<% @budgetings.each do |budget| %>
+    <tr>
+        <td><%= link_to budget.year.year, finances_budgeting_path(budget.id) %></td>
+        <td><%= format_currency(budget.monthly_budgets.sum(:initial_budget)) %></td>
+        <td><%= format_currency(budget.monthly_budgets.sum(:additional_budget)) %></td>
+        <td><%= format_currency(budget.monthly_budgets.sum(:initial_budget)+budget.monthly_budgets.sum(:additional_budget)) %></td>
+        <td><%= format_currency(budget.get_year_realization) %></td>
+        <td><%= number_to_percentage(budget.get_year_realization_in_percent, precision: 0) %></td>
+        <td>
+            <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), finances_budgeting_path(budget.id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+            <%= link_to raw('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>'), 'javascript:void(0)', onclick: "delete_one(#{budget.id}, 'budgetings')", class: "btn btn-danger btn-xs custom-edit-btn" %>
+        </td>
+    </tr>
+<% end %>

@@ -1,0 +1,93 @@
+<% total_awal_qty = 0 %>
+<% total_awal_price = 0 %>
+<% total_sales_qty = 0 %>
+<% total_sales_price = 0 %>
+<% total_sales_ppn = 0 %>
+<% total_receiving_qty = 0 %>
+<% total_receiving_price = 0 %>
+<% total_receiving_ppn = 0 %>
+<% total_gtr_qty = 0 %>
+<% total_gtr_price = 0 %>
+<% total_gtr_ppn = 0 %>
+<% total_gt_qty = 0 %>
+<% total_gt_price = 0 %>
+<% total_gt_ppn = 0 %>
+<% total_akhir_qty = 0 %>
+<% total_akhir_price = 0 %>
+<table class="table table-bordered table-striped" id='stock_table'>
+  <thead>
+    <tr>
+      <th rowspan=2>Item Code</th>
+      <th rowspan=2>Item Name</th>
+      <th colspan=2>Start</th>
+      <th colspan=2>Sales</th>
+      <th colspan=2>BPB</th>
+      <th colspan=2>End</th>
+    </tr>
+    <tr>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+      <th>Qty</th>
+      <th>Rp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% product_mutation_histories.each{|pmh| %>
+      <% sales_qty = stocks["qty_#{pmh[0]}_Sales"].to_f %>
+      <% if pmh[0].present? && sales_qty > 0 %>
+        <% awal = ProductMutationHistory.where("product_mutation_histories.id IN (#{ProductMutationHistory.select("MIN(product_mutation_histories.id) AS min_id, product_detail_id")
+          .joins(product_detail: :product).where("product_id=#{pmh[0].id} AND product_mutation_histories.id IN (#{pmh[1].map(&:id).join(',')})").group(:product_detail_id).map(&:min_id).join(',')})") %>
+        <% awal_qty = awal.map(&:old_quantity).sum %>
+        <% awal_price = awal.map{|pd|pd.price/pd.moved_quantity*pd.old_quantity}.sum %>
+        <% total_awal_qty += awal_qty %>
+        <% total_awal_price += awal_price %>
+        <% total_sales_qty += sales_qty %>
+        <% sales_price = stocks["price_#{pmh[0]}_Sales"].to_f %>
+        <% total_sales_price += sales_price %>
+        <% sales_ppn = stocks["ppn_#{pmh[0]}_Sales"].to_f %>
+        <% total_sales_ppn += sales_ppn %>
+        <% receiving_qty = stocks["qty_#{pmh[0]}_Receiving"].to_f %>
+        <% total_receiving_qty += receiving_qty %>
+        <% receiving_price = stocks["price_#{pmh[0]}_Receiving"].to_f %>
+        <% total_receiving_price += receiving_price %>
+        <% receiving_ppn = stocks["ppn_#{pmh[0]}_Receiving"].to_f %>
+        <% total_receiving_ppn += receiving_ppn %>
+        <% gtr_qty = stocks["qty_#{pmh[0]}_Good Transfer Receipt"].to_f %>
+        <% total_gtr_qty += gtr_qty %>
+        <% gtr_price = stocks["price_#{pmh[0]}_Good Transfer Receipt"].to_f %>
+        <% total_gtr_price += gtr_price %>
+        <% gtr_ppn = stocks["ppn_#{pmh[0]}_Good Transfer Receipt"].to_f %>
+        <% total_gtr_ppn += gtr_ppn %>
+        <% gt_qty = stocks["qty_#{pmh[0]}_Good Transfer"].to_f %>
+        <% total_gt_qty += gt_qty %>
+        <% gt_price = stocks["price_#{pmh[0]}_Good Transfer"].to_f %>
+        <% total_gt_price += gt_price %>
+        <% gt_ppn = stocks["ppn_#{pmh[0]}_Good Transfer"].to_f %>
+        <% total_gt_ppn += gt_ppn %>
+        <% akhir = ProductMutationHistory.where("product_mutation_histories.id IN (#{ProductMutationHistory.select("MAX(product_mutation_histories.id) AS max_id, product_detail_id")
+          .joins(product_detail: :product).where("product_id=#{pmh[0].id}").group(:product_detail_id).map(&:max_id).join(',')})") %>
+        <% akhir_qty = akhir.map(&:new_quantity).sum %>
+        <% akhir_price = akhir.map{|pd|pd.price/pd.moved_quantity*pd.new_quantity}.sum rescue 0 %>
+        <% total_akhir_qty += akhir_qty %>
+        <% total_akhir_price += akhir_price %>
+        <tr>
+          <td><%= pmh[0].article %></td>
+          <td><%= pmh[0].description %></td>
+          <td class='align-right'><%= format_currency awal_qty %></td>
+          <td class='align-right'><%= format_currency awal_price %></td>
+          <td class='align-right'><%= format_currency sales_qty %></td>
+          <td class='align-right'><%= format_currency sales_price %></td>
+          <td class='align-right'><%= format_currency receiving_qty %></td>
+          <td class='align-right'><%= format_currency receiving_price %></td>
+          <td class='align-right'><%= format_currency akhir_qty %></td>
+          <td class='align-right'><%= format_currency akhir_price %></td>
+        </tr>
+      <% end %>
+    <% } %>
+  </tbody>
+</table>
+

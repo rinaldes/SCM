@@ -1,0 +1,148 @@
+<% retur_counts = 0 %>
+  <thead id="sale-list">
+    <tr>
+      <th>Item Code
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'article-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'article-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Item Name
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Supplier Name
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'description-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'description-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Sales Price
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'total_price-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'total_price-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Sales Qty
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'quantity-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'quantity-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Retur sales
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'retur-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'retur-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>PPN
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'ppn-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'ppn-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Sales Net
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sales_net-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sales_net-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>HPP
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'hpp-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'hpp-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Margin Rp
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_rp-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_rp-asc', class: 'sorting' %>
+        </span>
+      </th>
+      <th>Margin %
+        <span style="float: right;" class="hide">
+          <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'margin_persen-desc', class: 'sorting hide' %>
+          <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'margin_persen-asc', class: 'sorting' %>
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="hasinput"><%= text_field_tag :article, params[:article], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th class="hasinput"><%= text_field_tag :description, params[:description], class: 'form-control', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control', name: 'suppliers.name', onkeydown: "enter_pressed(event);" %>
+      </th>
+      <th colspan="9"></th>
+    </tr>
+  </thead>
+  <tbody id="sale_list">
+    <% sales.each{|sale| %>
+      <% sales_retur = SalesDetail.where("article='#{sale.article}' AND quantity<0").joins(:product) %>
+      <% retur = sales_retur.map(&:quantity).sum*-1 rescue 0 %>
+      <% hpp = sale.capital_price rescue 0 %>
+      <% margin_rp = sale.total_price-sale.ppn-sale.capital_price+(sales_retur.map(&:total_price).sum+sales_retur.map(&:ppn).sum+sales_retur.map(&:capital_price).sum) rescue 0 %>
+      <% net_sales = sale.total_price-sale.ppn rescue 0 %>
+      <tr>
+        <td><%= sale.article %></td>
+        <td><%= sale.description %></td>
+        <!-- <td><%#= ProductSupplier.where("product_id=#{Product.find_by_article(sale.article).id}").order("id DESC").first.supplier.name rescue '' %></td> -->
+        <td><%= sale.supplier_name rescue '' %></td>
+        <td class='align-right'><%= format_currency sale.total_price rescue 0 %></td>
+        <td class='align-right'><%= format_currency sale.quantity rescue 0 %></td>
+        <td class='align-right'><%= format_currency retur rescue 0 %></td>
+        <td class='align-right'><%= format_currency sale.ppn rescue 0 %></td>
+        <td class='align-right'><%= format_currency net_sales %></td>
+        <td class='align-right'><%= format_currency hpp rescue 0 %></td>
+        <td class='align-right'><%= format_currency margin_rp %></td>
+        <td class='align-right'><%= hpp == 0 ? 0 : (margin_rp.to_f/net_sales.to_f*100).round(2) %>%</td>
+      </tr>
+      <% retur_counts += retur %>
+    <% } %>
+    <tr>
+      <th colspan=3>Total</th>
+      <th class='align-right'><%= format_currency sales.map(&:total_price).sum rescue 0 %></th>
+      <th class='align-right'><%= format_currency sales.map(&:quantity).sum rescue 0 %></th>
+      <th class='align-right'><%= format_currency retur_counts rescue 0 %></th>
+      <th class='align-right'><%= format_currency sales.map(&:ppn).sum rescue 0 %></th>
+      <th class='align-right'><%= format_currency sales.map{|sale|sale.total_price-sale.ppn}.sum rescue 0 %></th>
+      <th class='align-right'><%= format_currency sales.map(&:capital_price).sum rescue 0 %></th>
+      <th class='align-right'><%= format_currency sales.map{|sale|sale.total_price-sale.ppn-sale.capital_price}.sum rescue 0 %></th>
+      <th class='align-right'><%= (sales.map{|sale|sale.total_price-sale.ppn-sale.capital_price}.sum/sales.map{|sale|sale.total_price-sale.ppn}.sum.to_f*100).round(2) rescue 0 %>%</th>
+    </tr>
+  </tbody>
+<script>
+  $('.sorting').click(function(){
+          reload_list({sort: this.id})
+          $(this).addClass('hide')
+          if($(this).attr('id').split('-')[1] == 'desc')
+            $(this).next().removeClass('hide')
+          else
+            $(this).prev().removeClass('hide')
+        })
+  function reload(){
+    $.ajax({
+      url: "/reports/sale_item_reports?&dari=item"+
+            "&article="+($('#article').length == 1 ? $('#article').val() : '')+
+            "&store_code="+($('#store_code').length == 1 ? $('#store_code').val() : '')+
+            "&description="+($('#description').length == 1 ? $('#description').val() : '')+
+            "&supplier_name="+($('#supplier_name').length == 1 ? $('#supplier_name').val() : '')+
+            "&start_date="+$('#start_date').val()+
+            "&end_date="+$('#end_date').val(),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+    $('#export_to_xls').attr('href', "/reports/sale.xls?locale=en&"+$("form").serialize())
+  }
+
+  function enter_pressed(e){
+    if(e.keyCode == 13) // enter key
+    {
+        reload();
+    }
+  }
+</script>

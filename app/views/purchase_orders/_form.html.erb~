@@ -1,0 +1,345 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Purchase Order</li><li>New</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>New Purchase Order</h2>
+        </header>
+        <div> <!-- widget div-->
+          <div class="widget-body no-padding"> <!-- widget content -->
+            <%= form_for @purchase_order, html: {class: "smart-form", id: "form-update-verify", multipart: true} do |f| %>
+              <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+              <%= f.hidden_field :status %>
+              <%= hidden_field_tag :purchase_request_list %>
+              <%= hidden_field_tag :ref_transaction %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-6">
+                      <div class="row">
+                        <label class="col-md-2 label">Send To</label>
+                        <label class="col-md-10 input custom-input-box">
+                          <%= f.select :head_office_id, options_for_select((Warehouse.all+Branch.all).map{|branch|["#{branch.class == Warehouse ? 'Warehouse' : 'Store'}: #{branch.office_name}", branch.id]}),
+                            {include_blank: 'Please Select'}, class: 'origin_branch_id form-control ho_id', onchange: "data_terisi_semua();" %>
+                        </label>
+                      </div>
+                    <div class="row">
+                      <label class="label col-md-2">PO No.</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :number, class: "input-sm", readonly: true %></label>
+                    </div>
+                    <div class="row">
+                      <label class="label col-md-2">PO Date</label>
+                      <label class="col-md-10 input custom-input-box"><%= f.text_field :date, class: "input-sm", readonly: true %></label>
+                    </div>
+                    <div class="row">
+                      <label class="label col-md-2">TOP</label>
+                      <label class="col-md-1 input custom-input-box po_top"><%= f.text_field :top, class: "input-sm" %></label>
+                      <label class="label col-md-1"></label>
+                      <label class="label col-md-8">Days</label>
+                    </div>
+                    <div class="row">
+                      <section>
+                      <label class="col-md-2 label">Note </label>
+                      <label class="col-md-10 textarea custom-input-box"><%= f.text_area :note, :class => "input-sm" %></label>
+                    </section>
+                    </div>
+                    </section>
+                    <section class="col col-md-6">
+                      <div class="row">
+                        <section class="col col-md-12">
+                          <label for="" class="label col-md-3">Supplier Code</label>
+                          <label for="" class="label col-md-9">
+                            <label class="supl_code">None is choosen</label><button type="button" class="btn btn-primary btn-sm" onclick="$('#modalSupplier').modal()" style="margin-left: 10px;">Browse</button>
+                          </label>
+                        </section>
+                      </div>
+                      <div class="row">
+                        <section class="col col-md-12">
+                          <label for="" class="label col-md-3">Supplier Name</label>
+                          <label for="" class="label col-md-9 supl_name"></label>
+                        </section>
+                      </div>
+                      <div class="row">
+                        <section class="col col-md-12">
+                          <label for="" class="label col-md-3">Supplier Address</label>
+                          <label for="" class="label col-md-9 supl_address"></label>
+                        </section>
+                      </div>
+                    </section>
+                    <section class="col col-md-4">
+                      <label class="col-md-3 label">Expected Date</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :expected_delivery_date, class: "input-sm", value: (Time.now.tomorrow).strftime('%Y-%m-%d') %></label>
+                    </section>
+                    <section class="col col-md-4">
+                      <label class="col-md-3 label">Due Date</label>
+                      <label class="col-md-9 input custom-input-box"><%= f.text_field :due_date, class: "input-sm", value: (Time.now.tomorrow.tomorrow).strftime('%Y-%m-%d') %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <fieldset style="padding-left: 0px;" class='hide'>
+                <div class='row'>
+                  <section class="col col-md-12">
+                    <section class="col col-md-4">
+                      <label class="col-md-3 label">PR No.</label>
+                      <label class="col-md-6 input custom-input-box">
+                        <%= f.hidden_field :purchase_request_id, class: "input-sm" %>
+                        <%= text_field_tag :purchase_request_number, (@request.number rescue ''), class: 'input-sm' %>
+                      </label>
+                      <label class="col-md-3 input custom-input-box">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="searchPR()" style="margin-left: 10px;">Browse</button>
+                      </label>
+                      <button type="button" class="btn btn-primary btn-sm" onclick="add_pr_to_po($('#purchase_request_number').val())">Add PR to PO</button>
+                    </section>
+                    <section class="col col-md-4">
+                      <label class="col-md-3 label">PR DATE </label>
+                      <label class="col-md-9 input custom-input-box"><%= text_field_tag :pr_date, "", :class => "input-sm", disabled: true %></label>
+                    </section>
+                    <section class="col col-md-4">
+                      <label class="col-md-3 label">PR NOTE </label>
+                      <label class="col-md-9 textarea custom-input-box"><%= text_area_tag :pr_note, "", :class => "input-sm", disabled: true %></label>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <%= render "/purchase_requests/product_search" %>
+              <div class="choose-product-manual" hidden>
+                <fieldset class="col col-md-12">
+                  <div class="row">
+                    <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                      <thead>
+                        <tr>
+                          <th>ITEM CODE</th>
+                          <th>NAME</th>
+                          <th>PURCHASE COST</th>
+                          <th>QTY</th>
+                          <th>UNIT</th>
+                          <th>SUBTOTAL</th>
+                          <th class="col-md-1">ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody id='list_detail'>
+                        <%= render 'list_detail' if params[:action] == 'edit' %>
+                      </tbody>
+                    </table>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="choose-product-manual" hidden>
+              <footer >
+                <button type="button" class="btn btn-info" onclick="return(beforeSavePO())">
+                  Print To PDF
+                </button>
+                <button type="button" class="btn btn-primary" onclick="$('#purchase_order_status').val('APPROVED');return(beforeSavePO())">
+                  Approve
+                </button>
+                <button type="button" class="btn btn-info" onclick="$('#purchase_order_status').val('WAITING APPROVAL');return(beforeSavePO())">
+                  Save
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+              </div>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<%= render 'shared/modal_supplier' %>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="prModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="transaction_history" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  function beforeSavePO(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      $('footer button').attr('disabled', 'disabled')
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span:eq(0)").text());
+      }
+      $("#good_list").val(good_id.toString());
+
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/purchase_orders",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            $('footer button').removeAttr('disabled')
+          },
+        });
+      }, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  $(document).ready(function() {
+    data_terisi_semua();
+    autocomplete_barcode();
+    <% if session[:barcode].present? %>
+      changeBarcode('<%= session[:barcode] %>')
+    <% end %>
+    clone_details();
+    $("#tombol-export").change(function() {
+        data_terisi_semua();
+    });
+    $("#number").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+
+    $("#purchase_request_number").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/purchase_requests/autocomplete_purchase_request",
+          dataType: "json",
+          data: {term: request.term, supplier_id: $('.supplier_id').val(), status: "'WAITING APPROVAL'", present_pr: $('#ref_transaction').val()},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      select: function( event, ui ) {
+        $('#pr_date').val(ui.item.pr_date)
+        $('#pr_note').html(ui.item.pr_note)
+        $('#ref_transaction').val(($('#ref_transaction').val() == '' ? "'" + ui.item.value : $('#ref_transaction').val()+", '"+ui.item.value) + "'")
+      },
+      minLength: 1
+    });
+  });
+
+  function reset_quantity(){
+    $('.modal td input.qty').each(function(){
+    })
+  }
+
+  function getProduct(){
+    $.ajax({
+      url: '<%= get_product_purchase_requests_path %>',
+      type: 'get',
+      data: {
+        barcode: $("#number").val()
+      }
+    })
+  }
+
+  function getSupplier(){
+    $.ajax({
+      url: '<%= get_supplier_purchase_orders_path %>',
+      type: 'get',
+      data: {
+        name: $("#supplier_name").val()
+      }
+    })
+  }
+
+  function add_pr_to_po(number){
+    var date = new Date();
+    $.ajax({
+      url: '/purchase_orders/add_product_pr',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+      }
+    })
+  }
+
+  function nomor_ganti(){
+  }
+
+  function getPR(){
+    $.ajax({
+      url: '<%= get_purchase_request_purchase_orders_path %>',
+      type: 'get',
+      data: {
+        number: $("#purchase_request_number").val()
+      }
+    })
+  }
+
+  function reset_form(){
+    document.getElementById("form_request").reset();
+    $("#request tboby").html("");
+  }
+
+  function get_size(product_id, quantity){
+    $.ajax({
+        url: '/purchase_orders/get_size',
+        type: 'get',
+        data: {
+          product_id: product_id,
+          quantity : quantity
+        }
+    })
+  }
+
+  function view_transaction_history(barcode){
+    $.ajax({
+      url: '/products/transaction_history?barcode='+barcode,
+      method: "get",
+      dataType: "script"
+    });
+  }
+
+  function changeBarcode(barcode){
+    $("#number").val(barcode);
+    getProduct()
+
+    $("#myModal").modal('hide');
+  }
+
+  function importProductFile(){
+    $(".import-product-from-file").show();
+    $(".choose-product-manual").hide();
+    data_terisi_semua()
+  }
+
+  function chooseProductManual(){
+    $(".import-product-from-file").hide();
+    $(".choose-product-manual").show();
+    data_terisi_semua()
+  }
+
+  function data_terisi_semua(){
+    if($("#purchase_order_head_office_id").val() != "" && $("#purchase_order_top").val() != "" && $("#purchase_order_supplier_id").val() != "" && $("#import_excel").val() != ''){
+      $(".tombol-export").prop('disabled', false);
+    }
+    else{
+      $(".tombol-export").prop('disabled', true);
+    }
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

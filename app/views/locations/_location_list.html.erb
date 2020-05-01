@@ -1,0 +1,34 @@
+<% locations.each_with_index do |location, i| %>
+  <% idx = params[:page] ? (params[:page].to_i*10+i-9) : i+1 %>
+  <tr>
+    <td class="hidden-phone"><%= idx %></td>
+    <!-- <td rowspan=<%= location.children_size+1 rescue 1%>><span class="name"><%= location.location.code rescue '' %></span></td> -->
+    <td rowspan=<%= location.children_size+1 rescue 1%>><span class="name"><%= link_to location.name, location_path(location), class: 'blue' rescue '' %></span></td>
+    <!-- <td rowspan=<%= location.children_size+1 rescue 1%>><span class="name"><%= location.jenis  rescue '' %></span></td> -->
+    <td rowspan=<%= location.jenis%>><%= location.jenis%></td>
+    <td><span class="name"><%= location.code %></span></td>
+    <td class="hidden-phone">
+      <%= location.name %>
+    </td>
+    <td class="hidden-phone" rowspan=<%= location.children_size+1 rescue 1%>>
+      <%= link_to edit_location_path(location), class: "btn btn-primary btn-xs custom-edit-btn" do %>
+        <i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{location.id}, 'locations')", class: "btn btn-danger btn-xs custom-edit-btn" do %>
+        <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+      <% end %>
+    </td>
+  </tr>
+  <%= render partial: 'locations', locals: {i: idx, locations: location.locations, spliter: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"} if location.locations.present? %>
+<% end %>
+<tr>
+  <td colspan=6>
+    <% if locations.present? %>
+      <!-- <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(locations, options = {}) %>
+      </div> -->
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

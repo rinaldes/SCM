@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:order) %></li><li><%= t(:mobile_backend) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id="notice_template"><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span><%= t(:mobile_purchase_list) %></h2></header>
+          <div style='overflow-y: hidden;'>
+            <fieldset>
+              <div class="row">
+                <section class="col col-md-6">
+                  <section>
+                    <label class="col-md-3">Group By</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= select_tag :group_by, options_for_select(["Struk", "Item", "Member-Price", "Member-Item", "Sales-Summary Item", "Cashier"]), {class:"form-control search"} %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-3">Transaction Date</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= text_field_tag :start, '', class:"form-control search datepicker_form" %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-3">
+                      <div class="btn btn-primary" onclick="load()">Load</div>
+                    </label>
+                  </section>
+                </section>
+                <section class="col col-md-6">
+                  <section>
+                    <label class="col-md-3">Parent Store</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= select_tag :store, options_for_select([["All Store", 0]] + Office.active_store.map{|reg|[reg.office_name, reg.id]}), {class:"form-control search"} %>
+                    </label>
+                  </section>
+                  <section>
+                    <label class="col-md-3">To</label>
+                    <label class="col-md-8 input custom-input-box">
+                      <%= text_field_tag :to, '', class:"form-control search datepicker_form" %>
+                    </label>
+                  </section>
+                </section>
+              </div>
+              <br>
+            </fieldset>
+            <table class="table table-bordered tablenya" width="100%">
+              <%= render 'struck' %>
+            </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+<script type="text/javascript">
+  $(function () {
+    <% unless request.path.start_with?('/mobile_reports') %>
+      $("#group_by").prop("disabled", true);
+      $(".m_report").addClass("hide");
+    <% else %>
+      $(".m_transaction").addClass("hide");
+    <% end %>
+    <% if current_user.branch_id.present? %>
+      $("#store").val(<%= current_user.branch_id %>).change().prop("disabled",true);
+    <% end %>
+    $('.datepicker_form').datepicker({
+      dateFormat : 'dd-mm-yy',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>'
+    });
+  });
+
+  function load(){
+    $.ajax({
+      url: "/mobile_backends/search_sale?&group_by="+($('#group_by').length == 1 ? $('#group_by').val() : '')+
+       "&start="+($('#start').length == 1 ? $('#start').val() : '')+
+        <% unless request.path.start_with?('/mobile_reports') %>
+          "&type=pos"+
+        <% else %>
+          "&type=report"+
+        <% end %>
+       "&to="+($('#to').length == 1 ? $('#to').val() : '')+
+       "&store="+($('#store').length == 1 ? $('#store').val() : '')+
+       "&struck="+($('#struck').length == 1 ? $('#struck').val() : '')+
+       "&sku="+($('#sku').length == 1 ? $('#sku').val() : '')+
+       "&description="+($('#description').length == 1 ? $('#description').val() : '')+
+       "&status="+($('#status').length == 1 ? $('#status').val() : '')+
+       "&member="+($('#member').length == 1 ? $('#member').val() : '')+
+       "&kelurahan="+($('#kelurahan').length == 1 ? $('#kelurahan').val() : '')+
+       "&kecamatan="+($('#kecamatan').length == 1 ? $('#kecamatan').val() : '')+
+       "&city="+($('#city').length == 1 ? $('#city').val() : '')+
+       "&no_struck="+($('#no_struck').length == 1 ? $('#no_struck').val() : '')+
+       "&sales="+($('#sales').length == 1 ? $('#sales').val() : ''),
+      method: "get",
+      data: {
+        },
+        dataType: "script"
+    })
+  }
+
+  $(".pencarian").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+      load()
+    }
+  });
+</script>

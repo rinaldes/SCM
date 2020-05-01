@@ -1,0 +1,211 @@
+#main {
+    min-height: 800px;
+}
+
+#logo {
+    margin-top: 2px;
+}
+
+#ribbon .breadcrumb, #ribbon .breadcrumb a {
+    color: #fff !important;
+}
+
+#ribbon .breadcrumb li:last-child, #ribbon .breadcrumb > .active {
+    color: #fff;
+}
+
+.login-info {
+    border-color: transparent;
+}
+
+.login-info > span {
+    border-bottom: none;
+}
+
+aside {
+    background: transparent linear-gradient(to right, #001562  93%, #001562 100%) repeat scroll 0% 0%;
+}
+
+nav ul li a {
+    color: #FFF;
+}
+
+nav ul li a:hover {
+    background: #003762;
+}
+
+nav ul li a:focus {
+    color: #fff;
+}
+
+nav ul li a:active {
+    color: #ed9016 !important;
+}
+
+nav ul ul {
+    background: transparent linear-gradient(to right, #001562 93%, #001562 100%) repeat scroll 0% 0%;
+}
+
+nav ul li  ul li a:hover {
+    background: #003762;
+}
+
+nav ul li  ul li ul a {
+    color: #fff;
+}
+
+nav ul ul li::before {
+	border-top: 1px solid #C6C4C4
+}
+
+nav  ul li ul::before {
+    border-left: 1px solid #C6C4C4;
+}
+
+.minifyme {
+    border-bottom: 1px solid #9E0816;
+	background: #474544 none repeat scroll 0%;
+	color: #fff;
+}
+
+.minifyme :hover {
+	color: #fff;
+}
+
+.minified nav ul li ul {
+	background: #C6434F;
+}
+
+.minified nav ul ul li a {
+	background: #C6434F;
+}
+
+.minified nav ul ul li a:hover {
+	background: #001562;
+}
+
+.minified nav ul li ul {
+	border: none;
+}
+
+.minified nav > ul > li {
+    border-bottom: none;
+    border-top: none;
+}
+
+.jarviswidget-color-blueDark > header {
+    border-color: #001562 !important;
+    background: #001562 none repeat scroll 0% 0%;
+    color: #FFF;
+}
+
+.jarviswidget-color-blue > header {
+    border-color: #2A2725 !important;
+    background: #2A2725 none repeat scroll 0% 0%;
+    color: #FFF;
+}
+
+.bg-color-blue {
+    background-color: #001562 !important;
+}
+
+
+/* **** SUPPLIER - NEW **** */
+
+.custom-supplier-fieldset {
+    padding-left: 0 !important;
+    padding-right: 25px !important;
+    margin-bottom: 20px;
+    float: right;
+}
+
+.custom-supplier-fieldset .add_contact {
+    margin-bottom: 30px;
+}
+
+/* **** TYPES - NEW **** */
+
+#types-control-group {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+    #types-control-group .control-group {
+        background-color: #F9E8EA;
+        margin-top: 10px;
+        padding: 0 10px 10px 10px;
+        width: 500px;
+    }
+
+    #types-control-group .control-group .control-label {
+        margin-bottom: 8px;
+        margin-top: 5px;
+    }
+
+    #detail-sub-jenis h5 {
+        font-weight: bold;
+    }
+
+    #detail-sub-jenis table thead tr {
+
+    }
+
+    #detail-sub-jenis table thead tr th {
+        background-color: #BF1E2D;
+        color: white;
+    }
+
+#btn-reset-types-new {
+    margin-left: 8px;
+}
+
+
+/*GENERAL*/
+
+.custom-edit-btn, .edit-btn-dlt {
+    margin-bottom: 5px;
+}
+
+.edit-btn-primary {
+    margin: 20px 0 6px 6px;
+}
+
+.custom-input-box {
+   margin-bottom: 15px;
+}
+
+.text-rotation {
+    -ms-transform:rotate(270deg); /* IE 9 */
+    -moz-transform:rotate(270deg); /* Firefox */
+    -webkit-transform:rotate(270deg); /* Safari and Chrome */
+    -o-transform:rotate(270deg); /* Opera */
+    text-align: center;
+    width: 40px;
+    font-size: 20px;
+    margin-top: 660px;
+    letter-spacing: 2px;
+}
+
+.text-rotation-2 {
+    -ms-transform:rotate(270deg); /* IE 9 */
+    -moz-transform:rotate(270deg); /* Firefox */
+    -webkit-transform:rotate(270deg); /* Safari and Chrome */
+    -o-transform:rotate(270deg); /* Opera */
+    text-align: center;
+    width: 40px;
+    font-size: 20px;
+    margin-top: 330px;
+    letter-spacing: 2px;
+}
+
+.text-rotation-3 {
+    -ms-transform:rotate(270deg); /* IE 9 */
+    -moz-transform:rotate(270deg); /* Firefox */
+    -webkit-transform:rotate(270deg); /* Safari and Chrome */
+    -o-transform:rotate(270deg); /* Opera */
+    text-align: center;
+    width: 40px;
+    font-size: 15px;
+    margin-top: 85px;
+    letter-spacing: 2px;
+}

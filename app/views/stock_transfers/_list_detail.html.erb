@@ -1,0 +1,23 @@
+<% @list_product.each_with_index do |pd, i| %>
+<% product = pd.product %>
+<% quantity = pd.quantity rescue quantity %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= product.article %></td>
+    <td class="hidden-phone"><%= product.barcode %></td>
+    <td class="hidden-phone"><%= product.brand.name %></td>
+    <td class="hidden-phone"><%= product.description %></td>
+    <td>
+      <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{i}][id]", pd.id if pd.id? %>
+      <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{i}][product_id]", product.id %>
+      <%= hidden_field_tag "stock_transfer[stock_transfer_details_attributes][#{i}][_destroy]", 0 %>
+      <%= text_field_tag "stock_transfer[stock_transfer_details_attributes][#{i}][quantity]", quantity, style: 'width: 35px' %>
+    </td>
+    <td>
+      <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeDetail(this)">
+        <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+      </a>
+    </td>
+
+  </tr>
+<% end %>

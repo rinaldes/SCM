@@ -1,0 +1,33 @@
+<% @purchase_prices.each_with_index do |purchase_price, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><%= purchase_price.product.description %></td>
+    <td><%= purchase_price.product.article %></td>
+    <td><%= link_to purchase_price.product.barcode, purchase_price_path(purchase_price), class: 'blue' %></td>
+    <td><%= purchase_price.start_date %></td>
+    <td><%= purchase_price.end_date %></td>
+    <td><%= format_currency(purchase_price.price) %></td>
+    <td><%= format_currency(purchase_price.total_discount) %></td>
+    <td><%= format_currency(purchase_price.total_price_cost) %></td>
+    <td><%= format_currency(purchase_price.total_unit_cost) %></td>
+    <td class="hidden-phone">
+      <%= link_to edit_purchase_price_path(purchase_price), class: "btn btn-primary btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{purchase_price.id}, 'purchase_prices')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=11>
+    <% if @purchase_prices.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@purchase_prices, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

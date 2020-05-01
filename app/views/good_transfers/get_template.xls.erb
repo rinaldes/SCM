@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">NO | NAMA ITEM | QTY/ EA | BARCODE
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">NO</Data></Cell>
+        <Cell><Data ss:Type="String">NAMA ITEM</Data></Cell>
+        <Cell><Data ss:Type="String">QTY / EA</Data></Cell>
+        <Cell><Data ss:Type="String">BARCODE</Data></Cell>
+      </Row>
+      <% @product_details.each_with_index do |pd, i| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= i %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= pd.product.description %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= pd.available_qty rescue 0 %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= pd.product.barcode %></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

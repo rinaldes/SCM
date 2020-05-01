@@ -1,0 +1,5 @@
+$("#history-list").html("<%= j(render 'history_list') %>");
+<% if (current_user.office_id.present? rescue false) %>
+  $(".punya_toko").addClass("hide");
+<% end %>
+paging()

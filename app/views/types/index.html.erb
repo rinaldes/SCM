@@ -1,0 +1,80 @@
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Type</li><li>List</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <section id="widget-grid" class=""><!-- widget grid -->
+    <div class="row"><!-- row -->
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><!-- NEW WIDGET START -->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header>
+            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+            <h2>List Jenis</h2>
+          </header>
+          <div><!-- widget div-->
+            <div class="widget-body no-padding"><!-- widget content -->
+
+              <%= link_to new_type_path, :class => "btn btn-labeled btn-primary edit-btn-primary" do %>
+                <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Add Departement
+              <% end %>
+
+              <table class="table table-striped table-bordered" width="100%">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput" style="width:17%">
+                      <input type="text" class="form-control" placeholder="Filter Name" />
+                    </th>
+                    <th class="hasinput" style="width:18%">
+                      <div class="input-group">
+                        <input class="form-control" placeholder="Filter Position" type="text">
+                      </div>
+                    </th>
+                    <th class="hasinput" style="width:16%">
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>No</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @types.each_with_index do |type, i| %>
+                    <tr>
+                      <td rowspan="<%= type.subtype.length + 1%>"><span class="name"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></span></td>
+                      <td><span class="name"><%= type.code %></span></td>
+                      <td>
+                        <%= link_to detail_sub_type_types_path(type) do %>
+                          <%= type.name %>
+                        <% end %>
+                      </td>
+                      <td rowspan=3>
+
+                        <%= link_to edit_type_path(type), class: "btn btn-primary btn-xs" do %>
+                            <i class="fa fa-pencil"> Edit</i>
+                        <% end %>
+
+                        <%= link_to type, method: :delete, remote: true, confirm: 'Remove Departement?', class: "btn btn-danger btn-xs" do %>
+                            <i class="fa fa-trash-o"> Delete</i>
+                        <% end %>
+
+                      </td>
+                      <% type.subtype.each do |subtype| %>
+                      <tr>
+                        <td style="width: 30px"><%= subtype.code %></td>
+                        <td><%= subtype.name %> </td>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div><!-- end widget -->
+          </div><!-- end widget div -->
+        </div><!-- end widget -->
+      </article><!-- WIDGET END -->
+    </div>	<!-- end row -->
+  </section><!-- end widget grid -->
+</div>	<!-- end row -->

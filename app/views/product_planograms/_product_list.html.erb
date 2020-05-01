@@ -1,0 +1,18 @@
+<% @products.each_with_index do |product, i| %>
+                          <tr>
+                            <td class="hidden-phone"><%= i + 1 %></td>
+                            <td><%= product.barcode rescue '' %></td>
+                            <td><%= product.description rescue '' %></td>
+                            <td>
+                              <button onclick="add_product_planogram('<%= product.id %>');" class="btn btn-primary btn-xs custom-edit-btn" data-dismiss="modal">Add Item</button>
+                            </td>
+                          </tr>
+                          <% end %>
+                          <tr>
+                            <td colspan=6>
+                              <% if @products.blank? %>
+                              <% else %>
+                                <%= raw '<center>No Data Available</center>' %>
+                              <% end %>
+                            </td>
+                          </tr>

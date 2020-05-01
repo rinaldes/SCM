@@ -1,0 +1,110 @@
+<style type="text/css">
+  .label{
+    color: #151313;
+  }
+</style>
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+      </button>
+      <h4 class="modal-title" id="myModalLabel">Transaction History</h4>
+    </div>
+    <div class="modal-body" style="color:#5E5E5E">
+      <div class="row">
+        <%= render partial: 'shared/product_info', locals: {product: @product} %>
+      </div>
+      <div class="row">
+        <section class="col col-md-4">
+          <section class="form-group">
+            <label class="col-md-2 label">START </label>
+            <section class="col col-md-9 smart-form">
+              <label class="input custom-input-box" style="padding-right: 0px;">
+                <i class="smart-form icon-append fa fa-calendar"></i>
+                <input id="date_start" class="input-sm" />
+              </label>
+            </section>
+          </section>
+        </section>
+        <section class="col col-md-4">
+          <section class="form-group">
+            <label class="col col-md-3 label">END </label>
+            <section class="col col-md-9 smart-form">
+              <label class="input custom-input-box" style="padding-right: 0px;">
+                <i class="icon-append fa fa-calendar"></i>
+                <input id="date_end" class="input-sm" />
+              </label>
+            </section>
+          </section>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col col-md-12">
+          <label class="col-md-12 input custom-input-box">
+            <table class="table table-striped table-bordered" id="table_size">
+              <thead>
+                <tr>
+                  <td>Quantity</td>
+                  <td>Total Price</td>
+                  <td>Date</td>
+                </tr>
+              </thead>
+              <tbody>
+                <% @sales.each{|sale| %>
+                  <tr>
+                    <td><%= sale.quantity %></td>
+                    <td><%= format_currency sale.total_price %></td>
+                    <td><%= sale.sale.transaction_date.strftime('%d-%m-%Y') %></td>
+                  </tr>
+                <% } %>
+                <tr>
+                </tr>
+              </tbody>
+            </table>
+          </label>
+        </section>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+  $('#date_start').datepicker({
+    dateFormat : 'yy-mm-dd',
+    prevText : '<i class="fa fa-chevron-left"></i>',
+    nextText : '<i class="fa fa-chevron-right"></i>',
+    onSelect : function(selectedDate) {
+      if ($('#date_end').val() != "")
+        filter();
+    }
+  });
+
+  $('#date_end').datepicker({
+    dateFormat : 'yy-mm-dd',
+    prevText : '<i class="fa fa-chevron-left"></i>',
+    nextText : '<i class="fa fa-chevron-right"></i>',
+    onSelect : function(selectedDate) {
+      if ($('#date_start').val() != "")
+        filter();
+    }
+  });
+
+  function filter() {
+    var start = $('#date_start').val().split('-');
+    var end = $('#date_end').val().split('-');
+    $('#transaction_history #table_size tbody').children().each(function() {
+      var date = $(this).children().eq(2).text().split('-');
+      var dateCur = new Date(date[2], date[1], date[0]);
+      var dateStart = new Date(start[0], start[1], start[2]);
+      var dateEnd = new Date(end[0], end[1], end[2]);
+      if (dateCur < dateStart || dateCur > dateEnd)
+        $(this).hide();
+      else
+        $(this).show();
+    });
+  }
+</script>

@@ -1,0 +1,84 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<%= render 'shared/breadcrumb' %>
+<div id="content"><!-- MAIN CONTENT -->
+    <section id="widget-grid" class="">
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Petty Cash for <%= @petty_cash.year.strftime('%B') rescue Time.now().to_date.strftime("%B") %> <%= @petty_cash.year.year rescue Time.now().to_date.strftime("%Y") %> </h2>
+                    </header>
+                   <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+
+                        <div class="widget-body no-padding">
+                        <div class= "smart-form petty-cash"%>
+                          <fieldset>
+                           <div class="row">
+                            <section class="col col-6">
+                                <section>
+                                  <label class="col-md-4 ">Store</label>
+                                  <label class="col-md-6 input custom-input-box">
+                                    <% if current_user.branch_id.present? %>
+                                      <%= label_tag 'location', current_user.branch.office_name %>
+                                    <% else %>
+                                      <%= select_tag :store, options_for_select([["All Store", 0]] + Branch.all.map{|reg|[reg.office_name, reg.id]}), {class:"form-control", onchange: "reload();", onkeyup: "reload();"}%>
+                                    <% end %>
+                                  </label>
+                                  <label class="col-md-4 ">Year</label>
+                                  <label class="col-md-6 input custom-input-box">
+                                      <%= select_year(Date.today.year, {:start_year => Date.today.year, :end_year => 5.years.from_now.year},  :class => 'form-control', onchange: "reload();", onkeyup: "reload();") %>
+                                  </label>
+                                  <label class="col-md-4 ">Month </label>
+                                  <label class="col-md-6 input custom-input-box">
+                                      <%= select_month(Date.today.month,{}, :class => 'form-control', onchange: "reload();", onkeyup: "reload();" )%>
+                                  </label>
+                                </section>
+                            </section>
+                          </div>
+                          </fieldset>
+                        </div>
+                        </div>
+                        <div class="widget-body no-padding" id="petty-cash-details-list">
+                            <%= render partial: 'petty_cash_all_store' %>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+    <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+</div>  <!-- end row -->
+<script type="text/javascript">
+  $( document ).ready(function() {
+    $('#store').select2();
+  });
+
+  function reload(){
+    $.ajax({
+          url: "/finances/petty_cashes/petty_cash_month?&date_year="+($('#date_year').length == 1 ? $('#date_year').val() : '')+"&store="+($('#store').length == 1 ? $('#store').val() : '')+"&date_month="+($('#date_month').length == 1 ? $('#date_month').val() : ''),
+          method: "get",
+          data: {
+            },
+            dataType: "script"
+        })
+  } 
+</script>
+<script src="/js/jquery.min.js"></script>

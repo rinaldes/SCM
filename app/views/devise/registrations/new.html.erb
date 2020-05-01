@@ -1,0 +1,109 @@
+<section class="wrapper registrations_new">
+<!-- page start-->
+  <div class="row">
+    <div class="col-sm-12">
+      <section class="panel">
+        <header class="panel-heading">
+          Registration Now
+        </header>
+        <div class="panel-body">
+          <div class="position-center">
+            <%= devise_error_messages! %>
+            
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: "form-horizontal new-user-regis", role: "form"}) do |f| %>
+              <div class="form-group">
+                <%= f.label :first_name, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.text_field :first_name, autofocus: true, placeholder: "First Name", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :last_name, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.text_field :last_name, autofocus: true, placeholder: "Last Name", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :gender, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <div class="radios">
+                    <%= f.label :gender_male, class: "label_radio col-lg-6 col-sm-6" do %>
+                      <%= f.radio_button :gender, "male" %> Male
+                    <% end %>
+                    <%= f.label :gender_female, class: "label_radio col-lg-6 col-sm-6" do %>
+                      <%= f.radio_button :gender, "female" %> Female
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :birth_place, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.text_field :birth_place, autofocus: true, placeholder: "Birth Place", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :birth_date, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <div data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-group date dpYears">
+                    <%= f.text_field :birth_date, autofocus: true, placeholder: "Birth Date", class: "form-control", readonly: "" %>
+                    <span class="input-group-btn add-on">
+                      <%= button_tag class: "btn btn-primary", type: "button" do %>
+                        <i class="fa fa-calendar"></i>
+                      <% end %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :email, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.email_field :email, autofocus: true, placeholder: "Email", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :username, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.text_field :username, autofocus: true, placeholder: "Username", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.password_field :password, placeholder: "Password", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password_confirmation, class: "col-lg-3 col-sm-3 control-label" %>
+                <div class="col-lg-9">
+                  <%= f.password_field :password_confirmation, placeholder: "Re-type Password", class: "form-control" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-lg-offset-3 col-lg-9">
+                  <%= button_tag "Submit", class: "btn btn-primary", type: "submit" %>
+                  <%= button_tag "Reset", class: "btn btn-default", type: "reset" %>
+                </div>
+              </div>
+
+            <% end %>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+<!-- page end-->
+</section>
+
+<div class="unmargin pull-right">
+  Already Registered. <%= link_to "Login", new_user_session_path %>
+</div>

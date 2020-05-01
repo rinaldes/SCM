@@ -1,0 +1,59 @@
+wb = xlsx_package.workbook
+wb.use_autowidth = false
+styles = wb.styles
+title = styles.add_style(:sz => 16, :b => true, :alignment => { :horizontal => :center })
+header = styles.add_style(:b => true, :alignment => { :horizontal => :center, :vertical => :center })
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Denomination") do |sheet|
+  sheet.column_widths 4, 33, 17, 2, 24, 15, 2, 12, 8, 18
+  sheet.merge_cells 'A1:J1'
+  sheet.merge_cells 'A3:A4'
+  sheet.merge_cells 'B3:C3'
+  sheet.merge_cells 'E3:F3'
+  sheet.merge_cells 'H3:J3'
+  sheet.merge_cells 'B15:B16'
+  sheet.merge_cells 'C15:C16'
+  sheet.merge_cells 'E17:E18'
+  sheet.merge_cells 'F17:F18'
+  sheet.merge_cells 'H17:I18'
+  sheet.merge_cells 'J17:J18'
+  sheet.merge_cells 'H20:I21'
+  sheet.merge_cells 'J20:J21'
+  sheet.merge_cells 'F24:G25'
+  sheet.merge_cells 'H24:I25'
+  sheet.merge_cells 'J24:J25'
+  sheet.merge_cells 'B26:B27'
+  sheet.merge_cells 'C26:C27'
+
+  sheet.add_row ["LAPORAN KEUANGAN TOKO ABC : FASHION  TANGGAL : 01 DESEMBER 2015", "", "", "", "", "", "", "", "", ""], :style => title
+  sheet.add_row [], :height => 5
+  sheet.add_row ["No", "Pendapatan", "", "", "Biaya dan Pengeluaran", "", "", "Setoran Cashier", "", ""], :style => header
+  sheet.add_row ["", "Uraian", "Jumlah", "", "Uraian", "Jumlah", "", "Nominal", "Qty", "Total"], :style => header
+  sheet.add_row [], :height => 5
+  sheet.add_row ["1", "Pembayaran Tunai", "Rp.23.664.930", "", "Voucher", "", "", "Rp.100.000", "", "Rp.17.100.000"]
+  sheet.add_row ["2", "BTP Masuk (Tunai)", "", "", "Transfer Via BNI", "", "", "Rp.50.000", "", "Rp.5.900.000"]
+  sheet.add_row ["3", "Dp. Pembelian (Masuk)", "", "", "", "", "", "Rp.20.000", "", "Rp.80.000"]
+  sheet.add_row ["4", "Charge Merchant (Tunai)", "", "", "", "", "", "Rp.10.000", "", "Rp.320.000"]
+  sheet.add_row ["5", "Service", "", "", "", "", "", "Rp.5.000", "", "Rp.145.000"]
+  sheet.add_row ["6", "Buku Katalog/Kertas Kado", "", "", "", "", "", "Rp.2.000", "", "Rp.94.000"]
+  sheet.add_row ["", "", "Rp.23.664.930", "", "", "", "", "Rp.1.000", "", ""]
+  sheet.add_row ["", "", "", "", "", "", "", "Rp.500", "", "Rp.33.000"]
+  sheet.add_row ["7", "DP. Pembelian (Keluar)", "", "", "Mandiri", "Rp.88.000", "", "Rp.200", "", ""]
+  sheet.add_row ["", "Pendapatan Tunai", "Rp.23.664.930", "", "BNI", "Rp.1.196.700", "", "Rp.100", "", ""]
+  sheet.add_row ["", "", "", "", "BCA", "", "", "Rp.50", "", ""]
+  sheet.add_row ["", "", "", "", "Pengeluaran Tunai", "Rp.-", "", "Total Setoran", "", "Rp.23.672.000"]
+  sheet.add_row []
+  sheet.add_row []
+  sheet.add_row ["8", "Omzet - Koperasi", "", "", "", "", "", "Saldo Tunai", "", "Rp.23.664.930"]  
+  sheet.add_row ["9", "Credit Card", "", "", "", "", "", "", "", ""]
+  sheet.add_row ["10", "Debit Card", "Rp.1.284.700", "", "BTP Masuk (Saldo)", "Rp.-", "", "Selisih", "", "Rp.7.070"]
+  sheet.add_row ["11", "Tukar Point", "", "", "", "", "", "", "", ""]
+  sheet.add_row ["", "Pendapatan Non Tunai", "Rp.1.284.700", "", "", "Kepala Store", "", "Administrasi", "", "Cashier"]
+  sheet.add_row []
+  sheet.add_row ["", "Total Pendapatan", "Rp.24.949.630"]
+  sheet.add_row ["", "Bon Keluar", ""]
+  sheet.add_row ["", "Bon Titip", ""]
+  sheet.add_row ["", "Pendapatan Lainnya", "Rp.-"]
+  sheet.add_row ["", "Net.Sales", "Rp.24.949.630"]
+end

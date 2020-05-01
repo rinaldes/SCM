@@ -1,0 +1,44 @@
+<% if @receivings.count != 0 %>
+  <% @receivings.each_with_index do |receiving, i| %>
+    <% dpp = 0 %>
+    <% product = [] %>
+    <% receiving.returns_to_supplier_details.each do |rtsd| %>
+      <% pp = rtsd.purchase_price.to_i * rtsd.quantity.to_i %>
+      <% dpp += pp %>
+      <% product << rtsd.product.flag_pajak %>
+    <% end %>
+    <% ppn = 0 %>
+    <% ppn = dpp * 0.1 if receiving.supplier.status_pkp %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td class='nowrap'><%= link_to receiving.number, returns_to_supplier_path(receiving) %></td>
+      <td class='nowrap'><%= receiving.r_date %></td>
+      <td class='nowrap punya_toko'><%= receiving.office_name %></td>
+      <td class='nowrap'><%= receiving.reason_code %></td>
+      <td class='nowrap'><%= receiving.receive_no %></td>
+      <td class='nowrap'><%= receiving.supplier_name %></td>
+      <td class='nowrap'><%= format_currency dpp %></td>
+      <td class='nowrap'><%= format_currency ppn %></td>
+      <td class='nowrap'><%= format_currency dpp + ppn %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='11'>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@receivings, options = {}) %>
+        <%#= pagination_links(@receivings, :params => {:start_date => "2016-12-01", :end_date => "2016-12-31", :store => params[:store]}) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='11' align='center'>No Data Entries</td>
+  </tr>
+<% end %>
+<script type="text/javascript">
+  <% if @ada_toko.present? %>
+    $(".punya_toko").addClass("hide");
+  <% else %>
+    $(".punya_toko").removeClass("hide");
+  <% end %>
+</script>

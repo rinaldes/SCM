@@ -1,0 +1,32 @@
+<% m_classes.each_with_index do |m_class, i| %>
+  <% idx = params[:page] ? (params[:page].to_i*10+i-9) : i+1 %>
+  <tr>
+    <td class="hidden-phone"><%= idx %></td>
+    <td rowspan=<%= m_class.children_size+1 rescue 1%>><span class="name"><%= m_class.m_class.code rescue '' %></span></td>
+    <td rowspan=<%= m_class.children_size+1 rescue 1%>><span class="name"><%= link_to m_class.m_class.name, m_class_path(m_class), class: 'blue' rescue '' %></span></td>
+    <td><span class="name"><%= m_class.code %></span></td>
+    <td class="hidden-phone">
+      <%= m_class.name %>
+    </td>
+    <td class="hidden-phone" rowspan=<%= m_class.children_size+1 rescue 1%>>
+      <%= link_to edit_m_class_path(m_class), class: "btn btn-primary btn-xs custom-edit-btn" do %>
+        <i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{m_class.id}, 'm_classes')", class: "btn btn-danger btn-xs custom-edit-btn" do %>
+        <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+      <% end %>
+    </td>
+  </tr>
+  <%= render partial: 'm_classes', locals: {i: idx, m_classes: m_class.m_classes, spliter: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"} if m_class.m_classes.present? %>
+<% end %>
+<tr>
+  <td colspan=6>
+    <% if m_classes.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(m_classes, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

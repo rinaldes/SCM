@@ -1,0 +1,33 @@
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <section></section>
+            <section>
+                <label class="col-md-4 label">Year</label>
+                <label class="col-md-6 input custom-input-box">
+                <%= f.date_select :year, {:order => [:year], :start_year => Time.now.year, :end_year => Time.now.year+5, :prompt => {:year => "Select year"}}, {:class => "form-control", id: "select-year"} %>
+                </label>
+
+                <label class="col-md-4 label">Monthly Budget</label>
+                <label class="col-md-6 input custom-input-box">
+                    <%= text_field_tag 'budget[monthly_budget]', '', id: "monthly_budget", class: 'numeric' %>
+                </label>
+
+                <label class="col-md-4 label">Months</label>
+                <label class="col-md-6">
+                    <% 12.times {f.object.monthly_budgets.build} %>
+                    <%= f.fields_for :monthly_budgets  do |monthly_budget| %>
+                        <%= render 'monthly_budget_fields', f: monthly_budget %>
+                    <% end %>
+                 </label>
+            </section>
+        </section>
+    </div>
+</fieldset>
+
+<footer>
+    <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-budget", data: { :disable_with => "Please wait..." }  %>
+    <button type="button" class="btn btn-default" onclick="window.history.back();">
+        Back
+    </button>
+</footer>

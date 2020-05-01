@@ -1,0 +1,41 @@
+<% if @product.present? %>
+  $('#sku').val("<%= @product.sku %>");
+  $("#product_id").val("<%= @product.id %>");
+  $("#article").val("<%= @product.article %>");
+  $('#product_name').val("<%= @product.description %>");
+  $("#number").val("<%= @product.barcode.present? ? @product.barcode : @product.article %>");
+  $("#fraction_box1").val("<%= @product.box_num %>");
+  $("#fraction_box2").val("<%= @product.box2_num %>");
+  $('#unit_name').val("<%= Sku.where("article='#{params[:article]}' AND convertion_unit=1").joins(:product).first.unit.name rescue nil %>");
+  <% if @product.is_bkp? %>
+    $('#selling_price_ppn_in').val(parseFloat($('#selling_price_hpp').val())*0.1);
+  <% else %>
+    $('#selling_price_ppn_in').val('');
+  <% end %>
+  <% if @productdetail.present? %>
+    $("#rop").val("<%= @productdetail.rop_stock %>");
+    $("#safety_stock").val("<%= @productdetail.min_stock %>");
+    $("#available_qty").val("<%= @productdetail.available_qty.to_i %>");
+  <% end %>
+
+  <% if @product.product_price(Time.now).present? %>
+    $("#product_hpp").val("<%= format_currency @product.product_price(Time.now).hpp %>");
+  <% end %>
+
+  $("#selling_price_hpp").val("<%= @sellingprice.hpp unless @sellingprice.nil? %>");
+  $('#selling_price_hpp_average').val(<%= @sellingprice.hpp_average rescue '' %>)
+  $('#flag_pajak').val('<%= @product.flag_pajak %>');
+  $("#harga_pokok").val("<%= @product.cost_of_products %>");
+  $("#harga_jual").val("<%= @product.purchase_price %>");
+  $("#harga_beli").val("<%= @product.selling_price %>");
+  $("#status2").val("<%= @product.status2 %>");
+  $("#status3").val("<%= @product.status3 %>");
+  $("#status4").val("<%= @product.status4 %>");
+  $("#status5").val("<%= @product.status5 %>");
+  $("#flag_pajak").val("<%= @product.flag_pajak %>");
+  $("#m_class").val("<%= @product.m_class.name rescue '' %>");
+  $("#departement").val("<%= @product.brand.department.name rescue '' %>");
+  $("#product_image").html("<%= j(image_tag @product.image, width: '250px', height: '250px') %>");
+<% else %>
+  alert('Your Product not present!');
+<% end %>

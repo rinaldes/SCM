@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Office</Data></Cell>
+        <Cell><Data ss:Type="String">Hide Empty Stock</Data></Cell>
+        <Cell><Data ss:Type="String">Enable PPN</Data></Cell>
+        <Cell><Data ss:Type="String">Enable Minus Stock</Data></Cell>
+        <Cell><Data ss:Type="String">Enable Loss Price</Data></Cell>
+        <Cell><Data ss:Type="String">Receipt Footer</Data></Cell>
+        <Cell><Data ss:Type="String">EOD Footer</Data></Cell>
+      </Row>
+    <% PosMachine.all.each do |pos_machine| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= pos_machine.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.head_office.office_name rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.hide_empty_stock %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.enable_ppn %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.enable_minus_stock %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.enable_loss_price %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.receipt_footer %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pos_machine.eod_footer %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

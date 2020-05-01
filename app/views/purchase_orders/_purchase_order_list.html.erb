@@ -1,0 +1,40 @@
+<% if @purchase_orders.present? && @purchase_orders.count > 0 %>
+  <% @purchase_orders.each_with_index do |po, i| %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+      <td class='nowrap'><%= link_to po.number, purchase_order_url(po), class: 'blue' %></td>
+      <td><%= po.date %></td>
+      <td><%= po.supplier_name rescue '' %></td>
+      <td><%= po.office.office_name %></td>
+      <td style='text-align: right'><%= po.total_qty %></td>
+      <!-- <td style='text-align: right'><%= format_currency po.purchase_order_details.map{|pod|pod.hpp.to_f*pod.quantity}.sum rescue 0 %></td> -->
+      <td style='text-align: right'><%= format_currency po.grand_total %></td>
+      <td><%= po.purchase_requests.map(&:number).join(', ') %></td>
+      <td class='nowrap'><%= po.expected_delivery_date %></td>
+      <td class='nowrap'><%= po.due_date %></td>
+      <td class='nowrap'><%= po.status %></td>
+      <td class='nowrap'>
+        <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), edit_purchase_order_path(po.id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+        <% if po.is_waiting_approval? %>
+          <%= link_to raw('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>'), 'javascript:void(0)', onclick: "delete_one(#{po.id}, 'purchase_orders')",
+            class: "btn btn-danger btn-xs custom-edit-btn" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan=12>
+      <% if @purchase_orders.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@purchase_orders, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='11' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="s21" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom" />
+      <Borders />
+      <Font ss:Color="RED"/>
+      <Interior />
+      <NumberFormat />
+      <Protection />
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Store Code</Data></Cell>
+        <Cell><Data ss:Type="String">Store Name</Data></Cell>
+        <Cell><Data ss:Type="String">Store Address</Data></Cell>
+        <Cell><Data ss:Type="String">Phone Number</Data></Cell>
+        <Cell><Data ss:Type="String">Product Receipt Number</Data></Cell>
+        <Cell><Data ss:Type="String">Product Return Number</Data></Cell>
+        <Cell><Data ss:Type="String">No stock opname</Data></Cell>
+      </Row>
+      <% Branch.all.each{|branch| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= branch.code %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= branch.office_name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= branch.address %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= branch.phone_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Receiving.where("head_office_id=#{branch.id}").limit(1).order('id DESC').last.number rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= ReturnsToSupplier.where("head_office_id=#{branch.id}").limit(1).order('id DESC').last.number rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= StockOpname.where("office_id=#{branch.id}").limit(1).order('id DESC').last.opname_number rescue '' %></Data></Cell>
+      </Row>
+      <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

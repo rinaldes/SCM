@@ -1,0 +1,30 @@
+<% if @purchase_transfers.count > 0 %>
+  <% @purchase_transfers.each_with_index do |transfer, i| %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td><%= link_to transfer.code, purchase_transfer_url(transfer) %></td>
+      <td><%= transfer.mutation_date %></td>
+      <td><%= PrTransferProduct.find_by_transfer_product_id(transfer.id).purchase_request.number rescue '-' %></td>
+      <td><%= transfer.supplier_name %></td>
+      <td><%= transfer.status %></td>
+
+      <td class='nowrap'>
+
+        <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), edit_purchase_transfer_path(transfer.id), class: "btn btn-primary btn-xs" %>
+        <%= link_to raw('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>'), 'javascript:void(0)', onclick: "delete_one(#{transfer.id}, 'purchase_transfers')",
+          class: "btn btn-danger btn-xs edit-btn-dlt" %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan=7>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@purchase_orders, options = {}) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td colspan='7' align='center'>No Data Entries</td>
+  </tr>
+<% end %>

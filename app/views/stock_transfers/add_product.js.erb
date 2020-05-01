@@ -1,0 +1,5 @@
+var number = $("#request tbody tr:last-child td:first-child div").html() || 0;
+$('.po_only').remove()   
+<% prod = @product %>
+    $("#request tbody").append("<%= j(render 'tr_detail', product: prod, key: "#{Time.now.to_i}#{prod.id}", show_barcode: params[:transaction_type] == 'product_mutation', show_price: params[:transaction_type] != 'product_mutation') %>");
+    $("#request tbody tr:last-child td:first-child div").append(parseInt(number) + 1);

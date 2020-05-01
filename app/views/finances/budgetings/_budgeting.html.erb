@@ -1,0 +1,34 @@
+<fieldset>
+    <section>
+        <%= link_to_add_association 'Add New', f, :monthly_budgets,:"data-association-insertion-node" => "tbody#monthly-budgets", :"data-association-insertion-method" => "append", :partial => "new_monthly_budget_fields", :class => "btn btn-primary btn-sm" %>
+    </section>
+    <section>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Prev Budget Left</th>
+                        <th>Initial Budget</th>
+                        <th>Additional Budget</th>
+                        <th>Total Budget</th>
+                        <th>Realization</th>
+                        <th>Realization %</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="monthly-budgets">
+                    <%= f.fields_for :monthly_budgets, f.object.monthly_budgets.order('month_number ASC')    do |monthly_budget| %>
+                        <%= render 'new_monthly_budget_fields', f: monthly_budget %>
+                    <% end %>
+                    <%= hidden_field_tag 'year', @budget.year.to_date.year, id: "budget-year" %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</fieldset>
+
+<footer>
+    <%= f.submit "Submit", :class => "btn btn-primary", :id => "submit-budgeting", data: { :disable_with => "Please wait..." }  %>
+    <%= link_to "Back", finances_budgetings_path, :class => "btn btn-default"  %>
+</footer>

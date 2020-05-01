@@ -1,0 +1,11 @@
+<section>
+  <label class="col-md-<%= label_size %> label">Office</label>
+  <label class="col-md-<%= 12-label_size %> input custom-input-box">
+    <% if current_user.head_office_id.present? %>
+      <%= current_user.head_office.office_name %>
+      <%= f.select :head_office_id, options_for_select([[current_user.head_office.office_name, current_user.head_office_id]]), {}, class: 'form-control origin_branch_id hide ho_id' %>
+    <% else %>
+      <%= f.select :head_office_id, options_for_select(HeadOffice.all.map{|branch|[branch.office_name, branch.id]}), {}, class: 'form-control origin_branch_id ho_id' %>
+    <% end %>
+  </label>
+</section>

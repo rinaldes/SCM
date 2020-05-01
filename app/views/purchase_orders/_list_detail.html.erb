@@ -1,0 +1,4 @@
+<% @purchase_order.purchase_order_details.each_with_index do |pod, i| %>
+  <% product = pod.product %>
+  <%= render partial: 'tr_detail', locals: {key: i, pod: pod, product: product, purchase_request: @purchase_request, key: product.id} if product.present? %>
+<% end if @purchase_order.present? %>

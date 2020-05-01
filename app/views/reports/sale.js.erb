@@ -1,0 +1,79 @@
+<% if params[:all_stores] == 'Store' %>
+  $("#sales").html("<%= j(render 'reports/sales/all_toko', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'Item' %>
+  $("#sales").html("<%= j(render 'reports/sales/all_item', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'End of Shift' %>
+  $("#sales").html("<%= j(render 'reports/sales/end_of_shift', eos: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'End of Day' %>
+  $("#sales").html("<%= j(render 'reports/sales/end_of_day', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'Category' %>
+  $("#sales").html("<%= j(render 'reports/sales/all_category', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'Member' %>
+  $("#sales").html("<%= j(render 'reports/sales/by_member', sales: @sales) %>");
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sec_month").addClass('hide');
+<% elsif params[:all_stores] == 'Month' %>
+  $("#tf_label").hide();
+  $("#ut_label").hide();
+  $("#start_date").hide();
+  $("#end_date").hide();
+  $("#months").show();
+  $("#sales_per_item").html('');
+  $("#show_item").html('');
+  $(".hide_detail").addClass('hide');
+  $("#sec_month").removeClass('hide');
+  $("#transaction_date, #show_item").val('');
+  $("#sales").html("<%= j(render 'reports/sales/by_months', time_type: 'YYYY-MM-DD', label: 'Month', sales: @sales) %>");
+<% else %>
+  $("#sales").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'YYYY-MM-DD', label: 'Date', sales: @sales, dari: 'tanggal') %>");
+  $("#tf_label").show();
+  $("#ut_label").show();
+  $("#sec_month").addClass('hide');
+  $("#start_date").show();
+  $("#end_date").show();
+  $("#months").hide();
+  <% if params[:transaction_date].present? %>
+    <% if params[:all_stores] == 'Hour' %>
+      $("#sales_per_hour").html("<%= j(render 'reports/sales/all_tanggal', time_type: 'HH24 YYYY-MM-DD', label: 'Jam', sales: @sales_per_hour, dari: 'hour') %>");
+    <% end %>
+    <% if params[:show_item].present? %>
+      $("#sales_per_item").html("<%= j(render 'reports/sales/all_item', sales: @sales_per_item, dari: 'tanggal') %>");
+    <% end %>
+    $(".hide_detail").removeClass('hide');
+  <% else %>
+    $("#sales_per_item").html('');
+    $(".hide_detail").addClass('hide');
+    $("#show_item").html('');
+  <% end %>
+<% end %>
+//$("#sale-list").html("<%#= j(render 'sale') %>");
+//paging()
+$('#export_to_xls').attr('href', "/reports/sale.xls?locale=en&"+$("form").serialize())

@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li><%= t(:finances) %></li><li><%= t(:ap_invoices) %></li><li><%= t(:list) %></li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div id="notice_template"><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span><%= t(:ap_invoices_list) %></h2> <!-- header content --></header>
+          <div>
+            <div class="widget-body no-padding">
+              <%= link_to raw("<span class='btn-label'><i class='glyphicon glyphicon-plus'></i></span>#{t(:add_ap_invoice)}"), new_finances_ap_invoice_path, class: "btn btn-labeled btn-primary edit-btn-primary" %>
+              <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                <li class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to t(:export_to_csv), finances_ap_invoices_path(:id => params[:id], format: "csv") %></li>
+                    <li><%= link_to t(:export_to_excel), finances_ap_invoices_path(:id => params[:id], format: "xls") %></li>
+                    <li data-toggle="modal" data-target="#importModal" style="cursor: pointer"><a>Import from CSV</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <table class="table table-striped table-bordered" width="100%">
+              <thead>
+                <tr>
+                  <th><%= t(:no) %></th>
+                  <th>
+                    AP Invoice No.
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>
+                    <%= t(:supplier) %>
+                    <span style="float: right;">
+                      <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+                      <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+                    </span>
+                  </th>
+                  <th>DPP</th>
+                  <th>PPN</th>
+                  <th>Total</th>
+                  <th><%= t(:action) %></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th class="hasinput">
+                      <%= text_field_tag :code, params[:code], class: 'form-control search' %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :name, params[:name], class: 'form-control search' %>
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id='ap-invoices-list'><%= render 'ap_invoice_list' %></tbody>
+              </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import AP Invoices</h4>
+      </div>
+      <div class="modal-body">
+        <%#= form_tag finances_import_ap_invoices_path(:id => params[:id]), multipart: true do %>
+          <%= file_field_tag :file, accept: ".csv", onchange: "checkfile(this)" %>
+      </div>
+      <div class="modal-footer">
+        <%#= link_to "Download Template", finances_ap_invoices_path(format: "csv", :a => "a"), :class => "btn btn-success" %>
+        <%= submit_tag "Import", :class => "btn btn-primary", :id => "commit"%>
+        <%# end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+function delete_api(this_id){
+  if (confirm('Are you sure?')){
+    $.ajax({
+     dataType: "script",
+     method: 'DELETE',
+     url: '/finances/ap_invoices/'+this_id
+    })
+  }
+}
+
+$(document).ready(function() {
+  $('#commit').bind("click",function(){
+    if(!$('#file').val()){
+      alert("File not been chosen");
+      return false;
+    }
+  });
+  window.reset = function (e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();
+  }
+});
+function checkfile(sender) {
+    var validExts = new Array(".csv");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+      alert("This is not a csv file");
+      reset($("#file"));
+      return false;
+    }
+    else return true;
+};
+</script>

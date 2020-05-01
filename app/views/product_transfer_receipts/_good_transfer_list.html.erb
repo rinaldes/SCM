@@ -1,0 +1,17 @@
+<% @product_receipts.each_with_index do |gt, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= gt.created_at.to_s(:db)[0..9].to_time.strftime('%d-%m-%Y') %></span></td>
+    <td><%= link_to gt.code, gt.status == 'RECEIVED' ? product_transfer_receipt_url(gt) : accept_product_transfer_receipt_url(gt) %></td>
+    <td class="hidden-phone"><%= gt.origin_name %></td>
+    <td class="hidden-phone"><%= gt.destination_name %></td>
+    <td class="hidden-phone"><%= gt.sender_name %></td>
+    <td class="hidden-phone"><%= gt.no_surat_jalan rescue '' %></td>
+    <td class="hidden-phone"><%= gt.status rescue '' %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=8>
+    <%= will_paginate @product_receipts %>
+  </td>
+</tr>

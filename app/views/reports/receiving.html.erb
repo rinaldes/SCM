@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Reports</li><li>Product Movement</li><li>PURCHASE</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>PURCHASE <%= Time.now.strftime('%B %Y') %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+              <ul id="myTab1" class="nav nav-tabs" style='margin: 20px 0 6px 6px; float: left'>
+                  <li class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i></button>
+                      <ul class="dropdown-menu" >
+                        <li style="color:'black';"><%= link_to "Export to Excel", reports_receiving_path(:id => params[:id], format: "xls") %></li>
+                      </ul>
+                    </li>
+                  </ul>
+
+            <form class='smart-form' url="/products/stock">
+            </form> <!-- tambah product -->
+          </div><!-- end widget content -->
+          <div class="widget-body no-padding"><!-- TABEL -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped" id='stock'><%= render 'receiving' %></table>
+            </div>
+          </div><!-- END TABEL -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+
+<SCRIPT>
+  function filter_stock(){
+    $.ajax(
+    {
+      url: "/products/stock",
+      dataType: "script",
+      data: $("form").serialize(),
+      success: function (data){
+        response(data)
+      },
+    });
+  }
+
+  $(document).ready(function() {
+    $("#search_brand").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/brands/autocomplete_brand_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+    $("#supplier_name").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+  })
+</SCRIPT>

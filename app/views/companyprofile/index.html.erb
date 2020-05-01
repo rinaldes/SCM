@@ -1,0 +1,77 @@
+<script src="/js/jquery.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Company Profile</li><li><%= @company_profiles.name %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @company_profiles.name %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @company_profiles, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-6">
+                      <section class="form-group">
+                        <label class="col-md-3 label">Name</label>
+                        <label class="col-md-7 input custom-input-box"><%= @company_profiles.name %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Address</label>
+                        <label class="col-md-7 input custom-input-box"><%= @company_profiles.address %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">NPWP </label>
+                        <label class="col-md-7 input custom-input-box"><%= @company_profiles.npwp %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">NPWP Address </label>
+                        <label class="col-md-7 custom-input-box"><%= @company_profiles.npwp_address %>
+                        </label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Title</label>
+                        <label class="col-md-4"><%=@company_profiles.title %></label>
+                      </section>
+                    </section>
+                    <section class="col col-md-6">
+                      <section class="form-group">
+                        <label class="col-md-3 label">Footer </label>
+                        <label class="col-md-7 input custom-input-box"><%= @company_profiles.footer %></label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-3 label">Custom CSS </label>
+                        <label class="col-md-7 custom-input-box"><%= @company_profiles.custom_css %>
+                        </label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-7 custom-input-box"><%= image_tag @company_profiles.logo %>
+                        </label>
+                      </section><br>
+                      <section class="form-group">
+                        <label class="col-md-7 custom-input-box"><%= image_tag @company_profiles.favicon %>
+                        </label>
+                      </section><br>
+                    </section>
+                  </section>
+                </div>
+              </fieldset>
+              <footer>
+                <%= link_to edit_companyprofile_path(current_user), class: "btn btn-primary" do %>
+                <i class="fa fa-pencil"> Edit</i><% end %>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

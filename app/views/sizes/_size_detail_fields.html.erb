@@ -1,0 +1,10 @@
+<td class="hidden-phone size-detail"><%= f.text_field :size_number, :class => "size_detail_text_input" %></td>
+
+    <td style="width:4%">
+      <div class="nested-fields addform clearfix">
+         <%= f.autocomplete_field :employee_id, autocomplete_employee_name_schedules_path, class: "autocomplete-field-input", placeholder: "Employee" %>
+        <%= link_to_remove_association f do %>    
+          <i class="fa fa-remove"></i>
+        <% end %>
+      </div>
+    </td>

@@ -1,0 +1,80 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+      </button>
+      <h4 class="modal-title" id="myModalSupplier">Supplier</h4>
+    </div>
+    <div class="modal-body" style="color:#5E5E5E">
+      <table class="table table-striped table-bordered table-hover" width="100%">
+        <thead>
+        <tr>
+          <th>No</th>
+          <th>
+            Code
+            <span style="float: right;">
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+            </span>
+          </th>
+          <th>
+            Name
+            <span style="float: right;">
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'date-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'date-asc', class: 'sorting' %>
+            </span>
+          </th>
+          <th>
+            Street Address
+            <span style="float: right;">
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'supplier_name-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'supplier_name-asc', class: 'sorting' %>
+            </span>
+          </th>
+          <th>
+            City
+            <span style="float: right;">
+              <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'po_number-desc', class: 'sorting hide' %>
+              <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'po_number-asc', class: 'sorting' %>
+            </span>
+          </th>
+          <th>Actions</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th class="hasinput"><%= text_field_tag :supplier_code, params[:supplier_code], class: 'form-control search_su', onchange: "reload_suppliers();" %></th>
+            <th class="hasinput"><%= text_field_tag :supplier_name, params[:supplier_name], class: 'form-control search_su', onchange: "reload_suppliers();" %></th>
+            <th class="hasinput"><%= text_field_tag :supplier_address, params[:supplier_address], class: 'form-control search_su', onchange: "reload_suppliers();" %></th>
+            <th class="hasinput"><%= text_field_tag :supplier_city, params[:supplier_city], class: 'form-control search_su', onchange: "reload_suppliers();" %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id='supplier-list'><%= render 'modal_supplier_list' %></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="department();">Close</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<script type="text/javascript">
+$(document ).ready(function() {
+  $('.search_su').bind("enterKey",function(e){
+    reload_suppliers();
+  });
+});
+
+function reload_suppliers(){
+  $.ajax({
+    url: "/suppliers/search_supplier?&supplier_code="+($('#supplier_code').length == 1 ? $('#supplier_code').val() : '')+
+      "&supplier_name="+($('#supplier_name').length == 1 ? $('#supplier_name').val() : '')+
+      "&supplier_address="+($('#supplier_address').length == 1 ? $('#supplier_address').val() : '')+
+      "&supplier_city="+($('#supplier_city').length == 1 ? $('#supplier_city').val() : ''),
+    method: "get",
+    data: {
+      },
+      dataType: "script"
+  })
+}
+</script>

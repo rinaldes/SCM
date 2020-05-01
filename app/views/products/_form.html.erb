@@ -1,0 +1,662 @@
+<link rel="stylesheet" href="/css/jquery-ui-1.11.4.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui-1.11.4.js"></script>
+<script src="/js/jquery.maskMoney.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<style>
+  .smart-form input.input-sm {
+    margin: 0px !important;
+  }
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 4px 3px 0 !important;
+  }
+  #product_box_barcode {
+    margin-bottom: -14px !important;
+  }
+</style>
+
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Product</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div id='notification'></div>
+  <div class="row">
+    <div id='notice_template'>
+      <%= render 'layouts/notice' %>
+    </div>
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-product">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Product</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @product, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= hidden_field_tag :product_list %>
+              <% 1.upto(4) {|i| %>
+                <%= hidden_field_tag "brand_discount#{i}" %>
+              <% } %>
+              <%= hidden_field_tag :brand_price %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-12">
+                    <section class="col col-md-5">
+                      <section class="form-group">
+                        <label class="col-md-4 label">Supplier <span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box supplier_name">
+                          <%= select_tag :supplier, options_for_select(Supplier.all.map{|a|["#{a.code}: #{a.name}", a.id]}, selected:(@product_supplier.supplier_id rescue nil), include_blank: true),
+                            class: "form-control", :required => true %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-4 label">SKU/Article <span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box">
+                          <%= f.text_field :article, class: "input-sm" %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-4 label">Name<span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box">
+                          <%= f.text_field :description, class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: ". &(),+-/'"} %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-4 label"><%= t(:short_name) %> <span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box">
+                          <%= f.text_field :short_name, class: "input-sm", data: {validation: 'alphanumeric', validation_allowing: ". &(),+-/'"} %>
+                        </label>
+                      </section>
+                      <section class="form-group">
+                        <label class="col-md-4 label">Department<span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box">
+                          <%= f.select :department_id, options_for_select(MClass.where(parent_id: nil).map{|dprt|[dprt.name, dprt.id]}, selected: @product.department_id), {include_blank: 'Please Select'},
+                            {class: 'form-control', onchange: "pilih_cat(this, '0');"}%>
+                          <%= f.hidden_field :m_class_id %>
+                        </label>
+                      </section>
+                      <section class="form-group category">
+                        <label class="col-md-4 label">Category<span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box">
+                        <% if params[:action] == 'edit' %>
+                          <%= select_tag :m_class_id, options_for_select(@cat1.map{|dprt|[dprt.name, dprt.id]}, selected: MClass.find_by_name(@cat1_name).id), {include_blank: 'Please Select', class: 'form-control', onchange: "pilih_cat(this, '1');hidden_mclass(this);"}%>
+                        <% else %>
+                          <%= select_tag :m_class_id, options_for_select(MClass.where(parent_id: nil).map{|dprt|[dprt.name, dprt.id]}), {include_blank: 'Please Select', class: 'form-control', onchange: "pilih_cat(this, '1');hidden_mclass(this);"}%>
+                        <% end %>
+                        </label>
+                      </section>
+                      <section class="form-group category2">
+                        <label class="col-md-4 label">Category 2</label>
+                        <label class="col-md-8 input custom-input-box">
+                        <% if params[:action] == 'edit' %>
+                          <%= select_tag :m_class_id2, options_for_select(@cat2.map{|dprt|[dprt.name, dprt.id]}, selected: (MClass.where(name: @cat2_name, level: 2).first.id rescue 1)), {include_blank: 'Please Select', class: 'form-control', onchange: "pilih_cat(this, '2');hidden_mclass(this);"}%>
+                        <% else %>
+                          <%= select_tag :m_class_id2, options_for_select(MClass.where(parent_id: nil), selected: 1), {include_blank: 'Please Select', class: 'form-control', onchange: "pilih_cat(this, '2');hidden_mclass(this);"}%>
+                        <% end %>
+                        </label>
+                      </section>
+                      <section class="form-group category3">
+                        <label class="col-md-4 label">Category 3</label>
+                        <label class="col-md-8 input custom-input-box">
+                        <% if params[:action] == 'edit' %>
+                          <%= select_tag :m_class_id3, options_for_select(@cat3.map{|dprt|[dprt.name, dprt.id]}, selected: (MClass.where(name: @cat3_name).first.id rescue nil)), {include_blank: 'Please Select', class: 'form-control', onchange: "pilih_cat(this, '3');hidden_mclass(this);"}%>
+                        <% else %>
+                          <%= select_tag :m_class_id3, options_for_select(MClass.where(parent_id: nil), selected: 1), {include_blank: 'Please Select', class: 'form-control', onchange: "pilih_cat(this, '3');hidden_mclass(this);"}%>
+                        <% end %>
+                        </label>
+                      </section>
+                      <section class="form-group category4">
+                        <label class="col-md-4 label">Category 4</label>
+                        <label class="col-md-8 input custom-input-box">
+                        <% if params[:action] == 'edit' %>
+                          <%= select_tag :m_class_id4, options_for_select(@cat4.map{|dprt|[dprt.name, dprt.id]}, selected: 1), {include_blank: 'Please Select', class: 'form-control', onchange: "hidden_mclass(this);"}%>
+                        <% else %>
+                          <%= select_tag :m_class_id4, options_for_select(MClass.where(parent_id: nil), selected: 1), {include_blank: 'Please Select', class: 'form-control', onchange: "hidden_mclass(this);"}%>
+                        <% end %>
+                        </label>
+                      </section>
+                      </section>
+                      <section class="col col-md-7">
+                      <section class="col col-md-8">
+                        <section class="form-group">
+                          <label class="col-md-4 label">Unit<span class='important'>*</span></label>
+                          <label class="col-md-8 input custom-input-box">
+                            <%= f.select :unit_id, options_for_select(@units.map{|a|[a.name, a.id]}, selected: @product.unit_id), {include_blank: 'Please Select'}, class: "form-control" %>
+                          </label>
+                        </section>
+                        <section class="form-group">
+                          <label class="col-md-4 label">Barcode</label>
+                          <label class="col-md-8 input custom-input-box">
+                            <%= f.text_field :barcode, class: "input-sm not_manda", data: { validation: "number", validation_error_msg: 'The input value can only contain number' }, onchange: "not_mandatory(this.value, 'product_barcode');" %>
+                          </label>
+                        </section>
+                        <section class="form-group">
+                          <label class="col-md-4 label">Box</label>
+                          <label class="col-md-3 input custom-input-box">
+                            <%= f.select :box_id, options_for_select(@units.map{|a|[a.name, a.id]}, selected: @product.box_id), {include_blank: 'Please Select'}, class: "form-control" %>
+                          </label><label class="col-md-1"></label>
+                          <label class="col-md-1 label">QTY</label>
+                          <label class="col-md-3 input">
+                            <%= f.text_field :box_num, class: 'input-sm not_manda', data: {validation: "number",validation_error_msg: 'The input value can only contain number' }, onchange: "not_mandatory(this.value, 'product_box_num');" %>
+                          </label>
+                        </section>
+                        <section class="col-md-12 form-group">
+                          <label class="col-md-4 label">Box Barcode</label>
+                          <label class="col-md-8 input custom-input-box">
+                            <%= f.text_field :box_barcode, class: "input-sm not_manda", data: { validation: "number",validation_error_msg: 'The input value can only contain number' }, onchange: "not_mandatory(this.value, 'product_box_barcode');"  %>
+                          </label>
+                        </section>
+                        <section class="form-group">
+                          <label class="col-md-4 label">Box 2</label>
+                          <label class="col-md-3 input custom-input-box">
+                            <%= f.select :box2_id, options_for_select(@units.map{|a|[a.name, a.id]}, selected: @product.box2_id), {include_blank: 'Please Select'}, class: "form-control" %>
+                          </label><label class="col-md-1"></label>
+                          <label class="col-md-1 label">QTY</label>
+                          <label class="col-md-3 input">
+                            <%= f.text_field :box2_num, class: 'input-sm not_manda', data: { validation: "number",validation_error_msg: 'The input value can only contain number' }, onchange: "not_mandatory(this.value, 'product_box2_num');" %>
+                          </label>
+                        </section>
+                        <section class="col-md-12 form-group">
+                          <label class="col-md-4 label">Box 2 Barcode</label>
+                          <label class="col-md-8 input custom-input-box">
+                            <%= f.text_field :box2_barcode, class: "input-sm not_manda", data: { validation: "number",validation_error_msg: 'The input value can only contain number' }, onchange: "not_mandatory(this.value, 'product_box2_barcode');"  %>
+                          </label>
+                        </section>
+                      </section>
+                        <section class="col col-md-3">
+                          <div class="profile-user del-mrg">
+                            <%= f.file_field :image, class: "hidden", :onchange =>"readURL(this);"%>
+                            <a class="opt-profile change tip btn-upload" data-toggle="tooltip" title="Upload Photo" data-original-title="Upload" onclick="$('#product_image').click();" style="cursor: pointer;">
+                              <img id="img_prev" src="<%= @product.image.url || '/img/Actions-insert-image-icon.png' %>" width='135px'/>
+                            </a>
+                          </div>
+                          <label class="col-md-12 label" style="text-align: center; margin-top: 10px;">Upload Photo</label>
+                        </section>
+                      </section>
+                    </section> <!-- col-md-6 -->
+                  </section>
+                  <section class="col col-md-12">
+                    <%= render partial: 'status', locals: {f: f} %>
+                  </section>
+                </div>
+              </fieldset> <!-- tambah product -->
+              <footer>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              <%= hidden_field_tag :floated_margin_rp %>
+              <%= hidden_field_tag :floated_purchase_price %>
+              <%= hidden_field_tag :floated_harga_bandrol %>
+              <%= hidden_field_tag :floated_harga_eceran %>
+              <%= hidden_field_tag :floated_harga_member_eceran %>
+              <%= hidden_field_tag :floated_harga_kredit %>
+              <%= hidden_field_tag :floated_cost_of_products %>
+              <%= hidden_field_tag :floated_selling_price %>
+              <%= hidden_field_tag :floated_margin_percent4 %>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<SCRIPT>
+  $.validate({
+    lang: 'en'
+  });
+  function filter_supplier()
+  {
+    if($('#supplier_filter').val() == 'Name'){
+      $('.supplier_name').show();
+      $('.supplier_code').hide();
+    }else{
+      $('.supplier_name').hide();
+      $('.supplier_code').show();
+    }
+
+  }
+
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  function separate_number(){
+    $('#product_margin_rp').val(addCommas($('#product_margin_rp').val().split(',').join('')))
+    $('#product_purchase_price').val(addCommas($('#product_purchase_price').val().split(',').join('')))
+    $('#product_harga_bandrol').val(addCommas($('#product_harga_bandrol').val().split(',').join('')))
+    $('#product_harga_eceran').val(addCommas($('#product_harga_eceran').val().split(',').join('')))
+    $('#product_harga_member_eceran').val(addCommas($('#product_harga_member_eceran').val().split(',').join('')))
+    $('#product_harga_kredit').val(addCommas($('#product_harga_kredit').val().split(',').join('')))
+    $('#product_cost_of_products').val(addCommas($('#product_cost_of_products').val().split(',').join('')))
+    $('#product_selling_price').val(addCommas($('#product_selling_price').val().split(',').join('')))
+    $('#product_margin_percent4').val(addCommas($('#product_margin_percent4').val().split(',').join('')))
+  }
+
+  function restore_separated_number(){
+    $('#floated_margin_rp').val($('#product_margin_rp').val().split(',').join(''))
+    $('#floated_purchase_price').val($('#product_purchase_price').val().split(',').join(''))
+    $('#floated_harga_bandrol').val($('#product_harga_bandrol').val().split(',').join(''))
+    $('#floated_harga_eceran').val($('#product_harga_eceran').val().split(',').join(''))
+    $('#floated_harga_member_eceran').val($('#product_harga_member_eceran').val().split(',').join(''))
+    $('#floated_harga_kredit').val($('#product_harga_kredit').val().split(',').join(''))
+    $('#floated_cost_of_products').val($('#product_cost_of_products').val().split(',').join(''))
+    $('#floated_selling_price').val($('#product_selling_price').val().split(',').join(''))
+    $('#floated_margin_percent4').val($('#product_margin_percent4').val().split(',').join(''))
+  }
+
+  $(document).ready(function() {
+    $(".not_manda").removeAttr("data-validation");
+    <% if params[:action] == 'edit' %>
+      <% if @product.barcode.present? %>
+        $("#product_barcode").attr("data-validation, number")
+      <% else %>
+        $("#product_barcode").removeAttr("data-validation")
+      <% end %>
+      <% if @product.box_barcode.present? %>
+        $("#product_box_barcode").attr("data-validation, number")
+      <% else %>
+        $("#product_box_barcode").removeAttr("data-validation")
+      <% end %>
+      <% if @product.box2_barcode.present? %>
+        $("#product_box2_barcode").attr("data-validation, number")
+      <% else %>
+        $("#product_box2_barcode").removeAttr("data-validation")
+      <% end %>
+    <% end %>
+    <% unless params[:action] == 'edit' %>
+    $(".category").hide();
+    $(".category2").hide();
+    $(".category3").hide();
+    $(".category4").hide();
+    <% end %>
+    $("#supplier").select2();
+    $(".spl_code").select2();
+    $("#product_brand").select2();
+    $("#product_department_id").select2();
+    $("#product_m_class_id").select2();
+    $("#product_supplier_ids").select2();
+    $("#product_unit_id").select2();
+    $("#product_box_id").select2();
+    $("#product_box2_id").select2();
+    $("#product_status4").select2();
+    $('#category').attr('disabled', true)
+    $('#category').next().addClass('disabled')
+    $("#product_harga_eceran").keyup(function(e) {
+      if($(this).val() != '') {
+    //    $("#product_margin_percent3").attr('disabled','disabled');
+      } else {
+      //  $("#product_margin_percent3").removeAttr('disabled');
+      }
+    });
+    $("#product_harga_member_eceran").keyup(function(e) {
+      if($(this).val() != '') {
+        //$("#product_margin_percent2").attr('disabled','disabled');
+      } else {
+//        $("#product_margin_percent2").removeAttr('disabled');
+      }
+    });
+    $("#product_harga_kredit").keyup(function(e) {
+      if($(this).val() != '') {
+  //      $("#product_margin_percent1").attr('disabled','disabled');
+      } else {
+    //    $("#product_margin_percent1").removeAttr('disabled');
+      }
+    });
+    $("#product_margin_rp").keyup(function(e) {
+      if($(this).val() != '') {
+      //  $("#product_margin_percent").attr('disabled','disabled');
+      } else {
+        //$("#product_margin_percent").removeAttr('disabled');
+      }
+    });
+
+
+    $('#product_purchase_price, #product_margin_percent1, #product_margin_percent2, #product_margin_percent3, #product_margin_percent4, #product_margin_percent, #product_harga_bandrol, #product_harga_eceran, #product_harga_member_eceran, #product_harga_kredit, #product_cost_of_products, #product_selling_price').keyup(function(){
+//      set_price()
+      separate_number()
+    })
+    $('#product_first_po').datepicker()
+    add_branch()
+    add_m_class()
+    $('.status4 input').attr('disabled', 'disabled');
+
+    $("#brand").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/brands/autocomplete_brand_name",
+          dataType: "json",
+          data: {term: request.term, supplier_name: $('#supplier').val()},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        generate_data_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    $("#supplier").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/suppliers/autocomplete_supplier_code",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        collect_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    $("#m_class").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/m_classes/autocomplete_m_class_name",
+          dataType: "json",
+          data: {term: request.term, mclass_name: $('#department').val()},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        $('#product_m_class_id').val(ui.item.id);
+      },
+      minLength: 1
+    });
+
+    $("#department").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/departments/autocomplete_department_name",
+          dataType: "json",
+          data: {term: request.term, department_name: $('#department').val()},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        collect_mclass(ui.item.id)
+      },
+      minLength: 1
+    });
+
+    $("#unit").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/units/autocomplete_unit_name",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          }
+        });
+      },
+      minLength: 1
+    });
+
+  })
+
+  function generate_details(item_id){
+    $.ajax({
+      dataType: "script",
+      type: "get",
+      url: "/sizes/generate_details",
+      data: {size_id: item_id}
+    })
+  }
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#img_prev')
+          .attr('src', e.target.result)
+          .width(135)
+          .height(135);
+      };
+      reader.readAsDataURL(input.files[0]);
+      $('.profile-user').next().html($('#product_image').val())
+    }
+  }
+
+  function set_price(){
+    purchase_price = parseFloat($('#product_purchase_price').val().split(',').join(''))
+    price_after_discount1 = $('#product_purchase_price').val() == '' ? 0 : purchase_price*(100-parseFloat($('#brand_discount1').val()))/100
+    price_after_discount2 = price_after_discount1*(100-parseFloat($('#brand_discount2').val() == '' ? 0 : $('#brand_discount2').val()))/100
+    price_after_discount3 = price_after_discount2*(100-parseFloat($('#brand_discount3').val() == '' ? 0 : $('#brand_discount3').val()))/100
+    price_after_discount4 = price_after_discount3*(100-parseFloat($('#brand_discount4').val() == '' ? 0 : $('#brand_discount4').val()))/100
+    margin_percent3 = $('#product_margin_percent3').val() == '' ? 0 : parseFloat($('#product_margin_percent3').val())
+    margin_percent2 = $('#product_margin_percent2').val() == '' ? 0 : parseFloat($('#product_margin_percent2').val())
+    margin_percent1 = $('#product_margin_percent1').val() == '' ? 0 : parseFloat($('#product_margin_percent1').val())
+    margin_percent4 = $('#product_margin_percent4').val() == '' ? 0 : parseFloat($('#product_margin_percent4').val())
+    harga_bandrol = 0
+    mod = price_after_discount4 % 500
+    $('#product_cost_of_products').val(price_after_discount4)
+    if ($('#brand_price').val() == 'Normal'){
+      $('#product_margin_percent4, #product_margin_percent3, #product_margin_percent2, #product_margin_percent1').removeAttr('readOnly')
+      $('.labelPercent4').show()
+      $('#product_margin_rp').val(price_after_discount4/parseFloat($('#product_margin_percent').val())*100)
+      $('#product_margin_rp, #product_margin_percent').removeAttr('disabled')
+
+      harga_kredit = parseFloat($('#product_margin_rp').val())/margin_percent1*100
+      harga_kredit_mod = harga_kredit % 500
+      kredit = harga_kredit_mod > 250 ? harga_kredit+500-harga_kredit_mod : harga_kredit-harga_kredit_mod
+
+      harga_bandrol = parseInt(harga_kredit/margin_percent4*100)
+      harga_bandrol_mod = harga_bandrol % 500
+      bandrol = harga_bandrol_mod > 250 ? harga_bandrol+500-harga_bandrol_mod : harga_bandrol-harga_bandrol_mod
+
+      harga_eceran = parseInt(harga_bandrol-harga_bandrol*margin_percent3/100)
+      harga_eceran_mod = harga_eceran % 500
+      eceran = harga_eceran_mod > 250 ? harga_eceran+500-harga_eceran_mod : harga_eceran-harga_eceran_mod
+
+      harga_member_eceran = parseInt(harga_bandrol-harga_bandrol*margin_percent2/100)
+      harga_member_eceran_mod = harga_member_eceran % 500
+      member_eceran = harga_member_eceran_mod > 250 ? harga_member_eceran+500-harga_member_eceran_mod : harga_member_eceran-harga_member_eceran_mod
+
+      $('#product_harga_member_eceran').val(member_eceran)
+      $('#product_harga_eceran').val(eceran)
+      $('#product_harga_bandrol').val(bandrol)
+      $('#product_selling_price').val(bandrol)
+      $('#product_harga_kredit').val(kredit)
+    }
+    else if ($('#brand_price').val() == 'Pabrik'){
+      $('#product_margin_percent4, #product_margin_percent3, #product_margin_percent2, #product_margin_percent1').removeAttr('readOnly')
+      $('.labelPercent4').hide()
+      $('#product_margin_rp').val('')
+      $('#product_margin_percent').val('')
+      $('#product_margin_rp, #product_margin_percent').attr('disabled', true)
+
+/* membulatkan harga --START-- */
+      harga_bandrol = purchase_price+margin_percent4
+      harga_bandrol_mod = harga_bandrol % 500
+      bandrol = harga_bandrol_mod > 250 ? harga_bandrol+500-harga_bandrol_mod : harga_bandrol-harga_bandrol_mod
+
+      harga_kredit = bandrol-bandrol*margin_percent1/100
+      harga_kredit_mod = harga_kredit % 500
+      kredit = harga_kredit_mod > 250 ? harga_kredit+500-harga_kredit_mod : harga_kredit-harga_kredit_mod
+
+      harga_member_eceran = parseInt(bandrol-bandrol*margin_percent2/100)
+      harga_member_eceran_mod = harga_member_eceran % 500
+      member_eceran = harga_member_eceran_mod > 250 ? harga_member_eceran+500-harga_kredit_mod : harga_member_eceran-harga_member_eceran_mod
+
+      harga_eceran = parseInt(bandrol-bandrol*margin_percent3/100)
+      harga_eceran_mod = harga_eceran % 500
+      eceran = harga_eceran_mod > 250 ? harga_eceran+500-harga_eceran_mod : harga_eceran-harga_eceran_mod
+/* --END--*/
+
+      $('#product_harga_kredit').val(kredit)
+      $('#product_harga_member_eceran').val(member_eceran)
+      $('#product_harga_eceran').val(eceran)
+      $('#product_harga_bandrol').val(harga_bandrol)
+      $('#product_selling_price').val(parseInt(harga_bandrol))
+    }
+    else if ($('#brand_price').val() == 'Obral'){
+      $('#product_margin_percent4, #product_margin_percent3, #product_margin_percent2, #product_margin_percent1').removeAttr('readOnly')
+      product_margin_rp = price_after_discount4/parseFloat($('#product_margin_percent').val())*100
+      $('#product_margin_rp').val(product_margin_rp)
+      harga_eceran = parseFloat(product_margin_rp)/margin_percent3*100
+      harga_eceran_mod = harga_eceran % 500
+      eceran = harga_eceran_mod > 250 ? harga_eceran+500-harga_eceran_mod : harga_eceran-harga_eceran_mod
+
+      harga_member_eceran = parseInt(harga_eceran/margin_percent2*100)
+      harga_member_eceran_mod = harga_member_eceran % 500
+      member_eceran = harga_member_eceran_mod > 250 ? harga_member_eceran+500-harga_member_eceran_mod : harga_member_eceran-harga_member_eceran_mod
+
+      $('#product_harga_eceran').val(eceran)
+      $('#product_harga_member_eceran').val(member_eceran)
+      harga_bandrol = harga_eceran/margin_percent4*100
+      harga_bandrol_mod = harga_bandrol % 500
+      bandrol = harga_bandrol_mod > 250 ? harga_bandrol+500-harga_bandrol_mod : harga_bandrol-harga_bandrol_mod
+
+      harga_kredit = parseInt(bandrol-bandrol*margin_percent1/100)
+      harga_kredit_mod = harga_kredit % 500
+      kredit = harga_kredit_mod > 250 ? harga_kredit+500-harga_kredit_mod : harga_kredit-harga_kredit_mod
+
+      $('#product_harga_kredit').val(kredit)
+      $('#product_harga_bandrol').val(bandrol)
+      $('#product_selling_price').val(bandrol)
+    }
+    else{
+      $('#product_selling_price').val($('#product_harga_bandrol').val())
+      $('#product_harga_kredit, #product_harga_member_eceran, #product_harga_eceran, #product_harga_bandrol').removeAttr('readOnly')
+      $('#product_margin_percent4, #product_margin_percent3, #product_margin_percent2, #product_margin_percent1').attr('readOnly', 'readOnly')
+    }
+  }
+
+  function add_m_class(){
+    $('.add_m_class').click(function(){
+      $(this).attr('disabled', 'disabled')
+      var date = new Date();
+      $.ajax({
+        url: '/products/add_m_class',
+        data: {
+          key: $('#product_m_class section').length+1, parent_id: $('#m_class_'+$('#product_m_class section').length).val()
+        }
+      })
+    })
+  }
+
+  function mundur(i){
+    for(x=0; x< $('#product_m_class section').length+10; x++){
+        $('#mclass'+(i+x)).remove()
+      }
+  }
+
+  function reload_mclass(i, val){
+    if ($('#mclass'+(i+1)).length > 0 && $('#mclass'+(i+1)).html() != '') {
+      for(x=1; x< $('#product_m_class section').length+10; x++){
+        $('#mclass'+(i+x)).remove()
+      }
+      var date = new Date();
+      $.ajax({
+        url: '/products/add_m_class',
+        data: {
+          key: $('#product_m_class section').length+1, parent_id: val
+        }
+      })
+    }
+  }
+
+  function add_branch(){
+    $('.add_branch').click(function(){
+      var date = new Date();
+      $.ajax({
+        url: '/products/add_branch',
+        data: {
+          key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+        }
+      })
+    })
+  }
+
+  function collect_brand(supplier_id) {
+    $.ajax(
+    {
+      url: "/brands/brands_per_supplier",
+      dataType: "script",
+      data: {supplier_id: supplier_id}
+    });
+  }
+
+  function collect_mclass(department_id) {
+    $.ajax(
+    {
+      url: "/departments/categories_per_department",
+      dataType: "script",
+      data: {department_id: department_id}
+    });
+
+    $('#product_department_id').val(department_id);
+  }
+
+  function pilih_cat(obj, num){
+    $.ajax({
+      url: "/products/mclass_per_department",
+      dataType: "script",
+      data: {cat_id: obj.value, cat_num: num},
+      success: function (data){
+        response(data)
+      }
+    });
+  }
+
+  function hidden_mclass(category_id) {
+    $('#product_m_class_id').val(category_id.value);
+  }
+
+  function generate_data_brand(item_id){
+    $.ajax({
+      url: '/brands/generate_data_brand',
+      data: {brand_id: item_id}
+    })
+  }
+
+  function not_mandatory(a, b){
+    if(a.length != 0){
+      $("#"+b).attr("data-validation", "number")
+
+    }
+    else{
+      $("#"+b).removeAttr("data-validation")
+
+    }
+  }
+</SCRIPT>
+<script src="/js/jquery.min.js" type="text/javascript"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+
+<STYLE>
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+}
+</STYLE>

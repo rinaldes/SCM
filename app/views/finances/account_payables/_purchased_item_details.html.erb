@@ -1,0 +1,84 @@
+<div id="dialog-purchased-item" title="View Reciept" class="modal-dialog view-purchased-item-dialog">
+    <div class="modal-body">
+        <div class="table-responsive">
+            <% unless receiving_detail.product.blank? %>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Receive No.</th>
+                            <th colspan="4"><%= receiving_detail.receiving.number %></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td class="left-label">Barcode</td>
+                                <td class="left-input"><%= receiving_detail.product.try(:barcode) %></td>
+                                <td></td>
+                                <td></td>
+                                <td rowspan="7" class="product-image" style="border-left: solid 1px #ddd; vertical-align: middle"><%= get_image(receiving_detail.product.image) %></td>
+                            </tr>
+                            <tr>
+                                <td class="left-label">Brand</td>
+                                <td class="left-input"><%= receiving_detail.product.brand.name %></td>
+                                <td class="right-label">Invoice Price</td>
+                                <td class="right-input"><%= format_currency(receiving_detail.product.purchase_price) %></td>
+                            </tr>
+                            <tr>
+                                <td class="left-label">Article</td>
+                                <td class="left-input"><%= receiving_detail.product.try(:article) %></td>
+                                <td class="right-label">Cost Price</td>
+                                <td class="right-input"><%= format_currency(receiving_detail.product.cost_of_products) %></td>
+                            </tr>
+                            <tr>
+                                <td class="left-label">Color</td>
+                                <td class="left-input"><%= receiving_detail.product.colour.name %></td>
+                                <td class="right-label">Sell Price</td>
+                                <td class="right-input"><%= format_currency(receiving_detail.product.selling_price) %></td>
+                            </tr>
+                            <tr>
+                                <td class="left-label">Dept.</td>
+                                <td class="left-input"><%= receiving_detail.product.m_class.department.name %></td>
+                                <td class="right-label">Status 2</td>
+                                <td class="right-input"><%= receiving_detail.product.status2 %></td>
+                            </tr>
+                            <tr>
+                                <td class="left-label">M-class</td>
+                                <td class="left-input"><%= receiving_detail.product.m_class.name %></td>
+                                <td class="right-label">Status 3</td>
+                                <td class="right-input"><%= receiving_detail.product.status3 %></td>
+                            </tr>
+                            <tr>
+                                <td class="left-label">Discount</td>
+                                <td class="left-input">10% | 20% | 30% | 40%</td>
+                                <td class="right-label">Status 4</td>
+                                <td class="right-input"><%= receiving_detail.product.status4 %></td>
+                            </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped table-bordered" width="100%">
+                    <tr>
+                        <td><strong>Size</strong></td>
+                        <% receiving_detail.product.size.size_details.each do |size_detail| %>
+                            <td class='size_details'><%= size_detail.size_number %></td>
+                        <% end unless receiving_detail.product.blank? %>
+                        <td><b>Total</b></td>
+                    </tr>
+                    <% %w(receive_qty retur_qty accepted_qty).each do |qty| %>
+                        <tr>
+                            <td class='nowrap'><strong><%= qty.humanize %></strong></td>
+                            <% receiving_detail.product.size.size_details.each do |size_detail| %>
+                                <td>
+                                    <%= receiving_detail.product.count_qty(qty, size_detail) %>
+                                </td>
+                            <% end unless receiving_detail.product.blank? %>
+                        <td><%= receiving_detail.product.count_total_qty(qty) %></td>
+                        </tr>
+                    <% end %>
+                </table>
+            <% else %>
+                Product detail not found!
+            <% end %>
+        </div>
+    </div>
+</div>

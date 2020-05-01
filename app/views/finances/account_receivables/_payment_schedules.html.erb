@@ -1,0 +1,29 @@
+<section>
+    <legend>Payment Schedules</legend>
+</section>
+<section>
+    <%= link_to_add_association 'Add Payment Schedule', f, :payments,:"data-association-insertion-node" => "tbody#payments", :"data-association-insertion-method" => "append", :partial => "payment_schedule_fields", :class => "btn btn-primary btn-sm" %>
+</section>
+<section>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+            <thead>
+                <tr>
+                    <th>Payment No</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Payment Amount</th>
+                    <th>Payment Date</th>
+                    <th>Penalty</th>
+                    <th>Invoice</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="payments">
+                <%= f.fields_for :payments, f.object.payments.order('payment_number ASC') do |payment| %>
+                    <%= render 'payment_schedule_fields', f: payment %>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</section>

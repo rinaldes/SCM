@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">NO</Data></Cell>
+        <Cell><Data ss:Type="String">SKU</Data></Cell>
+        <Cell><Data ss:Type="String">BARCODE</Data></Cell>
+        <Cell><Data ss:Type="String">PRODUCT NAME</Data></Cell>
+        <Cell><Data ss:Type="String">HPP</Data></Cell>
+        <Cell><Data ss:Type="String">DISC1 %</Data></Cell>
+        <Cell><Data ss:Type="String">DISC2 %</Data></Cell>
+        <Cell><Data ss:Type="String">FRACTION</Data></Cell>
+        <Cell><Data ss:Type="String">UNIT</Data></Cell>
+        <Cell><Data ss:Type="String">QTY</Data></Cell>
+        <Cell><Data ss:Type="String">SUBTOTAL</Data></Cell>
+      </Row>
+      <% total = 0 %>
+      <% total_qty = 0 %>
+    <% @purchase_order.purchase_order_details.each_with_index do |pod, i| %>
+      <% product = pod.product %>
+
+      <% hpp_disc_amt = PurchasePrice.get_hpp_disc(product.id)*pod.fraction %>
+      <% hpp_akhir = pod.hpp*pod.fraction-hpp_disc_amt %>
+
+      <Row>
+        <Cell><Data ss:Type="String"><%= i+1 %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.article %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.barcode %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.description %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pod.hpp %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= PurchasePrice.get_disc1_percent(product.id) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= PurchasePrice.get_disc2_percent(product.id) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pod.fraction %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.select_unit pod.unit_type rescue '' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= pod.quantity %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= hpp_akhir*pod.quantity %></Data></Cell>
+      </Row>
+      <% total += hpp_akhir*pod.quantity %>
+      <% total_qty += pod.quantity %>
+    <% end %>
+      <Row>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String">TOTAL</Data></Cell>
+        <Cell><Data ss:Type="String"><%= total_qty %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= total %></Data></Cell>
+      </Row>
+    </Table>
+  </Worksheet>
+</Workbook>

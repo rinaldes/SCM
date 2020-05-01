@@ -1,0 +1,26 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+index = 0
+wb.add_worksheet(name: "Journal Memo") do |sheet|
+  sheet.add_row ["No", "Supplier", "Date Masuk", "No Faktur", "Qty", "Nominal Price", "Disc 1", "Disc 2", "Disc 3", "Disc 4", "Nominal Bayar"], :style => default
+  received_qty = 0
+  sum_total_amount = 0
+  sum_total_paid = 0
+  @journal_memos.each do |journal_memo|
+    index += 1
+  	account_payables = journal_memo.account_payables
+    account_payables_total_amount = account_payables.map(&:total_amount).sum
+    account_payables_total_paid = account_payables.map(&:total_paid).sum
+    sheet.add_row [index, journal_memo.supplier.try(:name), journal_memo.date.try(:strftime, "%d-%m-%Y"), journal_memo.consigment_number, journal_memo.received_qty, number_to_currency(account_payables_total_amount, unit: "Rp."), journal_memo.discount1, journal_memo.discount2, journal_memo.discount3, journal_memo.discount4, number_to_currency(account_payables_total_paid, unit: "Rp.")], :style => default
+  	received_qty += journal_memo.received_qty
+    sum_total_amount += account_payables_total_amount
+    sum_total_paid += account_payables_total_paid
+  end
+  if @journal_memos.present?
+  	last_row = index + 2
+  	sheet.merge_cells 'A' + last_row.to_s + ':D' + last_row.to_s
+  	sheet.add_row ["Total", "", "", "", received_qty, number_to_currency(sum_total_amount, unit: "Rp."), "", "", "", "", number_to_currency(sum_total_paid, unit: "Rp.")], :style => default
+  end
+end

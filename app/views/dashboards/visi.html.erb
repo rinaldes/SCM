@@ -1,0 +1,43 @@
+<%= javascript_tag render(:template => 'dashboards/jsManager.js', :formats => [:js]) %>
+<div class="container-fluid">
+  <ul class="breadcrumb">
+        <li><p>YOU ARE HERE</p></li> 
+        <li><a href="#" class="active">Visi</a></li>
+    </ul>
+    
+    <div class="page-title">  
+      <i class="fa fa-eye"></i>
+      <h3><span class="semi-bold">Visi</span></h3> 
+    </div>  
+    <div class="grid simple col-xs-9">
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                   Visi
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse expand in grid simple">
+              <article class="panel-body grid-body no-border m-t-10">
+                 <br />
+                 <p>
+                  <%= @visi.content_ind.html_safe rescue '' %>
+                 </p>
+                 
+              </article>
+            </div>
+          </div>
+        </div> 
+    </div>
+
+    <div class="grid simple col-xs-9">
+      <div class="checkbox check-default">
+          <input id="checkbox_accept" type="checkbox" onchange="cek_checkbox();">
+          <label for="checkbox_accept">Accept Agreement</label>
+      </div> 
+      <%= link_to dashboards_path(flag: 'vision'), :id => 'next', :class => 'btn btn-success pull-right' do %>
+          <span class="fa fa fa-arrow-circle-o-left"></span> Next
+      <% end %>
+    </div>
+
+</div>

@@ -1,0 +1,5 @@
+<label class="col-md-8 nested-fields">
+    <%= f.hidden_field :month_number %>
+    <input type="checkbox" class="months" rel="<%= f.options[:child_index].to_i+1 %>">
+    <span><%= Time.new(2015, f.options[:child_index].to_i+1, 1).strftime("%B") %></span>
+</label>

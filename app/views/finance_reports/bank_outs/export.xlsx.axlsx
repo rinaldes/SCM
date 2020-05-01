@@ -1,0 +1,15 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Bank Out") do |sheet|
+  sheet.add_row ["Perk", "Keterangan", "Debet", "Kredit"], :style => default
+  # @bank_outs.each do |bo|
+    sheet.add_row ["", "Family Tas", "Rp 4.560.000", ""], :style => default
+    sheet.add_row ["", "Retur 2", "", "Rp 76.000"], :style => default
+    sheet.add_row ["", "Adm B", "", "Rp 5.000"], :style => default
+    sheet.add_row ["", "Tunai", "Rp 4.479.000", ""], :style => default
+  # end
+  sheet.merge_cells 'A6:B6'
+  sheet.add_row ["Total", "", "", ""], :style => default
+end

@@ -1,0 +1,4 @@
+<% @purchase_request.purchase_request_details.group_by{|prd|prd.product_size.product_id}.each do |prd| %>
+  <% product = prd[1][0].product_size.product %>
+  <%= render partial: 'modal_product', locals: {product: product, quantities: prd[1].map(&:approved_qty), product_sizes: product.product_sizes, key: "#{key}#{product.id}", pr_id: pr_id} %>
+<% end %>

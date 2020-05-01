@@ -1,0 +1,5 @@
+$(".table-responsive").show();
+$("#snyc-list").html("<%= j(render 'list') %>");
+$('#button_submit').button('reset');
+$("#export-btn").attr('disabled', false);
+paging()

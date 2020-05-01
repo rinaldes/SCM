@@ -1,0 +1,15 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Account Payable") do |sheet|
+  sheet.add_row ["No. Halaman", "Kategori", "Sisa Hutang"], :style => default
+  # @account_payables.each do |ap|
+    sheet.add_row ["1", "Hutang Dagang ABC", "Rp 4.459.260.342"], :style => default
+    sheet.add_row ["2", "Hutang Konsinyasi ABC", "Rp 603.285.519"], :style => default
+    sheet.add_row ["3", "Hutang Azzurra", "Rp 2.553.205.030"], :style => default
+    sheet.add_row ["4", "Hutang Pendingan", "Rp 86.886.380"], :style => default
+    sheet.add_row ["5", "Giro Mundur", "Rp 27.394.000"], :style => default
+  # end
+  sheet.add_row ["", "", "Rp 7.730.031.271"], :style => default
+end

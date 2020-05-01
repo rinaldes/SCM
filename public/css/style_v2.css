@@ -1,0 +1,74 @@
+#ribbon {
+    background: #FFD24D none repeat scroll 0% 0%;
+}
+
+#ribbon .breadcrumb, #ribbon .breadcrumb a {
+    color: #fff !important;
+}
+
+#ribbon .breadcrumb li:last-child, #ribbon .breadcrumb > .active {
+    color: #fff;
+}
+
+aside {
+    background: transparent linear-gradient(to right, #FFCD3B  93%, #FFD24D 100%) repeat scroll 0% 0%;
+}
+
+nav ul li a {
+    color: #FFF;
+}
+
+nav ul li a:hover {
+    background: #ed9016;
+}
+
+nav ul li a:focus {
+    color: #fff;
+}
+
+nav ul li a:active {
+    color: #ed9016 !important;
+}
+
+nav ul ul {
+    background: #FFB800 none repeat scroll 0% 0%;
+}
+
+.minifyme {
+    border-bottom: 1px solid #FFB554;
+	background: #FCE8AC none repeat scroll 0% 
+}
+
+.minified nav ul li ul {
+	background: #FFB800;
+}
+
+.minified nav ul ul li a {
+	background: #FFB800;
+}
+
+.minified nav ul ul li a:hover {
+	background: #ed9016;
+}
+
+.minified nav ul li ul {
+	border: none;
+}
+
+.minifyme :hover {
+	color: #fff;
+}
+
+.jarviswidget-color-blueDark > header {
+    border-color: #DB810C !important;
+    background: #FEC216 none repeat scroll 0% 0%;
+    color: #FFF;
+}
+
+.page-footer {
+    background: #FEC216 none repeat scroll 0% 0%;
+}
+
+.bg-color-blue {
+    background-color: #ce7809 !important;
+}

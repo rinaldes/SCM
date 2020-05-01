@@ -1,0 +1,23 @@
+$("#purchase_price_product_id").val("<%= @product.id %>");
+$("#product_article").val("<%= @product.article %>");
+$("#product_barcode").val("<%= @product.barcode %>");
+$("#product_description").val("<%= @product.description %>");
+$("#supl_name").val("<%= @product_supplier.name %>");
+$("#supl_code").val("<%= @product_supplier.code %>");
+$("#box_unit").val("<%= @product.box_num || 0 %>");
+$("#box2_unit").val("<%= @product.box2_num || 0 %>");
+$("#hpp").val("<%= @product.selling_prices.last.hpp unless @product.selling_prices.last.nil? %>");
+
+// Purchase Price
+$("#purchase_price_start_date").val("<%= @product.selling_prices.last.start_date %>");
+$("#purchase_price_end_date").val("<%= @product.selling_prices.last.end_date %>");
+$("#purchase_price_price").val("<%= @product.selling_prices.last.hpp unless @product.selling_prices.last.nil? %>");
+$("#purchase_price_unit_id").append($("<option></option>").attr("value","Unit").text("<%= @product.unit.try(:name) %>"));
+
+<% if @product.box_id.present? %>
+$("#purchase_price_unit_id").append($("<option></option>").attr("value","Box").text("<%= @product.box.try(:name) %>"));
+<% end %>
+
+<% if @product.box2_id.present? %>
+$("#purchase_price_unit_id").append($("<option></option>").attr("value","Box 2").text("<%= @product.box2.try(:name) %>"));
+<% end %>

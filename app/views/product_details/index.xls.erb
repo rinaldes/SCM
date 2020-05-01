@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data>SKU</Data></Cell>
+        <Cell><Data>Store Name</Data></Cell>
+        <Cell><Data>Product Name</Data></Cell>
+        <Cell><Data>Barcode</Data></Cell>
+        <Cell><Data>Safety Stock</Data></Cell>
+        <Cell><Data>ROP Stock</Data></Cell>
+        <Cell><Data>Max Stock</Data></Cell>
+
+      </Row>
+    <% @product_d.each do |product| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= product.article %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.office_name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.product_description %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= product.barcode %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= product.min_stock %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= product.rop_stock %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= product.max_stock %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

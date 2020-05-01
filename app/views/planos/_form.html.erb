@@ -1,0 +1,297 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<link href="/plugin/multiple-select/multiple-select.css" rel="stylesheet" />
+
+<script src="/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="/js/jquery-ui.js" type="text/javascript"></script>
+<script src="/js/jquery.maskMoney.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<script src="/plugin/multiple-select/multiple-select.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Rack Display</li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-plano">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> Rack Display</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @plano, html: {class: "smart-form", id: "form-update-verify", :autocomplete => "off"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">Product</label>
+                      <label class="col-md-8 label">
+                        <label class="col-md-6 input custom-input-box">
+                          <%= text_field_tag :product, '', class: "input-sm", placeholder: "No product choosen", readonly: true, id: 'product_name' unless params[:action] == 'edit' %>
+                          <%= text_field_tag :product, @plano.product.description, class: "input-sm", placeholder: "No product choosen", readonly: true, id: 'product_name' if params[:action] == 'edit' %>
+                          <%= f.hidden_field :product_detail_id, value: @plano.product_detail_id %>
+                          <%= f.hidden_field :product_id, value: @plano.product_id %>
+                        </label>
+                        <button type="button" class="btn btn-primary btn-sm browser_product" onclick="searchProductDetails()" style="margin-left: 10px;">Browse</button>
+                      </label><br>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Period </label>
+                      <label class="col-md-8 input custom-input-box">
+                        Start : <%= f.text_field :start, :class => "datepicker_form input-sm #{(error_field @plano, :start)}" %>
+                        End :<%= f.text_field :end, :class => "datepicker_form input-sm #{(error_field @plano, :end)}" %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Rack Name </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.select :rak_id, options_for_select(Planogram.all.map{|reg|[reg.rack_number, reg.id]}, selected: @plano.rak_id), {include_blank: 'Please Select'},
+                          {class: 'form-control', onchange: 'rak_change(this);'}%>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Store</label>
+                        <div id="offices" class="col-md-8 status4">
+                          <label class="select">
+                          <%= select_tag "rackdis[office_id]", options_for_select(@offices.map { |str| [str.office_name, str.id] }, selected: (@plano.product_detail.warehouse_id rescue 0)), multiple: true, class: 'form_input', id: 'rackdis_office_id', onchange: 'get_spd_by_store(this);' %>
+                          </label>
+                        </div>
+                    </section>
+                  </section>
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">Rack Type</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= text_field_tag :rak_type, @plano.planogram.rack_type, {class: 'form-control', disabled: true} if params[:action] == 'edit' %>
+                        <%= text_field_tag :rak_type, '', {class: 'form-control', disabled: true} unless params[:action] == 'edit' %>
+                        <%= f.hidden_field :rak_type %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Shelving </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :shelving, :class => "input-sm #{(error_field @plano, :shelving)}", data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Min Display </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :min, :class => "input-sm #{(error_field @plano, :min)}", readonly: true %>
+                        <%= hidden_field_tag :spd unless params[:action] == 'edit'%>
+                        <%= hidden_field_tag :spd, @spd.averages.to_i if params[:action] == 'edit' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Baris </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :rows, :class => "input-sm #{(error_field @plano, :rows)}", data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Leadtime </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :leadtime, :class => "input-sm #{(error_field @plano, :leadtime)}", data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">N+ </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :nplus, :class => "input-sm" %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">Kiri - kanan</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.number_field :kir_ka, class: "input-sm #{(error_field @plano, :kir_ka)}", data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Atas - Bawah </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.number_field :at_ba, :class => "input-sm #{(error_field @plano, :at_ba)}", data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Depan - Belakang </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.number_field :de_be, :class => "input-sm #{(error_field @plano, :de_be)}", data: {validation: 'number', validation_error_msg: 'The input value can only contain number' } %>
+                      </label>
+                    </section>
+                    <%= hidden_field_tag "product_details[id]" %>
+                    <section>
+                      <label class="col-md-3 label">Safety Stock</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <% if @plano.new_record? %>
+                        <%= text_field_tag "product_details[min_stock]" %>
+                        <% else %>
+                        <%= text_field_tag "product_details[min_stock]", @plano.product_detail.min_stock %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Minor </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <% if @plano.new_record? %>
+                        <%= text_field_tag "product_details[rop_stock]" %>
+                        <% else %>
+                        <%= text_field_tag "product_details[rop_stock]", @plano.product_detail.rop_stock %>
+                        <% end %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Max Stock </label>
+                      <label class="col-md-8 input custom-input-box">
+                        <% if @plano.new_record? %>
+                        <%= text_field_tag "product_details[max_stock]", 0, readonly: true %>
+                        <% else %>
+                        <%= text_field_tag "product_details[max_stock]", @plano.product_detail.max_stock, readonly: true %>
+                        <% end %>
+                      </label>
+                    </section>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- Modal Supplier  -->
+<div class="modal fade" id="modal_product_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+<script>
+  $.validate({
+    lang: 'en'
+  });
+  function searchProductDetails() {
+    $.ajax({
+      dataType: "script",
+      url: '/product_details/get_product_details_modal',
+      type: 'get'
+    });
+  }
+
+  $(document).ready(function() {
+    $('#rackdis_office_id').multipleSelect();
+    $('#plano_kir_ka').keyup(function() {
+      hitung_mindis();
+      hitung_pkm();
+    });
+    $('#plano_at_ba').keyup(function() {
+      hitung_mindis();
+      hitung_pkm();
+    });
+    $('#plano_de_be').keyup(function() {
+      hitung_mindis();
+      hitung_pkm();
+    });
+    $('#plano_leadtime').keyup(function() {
+      hitung_pkm();
+    });
+    $('#product_details_min_stock').keyup(function() {
+      hitung_pkm();
+    });
+    $('#product_details_rop_stock').keyup(function() {
+      hitung_pkm();
+    });
+    $("#plano_rak_id").select2();
+    $('.datepicker_form').datepicker({
+      dateFormat : 'dd/mm/yy',
+      prevText : '<i class="fa fa-chevron-left"></i>',
+      nextText : '<i class="fa fa-chevron-right"></i>'
+    }).datepicker("setDate", new Date());
+  });
+
+  function hitung_mindis(){
+    kika = parseInt($("#plano_kir_ka").val()) || 0
+    aba = parseInt($("#plano_at_ba").val()) || 0
+    debe = parseInt($("#plano_de_be").val()) || 0
+    total = kika+aba+debe
+    $('#plano_min').val(total);
+  }
+
+  function hitung_pkm(){
+    // Variabel
+    spd = parseInt($("#spd").val()) || 0
+    lt = parseInt($("#plano_leadtime").val()) || 0
+    ss = parseInt($("#product_details_min_stock").val()) || 0
+    minor = parseInt($("#product_details_rop_stock").val()) || 0
+    mindis = parseInt($("#plano_min").val()) || 0
+
+    pkm = spd*(lt+ss)+minor
+    // Jika SPD < 3 Bulan, atau hasil = 0 maka PKM = Min. Display + Minor
+    if (spd === 0)
+    {
+      pkm = mindis+minor
+    }
+    // Jika PKM < Min. Display maka PKM = Min.Display + Minor
+    else if (pkm < mindis)
+    {
+      pkm = mindis+minor
+    }
+    $('#product_details_max_stock').val(pkm)
+  }
+
+  function rak_change(valuenya){
+    $.ajax({
+      url: '/planos/autogenerate_type',
+      data: {
+        idnya: valuenya.value
+      }
+    })
+  }
+
+  function get_spd_by_store(){
+    pd_id = $("#plano_product_id").val();
+    store_id = $("#rackdis_office_id").val();
+
+    $.ajax({
+      dataType: "script",
+      url: '/planos/get_spd',
+      data: {product_id: pd_id, store_id: store_id},
+      type: 'get'
+    });
+  }
+
+  $('form').submit(function() {
+    $('input.btn-primary').prop("disabled", "disabled");
+  })
+
+  function chooseProduct(id) {
+    var product_name = $('#product-' + id + ' td:nth-child(4)').text();
+    $('#product_name').val(product_name);
+    $('#plano_product_id').val(id);
+  }
+
+  function disable_button(){
+    $('input[type="submit"]').prop('enabled', true);
+  }
+
+  function get_planogram_type()
+  {
+    $.ajax({
+      url: '/planos/get_planogram_type',
+      data: {
+        id: $('#plano_rak_id').val(),
+        product_id: $('#number').val(),
+      }
+    })
+  }
+</script>

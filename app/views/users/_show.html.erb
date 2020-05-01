@@ -1,0 +1,70 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">User</h4>
+      </div>
+
+      <div class="modal-body">
+        <p id="notice"><%= notice %></p>
+
+        <p>
+          <strong>Image:</strong>
+          <%= @user.image? ? (image_tag @user.image_url(:thumb), alt: "", onerror: "this.src='/assets/default-user.png'") : "-" %>
+        </p>
+
+        <p>
+          <strong>First name:</strong>
+          <%= @user.first_name %>
+        </p>
+
+        <p>
+          <strong>Last name:</strong>
+          <%= @user.last_name %>
+        </p>
+
+        <p>
+          <strong>Gender:</strong>
+          <%= @user.gender %>
+        </p>
+
+        <p>
+          <strong>Birth place:</strong>
+          <%= @user.birth_place %>
+        </p>
+
+        <p>
+          <strong>Birth date:</strong>
+          <%= @user.birth_date.strftime("%d %B %Y") %>
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          <%= @user.email %>
+        </p>
+
+        <p>
+          <strong>Username:</strong>
+          <%= @user.username %>
+        </p>
+
+        <p>
+          <strong>Role:</strong>
+          <%= @user.role %>
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          <%= @user.status %>
+        </p>
+
+      </div>
+
+      <div class="modal-footer">
+        <% target_status = @user.status == "active" ? "Inactive" : "Active" %>
+        <%= link_to 'Edit', edit_user_path(@user), remote: true, class: "btn btn-success" %>
+        <%= link_to target_status, user_path(@user, :target_status => target_status.downcase), method: :delete, remote: true, class: "btn btn-primary" %>
+        <%= button_tag "Cancel", :"data-dismiss" => "modal", class: "btn btn-default", type: "button" %>
+      </div>
+  </div>
+</div>

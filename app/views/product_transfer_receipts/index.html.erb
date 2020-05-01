@@ -1,0 +1,102 @@
+<div id="ribbon">
+  <ol class="breadcrumb">
+    <li>Master Data</li><li>Product Receipt</li><li>List</li>
+  </ol>
+</div>
+<div id="content">
+  <section id="widget-grid" class="">
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+          <header>
+            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+            <h2>List Product Receipt</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <table class="table table-striped table-bordered" width="100%">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>
+                      Date
+                      <span style="float: right;">
+                        <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'created_at-desc', class: 'sorting hide' %>
+                        <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'created_at-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th class='nowrap'>
+                      No Product Transfer
+                      <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'code-desc', class: 'sorting hide' %>
+                      <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'code-asc', class: 'sorting' %>
+                    </th>
+                    <th>
+                      From
+                      <span style="float: right;">
+                        <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'origin_branch_name-desc', class: 'sorting hide' %>
+                        <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'origin_branch_name-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>
+                      Destination
+                      <span style="float: right;">
+                        <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'destination_branch_name-desc', class: 'sorting hide' %>
+                        <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'destination_branch_name-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>
+                      By
+                      <span style="float: right;">
+                        <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'receiver_name-desc', class: 'sorting hide' %>
+                        <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'receiver_name-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>
+                      Delivery Orders Number
+                      <span style="float: right;">
+                        <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'no_surat_jalan-desc', class: 'sorting hide' %>
+                        <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'no_surat_jalan-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                    <th>
+                      Status
+                      <span style="float: right;">
+                        <%= link_to raw("<i class='fa fa-sort-desc'></i>"), 'javascript:void(0)', id: 'status-desc', class: 'sorting hide' %>
+                        <%= link_to raw("<i class='fa fa-sort-asc'></i>"), 'javascript:void(0)', id: 'status-asc', class: 'sorting' %>
+                      </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th class="hasinput">
+                      <%= text_field_tag :tanggal, params[:tanggal], class: 'form-control search', name: "to_char(mutation_date, 'DD-MM-YYYY')" %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :code, params[:code], class: 'form-control search' %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :origin_branch_name, params[:origin_branch_name], class: 'form-control search', name: "origin.office_name" %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :destination_branch_name, params[:destination_branch_name], class: 'form-control search', name: "destination.office_name" %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :receiver_name, params[:receiver_name], class: 'form-control search', name: "concat(sender.first_name, ' ', sender.last_name)" %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :no_surat_jalan, params[:no_surat_jalan], class: 'form-control search' %>
+                    </th>
+                    <th class="hasinput">
+                      <%= text_field_tag :status, params[:status], class: 'form-control search', name: 'product_mutations.status' %>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id='good_transfer-list'><%= render 'good_transfer_list' %></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

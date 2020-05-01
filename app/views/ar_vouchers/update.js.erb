@@ -1,0 +1,5 @@
+$("#notification").html("<%= j(render 'dashboard/notification') %>");
+<% if @supplier.errors.blank? %>
+	$("#ar_voucher-list").html("<%= j(render 'ar_voucher_list') %>");
+<% end %>
+$("#form-ar_voucher").html("<%= j(render 'form') %>");

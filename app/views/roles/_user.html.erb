@@ -1,0 +1,9 @@
+<tr id="user_<%= user.id %>" class="">
+  <td><%= link_to user.first_name + " " + user.last_name, user, remote: true %></td>
+  <td><%= link_to user.username, user, remote: true %></td>
+  <td><%= user.gender %></td>
+  <td><%= user.birth_place %>, <%= user.birth_date.strftime("%d %B %Y") %></td>
+  <td><%= user.email %></td>
+  <td><%= user.role %></td>
+  <td><%= user.status %></td>
+</tr>

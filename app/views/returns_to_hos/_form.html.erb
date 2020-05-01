@@ -1,0 +1,338 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Purchasing</li><li>Retur Products To Warehouse</li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2>Retur Products</h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @returns_to_ho, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= f.hidden_field :status, value: "Pending", class: "input-sm" %>
+              <%= f.hidden_field :supplier_id, class: 'supplier_id' %>
+              <%= hidden_field_tag :ref_transaction %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-4 label">Retur No.</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :code, class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Retur Date</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :mutation_date, value: Time.now.strftime('%d-%m-%Y'), class: "input-sm #{(error_field @returns_to_ho, :date)}", disabled: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Status</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= label_tag "Pending", "Pending", class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Note</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_area :note, class: "input-sm" %>
+                      </label>
+                    </section>
+                    <!--
+                    <section>
+                      <label class="col-md-4 label">No. Surat Jalan</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%#= f.text_field :no_surat_jalan, class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                  </section>
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-3 label">Transfer no <span class='important'>*</span></label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%#= text_field_tag :receive_no, '', class: 'input-sm autocompletenya2' %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Transfer Date </label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%#= text_field_tag "r_date", '', class: "input-sm r_date", readonly: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Store </label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%#= f.hidden_field :origin_warehouse_id, value: current_user.branch_id, class: 'ho_id' %>
+                        <%#= text_field_tag "origin_branch", (current_user.branch.office_name rescue nil), class: "input-sm branch", onblur: "nomor_ganti()",
+                          readonly: current_user.branch_id.present? %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-3 label">Warehouse </label>
+                      <label class="col-md-9 input custom-input-box">
+                        <%#= f.hidden_field :destination_warehouse_id, value: current_user.head_office_id %>
+                        <%#= text_field_tag "HO", (current_user.head_office.office_name rescue nil), class: "input-sm HO", onblur: "nomor_ganti()",
+                          readonly: current_user.head_office_id.present? %>
+                      </label>
+                    </section>
+
+                  </section>
+                  <section class="col col-md-4">
+                    <%#= render 'shared/supplier_info' %>
+                    -->
+                  </section>
+                  <fieldset>
+                  <br/>
+                    <center><%#=link_to 'Add Purchase Transfer to Return Warehouse', "javascript:void(0)", onclick:"add_pt_to_rho($('.autocompletenya2').val())", class:"btn btn-primary btn-sm"%></center>
+                  </fieldset>
+
+                </div> <!-- row -->
+              </fieldset>
+              <%= render "purchase_requests/product_search" %>
+              <fieldset class="col col-md-12">
+                <div class="row">
+                  <table class="table table-condensed table-striped table-bordered table-hover no-margin" id="request">
+                    <thead>
+                      <tr>
+                        <th>Purchase Transfer</th>
+                        <th>Barcode</th>
+                        <th>Brand</th>
+                        <th>Article</th>
+                        <th>Colour</th>
+                        <th>Department</th>
+                        <th>Total</th>
+                        <th>Retur QTY</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id='list_detail'>
+                      <% if params[:action] == 'edit' %>
+                        <% @returns_to_ho.returns_to_ho_details.each{|cp| %>
+                          <%= render partial: "returns_to_ho_detail", locals: {key: cp.id, object: cp} %>
+                        <% } %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </section>
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick="return(beforeSave())">
+                  Save
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'></div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#supplier_name').blur(function(){
+      nomor_ganti()
+    })
+    $("#HO").autocomplete({
+        source : function(request, response) {
+          $.ajax({
+            url : "/warehouses/autocomplete_warehouse_office_name",
+            dataType : "json",
+            data : {
+              term : request.term
+            },
+            success: function (data){
+              response(data)
+            },
+            select: function( event, ui ) {
+              $('#origin_warehouse_id').val(ui.item.id)
+            },
+          });
+        }
+    });
+
+    autocomplete_barcode()
+    autocomplete_receiving()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+    $('.add_item').click(function(){
+      add_item()
+    })
+  });
+
+  function nomorkeisi(){
+    var value=$.trim($("#receive_no").val());
+    if(value.length>0)
+    {
+      $(".barang").hide();
+      $("#returns_to_ho_receive_no").val($("#receive_no").val());
+
+    }
+    else
+    {
+      $(".barang").show();
+      $("#returns_to_ho_receive_no").val('');
+    }
+  }
+
+  function add_item(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_hos/add_item',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, origin_branch: $("#stock_transfer_branch_id").val()
+      }
+    })
+  }
+
+  function add_brand(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_hos/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, origin_branch: $("#stock_transfer_branch_id").val()
+      }
+    })
+  }
+
+  function get_receiving(){
+    $.ajax({
+      url: '<%= get_receiving_returns_to_hos_path %>',
+      type: 'get',
+      data: {
+        name: $("#receive_no").val()
+      }
+    })
+  }
+
+  function get_product(){
+    $.ajax({
+      url: '<%= get_product_returns_to_hos_path %>',
+      type: 'get',
+      data: {
+        name: $("#barcode").val()
+      }
+    })
+  }
+
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function autocomplete_receiving(){
+    $(".autocompletenya2").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/purchase_transfers/autocomplete_purchase_transfer",
+          dataType: "json",
+          data: {term: request.term, destination_warehouse_id: '<%= current_user.branch_id %>', origin_warehouse_id: '<%= current_user.head_office_id %>',
+            supplier_id: $('.supplier_id').val(), present_transfer: $('#ref_transaction').val()},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+
+      },
+      minLength: 1
+    });
+  }
+
+  function add_pt_to_rho(number){
+    var date = new Date();
+    $.ajax({
+      url: '/returns_to_hos/add_product_pt',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), number: number
+      }
+    })
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#orders tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#orders tbody tr:eq("+ y +") td:eq(0) span:eq(0)").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){
+        $.ajax(
+        {
+          url: "/returns_to_hos",
+          dataType: "script",
+          method: 'POST',
+          data: $("form").serialize(),
+          success: function (data){
+            response(data)
+          },
+        });
+      }, 1000);
+    }else{
+      return false;
+    }
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+
+  function searchManual(){
+    $.ajax({
+      url: '/purchase_requests/search_product_manual',
+      type: 'get'
+    })
+  }
+
+  function nomor_ganti(){
+    $.ajax({
+        url: '/returns_to_hos/get_last_number',
+        type: 'get',
+        dataType: 'json',
+        data: {
+          supplier_id: $('.supplier_id').val()
+        },
+        success: function(data){
+          //RTH/Name Branch asal -Name HO penerima/No Supplier/Tahun-Bulan-Hari/No urut per supplier (terus berlanjut hingga 1 tahun)
+          $("#returns_to_ho_code").val("RTH/"+$('.branch').val()+" - "+$('#HO').val()+"/"+$("#supplier_code").val()+"/"+$('#returns_to_ho_mutation_date').val()+"/"+data.number);
+        }
+    })
+  }
+</script>
+<script src="/js/jquery.min.js"></script>

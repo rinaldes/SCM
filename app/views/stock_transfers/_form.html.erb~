@@ -1,0 +1,262 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li><%= t(:stock_mutation) %></li><li><%= label %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-good_transfer">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= label %> <%= t(:stock_mutation) %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @transfer, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <%= f.hidden_field :no_surat_jalan, value: "SJ/#{Time.now.strftime('%m%y')}-#{'%06d' % ((@last_goods_transfer.id rescue 0)+1)}", class: "input-sm" %>
+              <%= f.hidden_field :user_id, value: current_user.id %>
+              <%= f.hidden_field :status, value: "Pending", class: "input-sm" %>
+              <%= f.hidden_field :supplier_id, class: "supplier_id" %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-4 label">Date</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :date, value: Time.now.strftime('%d-%m-%Y'), class: "input-sm #{(error_field @transfer, :transfer_date)}", disabled: true %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">No. Mutation Status</label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.text_field :number, class: "input-sm", readonly: true %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-4">
+                    <%= render 'shared/supplier_info' %>
+                  </section> <!-- col-md-6 -->
+                  <section class="col col-md-4">
+                    <section>
+                      <label class="col-md-4 label">Branch <span class='important'>*</span></label>
+                        <label class="col-md-8 input custom-input-box">
+                          <% if current_user.branch.present? %>
+                            <%= current_user.branch.office_name %>
+                            <%= f.select :branch_id, options_for_select([[current_user.branch.office_name, current_user.branch_id]]), {}, class: 'origin_branch_id hide ho_id' %>
+                          <% else %>
+                            <%= f.select :branch_id, options_for_select(current_user.offices.map{|o|[o.office_name, o.id]}), {}, class: 'form-control origin_branch_id ho_id' %>
+                          <% end %>
+                        </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Origin Stock <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.select(:origin_stock, %w(Available Freezed Online Defect Reject), {prompt: 'Pilih Stok Asal'}, {class: "input-sm"}) %>
+                      </label>
+                    </section>
+                    <section>
+                      <label class="col-md-4 label">Destination Stock <span class='important'>*</span></label>
+                      <label class="col-md-8 input custom-input-box">
+                        <%= f.select(:destination_stock, %w(Available Freezed Online Defect Reject Scrap), {prompt: 'Pilih Stok Destination'}, {class: "input-sm "}) %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-6 -->
+                  <fieldset>
+                  </fieldset>
+                </div> <!-- row -->
+              </fieldset> <!-- tambah supplier -->
+              <%= render "product_search" %>
+              <fieldset class="col col-md-12"> <!-- brand person -->
+                <div class="row">
+                  <section class="col col-md-12">
+                    <table class="table table-striped table-brequested table-hover" width="100%" id="request">
+                      <thead>
+                        <tr>
+                          <th>CODE</th>
+                          <th>BRAND</th>
+                          <th>TYPE</th>
+                          <th>ARTICLE</th>
+                          <th>COST OF GOODS</th>
+                          <th>QUANTITY</th>
+                          <th class="col-md-1">ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% if params[:action] == 'edit' %>
+                          <%= render 'list_detail' %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </section>
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-primary" onclick="return(beforeSave())">
+                  Submit
+                </button>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                  Back
+                </button>
+              </footer>
+              <div id='product_detail_tobe_submitted' style='display: none'></div><!-- end widget div -->
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->
+<div id='product_detail'>
+  <% if params[:action] == 'edit' %>
+    <% @purchase_request.purchase_request_details.group_by{|prd|prd.product_size.product_id}.each_with_index { |prd, i| %>
+      <% product = prd[1][0].product_size.product %>
+      <div class="modal fade" id="myModal<%= product.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <%= render partial: 'size', locals: {product: product, quantities: prd[1].map(&:quantity), product_sizes: product.product_sizes, list_product: @list_product[product.id],
+          key: "#{Time.now}#{i}"} %>
+      </div>
+    <% } %>
+  <% end %>
+</div><!-- end widget div -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    autocomplete_barcode()
+    $('.add_brand').click(function(){
+      add_brand()
+    })
+
+    $("#stock_transfer_origin_stock").autocomplete({
+      source : function(request, response) {
+        $.ajax({
+          url : "/branches/autocomplete_branch_office_name",
+          dataType : "json",
+          data : {
+            term : request.term
+          },
+          success: function (data){
+            response(data),
+            nomor_ganti()
+          },
+        });
+      }
+    });
+    $("#stock_transfer_branch_id").autocomplete({
+      source : function(request, response) {
+        $.ajax({
+          url : "/branches/autocomplete_branch_office_name",
+          dataType : "json",
+          data : {
+            term : request.term
+          },
+          success: function (data){
+            response(data),
+            nomor_ganti()
+          },
+        });
+      }
+    });
+    $("#stock_transfer_destination_stock").autocomplete({
+      source : function(request, response) {
+        $.ajax({
+          url : "/branches/autocomplete_branch_office_name",
+          dataType : "json",
+          data : {
+            term : request.term
+          },
+          success: function (data){
+            response(data),
+            nomor_ganti()
+          },
+        });
+      }
+    });
+  });
+
+  function nomor_ganti(){
+    if ($('#good_transfer_destination_warehouse_id').val() != '' && $('#good_transfer_origin_warehouse_id').val() != '' && $('#supplier_name').val() != ''){
+      $.ajax({
+          url: '/good_transfers/get_last_number',
+          type: 'get',
+          dataType: 'json',
+          data: {
+            supplier_id: $('.supplier_id').val()
+          },
+          success: function(data){
+            //MST/Name Branch atau Name HO/No Supplier/Tahun-Bulan-Hari/No urut per supplier (terus berlanjut hingga 1 tahun)
+            $("#stock_transfer_code").val("MST/"+$('#good_transfer_origin_warehouse_id').get(0).options[$('#good_transfer_origin_warehouse_id').get(0).selectedIndex].innerHTML+" - "+$('#good_transfer_destination_warehouse_id').get(0).options[$('#good_transfer_destination_warehouse_id').get(0).selectedIndex].innerHTML+"/"+$("#supplier_code").val()+"/"+$('#good_transfer_mutation_date').val()+"/"+data.number);
+          }
+      })
+    }
+  }
+
+  function beforeSave(){
+    var good_id = [];
+    var tot = $('#request tbody tr').length;
+    if(tot != 0){
+      for(var y=0; y < tot; y+=1){
+        good_id.push($("#request tbody tr:eq("+ y +") td:eq(0) span").text())
+      }
+      $("#good_list").val(good_id.toString());
+      clone_inputs()
+      setTimeout(function(){$('form').submit()}, 1000);
+    }else{
+      alert('Insert Data First!')
+      return false;
+    }
+  }
+
+  function add_brand(product_id){
+    var date = new Date();
+    $.ajax({
+      url: '/stock_transfers/add_brand',
+      data: {
+        key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), product_id: product_id, origin_branch: $("#stock_transfer_branch_id").val()
+      }
+    })
+  }
+
+  function merk(){
+  }
+
+  function autocomplete_barcode(){
+    $(".autocompletenya").autocomplete({
+      search: function () {},
+      source: function (request, response)
+      {
+        $.ajax(
+        {
+          url: "/products/autocomplete_goods_barcode",
+          dataType: "json",
+          data: {term: request.term},
+          success: function (data){
+            response(data)
+          },
+        });
+      },
+      select: function( event, ui ) {
+        add_brand(ui.item.id)
+      },
+      minLength: 1
+    });
+  }
+
+  function deleteRow(event){
+    $(event.target).parent().parent().parent().remove();
+  }
+  function add_products(module_name){
+        var date = new Date();
+        $.ajax({
+          url: '/stock_transfer/add_product',
+          data: {
+            key: date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds(), id: $('#product_id').val(),
+            quantities: $('#quantity_number').val(), branch_id: $('.origin_branch_id').val(), origin_warehouse_id: $('.ho_id').val(), destination_warehouse_id: $('.destination_warehouse_id').val(),
+            transaction_type: '<%= params[:controller].chop %>'
+          }
+        })
+      }
+</script>
+<script src="/js/jquery.min.js"></script>

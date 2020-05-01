@@ -1,0 +1,29 @@
+<% @edc_machines.each_with_index do |edc_machine, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="hidden-phone"><%= link_to edc_machine.bank_name, edc_machine_path(edc_machine), class: 'blue' %></td>
+    <td class="hidden-phone"><%= edc_machine.branch %></td>
+    <td class="hidden-phone"><%= edc_machine.edc_serial_number %></td>
+    <td class="hidden-phone"><%= edc_machine.account_number %></td>
+    <td class="hidden-phone"><%= edc_machine.owner %></td>
+    <td class="hidden-phone">
+      <%= link_to edit_edc_machine_path(edc_machine), class: "btn btn-primary btn-xs " do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{edc_machine.id}, 'edc_machines')", class: "btn btn-danger btn-xs" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=7>
+    <% if @edc_machines.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@edc_machines, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

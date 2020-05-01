@@ -1,0 +1,17 @@
+<% @good_transfers.each_with_index do |gt, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= gt.mutation_date %></span></td>
+    <td><%= link_to gt.code, good_transfer_url(gt), class: 'blue' %></td>
+    <td class="hidden-phone"><%= gt.origin_name %></td>
+    <td class="hidden-phone"><%= gt.destination_name %></td>
+    <td class="hidden-phone"><%= gt.sender_name %></td>
+    <td class="hidden-phone"><%= gt.no_surat_jalan %></td>
+    <td class="hidden-phone"><%= gt.status %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=8>
+    <%= will_paginate @good_transfers %>
+  </td>
+</tr>

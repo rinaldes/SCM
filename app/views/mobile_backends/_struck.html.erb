@@ -1,0 +1,41 @@
+<thead>
+  <tr>
+    <th><%= t(:no) %></th>
+    <th>Date</th>
+    <th>
+      <%= t(:no_struk) %>
+      <span style="float: right;">
+        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'sales.code-desc', class: 'sorting hide' %>
+        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'sales.code-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th>
+      <%= t(:user) %>
+      <span style="float: right;">
+        <%= link_to raw('<i class="fa fa-sort-desc"></i>'), 'javascript:void(0)', id: 'name-desc', class: 'sorting hide' %>
+        <%= link_to raw('<i class="fa fa-sort-asc"></i>'), 'javascript:void(0)', id: 'name-asc', class: 'sorting' %>
+      </span>
+    </th>
+    <th class="m_report"><%= t(:net_sales) %></th>
+    <th class="m_report">VAT</th>
+    <th class="m_report"><%= t(:sales_price) %></th>
+    <th class="m_report">HPP</th>
+    <th class="m_report"><%= t(:margin_amount) %></th>
+    <th class="m_report">%</th>
+    <th class="m_transaction"><%= t(:total_sales) %></th>
+    <th class="m_transaction"><%= t(:status) %></th>
+    <th class="m_transaction"><%= t(:nama) %></th>
+    <th class="m_transaction"><%= t(:no_telp) %></th>
+    <th class="m_transaction"><%= t(:alamat) %></th>
+    <th class="m_transaction"><%= t(:kelurahan) %></th>
+    <th class="m_transaction"><%= t(:kecamatan) %></th>
+    <th class="m_transaction"><%= t(:kota) %></th>
+  </tr>
+  <tr>
+    <th colspan="2"></th>
+    <th class="hasinput"><%= text_field_tag :no_struck, params[:no_struck], class: 'form-control pencarian', onchange: "load();" %></th>
+    <th class="hasinput"><%= text_field_tag :sales, params[:sales], class: 'form-control pencarian', onchange: "load();" %></th>
+    <th colspan="15"></th>
+  </tr>
+</thead>
+<tbody id='purchase_order-list'><%= render 'purchase_order_list' %></tbody>

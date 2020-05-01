@@ -1,0 +1,48 @@
+<tr class="nested-fields">
+    <td>
+        <span class="monthly-budget-input" style="<%= f.object.month_number.blank?  ?  "" : 'display:none;' %>">
+            <%= f.select :month_number, options_for_select((1..12).map {|m| [Date::MONTHNAMES[m], m]}, (f.object.month_number  unless f.object.month_number.blank?)) , class: 'select-month'%>
+            </span>
+        <span class="monthly-budget-text">
+            <%= Time.new(2015, f.object.month_number).strftime("%B")  unless f.object.month_number.blank? %>
+        </span>
+    </td>
+
+    <td>
+        <span class="monthly-budget-textx"><%= format_currency(f.object.get_month_prev_budget) %></span>
+    </td>
+
+    <td>
+        <span class="monthly-budget-input" style="<%= f.object.month_number.blank?  ?  "" : 'display:none;' %>">
+            <%= f.text_field :initial_budget, :size=>"10" %>
+        </span>
+        <span class="monthly-budget-text"><%= format_currency(f.object.initial_budget) %></span>
+    </td>
+
+    <td>
+        <span class="monthly-budget-input" style="<%= f.object.month_number.blank?  ?  "" : 'display:none;' %>">
+            <%= f.text_field :additional_budget, :size=>"10" %>
+        </span>
+        <span class="monthly-budget-text"><%= format_currency(f.object.additional_budget.to_f) %></span>
+    </td>
+
+    <td>
+        <span class="monthly-budget-text-b"><%= format_currency(f.object.initial_budget.to_f + f.object.additional_budget.to_f) %></span>
+    </td>
+
+    <td>
+        <span class="monthly-budget-text-b"><%= format_currency(f.object.get_month_realization) %></span>
+    </td>
+
+    <td>
+        <span class="monthly-budget-ntext">
+            <%= f.object.get_month_realization_in_percent %> %
+        </span>
+    </td>
+
+    <td>
+       <%= link_to  raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), "#", :class => "click-edit-monthly-budget"  if  !f.object.month_number.blank? && (f.object.month_number > Time.now.month )||( f.object.budget.year.year > Time.now.year) %>
+        <%= link_to "Cancel", "#", :class => "click-cancel-edit-monthly-budget" if  !f.object.month_number.blank? &&  f.object.month_number > Time.now.month %>
+        <%= link_to_remove_association ('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>').html_safe, f  if  !f.object.month_number.blank? && (f.object.month_number > Time.now.month )||( f.object.budget.year.year > Time.now.year) || f.object.new_record? %>
+    </td>
+</tr>

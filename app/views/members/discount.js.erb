@@ -1,0 +1,11 @@
+$("#discount-list").html("<%= j render 'member_discount_list' %>")
+$(".pagination").html ("<%= j will_paginate @discounts %>")
+$('.pagination a').bind('click', function(){
+  $.ajax({
+    url: '<%= discount_members_path %>'.split('?page')[0]+'?page='+this.href.split('page=')[1],
+    method: "get",
+    dataType: "script"
+  })
+  return false
+});
+$("#form-discount").html("<%= j(render 'member_discount_form') %>");

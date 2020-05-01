@@ -1,0 +1,28 @@
+<% @returns_to_hos.each_with_index do |returns_to_ho, i| %>
+  <% details = returns_to_ho.product_mutation_details %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td class="nowrap"><%= link_to returns_to_ho.code, returns_to_ho_url(returns_to_ho) %></span></td>
+    <td class="hidden-phone"><%= returns_to_ho.mutation_date %></td>
+    <td class="hidden-phone"><%= returns_to_ho.supplier_name %></td>
+    <td class="hidden-phone"><%= returns_to_ho.total_quantity %></td>
+    <td class="hidden-phone"><%= returns_to_ho.total_price %></td>
+    <td class="hidden-phone"><%= returns_to_ho.note %></td>
+    <td class="hidden-phone"><%= returns_to_ho.status %></td>
+    <td class="nowrap">
+      <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_returns_to_ho_path(returns_to_ho), class: "btn btn-primary btn-xs" %>
+      <%= link_to raw('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', onclick: "delete_one(#{returns_to_ho.id}, 'returns_to_hos')", class: "btn btn-danger btn-xs" %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan='9'>
+    <% if @returns_to_hos.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@returns_to_hos, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

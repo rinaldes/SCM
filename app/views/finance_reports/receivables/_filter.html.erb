@@ -1,0 +1,14 @@
+<%= form_tag finance_reports_receivables_path, class: "smart-form", :id => "receivables-filter-form", :remote => true  do %>
+  <fieldset>
+    <div class="row">
+      <section class="col col-6">
+        <section>
+          <label class="col-md-4 label">Member</label>
+          <label class="col-md-6 input custom-input-box">
+            <%= select_tag("member_id", options_for_select(@members.map{|member|[member.name, member.id]}, selected: (object.id rescue '')), prompt: "Please Select", class: "form-control receivable-member") %>
+          </label>
+        </section>
+      </section>
+    </div>
+  </fieldset>
+<% end %>

@@ -1,0 +1,82 @@
+<script src="/js/jquery-2.1.1.min.js"></script><!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<div id="ribbon"><!-- RIBBON -->
+  <ol class="breadcrumb"><!-- breadcrumb -->
+    <li>Master Data</li><li>Planogram</li><li><%= @planogram.rack_number %></li>
+  </ol><!-- end breadcrumb -->
+</div><!-- END RIBBON -->
+<div id="content"><!-- MAIN CONTENT -->
+  <div class="row">
+    <article class="col-sm-12 col-md-12"><!-- NEW COL START -->
+      <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+        <header id="header-supplier">
+          <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+          <h2><%= @planogram.rack_number %></h2>
+        </header>
+        <div><!-- widget div-->
+          <div class="widget-body no-padding"><!-- widget content -->
+            <%= form_for @planogram, html: {class: "smart-form", id: "form-update-verify"} do |f| %>
+              <fieldset>
+                <div class="row">
+                  <section class="col col-md-6">
+                    <section>
+                      <label class="col-md-2 label">Rack Number</label>
+                      <label class="col-md-9 input custom-input-box"><%= @planogram.rack_number %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Rack Type</label>
+                      <label class="col-md-9 input custom-input-box"><%= @planogram.rack_type %></label>
+                    </section>
+                    <section>
+                      <label class="col-md-2 label">Store</label>
+                      <label class="col-md-9 input custom-input-box">
+                        <% @planogram.planograms_stores.each do |store| %>
+                        <%= Branch.find(store.branch_id).office_name %><br>
+                        <% end %>
+                      </label>
+                    </section>
+                  </section> <!-- col-md-12 -->
+                </div> <!-- row -->
+              </fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" onclick="window.history.back();">Back</button>
+              </footer>
+            <% end %>
+          </div><!-- end widget content -->
+        </div><!-- end widget div -->
+      </div><!-- end widget -->
+      <!-- <div role="widget" class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                <header role="heading">
+                <div role="menu" class="jarviswidget-ctrls"></div>
+                  <span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+                  <h2>Products on <%#= @planogram.rack_number %></h2>
+                </header>
+                <!-- widget div-->
+                <!-- <div role="content"> -->
+                  <!-- widget content -->
+                  <!-- <div class="widget-body">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>No.</th>
+                          <th>Barcode</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody> -->
+                        <%# ProductPlanogram.where(planogram_id: @planogram.id).each_with_index do |prop,i| %>
+                        <!-- <tr>
+                          <td><%#= i + 1%></td>
+                          <td><%#= prop.product.barcode %></td>
+                          <td><%#= prop.product.description %></td>
+                        </tr> -->
+                        <%# end %>
+                      <!-- </tbody>
+                    </table>
+                  </div> -->
+                  <!-- end widget content -->
+                <!-- </div> -->
+                <!-- end widget div -->
+      <!-- </div> -->
+    </article><!-- END COL -->
+  </div><!-- end widget div -->
+</div><!-- end widget div -->

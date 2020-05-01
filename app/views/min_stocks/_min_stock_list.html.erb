@@ -1,0 +1,18 @@
+<% @min_stocks.each_with_index do |product, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= link_to product.barcode, product_url(product) %></span></td>
+    <td class="hidden-phone"><%= product.brand_name %></td>
+    <td class="hidden-phone"><%= product.supplier_name %></td>
+    <td class="hidden-phone"><%= product.article %></td>
+    <td class="hidden-phone"><%= product.colour_name %></td>
+    <td class="hidden-phone"><%= product.m_class_name %></td>
+    <td class="hidden-phone"><%= product.purchase_price %></td>
+    <td class="hidden-phone"><%= product.selling_price %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=10>
+    <%= will_paginate @out_stocks %>
+  </td>
+</tr>

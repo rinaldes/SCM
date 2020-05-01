@@ -1,0 +1,29 @@
+<tr class="alert alert-info alert-block">
+  <div class="nested-fields addform clearfix">
+    <td>
+      <label class="col-md-10 input custom-input-box">
+        <%= hidden_field_tag "promotion[promo_item_lists_attributes][#{key}][product_id]", (object.product_id rescue ''), class: "product_id" %>
+        <button type="button" class="btn btn-sm btn-primary btn-circle" onclick="select_product_manual('<%=key%>')" id="btn_<%=key%>"><i class="glyphicon glyphicon-list"></i></button>
+        <span id="article_<%=key%>"><%= Product.find(object.product_id).article if params[:action] == 'edit' %></span>
+      </label>
+    </td>
+    <td>
+      <label class="col-md-10 input custom-input-box">
+        <%= hidden_field_tag "promotion[promo_item_lists_attributes][#{key}][department_id]", (object[:department_id] rescue ''), class: "input-sm hidden_sku" %>
+        <span id="product_name_<%=key%>"><%= Product.find(object.product_id).description if params[:action] == 'edit' %></span>
+      </label>
+    </td>
+    <td>
+      <label class="col-md-10 input custom-input-box">
+        <%= hidden_field_tag "promotion[promo_item_lists_attributes][#{key}][m_class_id]", (object[:m_class_id] rescue ''), class: "input-sm hidden_mclass" %>
+        <span id="unit_name_<%=key%>"><%= Sku.find_by_barcode(Product.find(object.product_id).barcode).unit.name if params[:action] == 'edit' %></span>
+      </label>
+    </td>
+    <td>
+      <label class="col-md-10 input custom-input-box">
+        <%= text_field_tag "promotion[promo_item_lists_attributes][#{key}][min_qty]", (object.min_qty rescue ''), class: "qty_detail" %>
+      </label>
+    </td>
+    <td><a class="close btn btn-default btn-xs" data-dismiss="alert" href="#"><i class="fa fa-times"></i></a></td>
+  </div>
+</tr>

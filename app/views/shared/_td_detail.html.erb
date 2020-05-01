@@ -1,0 +1,135 @@
+<% transaction_type = params[:transaction_type] || (transaction_type rescue 'product_mutation') %>
+<td><span class='product_barcode hide'><%= product.barcode rescue '' %></span><%= product.article rescue '' %></td>
+<% unless pod.nil? %>
+  <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][id]", pod.id %>
+<% end %>
+  <td id="rts_barcode" class="<%= render plain: 'hide' if params[:controller] != 'returns_to_suppliers' %>"><%= product.barcode rescue '' %></td>
+<% if (show_barcode rescue false) %>
+  <td><%= product.barcode rescue '' %></td>
+<% end %>
+<td><%= product.description rescue '' %></td>
+<% if (show_price rescue true) %>
+  <td>
+    <%= text_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp_separated]", format_currency(params[:hpp] || (pod.hpp rescue (hpp rescue ''))), class: "hpp",
+      onkeyup: "$(this).next().val(this.value)", readonly: true %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp]", params[:hpp].to_s.gsub(',', '') || (pod.hpp rescue (hpp rescue '')), class: 'hpp_origin' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp_middle]", (product.box_num.to_f rescue 0)*params[:hpp].to_f, class: 'hpp_middle_origin' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][hpp_high]", (product.box2_num.to_f rescue 0)*params[:hpp].to_f, class: 'hpp_high_origin' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][fraction_box]", (product.box_num.to_f rescue 0), class: 'fraction_box' %>
+    <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][fraction_box2]", (product.box2_num.to_f rescue 0), class: 'fraction_box2' %>
+    <%= hidden_field_tag :disc_amount, PurchasePrice.get_hpp_disc(product.id), class: 'disc' %>
+  </td>
+<% end %>
+<td>
+  <%= hidden_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][product_id]", product.id %>
+  <%= text_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][quantity]", (params[:quantities] || quantity || (pod.quantity rescue '')), class: 'qty',
+    onkeyup: "set_subtotal(this)" %>
+</td>
+<td id="td_fraction"><%= pod.fraction rescue 1 %></td>
+<td><%= PurchasePrice.get_disc1_percent(product.id) %></td>
+<td><%= PurchasePrice.get_disc2_percent(product.id) %></td>
+<td>
+  <%
+    unit_select = [[product.unit.try(:name), "Unit"]]
+    unit_select << [product.box.try(:name), "Box"] if product.box_id.present?
+    unit_select << [product.box2.try(:name), "Box 2"] if product.box2_id.present?
+  %>
+  <%= select_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][unit_type]", options_for_select(unit_select), class: 'uom',
+    onchange: "set_subtotal2(this)" %>
+</td>
+<% if (show_price rescue true) %>
+  <td class='subtotal'><%= number_with_precision(pod.nil?? ((hpp.to_f * quantity.to_f) rescue 0) : (pod.hpp * pod.quantity), :delimiter => ',', :precision => 0) %></td>
+<% end %>
+<td>
+  <a href="javascript:void(0)" class="btn btn-warning btn-xs custom-edit-btn" onclick="removeList(this)">
+    <i class="fa fa-trash-o" rel="tooltip" data-placement="left" data-original-title="Delete"></i>
+  </a>
+</td>
+<td class='fraction hide'><%= text_field_tag "#{params[:transaction_header]}[#{transaction_type}_details_attributes][#{key}][fraction]", 1, readonly: true %></td>
+<script type="text/javascript">
+  $(document).ready(function() {
+    if($('#rc1').is(':checked')){
+  //      $('.qty').prop('disabled', false);
+    }
+    else if($('#rc2').is(':checked')){
+  //    $('.qty').prop('disabled', true);
+    }
+    if($('#controllernya').val() == "returns_to_suppliers"){
+      $("#rts_barcode").removeClass("hide")
+    }
+
+    Number.prototype.formatMoney = function(c, d, t){
+    var n = this,
+        c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "." : d,
+        t = t == undefined ? "," : t,
+        s = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
+  });
+
+  function set_subtotal2(obj){
+    if ($(obj).val() == 'Unit') {
+      $(obj).parent().parent().find('#td_fraction').text(1);
+      $(obj).parent().parent().find('.fraction').find('input').val(1);
+
+      disc_amt = parseFloat($(obj).parent().parent().find('.disc').val());
+      hpp = parseFloat($(obj).parent().parent().find('.hpp_origin').val())-disc_amt;
+
+      $(obj).parent().parent().find('.subtotal').text(
+        (hpp*parseFloat($(obj).parent().parent().find('.qty').val())).formatMoney(0, '.', ',')
+      )
+    }
+    else if ($(obj).val() == 'Box') {
+      $(obj).parent().parent().find('#td_fraction').text(parseInt($('.fraction_box').val()));
+      $(obj).parent().parent().find('.fraction').find('input').val($(obj).parent().parent().find('.fraction_box').val());
+
+      disc_amt = parseFloat($(obj).parent().parent().find('.disc').val()*$(obj).parent().parent().find('.fraction_box').val());
+      hpp = parseFloat($(obj).parent().parent().find('.hpp_middle_origin').val())-disc_amt;
+
+      $(obj).parent().parent().find('.subtotal').text(
+        (hpp*parseFloat($(obj).parent().parent().find('.qty').val())).formatMoney(0, '.', ',')
+      )
+    }
+    else if ($(obj).val() == 'Box 2') {
+      $(obj).parent().parent().find('#td_fraction').text(parseInt($('.fraction_box2').val()));
+      $(obj).parent().parent().find('.fraction').find('input').val($(obj).parent().parent().find('.fraction_box2').val());
+
+      disc_amt = parseFloat($(obj).parent().parent().find('.disc').val()*$(obj).parent().parent().find('.fraction_box2').val());
+      hpp = parseFloat($(obj).parent().parent().find('.hpp_high_origin').val())-disc_amt;
+
+      $(obj).parent().parent().find('.subtotal').text(
+        (hpp*parseFloat($(obj).parent().parent().find('.qty').val())).formatMoney(0, '.', ',')
+      )
+    }
+  }
+
+  function set_subtotal(obj){
+    if ($(obj).parent().parent().find('.uom').val() == 'Unit') {
+      disc_amt = parseFloat($(obj).parent().parent().find('.disc').val());
+      hpp = parseFloat($(obj).parent().parent().find('.hpp_origin').val())-disc_amt;
+
+      $(obj).parent().parent().find('.subtotal').text(
+        (hpp*parseFloat($(obj).parent().parent().find('.qty').val())).formatMoney(0, '.', ',')
+      )
+    }
+    else if ($(obj).parent().parent().find('.uom').val() == 'Box') {
+      disc_amt = parseFloat($(obj).parent().parent().find('.disc').val()*$(obj).parent().parent().find('.fraction_box').val());
+      hpp = parseFloat($(obj).parent().parent().find('.hpp_middle_origin').val())-disc_amt;
+
+      $(obj).parent().parent().find('.subtotal').text(
+        (hpp*parseFloat($(obj).parent().parent().find('.qty').val())).formatMoney(0, '.', ',')
+      )
+    }
+    else if ($(obj).parent().parent().find('.uom').val() == 'Box 2') {
+      disc_amt = parseFloat($(obj).parent().parent().find('.disc').val()*$(obj).parent().parent().find('.fraction_box2').val());
+      hpp = parseFloat($(obj).parent().parent().find('.hpp_high_origin').val())-disc_amt;
+
+      $(obj).parent().parent().find('.subtotal').text(
+        (hpp*parseFloat($(obj).parent().parent().find('.qty').val())).formatMoney(0, '.', ',')
+      )
+    }
+  }
+</script>

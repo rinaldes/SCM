@@ -1,0 +1,93 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content"><!-- MAIN CONTENT -->
+    <section id="widget-grid" class=""><!-- widget grid -->
+        <div id='notice_template'><%= render 'layouts/notice' %></div>
+        <div class="row"><!-- row -->
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false"><!-- Widget ID (each widget will need unique ID)-->
+                    <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Account Payable List</h2> <!-- header content --></header>
+                    <div>
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            <table class="table table-striped table-brequested table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>AP No.</th>
+                                        <th>Due Date</th>
+                                        <th>Supplier Name</th>
+                                        <th>Total Amount</th>
+                                        <th>Total Paid</th>
+                                        <th>Total Retur</th>
+                                        <th>Outstanding</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <tr>
+                                        <%= form_tag finances_account_payables_path, :id => "account-payable-filter-form", :remote => true  do %>
+                                              <th>
+                                                  <input type="text" name="by_ar_number" id="by_ar_number" placeholder = "" class ="form-control search" size = "3" >
+                                              </th>
+                                              <th>
+                                                  <input type="text" name="by_transaction_no" id="by_transaction_no" placeholder = "" class ="form-control search" size = "5">
+                                              </th>
+                                              <th>
+                                                  <input type="text" name="by_customer_name" id="by_customer_name" placeholder = "" class ="form-control search" size = "5">
+                                              </th>
+                                        <% end %>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id='account_payable_list'><%= render 'list' %></tbody>
+                            </table>
+                            <!-- start pagination -->
+                            <div class="dt-toolbar-footer">
+                                <div class="col-xs-12 col-sm-6 pull-right">
+                                <%= will_paginate @payables %>
+                                    <!--div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+                                        <ul class="pagination pagination-sm">
+                                          <li class="paginate_button previous disabled" aria-controls="dt_basic" tabindex="0" id="dt_basic_previous">
+                                            <a href="#">Previous</a>
+                                          </li>
+                                          <li class="paginate_button active" aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">1</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">2</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">3</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">4</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">5</a>
+                                          </li>
+                                          <li class="paginate_button disabled" aria-controls="dt_basic" tabindex="0" id="dt_basic_ellipsis">
+                                            <a href="#">…</a>
+                                          </li>
+                                          <li class="paginate_button " aria-controls="dt_basic" tabindex="0">
+                                            <a href="#">10</a>
+                                          </li>
+                                          <li class="paginate_button next" aria-controls="dt_basic" tabindex="0" id="dt_basic_next">
+                                            <a href="#">Next</a>
+                                          </li>
+                                        </ul>
+                                    </div-->
+                                </div>
+                            </div>
+                            <!-- end pagination -->
+                        </div>
+                    <!-- end widget content -->
+                    </div>
+                </div><!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+        </div>  <!-- end row -->
+    </section><!-- end widget grid -->
+</div>  <!-- end row -->

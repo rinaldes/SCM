@@ -1,0 +1,74 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Trusted-Library: true
+X-COMMENT: Main-Class will be added automatically by build
+Class-Path: lib/plugin.jar lib/PDFRenderer-0.9.1.jar
+Created-By: 1.7.0_09-b05 (Oracle Corporation)
+Main-Class: jzebra.Main
+
+Name: jzebra/RawPrintApplet.class
+SHA-256-Digest: WIJKRudzFrkhUwX/zRq6v0n4iOA1/r28CyJP0pjNKxQ=
+
+Name: jzebra/PrintRaw$1.class
+SHA-256-Digest: Q6wYxKq2rqwxVvWRZxuCsvwO8gzh1X7/vOIaanTg2Ec=
+
+Name: jzebra/PrintApplet$2.class
+SHA-256-Digest: BcdwO5Xfb0aGFuTDd9393TrLtab14EZSmBO/cVg9BDA=
+
+Name: jzebra/Base64$InputStream.class
+SHA-256-Digest: OAJCcse62zhI4uXngEW3ibotwbvwmx+oxpy0dqw3W1Q=
+
+Name: jzebra/Base64$OutputStream.class
+SHA-256-Digest: 4wvQqya+e23gRFxIOhwBwcTmuOoxxGtoctg/6eEsf+w=
+
+Name: jzebra/ImageWrapper$1.class
+SHA-256-Digest: mfqxXtME1J6tzvPB4ph2V3uCT7vZ8kAWuTcdRAZrNoc=
+
+Name: jzebra/LanguageType.class
+SHA-256-Digest: fSLMY21Ij0JXYaX+EyZg+HZbMwiARbE0d72mwHfm+bc=
+
+Name: jzebra/LogIt.class
+SHA-256-Digest: vpn6JQnAG81R0GDdtXLYJF5cAJ745+VT2f+xnDEZ2o8=
+
+Name: jzebra/exception/NullCommandException.class
+SHA-256-Digest: DL0s7lLRezQw4Sf0JMiMiljDS3r+ydXuCZZL4RSU0wQ=
+
+Name: jzebra/PrintApplet$1.class
+SHA-256-Digest: OOU7ymG7yfjxpGTYr6V+zwwDFfCc4+RpWO7lq2Nv04w=
+
+Name: jzebra/newfile
+SHA-256-Digest: 47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+
+Name: jzebra/exception/NullPrintServiceException.class
+SHA-256-Digest: gY50fW7uTip7XB20ONtnSlu1zH0wydHcNHOQUuFwN3A=
+
+Name: jzebra/PrintApplet.class
+SHA-256-Digest: O+B0yPqCRIytfgFHNRTH+KIUPw9sZkf1Jj9+L+Wzz5M=
+
+Name: jzebra/Main.class
+SHA-256-Digest: Jr9a9eE4LKnEU/1n5MM8RdwVQI9NLeVkCZ8H6MnCt4o=
+
+Name: jzebra/Base64.class
+SHA-256-Digest: W0MPy22sbaYxuBEDrTNEF4W5Nxv0tDY/7Rp/G4qzeUM=
+
+Name: jzebra/PaperFormat.class
+SHA-256-Digest: vszmQJTeV8AKd83+4Q2GkKSRex4pNLn1bqyzU5CREMw=
+
+Name: jzebra/PrintPostScript.class
+SHA-256-Digest: KoJCxKWWOVPMW7XMyzUeFCvjFT0QKPXtF45VeEMGCvo=
+
+Name: jzebra/ImageWrapper.class
+SHA-256-Digest: fok2Q7laFLZBQkndRd7VKx+wMXVAD2ZcxV7s0QVBgrg=
+
+Name: jzebra/PrintHTML.class
+SHA-256-Digest: UEmjsjkePcf8mJ6g3ZHCAjGvHkGohMsYSw7KVEnzLdg=
+
+Name: jzebra/PrintServiceMatcher.class
+SHA-256-Digest: fiUNmPwzMzVMshFhv9Dww7vpgVVijF080FLi2tuANuM=
+
+Name: META-INF/INDEX.LIST
+SHA-256-Digest: 833DByPldQ/lFXVlJ9aZfGLjUjj9H47obuYraydf8Ak=
+
+Name: jzebra/PrintRaw.class
+SHA-256-Digest: X6/4icyDyvN9+iw8G7TMhF+46NXzAy2HtIcYUIsKzkk=
+

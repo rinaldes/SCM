@@ -1,0 +1,26 @@
+<% @brands.each_with_index do |brand, i| %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+    <td><span class="name"><%= brand.code %></span></td>
+    <td><%= link_to brand.name, brand_path(brand), class: 'blue' %></td>
+    <td>
+      <%= link_to edit_brand_path(brand), class: "btn btn-primary btn-xs custom-edit-btn" do %>
+        <i class="fa fa-pencil" rel="tooltip" data-placement="left" data-original-title="Edit"></i>
+      <% end %>
+      <%= link_to 'javascript:void(0)', onclick: "delete_one(#{brand.id}, 'brands')", class: "btn btn-danger btn-xs custom-edit-btn" do %>
+        <i class="fa fa-trash-o"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=4>
+    <% if @brands.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@brands, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

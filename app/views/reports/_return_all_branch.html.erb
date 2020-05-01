@@ -1,0 +1,34 @@
+<thead>
+  <tr>
+    <% @branches.each{|branch| %>
+      <td align='center' colspan=7><%= branch.description %> KE HO</td>
+    <% } %>
+  </tr>
+  <tr>
+    <% @branches.each{|branch| %>
+      <td>TGL</td>
+      <td>NO. SUPP</td>
+      <td>NO SURAT</td>
+      <td>QTY</td>
+      <td>COST</td>
+      <td>SELL</td>
+      <td>KETERANGAN</td>
+    <% } %>
+  </tr>
+</thead>
+<tbody>
+  <% ReturnsToHo.all.each_with_index{|rth, i| %>
+    <tr>
+      <% @branches.each{|branch| %>
+        <% rthb = @returns_to_hos[branch.id][i] rescue nil %>
+          <td class='nowrap'><%= rthb.mutation_date rescue '' %></td>
+          <td><%= rthb.supplier.code rescue '' %></td>
+          <td class='nowrap'><%= rthb.no_surat_jalan rescue '' %></td>
+          <td class='nowrap'><%= rthb.total_quantity rescue '' %></td>
+          <td class='nowrap'><%= rthb.total_price rescue '' %></td>
+          <td class='nowrap'><%= rthb.sell_price rescue '' %></td>
+          <td><%= rthb.note rescue '' %></td>
+      <% } %>
+    </tr>
+  <% } %>
+</tbody>

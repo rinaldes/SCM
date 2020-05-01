@@ -1,0 +1,32 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content">
+  <section id="widget-grid">
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <header id="header-product" role="heading">
+          <h2><span class="widget-icon"> <i class="fa fa-list-ul"></i> </span> Bank Out Report List</h2></header>
+          <div style="margin-top:-10px;">
+            <div class="widget-body no-padding">
+              <%= link_to export_finance_reports_bank_outs_path(format: "xlsx"), :class => "btn btn-labeled btn-primary edit-btn-primary" do %>
+                <span class="btn-label"><i class="glyphicon glyphicon-download"></i></span>Export XLSX
+              <% end %>
+            </div>
+            <table class="table table-striped table-brequested table-hover" width="100%">
+              <thead>
+                <tr>
+                  <th>Perk</th>
+                  <th>Keterangan</th>
+                  <th>Debet</th>
+                  <th>Credit</th>
+                </tr>
+              </thead>
+              <tbody id='bank_out_list'><%= render 'list' %></tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

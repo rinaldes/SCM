@@ -1,0 +1,40 @@
+<tr class="nested-fields">
+    <td>
+        <span class="payment-text-b payment-number"><%= f.object.payment_number%></span>
+    </td>
+
+    <td>
+        <span class="payment-input-b" style='display:none;'><%= f.text_field :amount,  :class => 'numeric'  %></span>
+        <span class="payment-input-b"><%= format_currency(f.object.amount) %></span>
+    </td>
+
+    <td>
+       <span class="payment-text-b"><%= format_date(f.object.due_date) %></span>
+    </td>
+
+    <td>
+        <span class="payment-input" style="display:none;"><%= f.text_field :payment_amount %></span>
+        <span class="payment-text"><%= format_currency(f.object.payment_amount) %></span>
+    </td>
+
+    <td>
+    <span class="payment-input" style="display:none;"><%= f.text_field :payment_date, :class => 'datepicker', :value => (f.object.payment_date.present? ?  format_date(f.object.payment_date) : format_date(Time.now.to_date)), :disabled => true %></span>
+        <span class="payment-text"><%= format_date(f.object.payment_date) %></span>
+    </td>
+
+    <td>
+        <span class="payment-input" style="display:none;"><%= f.text_field :penalty %></span>
+        <span class="payment-text"><%= format_currency(f.object.penalty) %></span>
+    </td>
+
+    <td>
+        <span class="payment-text">&nbsp;</span>
+    </td>
+
+    <td>
+        <%= link_to "Add Payment", "#", :class => "click-add-payment" if ( f.object.payment_amount.blank? && f.object.payment_date.blank? ) %>
+        <%= link_to "Cancel", "#", :class => "click-cancel-add-payment" %>
+         <%#= link_to "Edit", "#", :class => "click-edit-add-payment" unless ( f.object.payment_amount.blank? && f.object.payment_date.blank? ) %>
+    </td>
+</tr>
+

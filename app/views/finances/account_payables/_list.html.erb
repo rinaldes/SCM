@@ -1,0 +1,15 @@
+<% @account_payables.each do |ap| %>
+    <tr>
+        <td><%= link_to ap.ap_number, finances_account_payable_path(ap.id) %></td>
+        <td><%= format_date(ap.due_date) %></td>
+        <td><%= ap.supplier.name %></td>
+        <td><%= format_currency(ap.total_amount) %></td>
+        <td><%= format_currency(ap.total_paid) %></td>
+        <td><%= format_currency(ap.retur_amount) %></td>
+        <td><%= format_currency(ap.outstanding_amount) %></td>
+        <td>
+            <%= link_to raw('<i class="fa fa-pencil" rel="tooltip" data-placement="left"></i>'), finances_account_payable_path(ap.id), class: "btn btn-primary btn-xs custom-edit-btn" %>
+            <%= link_to raw('<i class="fa fa-trash-o" rel="tooltip" data-placement="left"></i>'), 'javascript:void(0)', onclick: "delete_one(#{ap.id}, 'account_payables')", class: "btn btn-danger btn-xs custom-edit-btn" %>
+        </td>
+    </tr>
+<% end %>

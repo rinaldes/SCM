@@ -1,0 +1,37 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+default = styles.add_style(:border => Axlsx::STYLE_THIN_BORDER)
+subjudul_biru_tengah = styles.add_style(:fg_color => "ffffff", :b => true, :alignment => { :horizontal => :center, :vertical => :center, :wrap_text => true}, :bg_color => "307cf4", :border => Axlsx::STYLE_THIN_BORDER)
+
+wb.add_worksheet(name: "Purchase Request") do |sheet|
+  sheet.add_row ['Purchase Request']
+  sheet.add_row ['Nomor', @purchase_request.number]
+  sheet.add_row ['Toko', @purchase_request.branch.office_name]
+  sheet.add_row ['Tanggal', @purchase_request.date.strftime("%d %B %Y")]
+  sheet.add_row ['PR Note', @purchase_request.note]
+  sheet.add_row []
+  sheet.add_row []
+  sheet.add_row ["No", "Article", "Barcode", "Product Name", "HPP", "Unit", "Fraction", "Disc1 %", "Disc2 %","Qty", "Subtotal"], :style => subjudul_biru_tengah, widths: [:auto,:auto,:auto,:auto]
+  total = 0
+  total_qty = 0
+  @purchase_request.purchase_request_details.each_with_index do |prd, i|
+    product = prd.product
+    hpp = SellingPrice.where("product_id=#{product.id} AND now() BETWEEN start_date AND end_date").limit(1).order('id DESC').last.hpp rescue 0
+    hpp_akhir = hpp-PurchasePrice.get_hpp_disc(product.id)
+    subtotal = hpp_akhir*prd.quantity*prd.fraction
+
+    sheet.add_row [
+      (i+1), product.article, product.barcode, product.description,
+      hpp*prd.fraction, product.select_unit(prd.unit_type), prd.fraction,
+      PurchasePrice.get_disc1_percent(product.id),
+      PurchasePrice.get_disc2_percent(product.id),
+      prd.quantity, subtotal
+    ], style: default
+
+    total += subtotal
+    total_qty += prd.quantity
+  end
+  sheet.add_row ['', '', '', '', '', '', '', '', '',total_qty, total],style: default
+  sheet.merge_cells(sheet.rows.last.cells[0..6])
+  sheet.rows.last.cells[0].value = "Total"
+end

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data>RECID</Data></Cell>
+        <Cell><Data>STATION</Data></Cell>
+        <Cell><Data>SHIFT</Data></Cell>
+        <Cell><Data>RTYPE</Data></Cell>
+        <Cell><Data>DOCNO</Data></Cell>
+        <Cell><Data>SEQNO</Data></Cell>
+        <Cell><Data>DIV</Data></Cell>
+        <Cell><Data>PRDCD</Data></Cell>
+        <Cell><Data>QTY</Data></Cell>
+        <Cell><Data>PRICE</Data></Cell>
+        <Cell><Data>GROSS</Data></Cell>
+        <Cell><Data>DISCOUNT</Data></Cell>
+        <Cell><Data>SHOP</Data></Cell>
+        <Cell><Data>TANGGAL</Data></Cell>
+        <Cell><Data>JAM</Data></Cell>
+        <Cell><Data>KONS</Data></Cell>
+        <Cell><Data>TTYPE</Data></Cell>
+        <Cell><Data>CAT_COD</Data></Cell>
+        <Cell><Data>HPP</Data></Cell>
+        <Cell><Data>PROMOSI</Data></Cell>
+        <Cell><Data>PPN</Data></Cell>
+        <Cell><Data>PTAG</Data></Cell>
+        <Cell><Data>NM_VCR</Data></Cell>
+        <Cell><Data>NO_VCR</Data></Cell>
+        <Cell><Data>BKP</Data></Cell>
+        <Cell><Data>SUB_BKP</Data></Cell>
+        <Cell><Data>KODE_NIP</Data></Cell>
+        <Cell><Data>UNIT_KERJA</Data></Cell>
+        <Cell><Data>JNS_BAYAR</Data></Cell>
+      </Row>
+      <% @sales.all.each{|sale| %>
+        <Row>
+          <Cell><Data ss:Type="String"><%#= sale.recid %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sale.sale.store_id rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sale.sale.session_id rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.rtype %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.docno %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.seqno %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.div %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.barcode rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sale.quantity %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sale.price %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.gross %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.discount %>%</Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.sale.store.office_name rescue ''%></Data></Cell>
+          <Cell><Data ss:Type="Date"><%= sale.sale.transaction_date.strftime("%Y-%m-%d") rescue ''%></Data></Cell>
+          <Cell><Data ss:Type="Date"><%= sale.sale.transaction_date.strftime("%H:%M:%S") rescue ''%></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.kons %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ttype %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.cat_cod %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sale.product.cost_of_products rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.promosi %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.ppn %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.ptag %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.nm_vcr %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.no_vcr %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.product.flag_pajak rescue '' %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.sub_bkp %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.kode_nip %></Data></Cell>
+          <Cell><Data ss:Type="String"><%#= sale.unit_kerja %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sale.sale.payment_type rescue '' %></Data></Cell>
+        </Row>
+      <% } %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,0 +1,44 @@
+<fieldset>
+    <section>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered" width="100%">
+                <tr align="center">
+                    <td style="vertical-align:middle"><strong>Date</strong></td>
+                    <td style="vertical-align:middle"><strong>Days</strong></td>
+                    <td style="vertical-align:middle"><strong>Qty</strong></td>
+                    <td style="vertical-align:middle"><strong>Amount</strong></td>
+                    <td style="vertical-align:middle"><strong>Realization Qty</strong></td>
+                    <td style="vertical-align:middle"><strong>Reaization Amount</strong></td>
+                    <td style="vertical-align:middle"><strong>Realization % Qty</strong></td>
+                    <td style="vertical-align:middle"><strong>Realization % Amount</strong></td>
+                </tr>
+
+                <% (@monthly_forecast.monthly_forecast_details.first.forecast_date.beginning_of_month..@monthly_forecast.monthly_forecast_details.first.forecast_date.end_of_month).each do |day| %>
+                    <tr>
+                        <td class='nowrap'><%= day.strftime("%e")  %></td>
+                        <td class='nowrap'><%= day.strftime("%A")   %></td>
+
+                        <% qty = @monthly_forecast.monthly_forecast_details.where(:forecast_date => day).sum(:qty) %>
+                        <% amount = @monthly_forecast.monthly_forecast_details.where(:forecast_date => day).sum(:amount) %>
+                        <% realization_qty = SalesDetail.where("EXTRACT(MONTH FROM created_at)=#{day.month}").sum(:quantity) %>
+                        <% realization_amount = SalesDetail.where("EXTRACT(MONTH FROM created_at)=#{day.month}").sum(:price) %>
+                        <% percent_realization_qty= ((realization_qty.to_f / qty.to_f) * 100 ) %>
+                        <% percent_realization_amount = ((realization_amount.to_f / amount.to_f) * 100) %>
+
+                        <td><%= format_currency(qty) %></td>
+                        <td><%= format_currency(amount) %></td>
+                        <td><%= format_currency(realization_qty) %></td>
+                        <td><%= format_currency(realization_amount) %></td>
+
+                        <td><%= number_to_percentage((percent_realization_qty.nan? ? 0 : percent_realization_qty), precision: 0)  %></td>
+                        <td><%= number_to_percentage((percent_realization_amount.nan? ? 0 : percent_realization_amount), precision: 0)   %></td>
+                    </tr>
+                <% end %>
+
+            </table>
+        </div>
+      <footer>
+          <%= link_to "Back", finances_forecast_path(@monthly_forecast.forecast_id), :class => "btn btn-default"  %>
+      </footer>
+    </section>
+</fieldset>

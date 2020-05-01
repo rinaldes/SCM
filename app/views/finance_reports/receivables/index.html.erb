@@ -1,0 +1,36 @@
+<%= render 'shared/breadcrumb' %>
+<div id="content">
+  <section id="widget-grid">
+    <div id='notice_template'><%= render 'layouts/notice' %></div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+          <h2 style="color:#BF1E2D; margin-top:-5px;"><i class="fa fa-list-ul"></i> Receivable Report List</h2>
+          <div style="margin-top:-10px;">
+            <div class="widget-body no-padding">
+              <%= render 'filter' %>
+            </div>
+            <table class="table table-striped table-brequested table-hover" width="100%">
+              <thead>
+                <tr>
+                  <th>Piutang</th>
+                  <th>Nominal</th>
+                  <th>Tanggal Bayar</th>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Sisa</th>
+                </tr>
+              </thead>
+              <tbody id='receivable_list'><%= render 'list' %></tbody>
+            </table>
+            <% if @payments.present? %>
+              <%= link_to export_finance_reports_receivables_path(format: "xlsx"), :class => "btn btn-labeled btn-primary edit-btn-primary" do %>
+                <span class="btn-label"><i class="glyphicon glyphicon-download"></i></span>Export XLSX
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,18 @@
+<% @departments.each{|department| %>
+  <% if ((params[:branch][:branch_departments_attributes]["#{department.id}"][:department_id]) rescue ((@branch.office_departments.find_by_department_id department.id rescue ''))) %>
+    <%= check_box_tag "branch[branch_departments_attributes][#{department.id}][department_id]", department.id, 1, :class => "depart-check" %><label><%= department.name %></label>
+  <% else %>
+    <%= check_box_tag "branch[branch_departments_attributes][#{department.id}][department_id]", department.id, false, :class => "depart-check" %><label><%= department.name %></label>
+  <% end %>
+  <br/>
+<% } %>
+<SCRIPT>
+  $(".depart-check").change(function(){
+    deps = []
+    $(".depart-check").each(function(){
+      if (this.checked)
+        deps.push($(this).next().html())
+    })
+    $("#selected_department").html(deps.join(', '));
+  });
+</SCRIPT>

@@ -1,0 +1,30 @@
+<%= hidden_field_tag "supplier[contact_people_attributes][#{key}][id]", (object[:id] rescue '') %>
+<div class="alert alert-info alert-block" style='float: left; width: 98%'>
+  <a class="close" data-dismiss="alert" href="#">×</a>
+  <div style="margin-bottom: 25px;">Division Supplier 1</div>
+    <section class="form-group">
+    <label class="col-md-2 label">Division Name <span class='important'>*</span></label>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "supplier[contact_people_attributes][#{key}][division_name]", (object[:division_name] rescue ''), class: "input-sm input_name", data: {validation: 'alphanumeric', validation_allowing: '. '} %></label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-2 label">Name <span class='important'>*</span></label>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "supplier[contact_people_attributes][#{key}][name]", (object[:name] rescue ''), class: "input-sm input_name", data: {validation: 'alphanumeric', validation_allowing: '. '} %></label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-2 label">PIC Phone </label>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "supplier[contact_people_attributes][#{key}][phone]", (object[:phone] rescue ''), class: "input-sm is-number" %></label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-2 label">PIC BB Pin</label>
+    <label class="col-md-10 input custom-input-box"><%= text_field_tag "supplier[contact_people_attributes][#{key}][pinbb]", (object[:pinbb] rescue ''), class: "input-sm" %></label>
+  </section>
+  <section class="form-group">
+    <label class="col-md-2 label">PIC Email *</label>
+    <label class="col-md-10 input custom-input-box"><%= email_field_tag "supplier[contact_people_attributes][#{key}][email]", (object[:email] rescue ''), class: "input-sm", data: {validation: 'email'} %></label>
+  </section>
+</div>
+<SCRIPT>
+  for (i=0; i<$('#contact div.alert div').length; i++){
+    $('#contact div.alert div')[i].innerHTML = "Division "+(i+1)
+  }
+</SCRIPT>

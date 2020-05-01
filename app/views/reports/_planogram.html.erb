@@ -1,0 +1,33 @@
+<% if @planogram.present? %>
+  <% @planogram.each_with_index{|plan, i| %>
+    <tr>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*10+i-9) : i+1 %></td>
+      <td><%= plan.article %></td>
+      <td><% plan.product_name %></td>
+      <td><%= plan.category %></td>
+      <td><%= plan.category %></td>
+      <td><%= plan.min_stock %></td>
+      <td><%= plan.rop_stock rescue 0 %></td>
+      <td><%= plan.max_stock rescue 0 %></td>
+      <td><%= plan.shelving %></td>
+      <td><%= plan.left_right %></td>
+      <td><%= plan.up_down %></td>
+      <td><%= plan.front_back %></td>
+      <td><%= plan.min_display %></td>
+      <td><%= plan.rack_number %></td>
+    </tr>
+  <% } %>
+  <tr>
+    <td colspan=14>
+      <% if @planogram.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@planogram, options = {}) %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+<tr>
+  <td colspan="14"><center>No Data Available</center></td>
+</tr>
+<% end %>

@@ -1,0 +1,11 @@
+<% if @product %>
+  $('#selected_product').val($('#selected_product').val() + "<%= @product.barcode %>" + ",");
+
+  $('#list_detail').append("<tr id='<%= @product.barcode %>'>" +
+    "<td><%= @product.article %></td>" +
+    "<td><%= @product.barcode %></td>" +
+    "<td><%= @product.description %></td>" +
+    "<td><%= number_to_currency((SellingPrice.find_by_product_id(@product.id).selling_price rescue 0), unit: "Rp.", separator: ",", delimiter: ".") %></td>" +
+    "<td><button class='btn btn-danger' onclick='delete_product(<%=@product.barcode%>)'>Delete</button></td>" +
+    "</tr>");
+<% end %>

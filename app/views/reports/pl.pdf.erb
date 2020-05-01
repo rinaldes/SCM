@@ -1,0 +1,128 @@
+<%= wicked_pdf_stylesheet_link_tag "documents" %>
+
+<h3>PROFIT & LOSS REPORT@<%= Branch.find(params[:branch_id]).office_name.upcase %></h3>
+
+<table width="100%">
+    <tbody>
+        <th style="margin-bottom: 3px">
+            <td>YTD <%= Date.today.year %></td>
+            <td>%</td>
+            <td><%= params[:prev_period].to_date.end_of_month.strftime('%B') %></td>
+            <td>%</td>
+            <td><%= params[:period].to_date.end_of_month.strftime('%B') %></td>
+            <td>%</td>
+        </th>
+        <tr height="10%">
+            <td><b>NET SALES</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td>Sales</td>
+            <td align="right"><%= format_currency @sales_details_ytd.sum(:subtotal_price) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_prev_period.sum(:subtotal_price) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_period.sum(:subtotal_price) %></td>
+            <td align="right"></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td>HPP</td>
+            <td align="right"><%= format_currency @sales_details_ytd.map{|a|a.capital_price*a.quantity}.sum %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_prev_period.map{|a|a.capital_price*a.quantity}.sum %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_period.map{|a|a.capital_price*a.quantity}.sum %></td>
+            <td align="right"></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td>Gross Margin</td>
+            <td align="right"><%= format_currency @sales_details_ytd.sum(:subtotal_price)-@sales_details_ytd.map{|a|a.capital_price*a.quantity}.sum %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_prev_period.sum(:subtotal_price)-@sales_details_prev_period.map{|a|a.capital_price*a.quantity}.sum %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_period.sum(:subtotal_price)-@sales_details_period.map{|a|a.capital_price*a.quantity}.sum %></td>
+            <td align="right"></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td><b>EXPENSES</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <% #@cash_outs_ytd.each_with_index do |cash, index| %>
+        <!-- <tr style="margin-bottom: 3px">
+            <td><%#= cash.description %></td>
+            <td><%#= format_currency cash.amount %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr> -->
+        <% #end %>
+        <tr style="margin-bottom: 3px">
+            <td>Total Expenses</td>
+            <td align="right"><%= format_currency @cash_outs_ytd.sum(:amount) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @cash_outs_prev_period.sum(:amount) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @cash_outs_period.sum(:amount) %></td>
+            <td align="right"></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td><b>OTHER INCOME</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <%# @cash_ins_ytd.each_with_index do |cash, index| %>
+        <!-- <tr style="margin-bottom: 3px">
+            <td><%#= cash.description %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr> -->
+        <%# end %>
+        <tr style="margin-bottom: 3px">
+            <td align="right">Total Other Income</td>
+            <td align="right"><%= format_currency @cash_ins_ytd.sum(:amount) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @cash_ins_prev_period.sum(:amount) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @cash_ins_period.sum(:amount) %></td>
+            <td align="right"></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td><b>Profit/Lost</b></td>
+            <td align="right"><%= @sales_details_ytd.sum(:subtotal_price) - (@sales_details_ytd.map{|a|a.capital_price*a.quantity}.sum+@cash_outs.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></td>
+            <td align="right"></td>
+            <td align="right"><%= @sales_details_prev_period.sum(:subtotal_price) - (@sales_details_prev_period.map{|a|a.capital_price*a.quantity}.sum+@cash_outs_prev_period.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></td>
+            <td align="right"></td>
+            <td align="right"><%= @sales_details_period.sum(:subtotal_price) - (@sales_details_period.map{|a|a.capital_price*a.quantity}.sum+@cash_outs_period.sum(:amount)) > 0 ? 'Net Profit' : 'Lost'  %></td>
+            <td align="right"></td>
+        </tr>
+        <tr style="margin-bottom: 3px">
+            <td><b>Profit/Lost Amount</b></td>
+            <td align="right"><%= format_currency @sales_details_ytd.sum(:subtotal_price) - (@sales_details_ytd.map{|a|a.capital_price*a.quantity}.sum+@cash_outs.sum(:amount)) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_prev_period.sum(:subtotal_price) - (@sales_details_prev_period.map{|a|a.capital_price*a.quantity}.sum+@cash_outs_prev_period.sum(:amount)) %></td>
+            <td align="right"></td>
+            <td align="right"><%= format_currency @sales_details_period.sum(:subtotal_price) - (@sales_details_period.map{|a|a.capital_price*a.quantity}.sum+@cash_outs_period.sum(:amount)) %></td>
+            <td align="right"></td>
+        </tr>
+    </tbody>
+</table>

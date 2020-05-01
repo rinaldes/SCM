@@ -1,0 +1,15 @@
+<% sum_amount = 0 %>
+<% @cash_outs.each do |cash_out| %>
+  <tr>
+    <td><%= cash_out.time.try(:strftime, "%d-%m-%Y") %></td>
+    <td><%= cash_out.description %></td>
+    <td><%= number_to_currency cash_out.amount, unit: "Rp." %></td>
+  </tr>
+  <% sum_amount += cash_out.amount %>
+<% end %>
+<% if @cash_outs.present? %>
+  <tr>
+    <td colspan="2" style="text-align:center;">Total</td>
+    <td><%= number_to_currency sum_amount, unit: "Rp." %></td>
+  </tr>
+<% end %>

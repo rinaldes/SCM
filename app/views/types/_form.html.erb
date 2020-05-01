@@ -1,0 +1,65 @@
+<%= form_for @type, html: {class: "form-horizontal no-margin", id: "form-update-verify"} do |f| %>
+  <div class="container-fluid">
+    <div class="row-fluid" style="margin-bottom: 20px;">
+     
+      <div id="types-control-group">
+        <div class="span6">
+          <div class="control-group">
+            <%= label_tag :id, "Code", class: "control-label" %>
+            <div class="controls controls-row">
+              <%= f.text_field :code %>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div class="control-group">
+            <%= label_tag :nama, raw("Name <span class='important'>*</span>"), :class => "control-label" %>
+            <div class="controls controls-row">
+              <%= f.text_field :name, class: "input-block-level #{(error_field @type, :name)}", :class => "span11 input_uppercase #{(error_field @type, :name)}",
+                placeholder: "Name" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span12">
+          <div id="detail-sub-jenis">
+            <%= render "types/shared/form_new_sub_types"%>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="span12">
+          <div class="form-actions no-margin">
+            <%= link_to "Kembali", types_path, :class => "btn btn-info pull-right span2",:style => "margin-left:30px;" %>
+            <button id="btn-reset-types-new" type="reset" class="btn btn-info span2 pull-right">Reset</button>
+            <%= submit_tag 'Simpan', class: 'btn btn-info span2 pull-right marginR10px' %>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="modal fade over-flow-none table-responsive modal-sm" id="myModalVerify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  style="width:100px;">
+</div>  
+
+<script>
+  $('#save-btn-supplier').on("click", function(){
+    $.get('/users/verify_user', {
+    });
+    $('#myModalVerify').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
+  });
+  $('.modal-out').on("click", function(){
+    $("#myModalVerify").modal('hide');
+  });
+
+function setData(){id=$("#add_sub").attr("data_sub"),data='<tr class="" id="'+id+'">\n          <td><input type="text" name="subtype_attributes[][code]" value="'+id+'" \n          class="input-block-level span11 input_uppercase" readonly = "readonly" ></td>\n          <td><input type="text" name="subtype_attributes[][name]" class="input-block-level \n          span11 input_uppercase" value="'+$("#input_sub").val()+'"></td>\n          <td class="text-center"><a href="javascript:void(0)" class="btn btn-danger" onclick="remData($(this))">\n          <i class="fa fa-times fa-1x"></i></a></td></tr>',$(".list_sub_type").append(data).fadeIn("slow"),ids=parseInt(id)+1,str=""+ids,newid="000".substring(0,"000".length-str.length)+str,$("#input_sub").val(""),$("#add_sub").attr("data_sub",newid),$("#input_sub_code").val(newid)}
+</script>

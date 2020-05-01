@@ -1,0 +1,3 @@
+no,article,department_name,category_1,category_2,category_3,category_4,cost_of_products,uom_1,uom_2,uom_3,box_num,box2_num,net_price_perpcs,barcode,description,description_2,selling_price,selling_price_2,selling_price_3,minimal_order,supplier_code,supplier_name,store,rop_stock,max_stock,bkp,bkt,retur,status1,status2
+1,502,Dep Umum,Makanan,Garing,Test,Lima,17100,bks,slp,bal,10,100,,502,Sampoerna Mild 16 Bal (10slp x 10bks),Sampoerna Mild 16,18000,175000,1745000,100,S001,Pt Muara Tirta Boga Cimory,M009,17,107,Y,Y,Y,Active,nonlotte
+2,503,Dep Umum,Makanan,Garing,Test,Lima,17100,bks,slp,bal,10,100,,503,Sampoerna Mild 12 Bal (10slp x 10bks),Sampoerna Mild 12,18000,175000,1745000,100,S001,Pt Muara Tirta Boga Cimory,M009,17,107,Y,Y,Y,Active,lotte

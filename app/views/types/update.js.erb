@@ -1,0 +1,5 @@
+$("#notification").html("<%= j(render 'dashboard/notification') %>");
+<% if @type.errors.blank? %>
+  $("#type-list").html("<%= j(render 'type_list') %>");
+<% end %>
+$("#form-type").html("<%= j(render 'form') %>");

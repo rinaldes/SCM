@@ -1,0 +1,4 @@
+$("#categories").html("<%= j(render 'category_per_department', categories: @categories) %>");
+dropdown_autocomplete()
+$('#category').removeAttr('disabled')
+$('#category').next().removeClass('disabled')

@@ -1,0 +1,14 @@
+<% (@po || []).each do |order| %>
+  <tr>
+      <td><%= order.number %></td>
+      <td><%= order.date.strftime("%d-%m-%Y") %></td>
+      <td><%= order.supplier.name rescue '' %></td>
+      <td><%= order.status %></td>
+      <td>
+        <a href="javascript:void(0)" class="btn btn-primary"
+          onclick="loadPO(<%= order.id %>, '<%= order.number %>', '<%= order.date %>', '<%= order.note.to_s.gsub("'", '') %>');$('#receiving_head_office_id').val(<%= order.head_office_id %>);chooseSupplier('<%= order.supplier_id %>');get_supplier('<%= order.supplier_id %>');">
+          Choose
+        </a>
+      </td>
+  </tr>
+<% end %>

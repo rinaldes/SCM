@@ -1,0 +1,53 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+      </button>
+      <h4 class="modal-title" id="myModalLabel">Browse Product</h4>
+    </div>
+    <div class="modal-body" style="color:#5E5E5E">
+      <table class="table table-striped table-brequested table-hover" width="100%">
+        <thead>
+          <tr>
+            <th>NO</th>
+            <th>SKU</th>
+            <th>BARCODE</th>
+            <th>PRODUCT NAME</th>
+            <th>ACTION</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th><%= text_field_tag :article, params[:article], class: 'form-control search', onkeyup: "reload_products()" %></th>
+            <th><%= text_field_tag :barcode, params[:barcode], class: 'form-control search', onkeyup: "reload_products()" %></th>
+            <th><%= text_field_tag :description, params[:description], class: 'form-control search', onkeyup: "reload_products()" %></th>
+            <th><a href="javascript:void(0)" onclick="chooseAll()" class="btn btn-primary"> Choose All </a></th>
+          </tr>
+        </thead>
+        <tbody id='product-search'>
+          <%= render 'product_search_list' %>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+        Cancel
+      </button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<SCRIPT>
+  function reload_products(){
+    $(document).keypress(function(e) {
+      if(e.which == 13){
+        $.ajax({
+          url: '/purchase_requests/search_in_modal',
+          method: "get",
+          data: {department: $('.modal-body #department').val(), brand_name: $('.modal-body #brand').val(),article: $('.modal-body #article').val(), description: $('.modal-body #description').val(), barcode: $('.modal-body #barcode').val()},
+          dataType: "script"
+        })
+      }
+    });
+  }
+</SCRIPT>

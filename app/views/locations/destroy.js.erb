@@ -1,0 +1,3 @@
+$("#location-list").html("<%= j(render partial: 'location_list', locals: {locations: @locations}) %>");
+paging()
+$("#notice_template").html("<%= j(render 'layouts/notice') %>");

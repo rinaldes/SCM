@@ -1,0 +1,13 @@
+<% @product.each do |product| %>
+  <table style="float: left;display: inline-block; width:3.9cm;table-layout:fixed;">
+    <tr>
+      <td valign="top">
+        <p style="font-size: 9px; margin: 0;"><b><%= product.description.upcase[0..30] rescue '' %></b><br></p>
+        <i style="font-size: 5px; margin-left: 2px"><%= product.article rescue ''%></i><br>
+        <p style="font-size: 16px; text-align: right; margin: 0; margin-bottom: 3px"><b><%= number_to_currency((SellingPrice.find_by_product_id(product.id).selling_price rescue 0), unit: "Rp.", separator: ",", delimiter: ".", :precision => 0) %></b></p>
+        <div style="font-family:'Code39AzaleaFont'; font-size:14px; text-align: right; margin-bottom: 0">*<%= product.barcode %>*</div>
+        <p style="font-size: 6px; text-align: right; margin: 0; margin-bottom: 0px"><%= product.barcode %></p>
+      </td>
+    </tr>
+  </table>
+<% end %>

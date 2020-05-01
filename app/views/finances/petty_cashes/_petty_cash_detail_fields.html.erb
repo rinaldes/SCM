@@ -1,0 +1,37 @@
+<tr class="nested-fields">
+    <td align="center"><%= f.object.date.strftime("%e") %></td>
+    <td>
+        <%= link_to f.object.date.strftime("%A"), finances_cash_out_path(f.object.petty_cash_id, date: f.object.date.to_date) %>
+    </td>
+    <td  align="right">
+        <span class="petty-cash-details-input">
+            <%#= f.text_field :initial_budget, :size=>"10" %>
+        </span>
+        <span class="petty-cash-details-text"><%= format_currency(f.object.initial_budget.to_f) %></span>
+    </td>
+
+    <td  align="right">
+        <span class="petty-cash-details-input">
+            <%#= f.text_field :cash_in, :size=>"10" %>
+        </span>
+        <span class="petty-cash-details-text"><%= format_currency(f.object.cash_in.to_f) %></span>
+    </td>
+
+    <td  align="right">
+        <span class="petty-cash-details-input">
+            <%#= f.text_field :cash_out, :size=>"10" %>
+        </span>
+        <span class="petty-cash-details-text"><%= format_currency(f.object.cash_out.to_f) %></span>
+    </td>
+
+    <td  align="right">
+        <span class="petty-cash-details-text"><%= format_currency(f.object.balance.to_f) %></span>
+    </td>
+
+    <td>
+        <span class="petty-cash-details-input">
+            <%#= f.text_field :note, :size=>"10" %>
+        </span>
+        <span class="petty-cash-details-text"><%= format_currency(f.object.note) %></span>
+    </td>
+</tr>

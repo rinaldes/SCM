@@ -1,0 +1,20 @@
+<% @size.size_details.sort_by{|size|size.size_number.to_i}.each_with_index{|size_detail, i| %>
+  $('.size_details')[<%= i %>].innerHTML = "<%= size_detail.size_number %><input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][size_detail_id]' type='hidden' value='<%= size_detail.id %>'>"
+  $('.min_stock')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][min_stock]' type='number' min = 0 class='qty_detail'>"
+  $('.available_qty')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][available_qty]' type='number' min = 0 class='qty_detail' disabled='disabled'>"
+  $('.allocated_qty')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][allocated_qty]' type='number' min = 0 class='qty_detail' disabled='disabled'>"
+  $('.freezed_qty')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][freezed_qty]' type='number' min = 0 class='qty_detail' disabled='disabled'>"
+  $('.rejected_qty')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][rejected_qty]' type='number' min = 0 class='qty_detail' disabled='disabled'>"
+  $('.defect_qty')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][defect_qty]' type='number' min = 0 class='qty_detail' disabled='disabled'>"
+  $('.online_qty')[<%= i %>].innerHTML = "<input name='product[product_sizes_attributes]["+(<%= i %>+1)+"][product_details_attributes]["+(<%= i %>+1)+"][online_qty]' type='number' min = 0 class='qty_detail' disabled='disabled'>"
+<% } %>
+<% @size.size_details.size.upto(14) { |i| %>
+  $('.size_details')[<%= i %>].innerHTML = ""
+  $('.min_stock')[<%= i %>].innerHTML = ""
+  $('.available_qty')[<%= i %>].innerHTML = ""
+  $('.allocated_qty')[<%= i %>].innerHTML = ""
+  $('.freezed_qty')[<%= i %>].innerHTML = ""
+  $('.rejected_qty')[<%= i %>].innerHTML = ""
+  $('.defect_qty')[<%= i %>].innerHTML = ""
+  $('.online_qty')[<%= i %>].innerHTML = ""
+<% } %>

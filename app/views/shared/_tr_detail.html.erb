@@ -1,0 +1,10 @@
+<tr id="<%= product.id %>">
+  <% if (%w(returns_to_supplier purchase_order).include?(transaction_type) rescue false) %>
+    <%= render "#{transaction_type}s/td_detail", product: product, key: key, pod: (pod rescue nil), show_barcode: true, show_price: (show_price rescue true), quantity: (quantity rescue nil),
+      transaction_type: (transaction_type rescue nil), hpp: (product.product_price(Time.now).hpp rescue 0),
+      disc: discount %>
+  <% else %>
+    <%= render 'shared/td_detail', product: product, key: key, pod: (pod rescue nil), show_barcode: (show_barcode rescue show_barcode2 rescue false), show_price: (show_price rescue true),
+      quantity: (quantity rescue nil), transaction_type: (transaction_type rescue nil), hpp: (product.product_price(Time.now).hpp rescue 0), disc: discount %>
+  <% end %>
+</tr>

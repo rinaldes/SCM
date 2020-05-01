@@ -1,0 +1,1 @@
+$('#<%= params[:id] %>').parent().parent().append('<%= j(render 'sub_m_class', level: params[:level].to_i, key: params[:key], parent: params[:parent], m_class: @m_class) %>')

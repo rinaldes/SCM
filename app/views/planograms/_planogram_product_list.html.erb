@@ -1,0 +1,23 @@
+                        <% @product_planograms.each_with_index do |prop,i| %>
+                        <tr>
+                          <td><%= i + 1%></td>
+                          <td><%= prop.product.barcode %></td>
+                          <td><%= prop.product.description %></td>
+                          <td>
+                          <%= link_to 'javascript:void(0)', onclick: "delete_product(#{prop.id}, 'departments')", class: "btn btn-danger btn-xs edit-btn-dlt" do %>
+                            <i class="fa fa-trash-o"></i>
+                          <% end %>
+                          </td>
+                        </tr>
+                        <% end %>
+                        <tr>
+                          <td colspan=4>
+                            <% if @product_planograms.present? %>
+                              <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+                                <%= pagination_links(@product_planograms, options = {}) %>
+                              </div>
+                            <% else %>
+                              <%= raw '<center>No Data Available</center>' %>
+                            <% end %>
+                          </td>
+                        </tr>

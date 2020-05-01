@@ -1,0 +1,30 @@
+<% @selling_prices.each_with_index do |sp, i| %>
+  <% selling_price = sp.selling_price %>
+  <tr>
+    <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE+1) : i+1 %></td>
+    <td class="hidden-phone"><%= link_to ((selling_price.product.article rescue nil)), selling_price_url(selling_price) %></td>
+    <td class="hidden-phone"><%= sp.sku.barcode rescue sp.selling_price.product.barcode %></td>
+    <td class="hidden-phone"><%= link_to ((selling_price.product.description rescue nil)), selling_price_url(selling_price) %></td>
+    <td class="hidden-phone"><%= selling_price.office.office_name %></td>
+    <td class="hidden-phone"><%= selling_price.start_date %></td>
+    <td class="hidden-phone"><%= selling_price.end_date %></td>
+    <td class="hidden-phone align-right"><%= format_currency selling_price.hpp %></td>
+    <td class="hidden-phone align-right"><%= format_currency selling_price.hpp_average %></td>
+    <td class="hidden-phone align-right"><%= format_currency selling_price.ppn_in %></td>
+    <td class="hidden-phone align-right"><%= selling_price.margin_percent.to_f.round(2) %>%</td>
+    <td class="hidden-phone align-right"><%= format_currency selling_price.margin_amount %></td>
+    <td class="hidden-phone align-right"><%= format_currency selling_price.ppn_out %></td>
+    <td class="hidden-phone align-right"><%= format_currency sp.price %></td>
+  </tr>
+<% end %>
+<tr>
+  <td colspan=12>
+    <% if @selling_prices.present? %>
+      <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <%= pagination_links(@selling_prices, options = {}) %>
+      </div>
+    <% else %>
+      <%= raw '<center>No Data Available</center>' %>
+    <% end %>
+  </td>
+</tr>

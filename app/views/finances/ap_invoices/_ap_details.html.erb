@@ -1,0 +1,26 @@
+<tr id="<%=key%>">
+  <td>1</td>
+  <td>
+    <%= hidden_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][receiving_id]" %>
+    <button type="button" class="btn btn-sm btn-primary btn-circle" onclick="select_receiving('<%=key%>')" id="btn_<%=key%>"><i class="glyphicon glyphicon-list"></i></button>
+    <span id="gr_number_<%=key%>"></span>
+  </td>
+  <td id="gr_date_<%=key%>"></td>
+  <td id="gr_store_<%=key%>"></td>
+  <td><%= text_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][tax_code]" %></td>
+  <td><%= text_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][tax_number]" %></td>
+  <td><%= text_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][tax_date]" %></td>
+  <script type="text/javascript">
+    $("#ap_invoice_ap_invoice_details_attributes_<%=key%>_tax_date").datepicker({
+        dateFormat : 'yy-mm-dd',
+        changeYear: true,
+        changeMonth: true,
+        prevText : '<i class="fa fa-chevron-left"></i>',
+        nextText : '<i class="fa fa-chevron-right"></i>',
+      });
+  </script>
+  <td><%= hidden_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][gross]" %></td>
+  <td><%= hidden_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][vat]" %></td>
+  <td><%= hidden_field_tag "ap_invoice[ap_invoice_details_attributes][#{key}][amount]" %></td>
+  <td><button onclick="remove_row(<%=key%>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button></td>
+</tr>

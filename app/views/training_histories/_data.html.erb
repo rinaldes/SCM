@@ -1,0 +1,13 @@
+<%= "<tr id=\"data_#{training_history.id}\">".html_safe if params[:action] != "update_training_history" %>  
+<td>
+  <div class="checkbox check-default">
+    <input id="checkbox<%= training_history.id %>" type="checkbox" value="<%= training_history.id %>" class="child-training_history child-box" data-section="training_history" data-traininghistory="child">
+    <label for="checkbox<%= training_history.id %>"></label>
+  </div>
+</td>
+    <td><%= training_history.training_type %></td>
+    <td><%= training_history.start %></td>
+    <td><%= training_history.end %></td>
+    <td><%= training_history.sponsor %></td>
+    <td><%= training_history.result %></td>
+    <%= "</tr>".html_safe if params[:action] != "update_training_history" %> 

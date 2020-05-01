@@ -1,0 +1,40 @@
+<% if @details.present? %>
+  <% @details.each_with_index{|d, i| %>
+    <tr>
+      <% selisih_amt = d.quantity*d.hpp - d.received_qty*d.hpp rescue d.quantity*d.hpp %>
+      <% selisih_qty = d.quantity - d.received_qty rescue d.quantity %>
+      <td class="hidden-phone"><%= params[:page] ? (params[:page].to_i*PER_PAGE+i-PER_PAGE-1) : i+1 %></td>
+      <td class="hidden-phone"><%= d.article %></td>
+      <td class="hidden-phone"><%= d.description %></td>
+      <td class="hidden-phone"><%= d.origin_name %></td>
+      <td class="hidden-phone"><%= d.code %></td>
+      <td class="hidden-phone"><%= d.mutation_date %></td>
+      <td class="align-right"><%= d.quantity %></td>
+      <td class="align-right"><%= format_currency d.hpp %></td>
+      <td class="align-right"><%= format_currency d.quantity*d.hpp %></td>
+      <td class="hidden-phone"><%= d.destination_name %></td>
+      <td class="hidden-phone"><%= d.code %></td>
+      <td><%= d.received_date %></td>
+      <td><%= d.received_qty %></td>
+      <td class="align-right"><%= format_currency d.hpp %></td>
+      <td class="align-right"><%= format_currency d.received_qty*d.hpp rescue '-' %></td>
+      <td class="align-right"><%= format_currency selisih_qty %></td>
+      <td class="align-right"><%= format_currency selisih_amt %></td>
+    </tr>
+  <% } %>
+  <tr>
+    <td colspan=17>
+      <% if @details.present? %>
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+          <%= pagination_links(@details, options = {}) %>
+        </div>
+      <% else %>
+        <%= raw '<center>No Data Available</center>' %>
+      <% end %>
+    </td>
+  </tr>
+<% else %>
+<tr>
+  <td colspan="13"><center>No Data Available</center></td>
+</tr>
+<% end %>

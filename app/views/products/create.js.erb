@@ -1,0 +1,11 @@
+<% if @product.errors.full_messages.present? %>
+  <%= render 'layouts/errors' %>
+  window.scrollTo(0, 0);
+<% else %>
+  <% if session[:ref].present? %>
+    <% session[:barcode] = @product.barcode %>
+    window.location = '<%= "http://#{request.env['HTTP_HOST']}/#{session[:ref]}" %>'
+  <% else %>
+    window.location = '/products'
+  <% end %>
+<% end %>

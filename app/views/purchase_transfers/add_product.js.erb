@@ -1,0 +1,17 @@
+var inputValues = [];
+var date = new Date();
+key = date.getDay() + ""+date.getMonth() + "" + date.getFullYear() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds()
+var hiddenFields = []
+$("#table_size input[type=text]").each(function() {
+  inputValues.push($(this).val())
+  key = key+$(this).next().val()
+  hiddenFields.push("<input type='hidden' name='purchase_transfer[product_mutation_details_attributes]["+key+"][product_size_id]' value="+$(this).next().val()
+    +"><input type='hidden' name='purchase_transfer[product_mutation_details_attributes]["+key+"][quantity]' value="+$(this).val()+">")
+})
+$("#transfer tbody").append("<tr><td></td><td><span class='hidden'>"+$('#product_id').val()+"</span><span class='product_barcode'>"+$('#number').val()+"</span></td><td>"+$('#merk').val()+"</td><td>"
+  +$('#m_class').val()+"</td><td>"+$('#article').val()+"</td><td>"+$('#harga_pokok').val()+"</td><td><a href='javascript:void(0)' onclick='$(\"#myModal_" +$('#product_id').val()
+  + "\").modal()'>View</a></td><td><a href='javascript:void(0)' class='btn btn-primary btn-xs custom-edit-btn' onclick='removeList(event)'><i class='fa fa-trash-o' rel='tooltip'></i></a></td></tr>");
+
+//$("#transfer tbody").append("<%= j(render 'purchase_orders/tr_detail', product: @product, key: @product.id) %>")
+$('#product_detail').append("<%= j(render 'modal_product', product: @product, quantities: params[:quantities], product_sizes: @product.product_sizes, key: params[:key]) %>")
+clone_details()
